@@ -114,6 +114,7 @@ This release is designed for early feedback from agent, RAG, MCP, and AI infrast
 ```bash
 npm run verify
 npm run launch:demo
+npm run diff:dashboard
 ```
 
 Open:
@@ -122,4 +123,7 @@ Open:
 .agentlens/launch/support-agent.html
 .agentlens/launch/mcp-policy.html
 .agentlens/launch/unsafe-agent.html
+.agentlens/reports/diff-demo.html
 ```
+
+See [DEMO_RECORDING.md](DEMO_RECORDING.md) for the launch GIF shot list and [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) before publishing.

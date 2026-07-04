@@ -251,6 +251,9 @@ See [API.md](docs/API.md) for trace, eval, JSONL, and MCP helper examples.
 
 - [Launch plan](docs/LAUNCH_PLAN.md)
 - [Launch copy](docs/LAUNCH_COPY.md)
+- [Release checklist](docs/RELEASE_CHECKLIST.md)
+- [Demo recording guide](docs/DEMO_RECORDING.md)
+- [Launch post draft](docs/LAUNCH_POST.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
 - [Changelog](CHANGELOG.md)
 - [JSON schemas](docs/SCHEMAS.md)

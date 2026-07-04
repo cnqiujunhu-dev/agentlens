@@ -14,6 +14,9 @@ const requiredFiles = [
   "docs/GITHUB_ACTION.md",
   "docs/LAUNCH_COPY.md",
   "docs/LAUNCH_PLAN.md",
+  "docs/RELEASE_CHECKLIST.md",
+  "docs/DEMO_RECORDING.md",
+  "docs/LAUNCH_POST.md",
   "docs/MCP_ADAPTER.md",
   "docs/JSONL_TRACES.md",
   "docs/REDACTION.md",
@@ -41,6 +44,9 @@ const requiredReadmeSnippets = [
   "diff-dashboard",
   "JSON output",
   "Markdown CI summaries",
+  "Release checklist",
+  "Demo recording guide",
+  "Launch post draft",
   "agentlens serve",
   "dashboard-screenshot.png"
 ];

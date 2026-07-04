@@ -43,6 +43,7 @@ Built:
 - JSONL streaming trace writer and materializer.
 - Public JavaScript API and package exports.
 - Launch demo artifact generator.
+- Release checklist, demo recording guide, and launch post draft.
 - Trace redaction CLI and API.
 - Real dashboard screenshot for README.
 - Trace/Eval JSON Schemas.
@@ -62,7 +63,8 @@ Do these before asking strangers to star it:
 2. Record a short launch GIF from `.agentlens/launch/support-agent.html`.
 3. Add the release tag.
 4. Publish the GitHub repository.
-5. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
+5. Run the release checklist before public posting.
+6. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
 
 ## Priority 2: Make The Product Real
 

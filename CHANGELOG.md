@@ -34,6 +34,7 @@ Initial MVP.
 - Markdown CI summaries for GitHub Actions.
 - `agentlens init` scaffolds starter eval config and a GitHub Action example.
 - Launch demo artifact generator.
+- Release checklist, demo recording guide, and launch post draft.
 - Public JavaScript API and package exports.
 - GitHub Actions CI workflow.
 - Issue templates, contribution docs, security docs, and Apache-2.0 license.
