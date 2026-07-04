@@ -25,6 +25,7 @@ Initial MVP.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - MCP tool inventory events, schema capture, and risk scanning.
 - Local dashboard JSON APIs and file-change refresh.
+- `agentlens init` scaffolds starter eval config and a GitHub Action example.
 - Launch demo artifact generator.
 - Public JavaScript API and package exports.
 - GitHub Actions CI workflow.

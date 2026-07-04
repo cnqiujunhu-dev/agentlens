@@ -49,10 +49,14 @@ async function main() {
   }
 
   if (command === "init") {
-    const workspace = initWorkspace(process.cwd());
+    const workspace = initWorkspace(process.cwd(), { scaffold: true });
     console.log(`Initialized AgentLens workspace at ${workspace.root}`);
     console.log(`Runs: ${workspace.runsDir}`);
     console.log(`Reports: ${workspace.reportsDir}`);
+    if (workspace.createdFiles.length > 0) {
+      console.log("Starter files:");
+      for (const file of workspace.createdFiles) console.log(`  ${file}`);
+    }
     return;
   }
 

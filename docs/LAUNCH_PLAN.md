@@ -9,6 +9,7 @@ Built:
 - Trace schema.
 - Local run store.
 - CLI.
+- Init scaffolding for starter evals and GitHub Action examples.
 - Demo trace generator.
 - Inspect summary.
 - Replay transcript.

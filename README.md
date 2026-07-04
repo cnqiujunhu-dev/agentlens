@@ -51,11 +51,13 @@ node ./bin/agentlens.js init
 node ./bin/agentlens.js demo --out .agentlens/runs/demo.json
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
-node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json
-node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json
+node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
+node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
 node ./bin/agentlens.js serve .agentlens/runs --port 4317
 ```
+
+`agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example.
 
 Want this in GitHub Actions?
 
@@ -276,6 +278,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Publish JSON Schemas for external tooling.
 - Browse local runs with a zero-dependency dashboard server.
 - Poll local trace files while agents are running.
+- Start with editable init scaffolding for evals and CI examples.
 - Fail GitHub PRs when recorded agent runs violate eval rules.
 - Generate launch-ready demo artifacts.
 - Share compact run reports in GitHub issues.
@@ -287,6 +290,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Public JavaScript API and package exports.
 - Trace redaction CLI and API.
 - Trace/Eval JSON Schemas.
+- Init scaffolding for starter evals and GitHub Action examples.
 - Generic LLM call adapter.
 - Local dashboard server.
 - GitHub Action for agent regression tests.
