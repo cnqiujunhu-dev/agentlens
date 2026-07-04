@@ -21,6 +21,7 @@ Initial MVP.
 - Static HTML dashboard renderer.
 - Local dashboard server for trace files and runs directories.
 - Release audit script for required files, README sections, exports, and pack contents.
+- Composite GitHub Action for running `agentlens ci` in PR workflows.
 - Launch demo artifact generator.
 - Public JavaScript API and package exports.
 - GitHub Actions CI workflow.

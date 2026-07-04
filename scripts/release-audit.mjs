@@ -8,8 +8,10 @@ const requiredFiles = [
   "LICENSE",
   "CONTRIBUTING.md",
   "SECURITY.md",
+  "action.yml",
   ".github/workflows/ci.yml",
   "docs/API.md",
+  "docs/GITHUB_ACTION.md",
   "docs/LAUNCH_COPY.md",
   "docs/LAUNCH_PLAN.md",
   "docs/MCP_ADAPTER.md",
@@ -27,6 +29,7 @@ const requiredReadmeSnippets = [
   "Eval Rules",
   "Use Cases",
   "Roadmap",
+  "GitHub Actions",
   "agentlens serve",
   "dashboard-screenshot.png"
 ];

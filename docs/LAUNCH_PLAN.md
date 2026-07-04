@@ -17,6 +17,7 @@ Built:
 - Static HTML dashboard.
 - Local dashboard server.
 - Release audit script.
+- Composite GitHub Action for `agentlens ci`.
 - Apache-2.0 license.
 - Contribution and security docs.
 - GitHub Actions smoke-test workflow.
@@ -50,7 +51,7 @@ Do these before asking strangers to star it:
 2. Record a short launch GIF from `.agentlens/launch/support-agent.html`.
 3. Add the release tag.
 4. Publish the GitHub repository.
-5. Keep `npm run verify` and `npm run release:audit` green as adapters are added.
+5. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
 
 ## Priority 2: Make The Product Real
 

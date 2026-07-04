@@ -38,6 +38,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
 - Zero-dependency stdio JSON-RPC MCP transport demo.
 - Static HTML dashboard for sharing runs in GitHub issues, PRs, and incident notes.
+- Composite GitHub Action for failing PRs on agent eval regressions.
 - Zero runtime dependencies in the MVP.
 
 ## Quick Demo
@@ -51,6 +52,16 @@ node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.js
 node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
 node ./bin/agentlens.js serve .agentlens/runs --port 4317
+```
+
+Want this in GitHub Actions?
+
+```yaml
+- name: Run AgentLens evals
+  uses: your-org/agentlens@v0
+  with:
+    runs: .agentlens/runs
+    config: evals/default.json
 ```
 
 Need schemas for editor or CI tooling?
@@ -211,6 +222,7 @@ See [API.md](docs/API.md) for trace, eval, JSONL, and MCP helper examples.
 
 - [Launch plan](docs/LAUNCH_PLAN.md)
 - [Launch copy](docs/LAUNCH_COPY.md)
+- [GitHub Action](docs/GITHUB_ACTION.md)
 - [Changelog](CHANGELOG.md)
 - [JSON schemas](docs/SCHEMAS.md)
 
@@ -250,6 +262,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Redact secrets before sharing traces.
 - Publish JSON Schemas for external tooling.
 - Browse local runs with a zero-dependency dashboard server.
+- Fail GitHub PRs when recorded agent runs violate eval rules.
 - Generate launch-ready demo artifacts.
 - Share compact run reports in GitHub issues.
 - Build policy packs for MCP servers and internal tools.
@@ -262,6 +275,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Trace/Eval JSON Schemas.
 - Generic LLM call adapter.
 - Local dashboard server.
+- GitHub Action for agent regression tests.
 - Launch demo artifact generator.
 - JavaScript SDK wrapper for common LLM calls.
 - LangGraph, AutoGen, CrewAI, and OpenAI/Anthropic-style adapter examples.

@@ -1,0 +1,28 @@
+name: AgentLens CI
+description: Run AgentLens evals against recorded AI agent traces.
+
+inputs:
+  runs:
+    description: Directory containing AgentLens trace JSON files.
+    required: false
+    default: .agentlens/runs
+  config:
+    description: AgentLens eval config JSON file.
+    required: false
+    default: evals/default.json
+  node-version:
+    description: Node.js version used to run AgentLens.
+    required: false
+    default: "20"
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Run AgentLens CI
+      shell: bash
+      run: node "$GITHUB_ACTION_PATH/bin/agentlens.js" ci --runs "${{ inputs.runs }}" --config "${{ inputs.config }}"

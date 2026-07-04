@@ -37,6 +37,12 @@ jobs:
           node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
           timeout 5s node ./bin/agentlens.js serve .agentlens/runs --port 4317 || test $? -eq 124
 
+      - name: GitHub Action smoke test
+        uses: ./
+        with:
+          runs: .agentlens/runs
+          config: evals/default.json
+
       - name: MCP adapter demo
         run: |
           npm run demo:mcp
