@@ -20,6 +20,7 @@ Initial MVP.
 - Trace and eval JSON Schemas.
 - Static HTML dashboard renderer.
 - Local dashboard server for trace files and runs directories.
+- Release audit script for required files, README sections, exports, and pack contents.
 - Launch demo artifact generator.
 - Public JavaScript API and package exports.
 - GitHub Actions CI workflow.

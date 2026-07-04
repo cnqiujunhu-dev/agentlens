@@ -102,6 +102,7 @@ Preparing launch screenshots or a demo recording?
 
 ```bash
 npm run launch:demo
+npm run release:audit
 ```
 
 This writes shareable traces, eval reports, and dashboards into `.agentlens/launch/`.
