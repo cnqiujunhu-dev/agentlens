@@ -33,8 +33,10 @@
     "CHANGELOG.md",
     "README.md",
     "LICENSE",
+    "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
-    "SECURITY.md"
+    "SECURITY.md",
+    "SUPPORT.md"
   ],
   "scripts": {
     "demo": "node ./bin/agentlens.js demo --out .agentlens/runs/demo.json",

@@ -261,6 +261,13 @@ See [API.md](docs/API.md) for trace, eval, JSONL, and MCP helper examples.
 - [Changelog](CHANGELOG.md)
 - [JSON schemas](docs/SCHEMAS.md)
 
+## Community
+
+- [Contributing](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Support](SUPPORT.md)
+- [Security](SECURITY.md)
+
 ## Eval Rules
 
 Rules live in JSON so they can be reviewed, versioned, and run in CI.

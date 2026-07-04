@@ -12,7 +12,7 @@ The public repo is not launch-ready until all of these are true:
 - `.github/workflows/ci.yml` passes on GitHub.
 - The README shows the product, the five-minute demo, the GitHub Action, the roadmap, and launch materials.
 - A current demo screenshot or GIF is linked from the README.
-- The GitHub repo has a clear description, topics, license, issues, and security policy.
+- The GitHub repo has a clear description, topics, license, issues, pull request template, support policy, code of conduct, and security policy.
 
 ## Local Validation
 
@@ -91,6 +91,7 @@ Before posting publicly:
 - Confirm the installation and demo commands work from a clean clone.
 - Confirm `agentlens init` creates starter evals and a GitHub Action example.
 - Confirm the first issue templates route bugs, adapter requests, and eval rule requests.
+- Confirm the PR template asks for validation and trace safety.
 - Prepare the launch post from [LAUNCH_POST.md](LAUNCH_POST.md).
 
 ## Known Launch Blockers

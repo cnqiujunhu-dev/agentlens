@@ -38,4 +38,5 @@ Initial MVP.
 - Release checklist, demo recording guide, and launch post draft.
 - Public JavaScript API and package exports.
 - GitHub Actions CI workflow.
+- Pull request template, support docs, and code of conduct.
 - Issue templates, contribution docs, security docs, and Apache-2.0 license.

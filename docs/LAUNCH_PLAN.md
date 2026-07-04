@@ -27,7 +27,8 @@ Built:
 - Release audit script.
 - Composite GitHub Action for `agentlens ci`.
 - Apache-2.0 license.
-- Contribution and security docs.
+- Contribution, support, security, and code of conduct docs.
+- Pull request template.
 - GitHub Actions smoke-test workflow.
 - Unit tests for trace, eval, and dashboard escaping.
 - Failure-case demo for forbidden tools and missing citations.

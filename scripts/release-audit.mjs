@@ -6,9 +6,12 @@ const requiredFiles = [
   "README.md",
   "CHANGELOG.md",
   "LICENSE",
+  "CODE_OF_CONDUCT.md",
   "CONTRIBUTING.md",
   "SECURITY.md",
+  "SUPPORT.md",
   "action.yml",
+  ".github/PULL_REQUEST_TEMPLATE.md",
   ".github/workflows/ci.yml",
   "docs/API.md",
   "docs/GITHUB_ACTION.md",
@@ -46,6 +49,8 @@ const requiredReadmeSnippets = [
   "Markdown CI summaries",
   "agentlens doctor",
   "Workspace doctor",
+  "Code of Conduct",
+  "Support",
   "Release checklist",
   "Demo recording guide",
   "Launch post draft",
@@ -112,7 +117,7 @@ function assertPackDryRun() {
   const output = `${result.stdout ?? ""}\n${result.stderr ?? ""}`;
   if (result.status !== 0) fail(`npm pack --dry-run failed:\n${output}`);
 
-  for (const file of ["README.md", "LICENSE", "bin/agentlens.js", "src/index.js", "docs/assets/dashboard-screenshot.png"]) {
+  for (const file of ["README.md", "LICENSE", "CODE_OF_CONDUCT.md", "SUPPORT.md", "bin/agentlens.js", "src/index.js", "docs/assets/dashboard-screenshot.png"]) {
     if (!output.includes(file)) fail(`npm pack dry-run missing ${file}`);
   }
 }
