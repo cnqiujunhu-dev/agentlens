@@ -41,6 +41,7 @@ Initial MVP.
 - `agentlens init` scaffolds starter eval config and a GitHub Action example.
 - Launch demo artifact generator.
 - Launch demo artifact for the LangGraph-style adapter.
+- README launch GIF generated from launch dashboard artifacts.
 - Release checklist, demo recording guide, and launch post draft.
 - Public JavaScript API and package exports.
 - GitHub Actions CI workflow.

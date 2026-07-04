@@ -114,6 +114,7 @@ This release is designed for early feedback from agent, RAG, MCP, and AI infrast
 ```bash
 npm run verify
 npm run launch:demo
+npm run release:gif
 npm run diff:dashboard
 ```
 

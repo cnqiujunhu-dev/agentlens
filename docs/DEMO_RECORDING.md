@@ -21,6 +21,7 @@ Run:
 ```bash
 npm run verify
 npm run launch:demo
+npm run release:gif
 npm run diff:dashboard
 ```
 
@@ -85,13 +86,19 @@ Quality checklist:
 - The first 3 seconds show the product name and dashboard.
 - The final frame shows a useful result, not a blank terminal.
 
-## After Recording
+## Scripted GIF
 
-Update:
+The committed README GIF can be regenerated with:
 
-- `README.md` to embed the new GIF near the top.
-- `docs/LAUNCH_PLAN.md` to remove the GIF blocker.
-- `docs/RELEASE_CHECKLIST.md` if the recording process changes.
+```bash
+npm run release:gif
+```
+
+The script screenshots launch dashboard artifacts and writes `docs/assets/agentlens-demo.gif`.
+
+## After Manual Recording
+
+Update `docs/RELEASE_CHECKLIST.md` if the recording process changes.
 
 Then run:
 

@@ -12,7 +12,9 @@ AgentLens is a local-first DevTools stack for AI agents, tool calls, RAG flows, 
 agent run -> trace -> replay -> eval -> dashboard
 ```
 
-![AgentLens dashboard screenshot](docs/assets/dashboard-screenshot.png)
+![AgentLens demo](docs/assets/agentlens-demo.gif)
+
+Static screenshot: [dashboard-screenshot.png](docs/assets/dashboard-screenshot.png)
 
 ## Why AgentLens
 
@@ -160,6 +162,7 @@ Preparing launch screenshots or a demo recording?
 
 ```bash
 npm run launch:demo
+npm run release:gif
 npm run share:demo
 npm run release:audit
 ```

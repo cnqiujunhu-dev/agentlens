@@ -25,6 +25,7 @@ const requiredFiles = [
   "docs/JSONL_TRACES.md",
   "docs/REDACTION.md",
   "docs/SCHEMAS.md",
+  "docs/assets/agentlens-demo.gif",
   "docs/assets/dashboard-screenshot.png",
   "schemas/agentlens.trace.v1.schema.json",
   "schemas/agentlens.eval.v1.schema.json"
@@ -62,6 +63,7 @@ const requiredReadmeSnippets = [
   "Demo recording guide",
   "Launch post draft",
   "agentlens serve",
+  "agentlens-demo.gif",
   "dashboard-screenshot.png"
 ];
 
@@ -127,14 +129,30 @@ function assertPackDryRun() {
   const output = `${result.stdout ?? ""}\n${result.stderr ?? ""}`;
   if (result.status !== 0) fail(`npm pack --dry-run failed:\n${output}`);
 
-  for (const file of ["README.md", "LICENSE", "CODE_OF_CONDUCT.md", "SUPPORT.md", "bin/agentlens.js", "src/index.js", "docs/assets/dashboard-screenshot.png"]) {
+  for (const file of [
+    "README.md",
+    "LICENSE",
+    "CODE_OF_CONDUCT.md",
+    "SUPPORT.md",
+    "bin/agentlens.js",
+    "src/index.js",
+    "docs/assets/agentlens-demo.gif",
+    "docs/assets/dashboard-screenshot.png"
+  ]) {
     if (!output.includes(file)) fail(`npm pack dry-run missing ${file}`);
   }
+}
+
+function assertDemoGif() {
+  const stats = fs.statSync("docs/assets/agentlens-demo.gif");
+  const maxBytes = 10 * 1024 * 1024;
+  if (stats.size > maxBytes) fail("docs/assets/agentlens-demo.gif must stay under 10 MB");
 }
 
 for (const file of requiredFiles) assertFile(file);
 assertReadme();
 assertPackage();
+assertDemoGif();
 assertPackDryRun();
 
 console.log("AgentLens release audit passed");

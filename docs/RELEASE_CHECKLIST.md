@@ -44,6 +44,7 @@ Generate launch artifacts:
 
 ```bash
 npm run launch:demo
+npm run release:gif
 npm run diff:dashboard
 ```
 
@@ -55,6 +56,7 @@ Open these files before recording:
 - `.agentlens/launch/langgraph-style.html`
 - `.agentlens/launch/unsafe-agent.html`
 - `.agentlens/reports/diff-demo.html`
+- `docs/assets/agentlens-demo.gif`
 
 Follow [DEMO_RECORDING.md](DEMO_RECORDING.md) for the shot list and export checks.
 
@@ -104,5 +106,4 @@ Before posting publicly:
 Track these honestly until resolved:
 
 - No public GitHub remote has been configured in this workspace.
-- The launch GIF still needs to be recorded from generated launch artifacts.
 - One production-oriented framework adapter or hardened MCP transport integration would make the MVP more credible.

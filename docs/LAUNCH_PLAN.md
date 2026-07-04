@@ -49,6 +49,7 @@ Built:
 - JSONL streaming trace writer and materializer.
 - Public JavaScript API and package exports.
 - Launch demo artifact generator.
+- README launch GIF generated from launch dashboard artifacts.
 - Release checklist, demo recording guide, and launch post draft.
 - Trace redaction CLI and API.
 - Real dashboard screenshot for README.
@@ -58,7 +59,6 @@ Built:
 
 Missing before a serious public launch:
 
-- Release GIF generated from `.agentlens/launch/*.html`.
 - Release tag.
 - Public repository remote.
 
@@ -66,11 +66,10 @@ Missing before a serious public launch:
 
 Do these before asking strangers to star it:
 
-1. Record a short launch GIF from `.agentlens/launch/support-agent.html`.
-2. Add the release tag.
-3. Publish the GitHub repository.
-4. Run the release checklist before public posting.
-5. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
+1. Add the release tag.
+2. Publish the GitHub repository.
+3. Run the release checklist before public posting.
+4. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
 
 ## Priority 2: Make The Product Real
 
@@ -135,5 +134,4 @@ Avoid hooks that sound like every other agent project:
 Target `v0.2.0`:
 
 - One popular framework adapter.
-- Real launch GIF or screenshot.
 - First release tag.
