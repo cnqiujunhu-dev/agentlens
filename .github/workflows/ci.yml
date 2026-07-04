@@ -30,6 +30,8 @@ jobs:
           node ./bin/agentlens.js inspect .agentlens/runs/demo.json
           node ./bin/agentlens.js replay .agentlens/runs/demo.json
           node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json
+          node ./bin/agentlens.js schema trace
+          node ./bin/agentlens.js schema eval
           node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
           node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json
           node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html

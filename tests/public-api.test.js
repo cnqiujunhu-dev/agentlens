@@ -7,6 +7,7 @@ import {
   evaluateTrace,
   finishRun,
   JsonlTraceWriter,
+  readSchema,
   redactTrace,
   renderReplay,
   summarizeTrace,
@@ -29,6 +30,7 @@ test("public API exports core trace and eval helpers", () => {
   assert.equal(report.passed, true);
   assert.match(renderReplay(run), /LLM RESPONSE/);
   assert.equal(redactTrace(run).metadata.redacted, true);
+  assert.equal(readSchema("trace").title, "AgentLens Trace v1");
 });
 
 test("public API exports streaming and MCP helpers", async () => {

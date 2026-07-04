@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentlens.dev/schemas/agentlens.eval.v1.schema.json",
+  "title": "AgentLens Eval v1",
+  "type": "object",
+  "required": ["version", "name", "assertions"],
+  "properties": {
+    "version": {
+      "const": "agentlens.eval.v1"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assertions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/assertion"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "assertion": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "allowed-mcp-servers",
+            "forbidden-tool-permissions",
+            "forbidden-tools",
+            "max-errors",
+            "max-tool-duration-ms",
+            "max-total-cost-usd",
+            "required-citations",
+            "required-event-types",
+            "required-final-response",
+            "required-tool-metadata"
+          ]
+        },
+        "eventTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "max": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "servers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

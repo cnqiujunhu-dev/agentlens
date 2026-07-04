@@ -6,6 +6,7 @@ export { DEFAULT_EVAL_CONFIG, evaluateTrace, formatEvalReport, loadEvalConfig } 
 export { discoverTraceFiles, formatCiReport, runCi } from "./ci.js";
 export { JsonlTraceWriter, readJsonlTrace } from "./jsonl.js";
 export { DEFAULT_REDACT_KEYS, parseRedactKeys, redactTrace } from "./redact.js";
+export { listSchemas, readSchema, schemaPath } from "./schemas.js";
 export { renderDashboard } from "./dashboard.js";
 export { createMcpRun, finishMcpRun, traceMcpToolCall } from "./adapters/mcp.js";
 export { MCP_PROTOCOL_VERSION, McpStdioClient, traceMcpStdioToolCall } from "./adapters/mcp-stdio.js";

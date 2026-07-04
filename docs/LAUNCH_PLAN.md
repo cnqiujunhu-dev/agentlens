@@ -31,6 +31,7 @@ Built:
 - Launch demo artifact generator.
 - Trace redaction CLI and API.
 - Real dashboard screenshot for README.
+- Trace/Eval JSON Schemas.
 
 Missing before a serious public launch:
 

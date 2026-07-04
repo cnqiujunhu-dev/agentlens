@@ -15,6 +15,7 @@ Initial MVP.
 - MCP policy eval pack for server allowlists, required metadata, and forbidden permissions.
 - JSONL streaming trace writer and materializer.
 - Trace redaction CLI and API.
+- Trace and eval JSON Schemas.
 - Static HTML dashboard renderer.
 - Launch demo artifact generator.
 - Public JavaScript API and package exports.

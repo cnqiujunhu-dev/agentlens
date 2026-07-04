@@ -17,6 +17,7 @@ The project should stay framework-neutral. It should integrate with agent framew
 
 2. Trace Layer
    - AgentLens Trace v1 JSON
+   - Trace JSON Schema
    - JSONL streaming trace records
    - Event normalization
    - Local run store
@@ -25,6 +26,7 @@ The project should stay framework-neutral. It should integrate with agent framew
    - Run inspection
    - Replay transcript
    - Eval assertions
+   - Eval JSON Schema
    - Safety and latency checks
    - Batch CI evaluation
 

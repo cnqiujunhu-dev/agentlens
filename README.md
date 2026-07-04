@@ -51,6 +51,13 @@ node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
 ```
 
+Need schemas for editor or CI tooling?
+
+```bash
+node ./bin/agentlens.js schema trace
+node ./bin/agentlens.js schema eval
+```
+
 Want to see eval failures?
 
 ```bash
@@ -159,6 +166,7 @@ agentlens inspect <trace-file>
 agentlens replay <trace-file>
 agentlens eval <trace-file> [--config path]
 agentlens ci [--runs dir] [--config path]
+agentlens schema <trace|eval> [--out path]
 agentlens materialize <jsonl-file> [--out path]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
 agentlens dashboard <trace-file> [--out path]
@@ -192,6 +200,7 @@ See [API.md](docs/API.md) for trace, eval, JSONL, and MCP helper examples.
 - [Launch plan](docs/LAUNCH_PLAN.md)
 - [Launch copy](docs/LAUNCH_COPY.md)
 - [Changelog](CHANGELOG.md)
+- [JSON schemas](docs/SCHEMAS.md)
 
 ## Eval Rules
 
@@ -226,6 +235,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Enforce MCP server and permission policies.
 - Stream long-running traces as JSONL.
 - Redact secrets before sharing traces.
+- Publish JSON Schemas for external tooling.
 - Generate launch-ready demo artifacts.
 - Share compact run reports in GitHub issues.
 - Build policy packs for MCP servers and internal tools.
@@ -235,6 +245,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Unit tests, CI batch eval, failure-case demo, MCP adapter MVP, and MCP policy rules.
 - Public JavaScript API and package exports.
 - Trace redaction CLI and API.
+- Trace/Eval JSON Schemas.
 - Launch demo artifact generator.
 - JavaScript SDK wrapper for common LLM calls.
 - LangGraph, AutoGen, CrewAI, and OpenAI/Anthropic-style adapter examples.

@@ -19,6 +19,7 @@ function usage() {
     "  agentlens replay <trace-file>",
     "  agentlens eval <trace-file> [--config path]",
     "  agentlens ci [--runs dir] [--config path]",
+    "  agentlens schema <trace|eval> [--out path]",
     "  agentlens materialize <jsonl-file> [--out path]",
     "  agentlens redact <trace-file> [--out path] [--keys key1,key2]",
     "  agentlens dashboard <trace-file> [--out path]",
@@ -98,6 +99,21 @@ async function main() {
     const report = runCi({ runsDir, config: loadEvalConfig(configPath) });
     console.log(formatCiReport(report));
     if (report.failed > 0 || report.total === 0) process.exitCode = 1;
+    return;
+  }
+
+  if (command === "schema") {
+    const kind = positional(1);
+    if (!kind) throw new Error("Missing schema kind. Usage: agentlens schema <trace|eval> [--out path]");
+    const { readSchema } = await import("../src/schemas.js");
+    const text = `${JSON.stringify(readSchema(kind), null, 2)}\n`;
+    const out = option("--out", undefined);
+    if (out) {
+      writeText(out, text);
+      console.log(`Wrote schema: ${out}`);
+    } else {
+      console.log(text.trimEnd());
+    }
     return;
   }
 

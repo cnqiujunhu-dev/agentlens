@@ -77,6 +77,16 @@ const redacted = redactTrace(trace, {
 writeTrace(".agentlens/runs/demo.redacted.json", redacted);
 ```
 
+## Schemas
+
+```js
+import { listSchemas, readSchema, schemaPath } from "agentlens";
+
+console.log(listSchemas());
+console.log(schemaPath("trace"));
+console.log(readSchema("eval"));
+```
+
 ## MCP-Style Tool Calls
 
 ```js
