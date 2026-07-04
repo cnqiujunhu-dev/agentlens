@@ -9,6 +9,16 @@ const DEFAULT_REDACT_KEYS = [
   "token"
 ];
 
+const SAFE_TOKEN_METRIC_KEYS = new Set([
+  "cachedtokens",
+  "completiontokens",
+  "inputtokens",
+  "outputtokens",
+  "prompttokens",
+  "reasoningtokens",
+  "totaltokens"
+]);
+
 function normalizeKeys(keys) {
   return keys.map((key) => key.toLowerCase());
 }
@@ -20,6 +30,7 @@ function canonicalKey(key) {
 function shouldRedactKey(key, normalizedKeys) {
   const lower = key.toLowerCase();
   const canonical = canonicalKey(key);
+  if (SAFE_TOKEN_METRIC_KEYS.has(canonical)) return false;
   return normalizedKeys.some((pattern) => {
     const canonicalPattern = canonicalKey(pattern);
     return lower === pattern || lower.includes(pattern) || canonical === canonicalPattern || canonical.includes(canonicalPattern);

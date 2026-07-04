@@ -41,6 +41,27 @@ test("redactTrace redacts nested secret-like fields", () => {
   assert.equal(validateTrace(redacted).valid, true);
 });
 
+test("redactTrace preserves token usage counters", () => {
+  const trace = createRun();
+  addEvent(trace, {
+    type: "llm.response",
+    name: "final",
+    usage: {
+      inputTokens: 10,
+      outputTokens: 5,
+      totalTokens: 15
+    },
+    output: { content: "ok" }
+  });
+  finishRun(trace, "passed");
+
+  const redacted = redactTrace(trace);
+
+  assert.equal(redacted.events[0].usage.inputTokens, 10);
+  assert.equal(redacted.events[0].usage.outputTokens, 5);
+  assert.equal(redacted.events[0].usage.totalTokens, 15);
+});
+
 test("redactTrace supports custom redaction keys", () => {
   const trace = createRun();
   addEvent(trace, {

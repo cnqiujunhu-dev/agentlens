@@ -48,6 +48,8 @@ test("buildShareBundle redacts sensitive fields before rendering dashboard", () 
   assert.equal(bundle.evalReport.passed, true);
   assert.match(bundle.summaryMarkdown, /AgentLens Share Bundle/);
   assert.match(bundle.summaryMarkdown, /Status: PASS/);
+  assert.match(bundle.summaryMarkdown, /## Scan/);
+  assert.equal(bundle.scanReport.passed, true);
   assert.doesNotMatch(bundle.dashboardHtml, /secret-api-key/);
   assert.doesNotMatch(bundle.dashboardHtml, /secret-token/);
 });
@@ -93,4 +95,5 @@ test("CLI share writes a share bundle", () => {
   assert.equal(fs.existsSync(path.join(outDir, "trace.redacted.json")), true);
   assert.equal(fs.existsSync(path.join(outDir, "dashboard.html")), true);
   assert.equal(fs.existsSync(path.join(outDir, "summary.md")), true);
+  assert.equal(fs.existsSync(path.join(outDir, "scan.txt")), true);
 });

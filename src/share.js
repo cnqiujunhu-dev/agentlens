@@ -3,6 +3,7 @@ import { renderDashboard } from "./dashboard.js";
 import { evaluateTrace, formatEvalReport, loadEvalConfig } from "./eval.js";
 import { formatSummary, summarizeTrace } from "./inspect.js";
 import { redactTrace } from "./redact.js";
+import { formatScanReport, scanTrace } from "./scan.js";
 import { ensureDir, readTrace, writeText, writeTrace } from "./store.js";
 
 function safeName(value) {
@@ -12,7 +13,7 @@ function safeName(value) {
     .slice(0, 120) || "trace";
 }
 
-function formatShareSummary({ summary, evalReport }) {
+function formatShareSummary({ summary, evalReport, scanReport }) {
   const lines = [
     "# AgentLens Share Bundle",
     "",
@@ -34,6 +35,7 @@ function formatShareSummary({ summary, evalReport }) {
     "",
     "- `trace.redacted.json`: redacted AgentLens trace.",
     "- `dashboard.html`: static dashboard rendered from the redacted trace.",
+    "- `scan.txt`: local security and quality scan report.",
     "- `summary.md`: this share summary."
   ];
 
@@ -41,6 +43,8 @@ function formatShareSummary({ summary, evalReport }) {
     lines.push("- `eval.txt`: eval report generated from the redacted trace.");
     lines.push("", "## Eval", "", `Status: ${evalReport.passed ? "PASS" : "FAIL"}`);
   }
+
+  lines.push("", "## Scan", "", `Status: ${scanReport.passed ? "PASS" : "FAIL"}`, `Findings: ${scanReport.summary.findings}`);
 
   lines.push(
     "",
@@ -56,13 +60,16 @@ export function buildShareBundle(trace, { evalConfig = undefined, redactionKeys 
   const redactedTrace = redactTrace(trace, { keys: redactionKeys });
   const summary = summarizeTrace(redactedTrace);
   const evalReport = evalConfig ? evaluateTrace(redactedTrace, evalConfig) : null;
+  const scanReport = scanTrace(redactedTrace);
 
   return {
     redactedTrace,
     dashboardHtml: renderDashboard(redactedTrace),
-    summaryMarkdown: formatShareSummary({ summary, evalReport }),
+    summaryMarkdown: formatShareSummary({ summary, evalReport, scanReport }),
+    scanText: `${formatScanReport(scanReport)}\n`,
     evalText: evalReport ? `${formatEvalReport(evalReport)}\n` : null,
-    evalReport
+    evalReport,
+    scanReport
   };
 }
 
@@ -80,17 +87,20 @@ export function writeShareBundle({ traceFile, outDir = undefined, configPath = u
     trace: path.join(bundleDir, "trace.redacted.json"),
     dashboard: path.join(bundleDir, "dashboard.html"),
     summary: path.join(bundleDir, "summary.md"),
+    scan: path.join(bundleDir, "scan.txt"),
     eval: bundle.evalText ? path.join(bundleDir, "eval.txt") : null
   };
 
   writeTrace(files.trace, bundle.redactedTrace);
   writeText(files.dashboard, bundle.dashboardHtml);
   writeText(files.summary, bundle.summaryMarkdown);
+  writeText(files.scan, bundle.scanText);
   if (files.eval) writeText(files.eval, bundle.evalText);
 
   return {
     outDir: bundleDir,
     files,
-    evalPassed: bundle.evalReport ? bundle.evalReport.passed : null
+    evalPassed: bundle.evalReport ? bundle.evalReport.passed : null,
+    scanPassed: bundle.scanReport.passed
   };
 }

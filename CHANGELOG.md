@@ -43,6 +43,8 @@ Initial MVP.
 - Launch demo artifact for the LangGraph-style adapter.
 - README launch GIF generated from launch dashboard artifacts.
 - Release preflight script for final GitHub publication checks.
+- Local security scan CLI and API for secret-shaped values, prompt injection phrases, and risky tool calls.
+- Share bundles include `scan.txt` generated from the redacted trace.
 - Public GitHub repository target and publication blocker notes.
 - Release checklist, demo recording guide, and launch post draft.
 - Public JavaScript API and package exports.

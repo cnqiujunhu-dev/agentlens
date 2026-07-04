@@ -45,6 +45,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - GitHub Action outputs for downstream workflow steps.
 - Workspace doctor for checking local setup, traces, eval config, and CI wiring.
 - Validation command for trace files and eval configs.
+- Local security scan for secret leaks, prompt injection phrases, and high-risk tool calls.
 - Redacted share bundle generation for GitHub issues, PRs, and support threads.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
@@ -68,6 +69,7 @@ node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
 node ./bin/agentlens.js share .agentlens/runs/demo.json --config .agentlens/evals/default.json --out .agentlens/share/demo
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
+node ./bin/agentlens.js scan .agentlens/runs/demo.json
 node ./bin/agentlens.js validate trace .agentlens/runs/demo.json
 node ./bin/agentlens.js validate eval .agentlens/evals/default.json
 node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json
@@ -174,6 +176,7 @@ Sharing a trace publicly?
 
 ```bash
 node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
+node ./bin/agentlens.js scan .agentlens/runs/demo.redacted.json
 ```
 
 Eval output:
@@ -210,7 +213,9 @@ flowchart LR
   C --> D[Replay Transcript]
   C --> E[Eval Rules]
   C --> F[Static Dashboard]
+  C --> H[Security Scan]
   E --> G[CI Exit Code]
+  H --> G
 ```
 
 The MVP stores each run as a single JSON file:
@@ -242,6 +247,7 @@ agentlens replay <trace-file>
 agentlens diff <baseline-trace> <candidate-trace> [--json]
 agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]
 agentlens eval <trace-file> [--config path] [--json]
+agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none]
 agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]
 agentlens schema <trace|eval> [--out path]
 agentlens validate <trace|eval> <file> [--json]
@@ -255,7 +261,7 @@ agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 ## JavaScript API
 
 ```js
-import { addEvent, createRun, evaluateTrace, finishRun, writeTrace } from "agentlens";
+import { addEvent, createRun, evaluateTrace, finishRun, scanTrace, writeTrace } from "agentlens";
 
 const run = createRun({ app: "support-agent", name: "refund question" });
 addEvent(run, { type: "llm.prompt", name: "planner" });
@@ -271,9 +277,11 @@ const report = evaluateTrace(run, {
   name: "citation-policy",
   assertions: [{ id: "citations", type: "required-citations", min: 1 }]
 });
+
+const scan = scanTrace(run);
 ```
 
-See [API.md](docs/API.md) for trace, eval, JSONL, and MCP helper examples.
+See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 
 ## Launch Materials
 
@@ -283,6 +291,7 @@ See [API.md](docs/API.md) for trace, eval, JSONL, and MCP helper examples.
 - [Demo recording guide](docs/DEMO_RECORDING.md)
 - [Launch post draft](docs/LAUNCH_POST.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
+- [Security scan](docs/SECURITY_SCAN.md)
 - [LangGraph-style adapter](docs/LANGGRAPH_ADAPTER.md)
 - [Changelog](CHANGELOG.md)
 - [JSON schemas](docs/SCHEMAS.md)
@@ -318,6 +327,23 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 }
 ```
 
+## Security Scan
+
+`agentlens scan` is a local heuristic pass for issues that are easy to miss in raw traces:
+
+- secret-shaped values such as API keys, GitHub tokens, JWTs, and bearer tokens
+- sensitive fields that were not redacted
+- prompt injection phrases in prompt, retrieval, and response content
+- declared or inferred high-risk tool calls
+
+```bash
+agentlens scan .agentlens/runs/demo.json
+agentlens scan .agentlens/runs/demo.json --fail-on medium
+agentlens scan .agentlens/runs/demo.json --json
+```
+
+The default threshold fails on `high` and `critical` findings. Medium findings, such as prompt-injection phrases, are reported as warnings unless you opt into `--fail-on medium`. Share bundles include `scan.txt` generated from the redacted trace.
+
 ## Use Cases
 
 - Debug tool-using AI agents.
@@ -332,6 +358,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Reproduce flaky agent failures.
 - Review RAG evidence and citation behavior.
 - Add eval checks to CI.
+- Scan traces for secret leaks, prompt injection text, and risky tool calls.
 - Trace MCP-style tool calls.
 - Trace real stdio MCP JSON-RPC tool calls.
 - Reuse MCP stdio trace sessions across multiple tool calls.
@@ -359,6 +386,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Unit tests, CI batch eval, failure-case demo, MCP adapter MVP, and MCP policy rules.
 - Public JavaScript API and package exports.
 - Trace redaction CLI and API.
+- Local security scan CLI and API.
 - Trace/Eval JSON Schemas.
 - Trace diff CLI and API.
 - Static trace diff dashboards.
@@ -390,4 +418,4 @@ It is the missing engineering layer around agent frameworks: trace, replay, eval
 
 ## Status
 
-Early MVP. The current version is useful for local traces, deterministic replay, JSON evals, and static dashboard reports. The next milestone is framework adapters and CI packaging.
+Early MVP. The current version is useful for local traces, deterministic replay, JSON evals, security scans, share bundles, CI checks, and static dashboard reports. The next milestone is deeper framework adapters and richer governance reports.

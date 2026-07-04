@@ -42,4 +42,10 @@ writeTrace(".agentlens/runs/demo.redacted.json", redacted);
 
 ## Limits
 
-Redaction is key-based. It does not yet scan arbitrary string values for secrets. Treat public traces as sensitive until reviewed.
+Redaction is key-based. Run `agentlens scan` after redaction to catch common secret-shaped string values and risky trace content:
+
+```bash
+node ./bin/agentlens.js scan .agentlens/runs/demo.redacted.json
+```
+
+Treat public traces as sensitive until reviewed. The scan is heuristic and does not replace manual review.

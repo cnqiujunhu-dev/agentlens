@@ -21,6 +21,7 @@ function usage() {
     "  agentlens diff <baseline-trace> <candidate-trace> [--json]",
     "  agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]",
     "  agentlens eval <trace-file> [--config path] [--json]",
+    "  agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none]",
     "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]",
     "  agentlens schema <trace|eval> [--out path]",
     "  agentlens validate <trace|eval> <file> [--json]",
@@ -36,6 +37,7 @@ function usage() {
     "  node ./bin/agentlens.js diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json",
     "  node ./bin/agentlens.js share .agentlens/runs/demo.json --config evals/default.json",
     "  node ./bin/agentlens.js validate trace .agentlens/runs/demo.json",
+    "  node ./bin/agentlens.js scan .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json",
     "  node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json"
   ].join("\n");
@@ -137,6 +139,16 @@ async function main() {
     const configPath = option("--config", "evals/default.json");
     const report = evaluateTrace(readTrace(traceFile), loadEvalConfig(configPath));
     console.log(flag("--json") ? JSON.stringify(report, null, 2) : formatEvalReport(report));
+    if (!report.passed) process.exitCode = 1;
+    return;
+  }
+
+  if (command === "scan") {
+    const traceFile = positional(1);
+    if (!traceFile) throw new Error("Missing trace file. Usage: agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none]");
+    const { formatScanReport, scanTrace } = await import("../src/scan.js");
+    const report = scanTrace(readTrace(traceFile), { failOnSeverity: option("--fail-on", "high") });
+    console.log(flag("--json") ? JSON.stringify(report, null, 2) : formatScanReport(report));
     if (!report.passed) process.exitCode = 1;
     return;
   }

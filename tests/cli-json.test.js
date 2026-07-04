@@ -27,7 +27,7 @@ function runCli(args, cwd) {
   return JSON.parse(result.stdout);
 }
 
-test("CLI emits JSON for inspect, eval, ci, and diff", () => {
+test("CLI emits JSON for inspect, eval, scan, ci, and diff", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-cli-json-"));
   const runsDir = path.join(dir, "runs");
   fs.mkdirSync(runsDir);
@@ -48,6 +48,9 @@ test("CLI emits JSON for inspect, eval, ci, and diff", () => {
 
   const evaluation = runCli(["eval", baselineFile, "--config", configFile, "--json"], dir);
   assert.equal(evaluation.passed, true);
+
+  const scan = runCli(["scan", baselineFile, "--json"], dir);
+  assert.equal(scan.passed, true);
 
   const ci = runCli(["ci", "--runs", runsDir, "--config", configFile, "--json"], dir);
   assert.equal(ci.total, 2);

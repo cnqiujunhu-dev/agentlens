@@ -47,6 +47,17 @@ const report = evaluateTrace(trace, {
 console.log(formatEvalReport(report));
 ```
 
+## Security Scan
+
+```js
+import { formatScanReport, readTrace, scanTrace } from "agentlens";
+
+const trace = readTrace(".agentlens/runs/refund.json");
+const report = scanTrace(trace, { failOnSeverity: "high" });
+
+console.log(formatScanReport(report));
+```
+
 ## Trace Diff
 
 ```js
@@ -65,6 +76,7 @@ const html = renderDiffDashboard(diff);
 ```bash
 agentlens inspect .agentlens/runs/demo.json --json
 agentlens eval .agentlens/runs/demo.json --config evals/default.json --json
+agentlens scan .agentlens/runs/demo.json --json
 agentlens ci --runs .agentlens/runs --config evals/default.json --json
 agentlens diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json --json
 agentlens diff-dashboard .agentlens/runs/baseline.json .agentlens/runs/candidate.json --out .agentlens/reports/diff.html
@@ -111,6 +123,8 @@ CLI:
 ```bash
 agentlens share .agentlens/runs/demo.json --config evals/default.json --out .agentlens/share/demo
 ```
+
+Share bundles include `scan.txt`, generated after redaction.
 
 ## Validation
 

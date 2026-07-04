@@ -22,6 +22,7 @@ Run these from the repository root:
 npm run verify
 npm run doctor
 npm run validate:demo
+npm run scan:demo
 npm run share:demo
 npm run release:audit
 npm run release:preflight:local
@@ -35,6 +36,7 @@ Expected result:
 - Demo traces, MCP demos, JSONL demos, diff dashboards, launch artifacts, and static dashboards generate.
 - `agentlens doctor` reports no failed checks.
 - `agentlens validate` reports no trace or eval config errors.
+- `agentlens scan` reports no blocking high or critical findings for the demo trace.
 - `agentlens share` writes a redacted share bundle.
 - Release audit prints `AgentLens release audit passed`.
 - Local release preflight warns only for expected unpublished-release gaps such as missing `workflow` scope, unpushed default branch, or missing tag.
