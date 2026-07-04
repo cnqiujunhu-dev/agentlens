@@ -38,6 +38,7 @@ const requiredReadmeSnippets = [
   "Roadmap",
   "GitHub Actions",
   "MCP tool inventory",
+  "MCP stdio trace sessions",
   "Reviewed MCP risk exceptions",
   "expiry metadata",
   "file-change refresh",

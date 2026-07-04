@@ -299,3 +299,30 @@ await traceMcpStdioToolCall(run, {
 
 finishMcpRun(run, "passed");
 ```
+
+For multiple calls against the same server process:
+
+```js
+import { McpStdioTraceSession, createMcpRun, finishMcpRun } from "agentlens";
+
+const run = createMcpRun({
+  app: "mcp-agent",
+  name: "stdio session",
+  server: "agentlens-demo-policy-server"
+});
+
+const session = new McpStdioTraceSession(run, {
+  command: process.execPath,
+  args: ["./examples/mcp-stdio-server.mjs"],
+  server: "agentlens-demo-policy-server"
+});
+
+try {
+  await session.initialize();
+  await session.callTool("policy.lookup", { input: { topic: "refund policy" }, permission: "read-only" });
+  await session.callTool("policy.lookup", { input: { topic: "damaged item" }, permission: "read-only" });
+  finishMcpRun(run, "passed");
+} finally {
+  session.close();
+}
+```

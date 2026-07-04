@@ -47,6 +47,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
 - MCP tool inventory and risk scanning.
 - Zero-dependency stdio JSON-RPC MCP transport demo.
+- MCP stdio trace sessions for reusing a server process across multiple tool calls.
 - Static HTML dashboard for sharing runs in GitHub issues, PRs, and incident notes.
 - Local dashboard server with JSON APIs and file-change refresh.
 - Timeline filters for event type, status, search text, and MCP risk.
@@ -136,6 +137,8 @@ npm run demo:mcp:stdio
 node ./bin/agentlens.js replay .agentlens/runs/mcp-stdio-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/mcp-stdio-demo.json --config evals/mcp-policy.json
 ```
+
+Need to reuse one MCP stdio server for multiple calls? Use `McpStdioTraceSession` from the JavaScript API.
 
 Want append-friendly streaming traces?
 
@@ -314,6 +317,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Add eval checks to CI.
 - Trace MCP-style tool calls.
 - Trace real stdio MCP JSON-RPC tool calls.
+- Reuse MCP stdio trace sessions across multiple tool calls.
 - Enforce MCP server and permission policies.
 - Scan MCP tool schemas for risky capabilities.
 - Review explicit exceptions for approved risky MCP tools.
@@ -348,6 +352,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Local dashboard server.
 - GitHub Action for agent regression tests.
 - MCP tool inventory and risk scanner.
+- MCP stdio trace sessions.
 - Live local dashboard refresh.
 - Dashboard timeline filters.
 - Reviewed MCP risk exceptions.

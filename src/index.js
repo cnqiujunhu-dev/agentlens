@@ -15,5 +15,5 @@ export { formatValidationReport, validateArtifact, validateEvalConfig } from "./
 export { renderDashboard } from "./dashboard.js";
 export { createDashboardServer, listen, listTraceFiles } from "./server.js";
 export { addMcpToolManifest, createMcpRun, finishMcpRun, scanMcpTools, traceMcpToolCall } from "./adapters/mcp.js";
-export { MCP_PROTOCOL_VERSION, McpStdioClient, traceMcpStdioToolCall } from "./adapters/mcp-stdio.js";
+export { MCP_PROTOCOL_VERSION, McpStdioClient, McpStdioTraceSession, traceMcpStdioSession, traceMcpStdioToolCall } from "./adapters/mcp-stdio.js";
 export { traceAnthropicCompatibleMessage, traceLlmCall, traceOpenAiCompatibleChat } from "./adapters/llm.js";

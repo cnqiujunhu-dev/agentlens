@@ -12,6 +12,7 @@ import {
   formatTraceDiff,
   finishRun,
   JsonlTraceWriter,
+  McpStdioTraceSession,
   readSchema,
   redactTrace,
   renderDiffDashboard,
@@ -22,6 +23,7 @@ import {
   traceLlmCall,
   traceOpenAiCompatibleChat,
   traceMcpToolCall,
+  traceMcpStdioSession,
   validateEvalConfig
 } from "../src/index.js";
 
@@ -65,6 +67,8 @@ test("public API exports streaming and MCP helpers", async () => {
   assert.deepEqual(result, { value: "ok" });
   assert.equal(run.events.length, 2);
   assert.equal(scanMcpTools({ tools: [{ name: "search", permission: "read-only" }] }).tools[0].risk, "low");
+  assert.equal(typeof McpStdioTraceSession, "function");
+  assert.equal(typeof traceMcpStdioSession, "function");
 });
 
 test("public API exports LLM helper", async () => {

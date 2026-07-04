@@ -41,6 +41,7 @@ Built:
 - MCP-style tool-call adapter MVP.
 - MCP adapter documentation and demo.
 - MCP stdio JSON-RPC transport demo.
+- Reusable MCP stdio trace sessions with tool inventory and diagnostics.
 - MCP policy eval rules.
 - MCP tool inventory and risk scanner.
 - Reviewed-risk policy exceptions for MCP tools.
@@ -56,20 +57,19 @@ Built:
 
 Missing before a serious public launch:
 
-- One production-oriented framework adapter or hardened MCP transport integration.
 - Release GIF generated from `.agentlens/launch/*.html`.
 - Release tag.
+- Public repository remote.
 
 ## Priority 1: Make The Project Trustworthy
 
 Do these before asking strangers to star it:
 
-1. Harden the MCP stdio transport demo into a production-oriented adapter.
-2. Record a short launch GIF from `.agentlens/launch/support-agent.html`.
-3. Add the release tag.
-4. Publish the GitHub repository.
-5. Run the release checklist before public posting.
-6. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
+1. Record a short launch GIF from `.agentlens/launch/support-agent.html`.
+2. Add the release tag.
+3. Publish the GitHub repository.
+4. Run the release checklist before public posting.
+5. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
 
 ## Priority 2: Make The Product Real
 
@@ -133,6 +133,6 @@ Avoid hooks that sound like every other agent project:
 
 Target `v0.2.0`:
 
-- Hardened MCP transport adapter or one popular framework adapter.
+- One popular framework adapter.
 - Real launch GIF or screenshot.
 - First release tag.

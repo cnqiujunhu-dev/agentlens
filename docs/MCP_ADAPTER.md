@@ -1,6 +1,6 @@
 # MCP Adapter MVP
 
-AgentLens includes a lightweight MCP-style tracing helper and a zero-dependency stdio JSON-RPC transport demo. The helper wraps the tool-call boundary used by an agent or MCP client and records the call as AgentLens trace events.
+AgentLens includes a lightweight MCP-style tracing helper and a zero-dependency stdio JSON-RPC transport adapter. The helper wraps the tool-call boundary used by an agent or MCP client and records the call as AgentLens trace events.
 
 ## Why This Exists
 
@@ -95,7 +95,45 @@ node ./bin/agentlens.js replay .agentlens/runs/mcp-stdio-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/mcp-stdio-demo.json --config evals/mcp-policy.json
 ```
 
-The stdio demo starts `examples/mcp-stdio-server.mjs` as a child process and uses newline-delimited JSON-RPC messages for `initialize`, `tools/list`, and `tools/call`.
+The stdio adapter starts `examples/mcp-stdio-server.mjs` as a child process and uses newline-delimited JSON-RPC messages for `initialize`, `tools/list`, and `tools/call`.
+
+## MCP Stdio Trace Sessions
+
+Use `McpStdioTraceSession` when an agent needs to call more than one tool on the same MCP stdio server. The session initializes the server once, records an `mcp.tools` inventory event, traces each `tool.call` and `tool.result`, and stores basic diagnostics such as command, PID, stderr tail, exit code, and pending request count on result metadata.
+
+```js
+import { McpStdioTraceSession, createMcpRun, finishMcpRun } from "agentlens";
+
+const run = createMcpRun({
+  app: "support-agent",
+  name: "mcp stdio session",
+  server: "agentlens-demo-policy-server"
+});
+
+const session = new McpStdioTraceSession(run, {
+  command: process.execPath,
+  args: ["examples/mcp-stdio-server.mjs"],
+  server: "agentlens-demo-policy-server",
+  timeoutMs: 5000
+});
+
+try {
+  await session.initialize();
+  await session.callTool("policy.lookup", {
+    input: { topic: "damaged item refund" },
+    permission: "read-only"
+  });
+  await session.callTool("policy.lookup", {
+    input: { topic: "receipt missing" },
+    permission: "read-only"
+  });
+  finishMcpRun(run, "passed");
+} finally {
+  session.close();
+}
+```
+
+For one-off calls, `traceMcpStdioToolCall` uses the same session machinery and closes the server after the call.
 
 ## Policy Evals
 
@@ -156,5 +194,5 @@ If an exception has `expiresAt` in the past, AgentLens treats it as invalid and 
 
 ## Next Steps
 
-- Add server/tool allowlists.
 - Add richer dashboards for exception review history.
+- Add real-world examples for popular MCP servers.
