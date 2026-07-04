@@ -38,6 +38,7 @@ Built:
 - MCP policy eval rules.
 - MCP tool inventory and risk scanner.
 - Reviewed-risk policy exceptions for MCP tools.
+- Owner and expiry checks for MCP risk exceptions.
 - JSONL streaming trace writer and materializer.
 - Public JavaScript API and package exports.
 - Launch demo artifact generator.
@@ -66,9 +67,9 @@ Do these before asking strangers to star it:
 
 The MVP becomes much more credible when it works with one real ecosystem:
 
-1. Add expiring owners for reviewed MCP risk exceptions.
-2. Add a LangGraph or generic tool-call adapter example.
-3. Add dashboard diff views using the trace diff API.
+1. Add a LangGraph or generic tool-call adapter example.
+2. Add dashboard diff views using the trace diff API.
+3. Add richer dashboards for MCP exception review history.
 
 ## Priority 3: Make The README Convert
 

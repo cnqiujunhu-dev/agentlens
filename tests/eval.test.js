@@ -154,6 +154,62 @@ test("evaluateTrace allows reviewed MCP tool risk exceptions", () => {
   assert.equal(report.results[0].details.exceptions, 1);
 });
 
+test("evaluateTrace enforces reviewed MCP exception owners and expiry", () => {
+  const trace = createRun({ app: "eval-test", name: "mcp reviewed risk governance" });
+  addEvent(trace, {
+    type: "mcp.tools",
+    name: "database-server",
+    metadata: { server: "database-server" },
+    output: {
+      tools: [{ name: "database.delete", risk: "critical" }]
+    }
+  });
+
+  const report = evaluateTrace(trace, {
+    name: "mcp-risk",
+    assertions: [
+      {
+        id: "risk",
+        type: "forbidden-mcp-tool-risks",
+        risks: ["critical"],
+        requireExceptionOwner: true,
+        requireExceptionExpiry: true,
+        exceptions: [{ server: "database-server", tool: "database.delete", risk: "critical", expiresAt: "2999-01-01T00:00:00.000Z" }]
+      }
+    ]
+  });
+
+  assert.equal(report.passed, false);
+  assert.equal(report.results[0].details.exceptionIssues[0].issue, "missing owner");
+});
+
+test("evaluateTrace rejects expired MCP risk exceptions", () => {
+  const trace = createRun({ app: "eval-test", name: "mcp expired risk" });
+  addEvent(trace, {
+    type: "tool.call",
+    name: "database.delete",
+    metadata: {
+      server: "database-server",
+      toolRisk: "critical"
+    }
+  });
+
+  const report = evaluateTrace(trace, {
+    name: "mcp-risk",
+    assertions: [
+      {
+        id: "risk",
+        type: "forbidden-mcp-tool-risks",
+        risks: ["critical"],
+        exceptions: [{ server: "database-server", tool: "database.delete", risk: "critical", owner: "platform", expiresAt: "2000-01-01T00:00:00.000Z" }]
+      }
+    ]
+  });
+
+  assert.equal(report.passed, false);
+  assert.equal(report.results[0].details.exceptionIssues[0].issue, "expired");
+});
+
 test("evaluateTrace enforces required tool metadata", () => {
   const trace = baseTrace();
   addEvent(trace, {

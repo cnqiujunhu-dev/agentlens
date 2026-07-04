@@ -33,6 +33,7 @@ const requiredReadmeSnippets = [
   "GitHub Actions",
   "MCP tool inventory",
   "Reviewed MCP risk exceptions",
+  "expiry metadata",
   "file-change refresh",
   "Timeline filters",
   "starter files",

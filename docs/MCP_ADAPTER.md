@@ -137,18 +137,24 @@ Reviewed exception example:
   "id": "reviewed-risk-policy",
   "type": "forbidden-mcp-tool-risks",
   "risks": ["high", "critical"],
+  "requireExceptionOwner": true,
+  "requireExceptionExpiry": true,
   "exceptions": [
     {
       "server": "internal-db-tools",
       "tool": "database.backup",
       "risk": "high",
+      "owner": "platform-team",
+      "expiresAt": "2026-12-31T00:00:00.000Z",
       "reason": "reviewed backup-only operation"
     }
   ]
 }
 ```
 
+If an exception has `expiresAt` in the past, AgentLens treats it as invalid and the risk is no longer suppressed. Use `requireExceptionOwner` and `requireExceptionExpiry` when you want CI to fail ownerless or permanent high-risk exceptions.
+
 ## Next Steps
 
 - Add server/tool allowlists.
-- Add richer policy reports for expired or ownerless exceptions.
+- Add richer dashboards for exception review history.

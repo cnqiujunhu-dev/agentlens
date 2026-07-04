@@ -290,6 +290,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Enforce MCP server and permission policies.
 - Scan MCP tool schemas for risky capabilities.
 - Review explicit exceptions for approved risky MCP tools.
+- Require owner and expiry metadata for MCP risk exceptions.
 - Stream long-running traces as JSONL.
 - Redact secrets before sharing traces.
 - Publish JSON Schemas for external tooling.
@@ -319,10 +320,11 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Live local dashboard refresh.
 - Dashboard timeline filters.
 - Reviewed MCP risk exceptions.
+- Owner and expiry checks for MCP risk exceptions.
 - Launch demo artifact generator.
 - JavaScript SDK wrapper for common LLM calls.
 - LangGraph, AutoGen, and CrewAI adapter examples.
-- Expiring owners for reviewed MCP risk exceptions.
+- Richer dashboards for MCP exception review history.
 - VS Code extension.
 - JSONL streaming trace reader and writer.
 

@@ -59,6 +59,21 @@ function matchesException(violation, exception) {
   );
 }
 
+function exceptionReviewIssue(exception, assertion) {
+  if (assertion.requireExceptionOwner && !exception.owner) {
+    return "missing owner";
+  }
+  if (assertion.requireExceptionExpiry && !exception.expiresAt) {
+    return "missing expiresAt";
+  }
+  if (exception.expiresAt) {
+    const expiresAtMs = Date.parse(exception.expiresAt);
+    if (Number.isNaN(expiresAtMs)) return "invalid expiresAt";
+    if (expiresAtMs < Date.now()) return "expired";
+  }
+  return null;
+}
+
 function runAssertion(trace, assertion) {
   if (assertion.type === "required-event-types") {
     const counts = eventCountByType(trace);
@@ -118,6 +133,10 @@ function runAssertion(trace, assertion) {
   if (assertion.type === "forbidden-mcp-tool-risks") {
     const forbidden = new Set((assertion.risks ?? []).map((risk) => risk.toLowerCase()));
     const exceptions = assertion.exceptions ?? assertion.allow ?? [];
+    const exceptionIssues = exceptions
+      .map((exception) => ({ exception, issue: exceptionReviewIssue(exception, assertion) }))
+      .filter((item) => item.issue);
+    const validExceptions = exceptions.filter((exception) => !exceptionReviewIssue(exception, assertion));
     const callViolations = trace.events
       .filter((event) => event.type === "tool.call")
       .filter((event) => forbidden.has(String(event.metadata?.toolRisk ?? "").toLowerCase()))
@@ -128,8 +147,20 @@ function runAssertion(trace, assertion) {
       .filter((tool) => forbidden.has(String(tool.risk ?? "").toLowerCase()))
       .map((tool) => ({ server: tool.server ?? null, tool: tool.name, risk: tool.risk ?? null }));
     const violations = [...callViolations, ...manifestViolations].filter(
-      (violation) => !exceptions.some((exception) => matchesException(violation, exception))
+      (violation) => !validExceptions.some((exception) => matchesException(violation, exception))
     );
+
+    if (exceptionIssues.length > 0) {
+      return fail(assertion, `MCP risk exceptions need review: ${exceptionIssues.map((item) => `${item.exception.tool ?? "*"}:${item.issue}`).join(", ")}`, {
+        violations,
+        exceptionIssues: exceptionIssues.map((item) => ({
+          server: item.exception.server ?? null,
+          tool: item.exception.tool ?? null,
+          risk: item.exception.risk ?? null,
+          issue: item.issue
+        }))
+      });
+    }
 
     if (violations.length > 0) {
       return fail(assertion, `Forbidden MCP tool risks found: ${violations.map((item) => `${item.tool}:${item.risk}`).join(", ")}`, { violations });
