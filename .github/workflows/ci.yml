@@ -1,0 +1,59 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Syntax check
+        run: npm run check
+
+      - name: Unit tests
+        run: npm test
+
+      - name: CLI smoke test
+        run: |
+          node ./bin/agentlens.js init
+          node ./bin/agentlens.js demo --out .agentlens/runs/demo.json
+          node ./bin/agentlens.js inspect .agentlens/runs/demo.json
+          node ./bin/agentlens.js replay .agentlens/runs/demo.json
+          node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json
+          node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
+          node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json
+          node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
+
+      - name: MCP adapter demo
+        run: |
+          npm run demo:mcp
+          node ./bin/agentlens.js eval .agentlens/runs/mcp-demo.json --config evals/default.json
+          node ./bin/agentlens.js eval .agentlens/runs/mcp-demo.json --config evals/mcp-policy.json
+
+      - name: JSONL streaming demo
+        run: |
+          npm run demo:jsonl
+          node ./bin/agentlens.js materialize .agentlens/runs/jsonl-demo.jsonl --out .agentlens/runs/jsonl-demo.cli.json
+          node ./bin/agentlens.js eval .agentlens/runs/jsonl-demo.cli.json --config evals/default.json
+
+      - name: Launch demo artifacts
+        run: npm run launch:demo
+
+      - name: Failure demo catches policy violations
+        shell: bash
+        run: |
+          npm run demo:fail
+          if node ./bin/agentlens.js eval .agentlens/runs/failing-demo.json --config evals/default.json; then
+            echo "Expected failing demo eval to fail"
+            exit 1
+          fi

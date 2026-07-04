@@ -1,0 +1,36 @@
+{
+  "version": "agentlens.eval.v1",
+  "name": "mcp-policy",
+  "assertions": [
+    {
+      "id": "has-core-events",
+      "type": "required-event-types",
+      "eventTypes": ["llm.prompt", "llm.response", "tool.call", "tool.result"]
+    },
+    {
+      "id": "mcp-server-allowlist",
+      "type": "allowed-mcp-servers",
+      "servers": ["local-policy-server"]
+    },
+    {
+      "id": "mcp-tool-metadata",
+      "type": "required-tool-metadata",
+      "keys": ["adapter", "protocol", "server", "permission"]
+    },
+    {
+      "id": "no-write-tools",
+      "type": "forbidden-tool-permissions",
+      "permissions": ["write", "admin", "destructive"]
+    },
+    {
+      "id": "no-errors",
+      "type": "max-errors",
+      "max": 0
+    },
+    {
+      "id": "final-answer-has-citation",
+      "type": "required-citations",
+      "min": 1
+    }
+  ]
+}

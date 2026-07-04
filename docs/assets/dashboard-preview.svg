@@ -1,0 +1,79 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">AgentLens dashboard preview</title>
+  <desc id="desc">A static preview of an AgentLens trace dashboard with summary cards and a timeline of LLM and tool events.</desc>
+  <rect width="1200" height="720" rx="24" fill="#F6F7F9"/>
+  <rect x="44" y="38" width="1112" height="128" rx="16" fill="#101828"/>
+  <text x="82" y="92" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">AgentLens Report</text>
+  <text x="82" y="130" fill="#CBD5E1" font-family="Segoe UI, Arial, sans-serif" font-size="18">support-agent / refund policy question / run_50da1765fdbe</text>
+  <g transform="translate(44 192)">
+    <rect width="130" height="88" rx="10" fill="#FFFFFF" stroke="#D9DEE8"/>
+    <text x="18" y="30" fill="#657184" font-family="Segoe UI, Arial, sans-serif" font-size="14">Status</text>
+    <text x="18" y="62" fill="#0F766E" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">passed</text>
+  </g>
+  <g transform="translate(190 192)">
+    <rect width="130" height="88" rx="10" fill="#FFFFFF" stroke="#D9DEE8"/>
+    <text x="18" y="30" fill="#657184" font-family="Segoe UI, Arial, sans-serif" font-size="14">Events</text>
+    <text x="18" y="62" fill="#17202A" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">9</text>
+  </g>
+  <g transform="translate(336 192)">
+    <rect width="160" height="88" rx="10" fill="#FFFFFF" stroke="#D9DEE8"/>
+    <text x="18" y="30" fill="#657184" font-family="Segoe UI, Arial, sans-serif" font-size="14">Wall time</text>
+    <text x="18" y="62" fill="#17202A" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">1830 ms</text>
+  </g>
+  <g transform="translate(512 192)">
+    <rect width="160" height="88" rx="10" fill="#FFFFFF" stroke="#D9DEE8"/>
+    <text x="18" y="30" fill="#657184" font-family="Segoe UI, Arial, sans-serif" font-size="14">LLM tokens</text>
+    <text x="18" y="62" fill="#17202A" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">180</text>
+  </g>
+  <g transform="translate(688 192)">
+    <rect width="160" height="88" rx="10" fill="#FFFFFF" stroke="#D9DEE8"/>
+    <text x="18" y="30" fill="#657184" font-family="Segoe UI, Arial, sans-serif" font-size="14">Cost</text>
+    <text x="18" y="62" fill="#17202A" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">$0.0021</text>
+  </g>
+  <g transform="translate(864 192)">
+    <rect width="130" height="88" rx="10" fill="#FFFFFF" stroke="#D9DEE8"/>
+    <text x="18" y="30" fill="#657184" font-family="Segoe UI, Arial, sans-serif" font-size="14">Errors</text>
+    <text x="18" y="62" fill="#17202A" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">0</text>
+  </g>
+  <rect x="44" y="306" width="1112" height="84" rx="12" fill="#FFFFFF" stroke="#D9DEE8"/>
+  <text x="68" y="338" fill="#17202A" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700">Event Types</text>
+  <g transform="translate(68 352)">
+    <rect width="106" height="28" rx="14" fill="#DFF7F3" stroke="#99F6E4"/>
+    <text x="13" y="19" fill="#115E59" font-family="Segoe UI, Arial, sans-serif" font-size="13">llm.prompt 2</text>
+    <rect x="118" width="116" height="28" rx="14" fill="#DFF7F3" stroke="#99F6E4"/>
+    <text x="131" y="19" fill="#115E59" font-family="Segoe UI, Arial, sans-serif" font-size="13">llm.response 2</text>
+    <rect x="246" width="92" height="28" rx="14" fill="#DFF7F3" stroke="#99F6E4"/>
+    <text x="259" y="19" fill="#115E59" font-family="Segoe UI, Arial, sans-serif" font-size="13">tool.call 1</text>
+    <rect x="350" width="102" height="28" rx="14" fill="#DFF7F3" stroke="#99F6E4"/>
+    <text x="363" y="19" fill="#115E59" font-family="Segoe UI, Arial, sans-serif" font-size="13">tool.result 1</text>
+    <rect x="464" width="126" height="28" rx="14" fill="#DFF7F3" stroke="#99F6E4"/>
+    <text x="477" y="19" fill="#115E59" font-family="Segoe UI, Arial, sans-serif" font-size="13">retrieval.result 1</text>
+  </g>
+  <rect x="44" y="416" width="1112" height="252" rx="12" fill="#FFFFFF" stroke="#D9DEE8"/>
+  <text x="68" y="450" fill="#17202A" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700">Timeline</text>
+  <line x1="92" y1="480" x2="92" y2="640" stroke="#D9DEE8" stroke-width="2"/>
+  <g transform="translate(68 476)">
+    <circle cx="24" cy="24" r="16" fill="#E5E7EB"/>
+    <text x="19" y="29" fill="#374151" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">1</text>
+    <text x="58" y="19" fill="#17202A" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">llm.prompt / planner</text>
+    <text x="58" y="43" fill="#657184" font-family="Segoe UI, Arial, sans-serif" font-size="13">+90ms · user asks about damaged item refund</text>
+  </g>
+  <g transform="translate(68 534)">
+    <circle cx="24" cy="24" r="16" fill="#E5E7EB"/>
+    <text x="19" y="29" fill="#374151" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">2</text>
+    <text x="58" y="19" fill="#17202A" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">tool.call / kb.search</text>
+    <text x="58" y="43" fill="#657184" font-family="Segoe UI, Arial, sans-serif" font-size="13">+840ms · query: damaged item refund policy</text>
+  </g>
+  <g transform="translate(68 592)">
+    <circle cx="24" cy="24" r="16" fill="#E5E7EB"/>
+    <text x="19" y="29" fill="#374151" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">3</text>
+    <text x="58" y="19" fill="#17202A" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">llm.response / final-answer</text>
+    <text x="58" y="43" fill="#657184" font-family="Segoe UI, Arial, sans-serif" font-size="13">+1810ms · cited answer with refund-policy-30d and damaged-item-policy</text>
+  </g>
+  <rect x="852" y="476" width="264" height="154" rx="10" fill="#111827"/>
+  <text x="876" y="510" fill="#E5E7EB" font-family="Consolas, monospace" font-size="15">Eval: baseline-agent-quality</text>
+  <text x="876" y="540" fill="#99F6E4" font-family="Consolas, monospace" font-size="15">Status: PASS</text>
+  <text x="876" y="570" fill="#E5E7EB" font-family="Consolas, monospace" font-size="14">[PASS] no-errors</text>
+  <text x="876" y="596" fill="#E5E7EB" font-family="Consolas, monospace" font-size="14">[PASS] no-dangerous-tools</text>
+  <text x="876" y="622" fill="#E5E7EB" font-family="Consolas, monospace" font-size="14">[PASS] citations</text>
+</svg>

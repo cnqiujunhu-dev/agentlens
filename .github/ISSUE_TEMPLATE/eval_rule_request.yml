@@ -1,0 +1,29 @@
+name: Eval rule request
+description: Request a new trace assertion or policy rule.
+title: "eval: "
+labels: ["eval", "enhancement"]
+body:
+  - type: textarea
+    id: rule
+    attributes:
+      label: Rule description
+      description: What behavior should AgentLens detect?
+      placeholder: "Fail if a final answer does not cite every retrieved source it uses."
+    validations:
+      required: true
+  - type: textarea
+    id: passing
+    attributes:
+      label: Passing example
+      description: What should pass?
+      render: json
+    validations:
+      required: false
+  - type: textarea
+    id: failing
+    attributes:
+      label: Failing example
+      description: What should fail?
+      render: json
+    validations:
+      required: false

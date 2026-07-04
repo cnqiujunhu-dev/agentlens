@@ -1,0 +1,39 @@
+name: Adapter request
+description: Request support for a framework, SDK, or MCP server.
+title: "adapter: "
+labels: ["adapter", "enhancement"]
+body:
+  - type: input
+    id: target
+    attributes:
+      label: Target framework or tool
+      placeholder: "LangGraph, AutoGen, CrewAI, MCP server name, OpenAI SDK..."
+    validations:
+      required: true
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Workflow to trace
+      description: What should AgentLens capture?
+      placeholder: "LLM prompts, tool calls, retrieval chunks, browser actions..."
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Minimal example
+      description: Link or paste a small example that should be traceable.
+      render: javascript
+    validations:
+      required: false
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Why does this matter?
+      options:
+        - I need this for production debugging.
+        - I need this for CI evals.
+        - I need this for local development.
+        - I am exploring the project.
+    validations:
+      required: true
