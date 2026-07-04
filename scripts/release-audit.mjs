@@ -32,6 +32,7 @@ const requiredReadmeSnippets = [
   "Roadmap",
   "GitHub Actions",
   "MCP tool inventory",
+  "file-change refresh",
   "agentlens serve",
   "dashboard-screenshot.png"
 ];

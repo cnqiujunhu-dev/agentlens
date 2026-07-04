@@ -36,23 +36,98 @@ function listTraceFiles(root) {
   return files.sort((a, b) => a.localeCompare(b));
 }
 
-function renderIndex({ root, files }) {
-  const items = files
-    .map((file) => {
-      const relative = path.relative(root, file);
-      const href = `/trace/${encodeURIComponent(relative.replaceAll(path.sep, "/"))}`;
-      let label = relative;
-      let status = "";
-      try {
-        const trace = readTrace(file);
-        label = `${trace.name} (${trace.app})`;
-        status = trace.status;
-      } catch {
-        status = "invalid";
+function safeJson(value) {
+  return JSON.stringify(value).replaceAll("<", "\\u003c");
+}
+
+function relativeUrlPath(root, file) {
+  return path.relative(root, file).replaceAll(path.sep, "/");
+}
+
+function fileStat(file) {
+  const stat = fs.statSync(file);
+  return {
+    mtimeMs: stat.mtimeMs,
+    size: stat.size
+  };
+}
+
+function statSignature(file) {
+  const stat = fileStat(file);
+  return `${stat.mtimeMs}:${stat.size}`;
+}
+
+function traceInfo(root, file) {
+  const relative = relativeUrlPath(root, file);
+  const stat = fileStat(file);
+  const info = {
+    path: relative,
+    href: `/trace/${encodeURIComponent(relative)}`,
+    apiHref: `/api/trace/${encodeURIComponent(relative)}`,
+    statHref: `/api/stat/${encodeURIComponent(relative)}`,
+    updatedAtMs: stat.mtimeMs,
+    size: stat.size,
+    valid: true
+  };
+
+  try {
+    const trace = readTrace(file);
+    return {
+      ...info,
+      runId: trace.runId,
+      app: trace.app,
+      name: trace.name,
+      status: trace.status,
+      events: trace.events?.length ?? 0
+    };
+  } catch (error) {
+    return {
+      ...info,
+      valid: false,
+      status: "invalid",
+      error: error.message
+    };
+  }
+}
+
+function listTraceInfos(root) {
+  return listTraceFiles(root).map((file) => traceInfo(root, file));
+}
+
+function runsSignature(files) {
+  return files.map((file) => `${file.path}:${file.updatedAtMs}:${file.size}:${file.valid}`).join("|");
+}
+
+function renderIndexLiveReload(signature) {
+  return `<script id="agentlens-index-live-reload">
+    (() => {
+      let signature = ${safeJson(signature)};
+      function nextSignature(files) {
+        return files.map((file) => [file.path, file.updatedAtMs, file.size, file.valid].join(":")).join("|");
       }
-      return `<li><a href="${href}">${escapeHtml(label)}</a><span>${escapeHtml(status)}</span><code>${escapeHtml(relative)}</code></li>`;
+      async function poll() {
+        try {
+          const response = await fetch("/api/runs", { cache: "no-store" });
+          if (!response.ok) return;
+          const data = await response.json();
+          const next = nextSignature(data.files || []);
+          if (next !== signature) window.location.reload();
+        } catch {}
+      }
+      window.setInterval(poll, 2000);
+    })();
+  </script>`;
+}
+
+function renderIndex({ root, files }) {
+  const infos = files.map((file) => traceInfo(root, file));
+  const items = infos
+    .map((info) => {
+      const label = info.valid ? `${info.name} (${info.app})` : info.path;
+      return `<li><a href="${info.href}">${escapeHtml(label)}</a><span>${escapeHtml(info.status)}</span><code>${escapeHtml(info.path)}</code></li>`;
     })
     .join("");
+  const signature = runsSignature(infos);
 
   return `<!doctype html>
 <html lang="en">
@@ -77,11 +152,12 @@ function renderIndex({ root, files }) {
 <body>
   <header>
     <h1>AgentLens Runs</h1>
-    <p>${escapeHtml(root)} · ${files.length} trace file${files.length === 1 ? "" : "s"}</p>
+    <p>${escapeHtml(root)} · ${infos.length} trace file${infos.length === 1 ? "" : "s"}</p>
   </header>
   <main>
-    ${files.length > 0 ? `<ul>${items}</ul>` : `<div class="empty">No trace JSON files found.</div>`}
+    ${infos.length > 0 ? `<ul>${items}</ul>` : `<div class="empty">No trace JSON files found.</div>`}
   </main>
+  ${renderIndexLiveReload(signature)}
 </body>
 </html>`;
 }
@@ -110,8 +186,42 @@ export function createDashboardServer(target = ".agentlens/runs") {
         return;
       }
 
+      if (isFile && url.pathname === "/api/trace") {
+        send(res, 200, JSON.stringify(readTrace(resolvedTarget)), "application/json; charset=utf-8");
+        return;
+      }
+
+      if (isFile && url.pathname === "/api/stat") {
+        send(res, 200, JSON.stringify(fileStat(resolvedTarget)), "application/json; charset=utf-8");
+        return;
+      }
+
+      if (!isFile && url.pathname === "/api/runs") {
+        send(res, 200, JSON.stringify({ root, files: listTraceInfos(root) }), "application/json; charset=utf-8");
+        return;
+      }
+
+      if (!isFile && url.pathname.startsWith("/api/trace/")) {
+        const tracePath = resolveTracePath(root, url.pathname.slice("/api/trace/".length));
+        send(res, 200, JSON.stringify(readTrace(tracePath)), "application/json; charset=utf-8");
+        return;
+      }
+
+      if (!isFile && url.pathname.startsWith("/api/stat/")) {
+        const tracePath = resolveTracePath(root, url.pathname.slice("/api/stat/".length));
+        send(res, 200, JSON.stringify(fileStat(tracePath)), "application/json; charset=utf-8");
+        return;
+      }
+
       if (isFile && (url.pathname === "/" || url.pathname === "/trace")) {
-        send(res, 200, renderDashboard(readTrace(resolvedTarget)));
+        send(
+          res,
+          200,
+          renderDashboard(readTrace(resolvedTarget), {
+            liveReloadUrl: "/api/stat",
+            liveReloadSignature: statSignature(resolvedTarget)
+          })
+        );
         return;
       }
 
@@ -122,7 +232,15 @@ export function createDashboardServer(target = ".agentlens/runs") {
 
       if (!isFile && url.pathname.startsWith("/trace/")) {
         const tracePath = resolveTracePath(root, url.pathname.slice("/trace/".length));
-        send(res, 200, renderDashboard(readTrace(tracePath)));
+        const relative = relativeUrlPath(root, tracePath);
+        send(
+          res,
+          200,
+          renderDashboard(readTrace(tracePath), {
+            liveReloadUrl: `/api/stat/${encodeURIComponent(relative)}`,
+            liveReloadSignature: statSignature(tracePath)
+          })
+        );
         return;
       }
 

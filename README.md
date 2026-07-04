@@ -40,6 +40,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - MCP tool inventory and risk scanning.
 - Zero-dependency stdio JSON-RPC MCP transport demo.
 - Static HTML dashboard for sharing runs in GitHub issues, PRs, and incident notes.
+- Local dashboard server with JSON APIs and file-change refresh.
 - Composite GitHub Action for failing PRs on agent eval regressions.
 - Zero runtime dependencies in the MVP.
 
@@ -274,6 +275,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Redact secrets before sharing traces.
 - Publish JSON Schemas for external tooling.
 - Browse local runs with a zero-dependency dashboard server.
+- Poll local trace files while agents are running.
 - Fail GitHub PRs when recorded agent runs violate eval rules.
 - Generate launch-ready demo artifacts.
 - Share compact run reports in GitHub issues.
@@ -289,11 +291,11 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Local dashboard server.
 - GitHub Action for agent regression tests.
 - MCP tool inventory and risk scanner.
+- Live local dashboard refresh.
 - Launch demo artifact generator.
 - JavaScript SDK wrapper for common LLM calls.
 - LangGraph, AutoGen, and CrewAI adapter examples.
 - Reviewed-risk policy exceptions for MCP servers.
-- Live local dashboard mode.
 - VS Code extension.
 - JSONL streaming trace reader and writer.
 

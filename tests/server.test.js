@@ -32,10 +32,24 @@ test("dashboard server lists trace files in directory mode", async () => {
     const index = await fetch(baseUrl).then((res) => res.text());
     assert.match(index, /directory trace/);
     assert.match(index, /demo\.json/);
+    assert.match(index, /agentlens-index-live-reload/);
 
     const trace = await fetch(`${baseUrl}/trace/demo.json`).then((res) => res.text());
     assert.match(trace, /AgentLens Report/);
     assert.match(trace, /directory trace/);
+    assert.match(trace, /agentlens-live-reload/);
+
+    const runs = await fetch(`${baseUrl}/api/runs`).then((res) => res.json());
+    assert.equal(runs.files.length, 1);
+    assert.equal(runs.files[0].name, "directory trace");
+    assert.equal(runs.files[0].path, "demo.json");
+
+    const traceJson = await fetch(`${baseUrl}/api/trace/demo.json`).then((res) => res.json());
+    assert.equal(traceJson.name, "directory trace");
+
+    const stat = await fetch(`${baseUrl}/api/stat/demo.json`).then((res) => res.json());
+    assert.equal(typeof stat.mtimeMs, "number");
+    assert.equal(typeof stat.size, "number");
   });
 });
 
@@ -51,6 +65,13 @@ test("dashboard server serves a single trace file", async () => {
     const page = await fetch(baseUrl).then((res) => res.text());
     assert.match(page, /AgentLens Report/);
     assert.match(page, /single trace/);
+    assert.match(page, /agentlens-live-reload/);
+
+    const trace = await fetch(`${baseUrl}/api/trace`).then((res) => res.json());
+    assert.equal(trace.name, "single trace");
+
+    const stat = await fetch(`${baseUrl}/api/stat`).then((res) => res.json());
+    assert.equal(typeof stat.mtimeMs, "number");
   });
 });
 

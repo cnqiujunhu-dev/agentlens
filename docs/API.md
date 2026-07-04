@@ -152,6 +152,16 @@ const address = await listen(server, {
 console.log(address);
 ```
 
+The server also exposes local JSON endpoints:
+
+```text
+GET /api/runs
+GET /api/trace/<relative-trace-path>
+GET /api/stat/<relative-trace-path>
+```
+
+When serving a single trace file, use `GET /api/trace` and `GET /api/stat`. HTML pages rendered by `agentlens serve` poll the stat endpoint and refresh when the underlying trace file changes.
+
 ## MCP-Style Tool Calls
 
 ```js

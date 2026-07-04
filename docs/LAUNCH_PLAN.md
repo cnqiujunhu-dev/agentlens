@@ -16,6 +16,7 @@ Built:
 - Generic LLM call adapter.
 - Static HTML dashboard.
 - Local dashboard server.
+- Dashboard JSON APIs and live file-change refresh.
 - Release audit script.
 - Composite GitHub Action for `agentlens ci`.
 - Apache-2.0 license.
@@ -61,7 +62,7 @@ The MVP becomes much more credible when it works with one real ecosystem:
 
 1. Add richer policy reports for reviewed-but-approved risky tools.
 2. Add a LangGraph or generic tool-call adapter example.
-3. Add file watching and live refresh to the local dashboard server.
+3. Add richer local dashboard filters and diff views.
 
 ## Priority 3: Make The README Convert
 
