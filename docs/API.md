@@ -75,6 +75,29 @@ await traceLlmCall(
 finishRun(run, "passed");
 ```
 
+## Provider-Style LLM Calls
+
+```js
+import { createRun, finishRun, traceOpenAiCompatibleChat } from "agentlens";
+
+const run = createRun({
+  app: "support-agent",
+  name: "provider wrapper"
+});
+
+await traceOpenAiCompatibleChat(run, {
+  client: yourClient,
+  params: {
+    model: "your-chat-model",
+    messages: [{ role: "user", content: "What is AgentLens?" }]
+  }
+});
+
+finishRun(run, "passed");
+```
+
+For message-style SDKs, use `traceAnthropicCompatibleMessage(run, { client, params })`. Both helpers delegate to `traceLlmCall`, so they produce the same `llm.prompt`, `llm.response`, usage, and error events.
+
 ## JSONL Streaming
 
 ```js

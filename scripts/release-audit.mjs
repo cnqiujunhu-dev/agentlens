@@ -26,6 +26,7 @@ const requiredFiles = [
 const requiredReadmeSnippets = [
   "Quick Demo",
   "JavaScript API",
+  "provider-style SDK adapters",
   "Eval Rules",
   "Use Cases",
   "Roadmap",

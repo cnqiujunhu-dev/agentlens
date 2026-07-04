@@ -36,6 +36,7 @@ Built:
 - Trace redaction CLI and API.
 - Real dashboard screenshot for README.
 - Trace/Eval JSON Schemas.
+- OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 
 Missing before a serious public launch:
 
@@ -57,11 +58,10 @@ Do these before asking strangers to star it:
 
 The MVP becomes much more credible when it works with one real ecosystem:
 
-1. Add provider-specific examples for OpenAI-compatible and Anthropic-compatible calls.
-2. Add MCP tool schema capture and policy reporting.
-3. Add a LangGraph or generic tool-call adapter example.
-4. Add a scanner for dangerous MCP capabilities.
-5. Add file watching and live refresh to the local dashboard server.
+1. Add MCP tool schema capture and policy reporting.
+2. Add a LangGraph or generic tool-call adapter example.
+3. Add a scanner for dangerous MCP capabilities.
+4. Add file watching and live refresh to the local dashboard server.
 
 ## Priority 3: Make The README Convert
 

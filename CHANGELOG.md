@@ -22,6 +22,7 @@ Initial MVP.
 - Local dashboard server for trace files and runs directories.
 - Release audit script for required files, README sections, exports, and pack contents.
 - Composite GitHub Action for running `agentlens ci` in PR workflows.
+- OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - Launch demo artifact generator.
 - Public JavaScript API and package exports.
 - GitHub Actions CI workflow.

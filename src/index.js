@@ -11,4 +11,4 @@ export { renderDashboard } from "./dashboard.js";
 export { createDashboardServer, listen, listTraceFiles } from "./server.js";
 export { createMcpRun, finishMcpRun, traceMcpToolCall } from "./adapters/mcp.js";
 export { MCP_PROTOCOL_VERSION, McpStdioClient, traceMcpStdioToolCall } from "./adapters/mcp-stdio.js";
-export { traceLlmCall } from "./adapters/llm.js";
+export { traceAnthropicCompatibleMessage, traceLlmCall, traceOpenAiCompatibleChat } from "./adapters/llm.js";

@@ -12,9 +12,34 @@ function durationSince(startedAtMs) {
   return Math.max(0, Date.now() - startedAtMs);
 }
 
+function textFromBlocks(blocks) {
+  if (!Array.isArray(blocks)) return undefined;
+
+  const text = blocks
+    .map((block) => {
+      if (typeof block === "string") return block;
+      if (typeof block?.text === "string") return block.text;
+      if (typeof block?.content === "string") return block.content;
+      return undefined;
+    })
+    .filter(Boolean)
+    .join("");
+
+  return text || undefined;
+}
+
 function extractContent(result) {
   if (typeof result === "string") return result;
-  return result?.content ?? result?.message?.content ?? result?.choices?.[0]?.message?.content ?? result?.text;
+
+  const chatContent = result?.choices?.[0]?.message?.content;
+  const directContent = result?.content ?? result?.message?.content ?? result?.text;
+
+  return (
+    result?.output_text ??
+    (typeof chatContent === "string" ? chatContent : textFromBlocks(chatContent)) ??
+    (typeof directContent === "string" ? directContent : textFromBlocks(directContent)) ??
+    textFromBlocks(result?.output)
+  );
 }
 
 function extractUsage(result) {
@@ -22,8 +47,8 @@ function extractUsage(result) {
   if (!usage) return undefined;
 
   return {
-    inputTokens: usage.inputTokens ?? usage.prompt_tokens ?? usage.promptTokens,
-    outputTokens: usage.outputTokens ?? usage.completion_tokens ?? usage.completionTokens,
+    inputTokens: usage.inputTokens ?? usage.input_tokens ?? usage.prompt_tokens ?? usage.promptTokens,
+    outputTokens: usage.outputTokens ?? usage.output_tokens ?? usage.completion_tokens ?? usage.completionTokens,
     totalTokens: usage.totalTokens ?? usage.total_tokens,
     costUsd: usage.costUsd
   };
@@ -91,4 +116,48 @@ export async function traceLlmCall(run, options = {}, execute) {
     });
     throw error;
   }
+}
+
+export async function traceOpenAiCompatibleChat(run, options = {}) {
+  const { client, params, name = "chat.completions.create", metadata = {} } = options;
+  if (!client?.chat?.completions || typeof client.chat.completions.create !== "function") {
+    throw new Error("traceOpenAiCompatibleChat requires client.chat.completions.create");
+  }
+  if (!params || typeof params !== "object") {
+    throw new Error("traceOpenAiCompatibleChat requires params");
+  }
+
+  return traceLlmCall(
+    run,
+    {
+      name,
+      provider: "openai-compatible",
+      model: params.model,
+      input: params,
+      metadata: { adapter: "openai-compatible-chat", ...metadata }
+    },
+    () => client.chat.completions.create(params)
+  );
+}
+
+export async function traceAnthropicCompatibleMessage(run, options = {}) {
+  const { client, params, name = "messages.create", metadata = {} } = options;
+  if (!client?.messages || typeof client.messages.create !== "function") {
+    throw new Error("traceAnthropicCompatibleMessage requires client.messages.create");
+  }
+  if (!params || typeof params !== "object") {
+    throw new Error("traceAnthropicCompatibleMessage requires params");
+  }
+
+  return traceLlmCall(
+    run,
+    {
+      name,
+      provider: "anthropic-compatible",
+      model: params.model,
+      input: params,
+      metadata: { adapter: "anthropic-compatible-message", ...metadata }
+    },
+    () => client.messages.create(params)
+  );
 }

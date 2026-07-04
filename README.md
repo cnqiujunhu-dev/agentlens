@@ -33,6 +33,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 
 - Trace model for LLM prompts, responses, tool calls, retrieval, errors, usage, and metadata.
 - Generic LLM wrapper for tracing model calls from any SDK.
+- OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
@@ -84,6 +85,14 @@ Want to wrap a generic LLM call?
 npm run demo:llm
 node ./bin/agentlens.js replay .agentlens/runs/llm-wrapper-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/llm-wrapper-demo.json --config evals/llm-basic.json
+```
+
+Want provider-style SDK adapters without adding SDK dependencies?
+
+```bash
+npm run demo:providers
+node ./bin/agentlens.js replay .agentlens/runs/provider-adapters-demo.json
+node ./bin/agentlens.js eval .agentlens/runs/provider-adapters-demo.json --config evals/llm-basic.json
 ```
 
 Want to trace an MCP-style tool call?
@@ -252,6 +261,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 
 - Debug tool-using AI agents.
 - Trace model calls without binding to one LLM SDK.
+- Wrap OpenAI-compatible and Anthropic-compatible SDK calls.
 - Reproduce flaky agent failures.
 - Review RAG evidence and citation behavior.
 - Add eval checks to CI.
@@ -278,9 +288,8 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - GitHub Action for agent regression tests.
 - Launch demo artifact generator.
 - JavaScript SDK wrapper for common LLM calls.
-- LangGraph, AutoGen, CrewAI, and OpenAI/Anthropic-style adapter examples.
+- LangGraph, AutoGen, and CrewAI adapter examples.
 - MCP server scanner and policy pack.
-- GitHub Action for agent regression tests.
 - Live local dashboard mode.
 - VS Code extension.
 - JSONL streaming trace reader and writer.

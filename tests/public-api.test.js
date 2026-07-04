@@ -11,7 +11,9 @@ import {
   redactTrace,
   renderReplay,
   summarizeTrace,
+  traceAnthropicCompatibleMessage,
   traceLlmCall,
+  traceOpenAiCompatibleChat,
   traceMcpToolCall
 } from "../src/index.js";
 
@@ -55,4 +57,6 @@ test("public API exports LLM helper", async () => {
 
   assert.equal(run.events.length, 2);
   assert.equal(run.events[1].output.content, "ok");
+  assert.equal(typeof traceOpenAiCompatibleChat, "function");
+  assert.equal(typeof traceAnthropicCompatibleMessage, "function");
 });
