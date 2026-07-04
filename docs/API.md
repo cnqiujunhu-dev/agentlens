@@ -78,7 +78,7 @@ const html = renderDiffDashboard(diff);
 agentlens inspect .agentlens/runs/demo.json --json
 agentlens eval .agentlens/runs/demo.json --config evals/default.json --json
 agentlens scan .agentlens/runs/demo.json --json --sarif .agentlens/reports/agentlens-scan.sarif
-agentlens ci --runs .agentlens/runs --config evals/default.json --scan --json
+agentlens ci --runs .agentlens/runs --config evals/default.json --scan --json --sarif .agentlens/reports/agentlens-ci.sarif
 agentlens diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json --json
 agentlens diff-dashboard .agentlens/runs/baseline.json .agentlens/runs/candidate.json --out .agentlens/reports/diff.html
 ```

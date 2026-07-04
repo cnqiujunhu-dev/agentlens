@@ -377,7 +377,46 @@ function sarifRules(findings) {
   return [...rules.values()].sort((a, b) => a.id.localeCompare(b.id));
 }
 
-export function formatScanSarif(report, { traceFile = "trace.json" } = {}) {
+function sarifResult(finding, traceFile) {
+  return {
+    ruleId: finding.ruleId,
+    level: sarifLevel(finding.severity),
+    message: {
+      text: `${finding.message} at ${finding.path}`
+    },
+    locations: [
+      {
+        physicalLocation: {
+          artifactLocation: {
+            uri: traceFile
+          },
+          region: {
+            startLine: 1,
+            startColumn: 1
+          }
+        },
+        logicalLocations: [
+          {
+            name: finding.path,
+            kind: "jsonpath"
+          }
+        ]
+      }
+    ],
+    properties: {
+      severity: finding.severity,
+      category: finding.category,
+      path: finding.path,
+      ...(finding.eventId ? { eventId: finding.eventId } : {}),
+      ...(finding.eventType ? { eventType: finding.eventType } : {}),
+      ...(finding.eventName ? { eventName: finding.eventName } : {}),
+      ...(finding.sample ? { sample: finding.sample } : {})
+    }
+  };
+}
+
+export function formatScanReportsSarif(items = []) {
+  const allFindings = items.flatMap((item) => item.report?.findings ?? []);
   return {
     version: "2.1.0",
     $schema: "https://json.schemastore.org/sarif-2.1.0.json",
@@ -387,45 +426,15 @@ export function formatScanSarif(report, { traceFile = "trace.json" } = {}) {
           driver: {
             name: "AgentLens",
             informationUri: "https://github.com/cnqiujunhu-dev/agentlens",
-            rules: sarifRules(report.findings)
+            rules: sarifRules(allFindings)
           }
         },
-        results: report.findings.map((finding) => ({
-          ruleId: finding.ruleId,
-          level: sarifLevel(finding.severity),
-          message: {
-            text: `${finding.message} at ${finding.path}`
-          },
-          locations: [
-            {
-              physicalLocation: {
-                artifactLocation: {
-                  uri: traceFile
-                },
-                region: {
-                  startLine: 1,
-                  startColumn: 1
-                }
-              },
-              logicalLocations: [
-                {
-                  name: finding.path,
-                  kind: "jsonpath"
-                }
-              ]
-            }
-          ],
-          properties: {
-            severity: finding.severity,
-            category: finding.category,
-            path: finding.path,
-            ...(finding.eventId ? { eventId: finding.eventId } : {}),
-            ...(finding.eventType ? { eventType: finding.eventType } : {}),
-            ...(finding.eventName ? { eventName: finding.eventName } : {}),
-            ...(finding.sample ? { sample: finding.sample } : {})
-          }
-        }))
+        results: items.flatMap((item) => (item.report?.findings ?? []).map((finding) => sarifResult(finding, item.traceFile ?? "trace.json")))
       }
     ]
   };
+}
+
+export function formatScanSarif(report, { traceFile = "trace.json" } = {}) {
+  return formatScanReportsSarif([{ report, traceFile }]);
 }

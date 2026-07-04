@@ -10,6 +10,7 @@ agentlens scan .agentlens/runs/demo.json --fail-on medium
 agentlens scan .agentlens/runs/demo.json --json
 agentlens scan .agentlens/runs/demo.json --sarif .agentlens/reports/agentlens-scan.sarif
 agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fail-on high
+agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fail-on none --sarif .agentlens/reports/agentlens-ci.sarif
 ```
 
 Default behavior:
@@ -17,7 +18,8 @@ Default behavior:
 - `high` and `critical` findings fail the command.
 - `medium` findings are reported but do not fail unless `--fail-on medium` is used.
 - `--fail-on none` reports findings without changing the exit code.
-- `--sarif <path>` writes a SARIF 2.1.0 report for GitHub code scanning or other SARIF consumers.
+- `scan --sarif <path>` writes a SARIF 2.1.0 report for one trace.
+- `ci --scan --sarif <path>` writes combined SARIF for every trace in a run directory.
 
 ## What It Checks
 
@@ -70,7 +72,13 @@ Single-trace scan findings can be exported as SARIF:
 agentlens scan .agentlens/runs/demo.json --sarif .agentlens/reports/agentlens-scan.sarif --fail-on none
 ```
 
-In GitHub Actions, upload that file with `github/codeql-action/upload-sarif`:
+Run-directory scan findings can be exported from CI:
+
+```bash
+agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fail-on none --sarif .agentlens/reports/agentlens-ci.sarif
+```
+
+In GitHub Actions, upload either SARIF file with `github/codeql-action/upload-sarif`:
 
 ```yaml
 - name: Export AgentLens SARIF

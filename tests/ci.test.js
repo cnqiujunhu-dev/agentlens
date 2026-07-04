@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { formatCiMarkdown, formatCiReport, runCi } from "../src/ci.js";
+import { formatCiMarkdown, formatCiReport, formatCiSarif, runCi } from "../src/ci.js";
 import { addEvent, createRun, finishRun } from "../src/trace.js";
 import { writeTrace } from "../src/store.js";
 
@@ -91,4 +91,27 @@ test("runCi scan fail-on none reports findings without failing traces", () => {
   assert.equal(summary.failed, 0);
   assert.equal(summary.results[0].scanReport.summary.findings, 1);
   assert.doesNotMatch(formatCiMarkdown(summary), /scan\/sensitive-key/);
+});
+
+test("formatCiSarif combines scan findings for a run directory", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-ci-sarif-"));
+  writeTrace(path.join(dir, "pass.json"), makePassingTrace());
+  writeTrace(path.join(dir, "secret.json"), makeSecretTrace());
+
+  const summary = runCi({
+    runsDir: dir,
+    scan: true,
+    scanFailOnSeverity: "none",
+    config: {
+      name: "ci-test",
+      assertions: [{ id: "citations", type: "required-citations", min: 1 }]
+    }
+  });
+  const sarif = formatCiSarif(summary);
+
+  assert.equal(sarif.version, "2.1.0");
+  assert.equal(sarif.runs[0].tool.driver.rules.length, 1);
+  assert.equal(sarif.runs[0].results.length, 1);
+  assert.equal(sarif.runs[0].results[0].ruleId, "sensitive-key");
+  assert.match(sarif.runs[0].results[0].locations[0].physicalLocation.artifactLocation.uri, /secret\.json$/);
 });

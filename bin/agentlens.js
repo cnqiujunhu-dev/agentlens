@@ -22,7 +22,7 @@ function usage() {
     "  agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]",
     "  agentlens eval <trace-file> [--config path] [--json]",
     "  agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]",
-    "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--scan] [--scan-fail-on severity]",
+    "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--scan] [--scan-fail-on severity] [--sarif path]",
     "  agentlens schema <trace|eval> [--out path]",
     "  agentlens validate <trace|eval> <file> [--json]",
     "  agentlens materialize <jsonl-file> [--out path]",
@@ -158,7 +158,7 @@ async function main() {
   }
 
   if (command === "ci") {
-    const { formatCiMarkdown, formatCiReport, runCi } = await import("../src/ci.js");
+    const { formatCiMarkdown, formatCiReport, formatCiSarif, runCi } = await import("../src/ci.js");
     const { loadEvalConfig } = await import("../src/eval.js");
     const runsDir = option("--runs", ".agentlens/runs");
     const configPath = option("--config", "evals/default.json");
@@ -170,6 +170,11 @@ async function main() {
     });
     const summaryMdPath = option("--summary-md", undefined);
     if (summaryMdPath) appendText(summaryMdPath, `${formatCiMarkdown(report)}\n\n`);
+    const sarifPath = option("--sarif", undefined);
+    if (sarifPath) {
+      if (!report.scan.enabled) throw new Error("agentlens ci --sarif requires --scan");
+      writeText(sarifPath, `${JSON.stringify(formatCiSarif(report), null, 2)}\n`);
+    }
     console.log(flag("--json") ? JSON.stringify(report, null, 2) : formatCiReport(report));
     if (report.failed > 0 || report.total === 0) process.exitCode = 1;
     return;

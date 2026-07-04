@@ -85,3 +85,30 @@ test("CLI writes CI markdown summaries", () => {
   assert.match(markdown, /## AgentLens CI/);
   assert.match(markdown, /summary/);
 });
+
+test("CLI writes combined SARIF for scanned CI runs", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-cli-sarif-"));
+  const runsDir = path.join(dir, "runs");
+  fs.mkdirSync(runsDir);
+  const traceFile = path.join(runsDir, "trace.json");
+  const configFile = path.join(dir, "eval.json");
+  const sarifFile = path.join(dir, "agentlens.sarif");
+
+  const trace = makeTrace("sarif");
+  trace.metadata.apiKey = "plain-secret";
+  writeTrace(traceFile, trace);
+  writeJson(configFile, {
+    version: "agentlens.eval.v1",
+    name: "cli-sarif",
+    assertions: [{ id: "has-answer", type: "required-final-response" }]
+  });
+
+  const result = spawnSync(process.execPath, [binPath, "ci", "--runs", runsDir, "--config", configFile, "--scan", "--scan-fail-on", "none", "--sarif", sarifFile], {
+    cwd: dir,
+    encoding: "utf8"
+  });
+
+  assert.equal(result.status, 0, result.stderr);
+  const sarif = JSON.parse(fs.readFileSync(sarifFile, "utf8"));
+  assert.equal(sarif.runs[0].results[0].ruleId, "sensitive-key");
+});

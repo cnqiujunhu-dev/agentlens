@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { evaluateTrace } from "./eval.js";
-import { scanTrace, SEVERITY_ORDER } from "./scan.js";
+import { formatScanReportsSarif, scanTrace, SEVERITY_ORDER } from "./scan.js";
 import { readTrace } from "./store.js";
 
 function walkJsonFiles(dir) {
@@ -157,4 +157,15 @@ export function formatCiMarkdown(summary) {
   }
 
   return lines.join("\n");
+}
+
+export function formatCiSarif(summary) {
+  return formatScanReportsSarif(
+    summary.results
+      .filter((result) => result.scanReport)
+      .map((result) => ({
+        traceFile: path.relative(process.cwd(), result.file).replaceAll(path.sep, "/"),
+        report: result.scanReport
+      }))
+  );
 }

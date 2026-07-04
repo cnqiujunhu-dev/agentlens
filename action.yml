@@ -26,6 +26,10 @@ inputs:
     description: Lowest scan severity that fails the action.
     required: false
     default: high
+  sarif:
+    description: Optional path to write combined SARIF scan results. Requires scan to be true.
+    required: false
+    default: ""
 
 outputs:
   status:
@@ -57,6 +61,9 @@ runs:
         args=(ci --runs "${{ inputs.runs }}" --config "${{ inputs.config }}" --json)
         if [[ "${{ inputs.scan }}" == "true" ]]; then
           args+=(--scan --scan-fail-on "${{ inputs.scan-fail-on }}")
+        fi
+        if [[ -n "${{ inputs.sarif }}" ]]; then
+          args+=(--sarif "${{ inputs.sarif }}")
         fi
         if [[ "${{ inputs.summary }}" == "true" && -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
           args+=(--summary-md "$GITHUB_STEP_SUMMARY")

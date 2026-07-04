@@ -47,6 +47,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Validation command for trace files and eval configs.
 - Local security scan for secret leaks, prompt injection phrases, and high-risk tool calls.
 - SARIF output for uploading agent trace scan findings to GitHub code scanning.
+- Batch SARIF output from CI scan gates for run directories.
 - Redacted share bundle generation for GitHub issues, PRs, and support threads.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
@@ -345,9 +346,10 @@ agentlens scan .agentlens/runs/demo.json --fail-on medium
 agentlens scan .agentlens/runs/demo.json --json
 agentlens scan .agentlens/runs/demo.json --sarif .agentlens/reports/agentlens-scan.sarif
 agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fail-on high
+agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fail-on none --sarif .agentlens/reports/agentlens-ci.sarif
 ```
 
-The default threshold fails on `high` and `critical` findings. Medium findings, such as prompt-injection phrases, are reported as warnings unless you opt into `--fail-on medium`. CI can run the same scan with `--scan --scan-fail-on high`. Use `--sarif` when you want GitHub code scanning or another SARIF consumer to ingest trace findings. Static dashboards include a Security Scan panel, and share bundles include `scan.txt` generated from the redacted trace.
+The default threshold fails on `high` and `critical` findings. Medium findings, such as prompt-injection phrases, are reported as warnings unless you opt into `--fail-on medium`. CI can run the same scan with `--scan --scan-fail-on high`. Use `--sarif` on `scan` for one trace or on `ci --scan` for a run directory when you want GitHub code scanning or another SARIF consumer to ingest trace findings. Static dashboards include a Security Scan panel, and share bundles include `scan.txt` generated from the redacted trace.
 
 ## Use Cases
 
@@ -365,6 +367,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Add eval checks to CI.
 - Scan traces for secret leaks, prompt injection text, and risky tool calls.
 - Upload trace scan findings as SARIF for security dashboards.
+- Export combined SARIF from CI scan gates for all traces in a run directory.
 - Trace MCP-style tool calls.
 - Trace real stdio MCP JSON-RPC tool calls.
 - Reuse MCP stdio trace sessions across multiple tool calls.

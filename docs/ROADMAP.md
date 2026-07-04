@@ -11,7 +11,7 @@ Shipped:
 - Trace v1 JSON schema and validation.
 - CLI for `init`, `demo`, `inspect`, `replay`, `eval`, `scan`, `ci`, `redact`, `share`, `dashboard`, `serve`, `diff`, and `validate`.
 - Local security scan for leaked secrets, prompt injection phrases, and risky tool calls.
-- SARIF export for scan findings.
+- Single-trace and batch SARIF export for scan findings.
 - CI scan gates through `agentlens ci --scan` and the composite GitHub Action.
 - Redacted share bundles with dashboard, eval report, scan report, and summary.
 - Static dashboards with timeline filters and a Security Scan panel.
@@ -46,7 +46,6 @@ Goal: make trace review ergonomic for teams using GitHub issues, PRs, and CI.
 
 Candidates:
 
-- Batch SARIF export for run directories.
 - PR comment renderer for CI summaries.
 - Trace bundle index pages for multiple runs.
 - Configurable dashboard sections for eval, scan, MCP risk, and diff.

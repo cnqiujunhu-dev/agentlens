@@ -42,6 +42,7 @@ The action fails the job when any trace fails its eval config, any enabled scan 
 | `summary` | `true` | Write a Markdown report to the GitHub Actions step summary. |
 | `scan` | `true` | Run the local AgentLens security scan after evals. |
 | `scan-fail-on` | `high` | Lowest scan severity that fails the action: `low`, `medium`, `high`, `critical`, or `none`. |
+| `sarif` | empty | Optional path for combined SARIF scan findings. Requires `scan: true`. |
 
 ## Outputs
 
@@ -88,6 +89,24 @@ For GitHub code scanning, export SARIF with the CLI and upload it in a later ste
     sarif_file: .agentlens/reports/agentlens-scan.sarif
 ```
 
+For all traces in a run directory, let the AgentLens Action write combined SARIF and upload it:
+
+```yaml
+- name: Run AgentLens evals
+  id: agentlens
+  uses: your-org/agentlens@v0
+  with:
+    runs: .agentlens/runs
+    config: evals/default.json
+    scan-fail-on: none
+    sarif: .agentlens/reports/agentlens-ci.sarif
+
+- name: Upload AgentLens SARIF
+  uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: .agentlens/reports/agentlens-ci.sarif
+```
+
 ## Local Repository Smoke Test
 
 Inside this repository, CI also tests the action with:
@@ -100,4 +119,5 @@ Inside this repository, CI also tests the action with:
     runs: .agentlens/runs
     config: evals/default.json
     scan-fail-on: high
+    sarif: .agentlens/reports/agentlens-ci.sarif
 ```

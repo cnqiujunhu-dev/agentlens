@@ -12,6 +12,7 @@ import {
   formatDoctorReport,
   formatTraceDiff,
   finishRun,
+  formatCiSarif,
   formatScanReport,
   formatScanSarif,
   JsonlTraceWriter,
@@ -46,6 +47,7 @@ test("public API exports core trace and eval helpers", () => {
   const diff = compareTraces(run, run);
   const bundle = buildShareBundle(run);
   const scan = scanTrace(run);
+  const ciSarif = formatCiSarif({ results: [{ file: "trace.json", scanReport: scan }] });
 
   assert.equal(summary.eventCount, 2);
   assert.equal(report.passed, true);
@@ -57,6 +59,7 @@ test("public API exports core trace and eval helpers", () => {
   assert.match(renderDiffDashboard(diff), /AgentLens Trace Diff/);
   assert.match(formatScanReport(scan), /Scan:/);
   assert.equal(formatScanSarif(scan).version, "2.1.0");
+  assert.equal(ciSarif.version, "2.1.0");
   assert.match(formatDoctorReport(doctorWorkspace(process.cwd())), /AgentLens Doctor/);
   assert.match(renderReplay(run), /LLM RESPONSE/);
   assert.equal(redactTrace(run).metadata.redacted, true);
