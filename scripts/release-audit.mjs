@@ -47,6 +47,7 @@ const requiredReadmeSnippets = [
   "diff-dashboard",
   "JSON output",
   "Markdown CI summaries",
+  "GitHub Action outputs",
   "agentlens doctor",
   "agentlens share",
   "share bundle",

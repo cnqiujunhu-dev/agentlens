@@ -19,6 +19,20 @@ inputs:
     required: false
     default: "true"
 
+outputs:
+  status:
+    description: PASS when all traces pass and at least one trace is found; otherwise FAIL.
+    value: ${{ steps.agentlens.outputs.status }}
+  total:
+    description: Number of trace files evaluated.
+    value: ${{ steps.agentlens.outputs.total }}
+  passed:
+    description: Number of trace files that passed.
+    value: ${{ steps.agentlens.outputs.passed }}
+  failed:
+    description: Number of trace files that failed.
+    value: ${{ steps.agentlens.outputs.failed }}
+
 runs:
   using: composite
   steps:
@@ -28,10 +42,26 @@ runs:
         node-version: ${{ inputs.node-version }}
 
     - name: Run AgentLens CI
+      id: agentlens
       shell: bash
       run: |
-        args=(ci --runs "${{ inputs.runs }}" --config "${{ inputs.config }}")
+        report_json="$(mktemp)"
+        args=(ci --runs "${{ inputs.runs }}" --config "${{ inputs.config }}" --json)
         if [[ "${{ inputs.summary }}" == "true" && -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
           args+=(--summary-md "$GITHUB_STEP_SUMMARY")
         fi
-        node "$GITHUB_ACTION_PATH/bin/agentlens.js" "${args[@]}"
+        set +e
+        node "$GITHUB_ACTION_PATH/bin/agentlens.js" "${args[@]}" > "$report_json"
+        exit_code=$?
+        set -e
+        cat "$report_json"
+        node - "$report_json" <<'NODE' >> "$GITHUB_OUTPUT"
+        const fs = require("node:fs");
+        const report = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
+        const status = report.failed === 0 && report.total > 0 ? "PASS" : "FAIL";
+        console.log(`status=${status}`);
+        console.log(`total=${report.total}`);
+        console.log(`passed=${report.passed}`);
+        console.log(`failed=${report.failed}`);
+        NODE
+        exit "$exit_code"

@@ -19,10 +19,14 @@ jobs:
         run: npm test
 
       - name: Run AgentLens evals
+        id: agentlens
         uses: your-org/agentlens@v0
         with:
           runs: .agentlens/runs
           config: evals/default.json
+
+      - name: Use AgentLens result
+        run: echo "AgentLens status: ${{ steps.agentlens.outputs.status }}"
 ```
 
 The action fails the job when any trace fails its eval config or when no trace files are found.
@@ -35,6 +39,23 @@ The action fails the job when any trace fails its eval config or when no trace f
 | `config` | `evals/default.json` | Eval config JSON file. |
 | `node-version` | `20` | Node.js version used to run AgentLens. |
 | `summary` | `true` | Write a Markdown report to the GitHub Actions step summary. |
+
+## Outputs
+
+| Output | Description |
+| --- | --- |
+| `status` | `PASS` when all traces pass and at least one trace is found; otherwise `FAIL`. |
+| `total` | Number of trace files evaluated. |
+| `passed` | Number of trace files that passed. |
+| `failed` | Number of trace files that failed. |
+
+Use these outputs in later steps:
+
+```yaml
+- name: Notify on agent regression
+  if: steps.agentlens.outputs.status != 'PASS'
+  run: echo "AgentLens found ${{ steps.agentlens.outputs.failed }} failing traces"
+```
 
 ## Step Summary
 
@@ -55,6 +76,7 @@ Inside this repository, CI also tests the action with:
 
 ```yaml
 - name: GitHub Action smoke test
+  id: agentlens-action
   uses: ./
   with:
     runs: .agentlens/runs

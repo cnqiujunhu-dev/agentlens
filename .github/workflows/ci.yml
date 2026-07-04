@@ -38,11 +38,19 @@ jobs:
           timeout 5s node ./bin/agentlens.js serve .agentlens/runs --port 4317 || test $? -eq 124
 
       - name: GitHub Action smoke test
+        id: agentlens-action
         uses: ./
         with:
           runs: .agentlens/runs
           config: evals/default.json
           summary: false
+
+      - name: Verify GitHub Action outputs
+        shell: bash
+        run: |
+          test "${{ steps.agentlens-action.outputs.status }}" = "PASS"
+          test "${{ steps.agentlens-action.outputs.failed }}" = "0"
+          test "${{ steps.agentlens-action.outputs.total }}" != "0"
 
       - name: MCP adapter demo
         run: |

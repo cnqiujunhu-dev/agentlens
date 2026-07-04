@@ -39,6 +39,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Static diff dashboards for sharing before/after regressions.
 - JSON output for inspect, eval, CI, and diff automation.
 - Markdown CI summaries for GitHub Actions.
+- GitHub Action outputs for downstream workflow steps.
 - Workspace doctor for checking local setup, traces, eval config, and CI wiring.
 - Redacted share bundle generation for GitHub issues, PRs, and support threads.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
@@ -302,6 +303,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Share before/after trace diff dashboards in issues and PRs.
 - Emit JSON reports for CI bots, scripts, and PR comments.
 - Add Markdown summaries to GitHub Actions runs.
+- Feed GitHub Action status outputs into comments, notifications, or artifacts.
 - Wrap OpenAI-compatible and Anthropic-compatible SDK calls.
 - Reproduce flaky agent failures.
 - Review RAG evidence and citation behavior.

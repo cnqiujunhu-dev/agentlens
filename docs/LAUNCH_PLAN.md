@@ -17,6 +17,7 @@ Built:
 - Static trace diff dashboards.
 - JSON report output for CLI automation.
 - GitHub Actions Markdown summary output.
+- GitHub Action status/count outputs for downstream workflow steps.
 - Workspace doctor for local setup, trace, eval config, and CI checks.
 - Redacted share bundles for issues, pull requests, and support threads.
 - JSON eval engine.

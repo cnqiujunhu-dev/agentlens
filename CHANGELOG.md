@@ -32,6 +32,7 @@ Initial MVP.
 - Static HTML trace diff dashboards.
 - JSON output for inspect, eval, CI, and diff CLI reports.
 - Markdown CI summaries for GitHub Actions.
+- GitHub Action status and count outputs for downstream workflow steps.
 - Workspace doctor CLI and API for local setup, trace, eval config, and CI checks.
 - Redacted share bundle CLI and API for issue, PR, and support handoffs.
 - `agentlens init` scaffolds starter eval config and a GitHub Action example.
