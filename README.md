@@ -12,7 +12,7 @@ AgentLens is a local-first DevTools stack for AI agents, tool calls, RAG flows, 
 agent run -> trace -> replay -> eval -> dashboard
 ```
 
-![AgentLens dashboard preview](docs/assets/dashboard-preview.svg)
+![AgentLens dashboard screenshot](docs/assets/dashboard-screenshot.png)
 
 ## Why AgentLens
 

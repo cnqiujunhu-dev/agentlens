@@ -30,11 +30,12 @@ Built:
 - Public JavaScript API and package exports.
 - Launch demo artifact generator.
 - Trace redaction CLI and API.
+- Real dashboard screenshot for README.
 
 Missing before a serious public launch:
 
 - One production-oriented framework adapter or hardened MCP transport integration.
-- Real browser screenshot or GIF generated from `.agentlens/launch/*.html`.
+- Release GIF generated from `.agentlens/launch/*.html`.
 - Release tag.
 
 ## Priority 1: Make The Project Trustworthy
@@ -42,9 +43,9 @@ Missing before a serious public launch:
 Do these before asking strangers to star it:
 
 1. Harden the MCP stdio transport demo into a production-oriented adapter.
-2. Replace the SVG preview with a real screenshot or GIF.
-3. Record a short launch GIF from `.agentlens/launch/support-agent.html`.
-4. Tag the first release.
+2. Record a short launch GIF from `.agentlens/launch/support-agent.html`.
+3. Add the release tag.
+4. Publish the GitHub repository.
 5. Keep the CI workflow green as adapters are added.
 
 ## Priority 2: Make The Product Real
