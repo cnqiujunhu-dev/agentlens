@@ -55,7 +55,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Static HTML dashboard for sharing runs in GitHub issues, PRs, and incident notes.
 - Local dashboard server with JSON APIs and file-change refresh.
 - Timeline filters for event type, status, search text, and MCP risk.
-- Composite GitHub Action for failing PRs on agent eval regressions.
+- Composite GitHub Action for failing PRs on agent eval regressions and scan findings.
 - Zero runtime dependencies in the MVP.
 
 ## Quick Demo
@@ -72,7 +72,7 @@ node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals
 node ./bin/agentlens.js scan .agentlens/runs/demo.json
 node ./bin/agentlens.js validate trace .agentlens/runs/demo.json
 node ./bin/agentlens.js validate eval .agentlens/evals/default.json
-node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json
+node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json --scan
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
 node ./bin/agentlens.js serve .agentlens/runs --port 4317
 ```
@@ -87,6 +87,7 @@ Want this in GitHub Actions?
   with:
     runs: .agentlens/runs
     config: evals/default.json
+    scan-fail-on: high
 ```
 
 Need schemas for editor or CI tooling?
@@ -340,9 +341,10 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 agentlens scan .agentlens/runs/demo.json
 agentlens scan .agentlens/runs/demo.json --fail-on medium
 agentlens scan .agentlens/runs/demo.json --json
+agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fail-on high
 ```
 
-The default threshold fails on `high` and `critical` findings. Medium findings, such as prompt-injection phrases, are reported as warnings unless you opt into `--fail-on medium`. Share bundles include `scan.txt` generated from the redacted trace.
+The default threshold fails on `high` and `critical` findings. Medium findings, such as prompt-injection phrases, are reported as warnings unless you opt into `--fail-on medium`. CI can run the same scan with `--scan --scan-fail-on high`. Share bundles include `scan.txt` generated from the redacted trace.
 
 ## Use Cases
 
@@ -375,7 +377,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Poll local trace files while agents are running.
 - Filter long traces by event type, status, text, and MCP risk.
 - Start with editable init scaffolding for evals and CI examples.
-- Fail GitHub PRs when recorded agent runs violate eval rules.
+- Fail GitHub PRs when recorded agent runs violate eval rules or scan gates.
 - Generate launch-ready demo artifacts.
 - Check local AgentLens setup with `agentlens doctor`.
 - Share compact run reports in GitHub issues.

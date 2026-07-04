@@ -10,7 +10,7 @@ AgentLens is local-first DevTools for AI agents: trace, replay, eval, scan, reda
 
 - Chrome DevTools for AI agent runs.
 - Replay failed agent runs without calling the model again.
-- CI checks for tool-using agents.
+- CI checks and scan gates for tool-using agents.
 - Secret and prompt-injection scans for agent traces.
 - Static trace reports for GitHub issues.
 - MCP policy checks for agent tool calls.
@@ -40,6 +40,7 @@ Current MVP:
 - LLM-specific eval pack
 - batch CI command
 - local security scan
+- GitHub Action scan gate
 - static HTML dashboard
 - local dashboard server
 - JSONL streaming traces
@@ -110,7 +111,7 @@ Highlights:
 - Trace AI agent runs as readable local JSON.
 - Wrap generic LLM calls without binding to one SDK.
 - Replay model/tool/retrieval timelines deterministically.
-- Run JSON eval rules locally or in CI.
+- Run JSON eval rules and scan gates locally or in CI.
 - Scan traces for leaked secrets, prompt injection phrases, and risky tool calls.
 - Generate static HTML dashboards.
 - Stream long-running traces as JSONL.

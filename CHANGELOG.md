@@ -44,6 +44,7 @@ Initial MVP.
 - README launch GIF generated from launch dashboard artifacts.
 - Release preflight script for final GitHub publication checks.
 - Local security scan CLI and API for secret-shaped values, prompt injection phrases, and risky tool calls.
+- CI can combine eval rules with local scan gates via `agentlens ci --scan`.
 - Share bundles include `scan.txt` generated from the redacted trace.
 - Public GitHub repository target and publication blocker notes.
 - Release checklist, demo recording guide, and launch post draft.

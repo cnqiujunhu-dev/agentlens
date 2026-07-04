@@ -10,6 +10,10 @@ test("composite GitHub Action exposes CI outputs", () => {
   assert.match(action, /total:/);
   assert.match(action, /passed:/);
   assert.match(action, /failed:/);
+  assert.match(action, /scan:/);
+  assert.match(action, /scan-fail-on:/);
+  assert.match(action, /--scan/);
+  assert.match(action, /--scan-fail-on/);
   assert.match(action, /--json/);
   assert.match(action, /GITHUB_OUTPUT/);
 });

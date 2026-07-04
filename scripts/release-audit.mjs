@@ -57,6 +57,8 @@ const requiredReadmeSnippets = [
   "agentlens doctor",
   "agentlens share",
   "agentlens scan",
+  "--scan",
+  "scan-fail-on",
   "Security Scan",
   "agentlens validate",
   "share bundle",

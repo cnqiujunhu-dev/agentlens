@@ -1,6 +1,6 @@
 # GitHub Action
 
-AgentLens ships a composite GitHub Action for running trace evals in CI.
+AgentLens ships a composite GitHub Action for running trace evals and local scan gates in CI.
 
 ```yaml
 name: agentlens
@@ -24,12 +24,13 @@ jobs:
         with:
           runs: .agentlens/runs
           config: evals/default.json
+          scan-fail-on: high
 
       - name: Use AgentLens result
         run: echo "AgentLens status: ${{ steps.agentlens.outputs.status }}"
 ```
 
-The action fails the job when any trace fails its eval config or when no trace files are found.
+The action fails the job when any trace fails its eval config, any enabled scan reaches the configured severity, or when no trace files are found.
 
 ## Inputs
 
@@ -39,6 +40,8 @@ The action fails the job when any trace fails its eval config or when no trace f
 | `config` | `evals/default.json` | Eval config JSON file. |
 | `node-version` | `20` | Node.js version used to run AgentLens. |
 | `summary` | `true` | Write a Markdown report to the GitHub Actions step summary. |
+| `scan` | `true` | Run the local AgentLens security scan after evals. |
+| `scan-fail-on` | `high` | Lowest scan severity that fails the action: `low`, `medium`, `high`, `critical`, or `none`. |
 
 ## Outputs
 
@@ -68,6 +71,7 @@ By default, the action appends a Markdown report to `GITHUB_STEP_SUMMARY`. Disab
     runs: .agentlens/runs
     config: evals/default.json
     summary: false
+    scan: false
 ```
 
 ## Local Repository Smoke Test
@@ -81,4 +85,5 @@ Inside this repository, CI also tests the action with:
   with:
     runs: .agentlens/runs
     config: evals/default.json
+    scan-fail-on: high
 ```

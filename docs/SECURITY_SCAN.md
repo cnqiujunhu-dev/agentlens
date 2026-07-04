@@ -8,6 +8,7 @@
 agentlens scan .agentlens/runs/demo.json
 agentlens scan .agentlens/runs/demo.json --fail-on medium
 agentlens scan .agentlens/runs/demo.json --json
+agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fail-on high
 ```
 
 Default behavior:
@@ -43,6 +44,16 @@ agentlens share .agentlens/runs/demo.json --config evals/default.json --out .age
 ```
 
 The share summary includes scan status and finding counts. Always review public bundles manually before attaching them to an issue or PR.
+
+## CI Gate
+
+`agentlens ci` can run eval rules and scan findings together:
+
+```bash
+agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fail-on high
+```
+
+The composite GitHub Action enables scan by default. Use `scan: false` when you want eval-only CI.
 
 ## Limits
 

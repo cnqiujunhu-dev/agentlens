@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { evaluateTrace } from "./eval.js";
+import { scanTrace, SEVERITY_ORDER } from "./scan.js";
 import { readTrace } from "./store.js";
 
 function walkJsonFiles(dir) {
@@ -22,7 +23,14 @@ export function discoverTraceFiles(runsDir) {
   return walkJsonFiles(runsDir);
 }
 
-export function runCi({ runsDir = ".agentlens/runs", config }) {
+function blockingScanFindings(scanReport) {
+  if (!scanReport) return [];
+  if (scanReport.failOnSeverity === "none") return [];
+  const threshold = SEVERITY_ORDER[scanReport.failOnSeverity] ?? SEVERITY_ORDER.high;
+  return scanReport.findings.filter((finding) => SEVERITY_ORDER[finding.severity] >= threshold);
+}
+
+export function runCi({ runsDir = ".agentlens/runs", config, scan = false, scanFailOnSeverity = "high" }) {
   const files = discoverTraceFiles(runsDir);
   const results = [];
 
@@ -30,12 +38,15 @@ export function runCi({ runsDir = ".agentlens/runs", config }) {
     try {
       const trace = readTrace(file);
       const report = evaluateTrace(trace, config);
+      const scanReport = scan ? scanTrace(trace, { failOnSeverity: scanFailOnSeverity }) : null;
+      const passed = report.passed && (!scanReport || scanReport.passed);
       results.push({
         file,
         traceId: trace.runId,
         name: trace.name,
-        passed: report.passed,
-        report
+        passed,
+        report,
+        ...(scanReport ? { scanReport } : {})
       });
     } catch (error) {
       results.push({
@@ -50,6 +61,10 @@ export function runCi({ runsDir = ".agentlens/runs", config }) {
 
   return {
     runsDir,
+    scan: {
+      enabled: Boolean(scan),
+      failOnSeverity: scanFailOnSeverity
+    },
     total: results.length,
     passed: results.filter((result) => result.passed).length,
     failed: results.filter((result) => !result.passed).length,
@@ -63,6 +78,7 @@ export function formatCiReport(summary) {
     `Runs: ${summary.runsDir}`,
     `Status: ${summary.failed === 0 ? "PASS" : "FAIL"}`,
     `Total: ${summary.total}, Passed: ${summary.passed}, Failed: ${summary.failed}`,
+    `Scan: ${summary.scan?.enabled ? `enabled, fail on ${summary.scan.failOnSeverity}` : "disabled"}`,
     ""
   ];
 
@@ -85,6 +101,13 @@ export function formatCiReport(summary) {
     for (const assertion of result.report.results.filter((item) => !item.passed)) {
       lines.push(`  failed: ${assertion.id} - ${assertion.message}`);
     }
+
+    if (result.scanReport) {
+      lines.push(`  scan: ${result.scanReport.passed ? "PASS" : "FAIL"} (${result.scanReport.summary.findings} findings)`);
+      for (const finding of blockingScanFindings(result.scanReport)) {
+        lines.push(`  scan failed: [${finding.severity.toUpperCase()}] ${finding.ruleId} - ${finding.message} at ${finding.path}`);
+      }
+    }
   }
 
   return lines.join("\n");
@@ -99,9 +122,13 @@ function escapeMarkdownCell(value) {
 
 function failedAssertions(result) {
   if (result.error) return [result.error];
-  return (result.report?.results ?? [])
+  const evalFailures = (result.report?.results ?? [])
     .filter((item) => !item.passed)
     .map((item) => `${item.id}: ${item.message}`);
+  const scanFailures = blockingScanFindings(result.scanReport).map(
+    (finding) => `scan/${finding.ruleId}: [${finding.severity}] ${finding.message} at ${finding.path}`
+  );
+  return [...evalFailures, ...scanFailures];
 }
 
 export function formatCiMarkdown(summary) {
@@ -112,6 +139,7 @@ export function formatCiMarkdown(summary) {
     `**Status:** ${status}`,
     `**Runs:** \`${escapeMarkdownCell(summary.runsDir)}\``,
     `**Total:** ${summary.total} | **Passed:** ${summary.passed} | **Failed:** ${summary.failed}`,
+    `**Scan:** ${summary.scan?.enabled ? `enabled, fail on ${summary.scan.failOnSeverity}` : "disabled"}`,
     ""
   ];
 

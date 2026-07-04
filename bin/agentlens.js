@@ -22,7 +22,7 @@ function usage() {
     "  agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]",
     "  agentlens eval <trace-file> [--config path] [--json]",
     "  agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none]",
-    "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]",
+    "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--scan] [--scan-fail-on severity]",
     "  agentlens schema <trace|eval> [--out path]",
     "  agentlens validate <trace|eval> <file> [--json]",
     "  agentlens materialize <jsonl-file> [--out path]",
@@ -39,7 +39,7 @@ function usage() {
     "  node ./bin/agentlens.js validate trace .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js scan .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json",
-    "  node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json"
+    "  node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json --scan"
   ].join("\n");
 }
 
@@ -158,7 +158,12 @@ async function main() {
     const { loadEvalConfig } = await import("../src/eval.js");
     const runsDir = option("--runs", ".agentlens/runs");
     const configPath = option("--config", "evals/default.json");
-    const report = runCi({ runsDir, config: loadEvalConfig(configPath) });
+    const report = runCi({
+      runsDir,
+      config: loadEvalConfig(configPath),
+      scan: flag("--scan"),
+      scanFailOnSeverity: option("--scan-fail-on", "high")
+    });
     const summaryMdPath = option("--summary-md", undefined);
     if (summaryMdPath) appendText(summaryMdPath, `${formatCiMarkdown(report)}\n\n`);
     console.log(flag("--json") ? JSON.stringify(report, null, 2) : formatCiReport(report));

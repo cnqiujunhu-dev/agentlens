@@ -1,5 +1,5 @@
 name: AgentLens CI
-description: Run AgentLens evals against recorded AI agent traces.
+description: Run AgentLens evals and optional scans against recorded AI agent traces.
 
 inputs:
   runs:
@@ -18,10 +18,18 @@ inputs:
     description: Write a Markdown report to the GitHub Actions step summary.
     required: false
     default: "true"
+  scan:
+    description: Run AgentLens security scan after evals.
+    required: false
+    default: "true"
+  scan-fail-on:
+    description: Lowest scan severity that fails the action.
+    required: false
+    default: high
 
 outputs:
   status:
-    description: PASS when all traces pass and at least one trace is found; otherwise FAIL.
+    description: PASS when all traces pass evals and scans and at least one trace is found; otherwise FAIL.
     value: ${{ steps.agentlens.outputs.status }}
   total:
     description: Number of trace files evaluated.
@@ -47,6 +55,9 @@ runs:
       run: |
         report_json="$(mktemp)"
         args=(ci --runs "${{ inputs.runs }}" --config "${{ inputs.config }}" --json)
+        if [[ "${{ inputs.scan }}" == "true" ]]; then
+          args+=(--scan --scan-fail-on "${{ inputs.scan-fail-on }}")
+        fi
         if [[ "${{ inputs.summary }}" == "true" && -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
           args+=(--summary-md "$GITHUB_STEP_SUMMARY")
         fi
