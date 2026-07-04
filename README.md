@@ -40,6 +40,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - JSON output for inspect, eval, CI, and diff automation.
 - Markdown CI summaries for GitHub Actions.
 - Workspace doctor for checking local setup, traces, eval config, and CI wiring.
+- Redacted share bundle generation for GitHub issues, PRs, and support threads.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
 - MCP tool inventory and risk scanning.
@@ -59,6 +60,7 @@ node ./bin/agentlens.js demo --out .agentlens/runs/demo.json
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
+node ./bin/agentlens.js share .agentlens/runs/demo.json --config .agentlens/evals/default.json --out .agentlens/share/demo
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
 node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
@@ -142,6 +144,7 @@ Preparing launch screenshots or a demo recording?
 
 ```bash
 npm run launch:demo
+npm run share:demo
 npm run release:audit
 ```
 
@@ -223,6 +226,7 @@ agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]
 agentlens schema <trace|eval> [--out path]
 agentlens materialize <jsonl-file> [--out path]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
+agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]
 agentlens dashboard <trace-file> [--out path]
 agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 ```
@@ -310,6 +314,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Require owner and expiry metadata for MCP risk exceptions.
 - Stream long-running traces as JSONL.
 - Redact secrets before sharing traces.
+- Generate a redacted share bundle for support threads.
 - Publish JSON Schemas for external tooling.
 - Browse local runs with a zero-dependency dashboard server.
 - Poll local trace files while agents are running.

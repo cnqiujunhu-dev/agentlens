@@ -25,6 +25,7 @@ function usage() {
     "  agentlens schema <trace|eval> [--out path]",
     "  agentlens materialize <jsonl-file> [--out path]",
     "  agentlens redact <trace-file> [--out path] [--keys key1,key2]",
+    "  agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]",
     "  agentlens dashboard <trace-file> [--out path]",
     "  agentlens serve [trace-file|runs-dir] [--host host] [--port port]",
     "",
@@ -32,6 +33,7 @@ function usage() {
     "  node ./bin/agentlens.js doctor",
     "  node ./bin/agentlens.js demo --out .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json",
+    "  node ./bin/agentlens.js share .agentlens/runs/demo.json --config evals/default.json",
     "  node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json",
     "  node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json"
   ].join("\n");
@@ -183,6 +185,22 @@ async function main() {
     const keys = parseRedactKeys(option("--keys", undefined));
     writeTrace(out, redactTrace(readTrace(traceFile), { keys }));
     console.log(`Wrote redacted trace: ${out}`);
+    return;
+  }
+
+  if (command === "share") {
+    const traceFile = positional(1);
+    if (!traceFile) throw new Error("Missing trace file. Usage: agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]");
+    const { parseRedactKeys } = await import("../src/redact.js");
+    const { writeShareBundle } = await import("../src/share.js");
+    const result = writeShareBundle({
+      traceFile,
+      outDir: option("--out", undefined),
+      configPath: option("--config", undefined),
+      redactionKeys: parseRedactKeys(option("--keys", undefined))
+    });
+    console.log(`Wrote share bundle: ${result.outDir}`);
+    for (const file of Object.values(result.files).filter(Boolean)) console.log(`- ${file}`);
     return;
   }
 

@@ -33,6 +33,7 @@ Initial MVP.
 - JSON output for inspect, eval, CI, and diff CLI reports.
 - Markdown CI summaries for GitHub Actions.
 - Workspace doctor CLI and API for local setup, trace, eval config, and CI checks.
+- Redacted share bundle CLI and API for issue, PR, and support handoffs.
 - `agentlens init` scaffolds starter eval config and a GitHub Action example.
 - Launch demo artifact generator.
 - Release checklist, demo recording guide, and launch post draft.

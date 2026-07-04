@@ -7,6 +7,7 @@ import {
   createRun,
   doctorWorkspace,
   evaluateTrace,
+  buildShareBundle,
   formatDoctorReport,
   formatTraceDiff,
   finishRun,
@@ -35,10 +36,12 @@ test("public API exports core trace and eval helpers", () => {
     assertions: [{ id: "citations", type: "required-citations", min: 1 }]
   });
   const diff = compareTraces(run, run);
+  const bundle = buildShareBundle(run);
 
   assert.equal(summary.eventCount, 2);
   assert.equal(report.passed, true);
   assert.equal(diff.deltas.eventCount, 0);
+  assert.match(bundle.summaryMarkdown, /AgentLens Share Bundle/);
   assert.match(formatTraceDiff(diff), /AgentLens Trace Diff/);
   assert.match(renderDiffDashboard(diff), /AgentLens Trace Diff/);
   assert.match(formatDoctorReport(doctorWorkspace(process.cwd())), /AgentLens Doctor/);

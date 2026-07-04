@@ -21,6 +21,7 @@ Run these from the repository root:
 ```bash
 npm run verify
 npm run doctor
+npm run share:demo
 npm run release:audit
 npm pack --dry-run
 ```
@@ -31,6 +32,7 @@ Expected result:
 - Unit tests pass.
 - Demo traces, MCP demos, JSONL demos, diff dashboards, launch artifacts, and static dashboards generate.
 - `agentlens doctor` reports no failed checks.
+- `agentlens share` writes a redacted share bundle.
 - Release audit prints `AgentLens release audit passed`.
 - Dry-run packaging includes `README.md`, `LICENSE`, `bin/agentlens.js`, `src/index.js`, and `docs/assets/dashboard-screenshot.png`.
 

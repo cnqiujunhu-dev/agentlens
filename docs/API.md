@@ -92,6 +92,26 @@ agentlens doctor
 agentlens doctor --json
 ```
 
+## Share Bundles
+
+```js
+import { writeShareBundle } from "agentlens";
+
+const bundle = writeShareBundle({
+  traceFile: ".agentlens/runs/demo.json",
+  configPath: "evals/default.json",
+  outDir: ".agentlens/share/demo"
+});
+
+console.log(bundle.files);
+```
+
+CLI:
+
+```bash
+agentlens share .agentlens/runs/demo.json --config evals/default.json --out .agentlens/share/demo
+```
+
 ## Generic LLM Calls
 
 ```js

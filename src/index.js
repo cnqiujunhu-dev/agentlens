@@ -9,6 +9,7 @@ export { DEFAULT_EVAL_CONFIG, evaluateTrace, formatEvalReport, loadEvalConfig } 
 export { discoverTraceFiles, formatCiReport, runCi } from "./ci.js";
 export { JsonlTraceWriter, readJsonlTrace } from "./jsonl.js";
 export { DEFAULT_REDACT_KEYS, parseRedactKeys, redactTrace } from "./redact.js";
+export { buildShareBundle, writeShareBundle } from "./share.js";
 export { listSchemas, readSchema, schemaPath } from "./schemas.js";
 export { renderDashboard } from "./dashboard.js";
 export { createDashboardServer, listen, listTraceFiles } from "./server.js";

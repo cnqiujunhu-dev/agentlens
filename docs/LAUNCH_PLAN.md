@@ -18,6 +18,7 @@ Built:
 - JSON report output for CLI automation.
 - GitHub Actions Markdown summary output.
 - Workspace doctor for local setup, trace, eval config, and CI checks.
+- Redacted share bundles for issues, pull requests, and support threads.
 - JSON eval engine.
 - Generic LLM call adapter.
 - Static HTML dashboard.
