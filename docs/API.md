@@ -76,6 +76,22 @@ For GitHub Actions summaries or local reports:
 agentlens ci --runs .agentlens/runs --config evals/default.json --summary-md agentlens-summary.md
 ```
 
+## Workspace Doctor
+
+```js
+import { doctorWorkspace, formatDoctorReport } from "agentlens";
+
+const report = doctorWorkspace(process.cwd());
+console.log(formatDoctorReport(report));
+```
+
+CLI:
+
+```bash
+agentlens doctor
+agentlens doctor --json
+```
+
 ## Generic LLM Calls
 
 ```js

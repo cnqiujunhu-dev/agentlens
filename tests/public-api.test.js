@@ -5,7 +5,9 @@ import {
   compareTraces,
   createMcpRun,
   createRun,
+  doctorWorkspace,
   evaluateTrace,
+  formatDoctorReport,
   formatTraceDiff,
   finishRun,
   JsonlTraceWriter,
@@ -39,6 +41,7 @@ test("public API exports core trace and eval helpers", () => {
   assert.equal(diff.deltas.eventCount, 0);
   assert.match(formatTraceDiff(diff), /AgentLens Trace Diff/);
   assert.match(renderDiffDashboard(diff), /AgentLens Trace Diff/);
+  assert.match(formatDoctorReport(doctorWorkspace(process.cwd())), /AgentLens Doctor/);
   assert.match(renderReplay(run), /LLM RESPONSE/);
   assert.equal(redactTrace(run).metadata.redacted, true);
   assert.equal(readSchema("trace").title, "AgentLens Trace v1");

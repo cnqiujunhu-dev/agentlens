@@ -17,6 +17,7 @@ Built:
 - Static trace diff dashboards.
 - JSON report output for CLI automation.
 - GitHub Actions Markdown summary output.
+- Workspace doctor for local setup, trace, eval config, and CI checks.
 - JSON eval engine.
 - Generic LLM call adapter.
 - Static HTML dashboard.

@@ -14,6 +14,7 @@ function usage() {
     "",
     "Usage:",
     "  agentlens init",
+    "  agentlens doctor [--json]",
     "  agentlens demo [--out path]",
     "  agentlens inspect <trace-file> [--json]",
     "  agentlens replay <trace-file>",
@@ -28,6 +29,7 @@ function usage() {
     "  agentlens serve [trace-file|runs-dir] [--host host] [--port port]",
     "",
     "Examples:",
+    "  node ./bin/agentlens.js doctor",
     "  node ./bin/agentlens.js demo --out .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json",
     "  node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json",
@@ -64,6 +66,14 @@ async function main() {
       console.log("Starter files:");
       for (const file of workspace.createdFiles) console.log(`  ${file}`);
     }
+    return;
+  }
+
+  if (command === "doctor") {
+    const { doctorWorkspace, formatDoctorReport } = await import("../src/doctor.js");
+    const report = doctorWorkspace(process.cwd());
+    console.log(flag("--json") ? JSON.stringify(report, null, 2) : formatDoctorReport(report));
+    if (!report.passed) process.exitCode = 1;
     return;
   }
 

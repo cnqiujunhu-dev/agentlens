@@ -3,6 +3,7 @@ export { appendText, initWorkspace, readTrace, writeTrace, readJson, writeJson, 
 export { formatSummary, summarizeTrace } from "./inspect.js";
 export { compareTraces, formatTraceDiff } from "./diff.js";
 export { renderDiffDashboard } from "./diff-dashboard.js";
+export { doctorWorkspace, formatDoctorReport } from "./doctor.js";
 export { renderReplay } from "./replay.js";
 export { DEFAULT_EVAL_CONFIG, evaluateTrace, formatEvalReport, loadEvalConfig } from "./eval.js";
 export { discoverTraceFiles, formatCiReport, runCi } from "./ci.js";

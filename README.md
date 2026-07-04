@@ -39,6 +39,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Static diff dashboards for sharing before/after regressions.
 - JSON output for inspect, eval, CI, and diff automation.
 - Markdown CI summaries for GitHub Actions.
+- Workspace doctor for checking local setup, traces, eval config, and CI wiring.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
 - MCP tool inventory and risk scanning.
@@ -53,6 +54,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 
 ```bash
 node ./bin/agentlens.js init
+node ./bin/agentlens.js doctor
 node ./bin/agentlens.js demo --out .agentlens/runs/demo.json
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
@@ -210,6 +212,7 @@ The MVP stores each run as a single JSON file:
 
 ```text
 agentlens init
+agentlens doctor [--json]
 agentlens demo [--out path]
 agentlens inspect <trace-file> [--json]
 agentlens replay <trace-file>
@@ -307,6 +310,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Start with editable init scaffolding for evals and CI examples.
 - Fail GitHub PRs when recorded agent runs violate eval rules.
 - Generate launch-ready demo artifacts.
+- Check local AgentLens setup with `agentlens doctor`.
 - Share compact run reports in GitHub issues.
 - Build policy packs for MCP servers and internal tools.
 
