@@ -28,6 +28,7 @@ Built:
 - Dashboard JSON APIs and live file-change refresh.
 - Dashboard timeline filters for long traces.
 - Release audit script.
+- Release preflight script for clean worktree, remote, tag, GIF, audit, and verify checks.
 - Composite GitHub Action for `agentlens ci`.
 - Apache-2.0 license.
 - Contribution, support, security, and code of conduct docs.
@@ -69,7 +70,8 @@ Do these before asking strangers to star it:
 1. Add the release tag.
 2. Publish the GitHub repository.
 3. Run the release checklist before public posting.
-4. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
+4. Run `npm run release:preflight` after tagging.
+5. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
 
 ## Priority 2: Make The Product Real
 

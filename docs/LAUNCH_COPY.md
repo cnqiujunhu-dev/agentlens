@@ -116,6 +116,7 @@ npm run verify
 npm run launch:demo
 npm run release:gif
 npm run diff:dashboard
+npm run release:preflight:local
 ```
 
 Open:

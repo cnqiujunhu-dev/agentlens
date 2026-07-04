@@ -165,6 +165,7 @@ npm run launch:demo
 npm run release:gif
 npm run share:demo
 npm run release:audit
+npm run release:preflight:local
 ```
 
 This writes shareable traces, eval reports, and dashboards into `.agentlens/launch/`.
@@ -285,6 +286,8 @@ See [API.md](docs/API.md) for trace, eval, JSONL, and MCP helper examples.
 - [LangGraph-style adapter](docs/LANGGRAPH_ADAPTER.md)
 - [Changelog](CHANGELOG.md)
 - [JSON schemas](docs/SCHEMAS.md)
+
+Before publishing, run `npm run release:preflight` after configuring the GitHub remote and tagging the release. Use `npm run release:preflight:local` for local checks before the remote and tag exist.
 
 ## Community
 

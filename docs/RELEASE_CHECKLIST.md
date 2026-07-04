@@ -24,6 +24,7 @@ npm run doctor
 npm run validate:demo
 npm run share:demo
 npm run release:audit
+npm run release:preflight:local
 npm pack --dry-run
 ```
 
@@ -36,6 +37,7 @@ Expected result:
 - `agentlens validate` reports no trace or eval config errors.
 - `agentlens share` writes a redacted share bundle.
 - Release audit prints `AgentLens release audit passed`.
+- Local release preflight warns only for missing remote/tag while the repository is still unpublished.
 - Dry-run packaging includes `README.md`, `LICENSE`, `bin/agentlens.js`, `src/index.js`, and `docs/assets/dashboard-screenshot.png`.
 
 ## Demo Assets
@@ -85,6 +87,12 @@ Only tag after local validation and the GitHub workflow pass:
 ```bash
 git tag v0.1.0
 git push origin v0.1.0
+```
+
+After tagging and configuring `origin`, run the strict gate:
+
+```bash
+npm run release:preflight
 ```
 
 Use the release notes from [LAUNCH_COPY.md](LAUNCH_COPY.md). Keep the wording scoped to the MVP: local-first tracing, replay, evals, dashboards, CI, MCP policy checks, redaction, JSONL traces, and provider-style adapters.

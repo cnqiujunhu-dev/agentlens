@@ -27,6 +27,7 @@ const requiredFiles = [
   "docs/SCHEMAS.md",
   "docs/assets/agentlens-demo.gif",
   "docs/assets/dashboard-screenshot.png",
+  "scripts/release-preflight.mjs",
   "schemas/agentlens.trace.v1.schema.json",
   "schemas/agentlens.eval.v1.schema.json"
 ];
@@ -64,6 +65,7 @@ const requiredReadmeSnippets = [
   "Launch post draft",
   "agentlens serve",
   "agentlens-demo.gif",
+  "release:preflight",
   "dashboard-screenshot.png"
 ];
 
