@@ -163,6 +163,26 @@ await traceLlmCall(
 finishRun(run, "passed");
 ```
 
+## LangGraph-Style Nodes
+
+```js
+import { createLangGraphRun, finishRun, wrapLangGraphNode } from "agentlens";
+
+const run = createLangGraphRun({
+  app: "support-agent",
+  name: "support graph",
+  graph: "support-refund-flow"
+});
+
+const planner = wrapLangGraphNode(run, "planner", async (state) => ({
+  ...state,
+  steps: [...(state.steps ?? []), "lookup-refund-policy"]
+}));
+
+const state = await planner({ messages: [{ role: "user", content: "Can I refund this?" }], steps: [] });
+finishRun(run, "passed");
+```
+
 ## Provider-Style LLM Calls
 
 ```js

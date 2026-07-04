@@ -1,0 +1,16 @@
+{
+  "version": "agentlens.eval.v1",
+  "name": "langgraph-basic",
+  "assertions": [
+    {
+      "id": "has-node-events",
+      "type": "required-event-types",
+      "eventTypes": ["framework.node.start", "framework.node.end"]
+    },
+    {
+      "id": "no-errors",
+      "type": "max-errors",
+      "max": 0
+    }
+  ]
+}

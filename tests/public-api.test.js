@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   addEvent,
   compareTraces,
+  createLangGraphRun,
   createMcpRun,
   createRun,
   doctorWorkspace,
@@ -20,6 +21,7 @@ import {
   scanMcpTools,
   summarizeTrace,
   traceAnthropicCompatibleMessage,
+  traceLangGraphNode,
   traceLlmCall,
   traceOpenAiCompatibleChat,
   traceMcpToolCall,
@@ -69,6 +71,18 @@ test("public API exports streaming and MCP helpers", async () => {
   assert.equal(scanMcpTools({ tools: [{ name: "search", permission: "read-only" }] }).tools[0].risk, "low");
   assert.equal(typeof McpStdioTraceSession, "function");
   assert.equal(typeof traceMcpStdioSession, "function");
+});
+
+test("public API exports LangGraph-style helpers", async () => {
+  const run = createLangGraphRun({ app: "api-test", name: "langgraph api" });
+  const output = await traceLangGraphNode(run, { name: "planner", input: { messages: [] } }, async (state) => ({
+    ...state,
+    planned: true
+  }));
+
+  assert.equal(output.planned, true);
+  assert.equal(run.events[0].type, "framework.node.start");
+  assert.equal(run.events[1].type, "framework.node.end");
 });
 
 test("public API exports LLM helper", async () => {

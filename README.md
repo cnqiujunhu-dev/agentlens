@@ -34,6 +34,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Trace model for LLM prompts, responses, tool calls, retrieval, errors, usage, and metadata.
 - Generic LLM wrapper for tracing model calls from any SDK.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
+- LangGraph-style node adapter for tracing graph-based agent steps.
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - Trace diff reports for before/after agent regressions.
 - Static diff dashboards for sharing before/after regressions.
@@ -120,6 +121,14 @@ Want provider-style SDK adapters without adding SDK dependencies?
 npm run demo:providers
 node ./bin/agentlens.js replay .agentlens/runs/provider-adapters-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/provider-adapters-demo.json --config evals/llm-basic.json
+```
+
+Want to trace LangGraph-style node functions?
+
+```bash
+npm run demo:langgraph
+node ./bin/agentlens.js replay .agentlens/runs/langgraph-style-demo.json
+node ./bin/agentlens.js eval .agentlens/runs/langgraph-style-demo.json --config evals/langgraph-basic.json
 ```
 
 Want to trace an MCP-style tool call?
@@ -270,6 +279,7 @@ See [API.md](docs/API.md) for trace, eval, JSONL, and MCP helper examples.
 - [Demo recording guide](docs/DEMO_RECORDING.md)
 - [Launch post draft](docs/LAUNCH_POST.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
+- [LangGraph-style adapter](docs/LANGGRAPH_ADAPTER.md)
 - [Changelog](CHANGELOG.md)
 - [JSON schemas](docs/SCHEMAS.md)
 
@@ -306,6 +316,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 
 - Debug tool-using AI agents.
 - Trace model calls without binding to one LLM SDK.
+- Trace LangGraph-style node functions without adding a framework dependency.
 - Compare before/after traces when an agent regresses.
 - Share before/after trace diff dashboards in issues and PRs.
 - Emit JSON reports for CI bots, scripts, and PR comments.
@@ -349,6 +360,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - GitHub Actions Markdown summaries.
 - Init scaffolding for starter evals and GitHub Action examples.
 - Generic LLM call adapter.
+- LangGraph-style node adapter.
 - Local dashboard server.
 - GitHub Action for agent regression tests.
 - MCP tool inventory and risk scanner.

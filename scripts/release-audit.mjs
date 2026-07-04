@@ -15,6 +15,7 @@ const requiredFiles = [
   ".github/workflows/ci.yml",
   "docs/API.md",
   "docs/GITHUB_ACTION.md",
+  "docs/LANGGRAPH_ADAPTER.md",
   "docs/LAUNCH_COPY.md",
   "docs/LAUNCH_PLAN.md",
   "docs/RELEASE_CHECKLIST.md",
@@ -33,6 +34,7 @@ const requiredReadmeSnippets = [
   "Quick Demo",
   "JavaScript API",
   "provider-style SDK adapters",
+  "LangGraph-style",
   "Eval Rules",
   "Use Cases",
   "Roadmap",
@@ -76,6 +78,7 @@ const requiredPackageExports = [
   "./validate",
   "./dashboard",
   "./server",
+  "./adapters/langgraph",
   "./adapters/llm",
   "./adapters/mcp",
   "./adapters/mcp-stdio"

@@ -54,6 +54,7 @@ Built:
 - Real dashboard screenshot for README.
 - Trace/Eval JSON Schemas.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
+- LangGraph-style node adapter and demo eval pack.
 
 Missing before a serious public launch:
 

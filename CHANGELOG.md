@@ -24,6 +24,7 @@ Initial MVP.
 - Release audit script for required files, README sections, exports, and pack contents.
 - Composite GitHub Action for running `agentlens ci` in PR workflows.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
+- LangGraph-style node adapter, demo, and eval pack.
 - MCP tool inventory events, schema capture, and risk scanning.
 - Reviewed exceptions for MCP high-risk tool policies.
 - Owner and expiry validation for MCP risk exceptions.
