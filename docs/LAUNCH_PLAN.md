@@ -13,6 +13,7 @@ Built:
 - Inspect summary.
 - Replay transcript.
 - JSON eval engine.
+- Generic LLM call adapter.
 - Static HTML dashboard.
 - Apache-2.0 license.
 - Contribution and security docs.
@@ -53,7 +54,7 @@ Do these before asking strangers to star it:
 
 The MVP becomes much more credible when it works with one real ecosystem:
 
-1. Add a tiny JavaScript wrapper for LLM calls.
+1. Add provider-specific examples for OpenAI-compatible and Anthropic-compatible calls.
 2. Add MCP tool schema capture and policy reporting.
 3. Add a LangGraph or generic tool-call adapter example.
 4. Add a scanner for dangerous MCP capabilities.

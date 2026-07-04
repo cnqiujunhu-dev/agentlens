@@ -47,6 +47,34 @@ const report = evaluateTrace(trace, {
 console.log(formatEvalReport(report));
 ```
 
+## Generic LLM Calls
+
+```js
+import { createRun, finishRun, traceLlmCall } from "agentlens";
+
+const run = createRun({
+  app: "support-agent",
+  name: "llm wrapper"
+});
+
+await traceLlmCall(
+  run,
+  {
+    name: "final-answer",
+    provider: "openai-compatible",
+    model: "demo-model",
+    input: {
+      messages: [{ role: "user", content: "What is AgentLens?" }]
+    }
+  },
+  async (input) => {
+    return yourLlmClient.chat(input);
+  }
+);
+
+finishRun(run, "passed");
+```
+
 ## JSONL Streaming
 
 ```js

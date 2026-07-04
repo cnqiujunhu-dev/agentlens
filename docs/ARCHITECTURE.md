@@ -12,6 +12,7 @@ The project should stay framework-neutral. It should integrate with agent framew
 1. Collection Layer
    - SDK hooks
    - LLM provider wrappers
+   - Generic LLM call adapter
    - MCP/tool call adapters
    - Browser/code/RAG adapters
 

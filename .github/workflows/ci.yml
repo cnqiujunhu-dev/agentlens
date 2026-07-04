@@ -44,6 +44,11 @@ jobs:
           npm run demo:mcp:stdio
           node ./bin/agentlens.js eval .agentlens/runs/mcp-stdio-demo.json --config evals/mcp-policy.json
 
+      - name: LLM wrapper demo
+        run: |
+          npm run demo:llm
+          node ./bin/agentlens.js eval .agentlens/runs/llm-wrapper-demo.json --config evals/llm-basic.json
+
       - name: JSONL streaming demo
         run: |
           npm run demo:jsonl

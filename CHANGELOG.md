@@ -10,6 +10,8 @@ Initial MVP.
 - CLI commands: `init`, `demo`, `inspect`, `replay`, `eval`, `ci`, `materialize`, `redact`, and `dashboard`.
 - Deterministic replay transcript.
 - JSON eval engine with baseline rules.
+- Generic LLM call adapter.
+- LLM-specific eval pack.
 - MCP-style tool-call adapter.
 - Zero-dependency MCP stdio JSON-RPC transport demo.
 - MCP policy eval pack for server allowlists, required metadata, and forbidden permissions.

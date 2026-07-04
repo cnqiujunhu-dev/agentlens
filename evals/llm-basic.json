@@ -1,0 +1,30 @@
+{
+  "version": "agentlens.eval.v1",
+  "name": "llm-basic",
+  "assertions": [
+    {
+      "id": "has-llm-events",
+      "type": "required-event-types",
+      "eventTypes": ["llm.prompt", "llm.response"]
+    },
+    {
+      "id": "no-errors",
+      "type": "max-errors",
+      "max": 0
+    },
+    {
+      "id": "cost-budget",
+      "type": "max-total-cost-usd",
+      "max": 0.05
+    },
+    {
+      "id": "has-final-answer",
+      "type": "required-final-response"
+    },
+    {
+      "id": "final-answer-has-citation",
+      "type": "required-citations",
+      "min": 1
+    }
+  ]
+}

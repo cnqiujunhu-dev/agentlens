@@ -32,6 +32,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 ## What You Get
 
 - Trace model for LLM prompts, responses, tool calls, retrieval, errors, usage, and metadata.
+- Generic LLM wrapper for tracing model calls from any SDK.
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
@@ -63,6 +64,14 @@ Want to see eval failures?
 ```bash
 npm run demo:fail
 node ./bin/agentlens.js eval .agentlens/runs/failing-demo.json --config evals/default.json
+```
+
+Want to wrap a generic LLM call?
+
+```bash
+npm run demo:llm
+node ./bin/agentlens.js replay .agentlens/runs/llm-wrapper-demo.json
+node ./bin/agentlens.js eval .agentlens/runs/llm-wrapper-demo.json --config evals/llm-basic.json
 ```
 
 Want to trace an MCP-style tool call?
@@ -227,6 +236,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 ## Use Cases
 
 - Debug tool-using AI agents.
+- Trace model calls without binding to one LLM SDK.
 - Reproduce flaky agent failures.
 - Review RAG evidence and citation behavior.
 - Add eval checks to CI.
@@ -246,6 +256,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Public JavaScript API and package exports.
 - Trace redaction CLI and API.
 - Trace/Eval JSON Schemas.
+- Generic LLM call adapter.
 - Launch demo artifact generator.
 - JavaScript SDK wrapper for common LLM calls.
 - LangGraph, AutoGen, CrewAI, and OpenAI/Anthropic-style adapter examples.

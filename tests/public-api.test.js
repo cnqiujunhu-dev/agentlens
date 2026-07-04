@@ -11,6 +11,7 @@ import {
   redactTrace,
   renderReplay,
   summarizeTrace,
+  traceLlmCall,
   traceMcpToolCall
 } from "../src/index.js";
 
@@ -45,4 +46,13 @@ test("public API exports streaming and MCP helpers", async () => {
 
   assert.deepEqual(result, { value: "ok" });
   assert.equal(run.events.length, 2);
+});
+
+test("public API exports LLM helper", async () => {
+  const run = createRun({ app: "api-test", name: "llm api" });
+
+  await traceLlmCall(run, { name: "answer", input: { messages: [] } }, async () => "ok");
+
+  assert.equal(run.events.length, 2);
+  assert.equal(run.events[1].output.content, "ok");
 });

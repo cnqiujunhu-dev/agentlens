@@ -35,6 +35,8 @@ Current MVP:
 - trace JSON schema
 - deterministic replay
 - JSON eval rules
+- generic LLM call wrapper
+- LLM-specific eval pack
 - batch CI command
 - static HTML dashboard
 - JSONL streaming traces
@@ -95,6 +97,7 @@ AgentLens v0.1.0 is the first MVP release.
 
 Highlights:
 - Trace AI agent runs as readable local JSON.
+- Wrap generic LLM calls without binding to one SDK.
 - Replay model/tool/retrieval timelines deterministically.
 - Run JSON eval rules locally or in CI.
 - Generate static HTML dashboards.
