@@ -178,6 +178,12 @@ const report = evaluateTrace(run, {
 
 See [API.md](docs/API.md) for trace, eval, JSONL, and MCP helper examples.
 
+## Launch Materials
+
+- [Launch plan](docs/LAUNCH_PLAN.md)
+- [Launch copy](docs/LAUNCH_COPY.md)
+- [Changelog](CHANGELOG.md)
+
 ## Eval Rules
 
 Rules live in JSON so they can be reviewed, versioned, and run in CI.

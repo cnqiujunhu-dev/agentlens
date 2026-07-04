@@ -1,0 +1,21 @@
+# Changelog
+
+## 0.1.0
+
+Initial MVP.
+
+### Added
+
+- AgentLens Trace v1 JSON schema.
+- CLI commands: `init`, `demo`, `inspect`, `replay`, `eval`, `ci`, `materialize`, `redact`, and `dashboard`.
+- Deterministic replay transcript.
+- JSON eval engine with baseline rules.
+- MCP-style tool-call adapter.
+- MCP policy eval pack for server allowlists, required metadata, and forbidden permissions.
+- JSONL streaming trace writer and materializer.
+- Trace redaction CLI and API.
+- Static HTML dashboard renderer.
+- Launch demo artifact generator.
+- Public JavaScript API and package exports.
+- GitHub Actions CI workflow.
+- Issue templates, contribution docs, security docs, and Apache-2.0 license.
