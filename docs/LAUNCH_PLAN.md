@@ -57,6 +57,11 @@ Built:
 - Trace/Eval JSON Schemas.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - LangGraph-style node adapter and demo eval pack.
+- Local security scan for secret leaks, prompt injection phrases, and high-risk tool calls.
+- CI scan gates through `agentlens ci --scan` and the composite GitHub Action.
+- SARIF export for scan findings.
+- Dashboard Security Scan panel.
+- Public roadmap.
 
 Missing before a serious public launch:
 
@@ -78,9 +83,9 @@ Do these before asking strangers to star it:
 
 The MVP becomes much more credible when it works with one real ecosystem:
 
-1. Add a LangGraph or generic tool-call adapter example.
-2. Add richer dashboards for MCP exception review history.
-3. Add framework adapter examples.
+1. Harden the LangGraph adapter against common graph/node shapes.
+2. Add AutoGen and CrewAI-style examples.
+3. Add richer dashboards for MCP exception review history.
 
 ## Priority 3: Make The README Convert
 
@@ -91,6 +96,8 @@ The GitHub README should do five jobs fast:
 3. Show a five-minute demo.
 4. Show concrete output.
 5. Show a believable roadmap.
+
+See [ROADMAP.md](ROADMAP.md) for the public roadmap.
 
 Avoid vague claims such as "production-ready" before adapters, tests, and CI exist.
 
@@ -138,3 +145,4 @@ Target `v0.2.0`:
 
 - One popular framework adapter.
 - First release tag.
+- Batch SARIF for run directories.

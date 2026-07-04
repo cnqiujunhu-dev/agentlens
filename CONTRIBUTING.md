@@ -9,6 +9,7 @@ AgentLens is early. The best contributions are small, testable improvements that
 - Add dashboard usability fixes.
 - Add framework adapter examples.
 - Improve docs where setup or concepts are unclear.
+- Pick a scoped task from [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Development
 

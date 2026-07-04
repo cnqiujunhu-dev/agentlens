@@ -48,6 +48,7 @@ Initial MVP.
 - `agentlens scan --sarif` exports SARIF 2.1.0 for GitHub code scanning and compatible tools.
 - Static dashboards include a Security Scan panel with severity, rule, path, event context, and redacted samples.
 - Share bundles include `scan.txt` generated from the redacted trace.
+- Public roadmap covering launch blockers, integration milestones, good first issues, and non-goals.
 - Public GitHub repository target and publication blocker notes.
 - Release checklist, demo recording guide, and launch post draft.
 - Public JavaScript API and package exports.

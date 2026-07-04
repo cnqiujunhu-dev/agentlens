@@ -292,6 +292,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Release checklist](docs/RELEASE_CHECKLIST.md)
 - [Demo recording guide](docs/DEMO_RECORDING.md)
 - [Launch post draft](docs/LAUNCH_POST.md)
+- [Roadmap](docs/ROADMAP.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
 - [Security scan](docs/SECURITY_SCAN.md)
 - [LangGraph-style adapter](docs/LANGGRAPH_ADAPTER.md)
@@ -387,6 +388,8 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Build policy packs for MCP servers and internal tools.
 
 ## Roadmap
+
+See [ROADMAP.md](docs/ROADMAP.md) for launch blockers, integration milestones, good first issues, and non-goals.
 
 - Unit tests, CI batch eval, failure-case demo, MCP adapter MVP, and MCP policy rules.
 - Public JavaScript API and package exports.

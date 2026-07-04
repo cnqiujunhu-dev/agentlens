@@ -1,0 +1,76 @@
+# AgentLens Roadmap
+
+AgentLens is early, but the direction is intentionally narrow: local-first DevTools for agent traces, evals, scan gates, and shareable debugging artifacts. This roadmap is public so contributors can see what is finished, what is next, and what is deliberately out of scope.
+
+## v0.1.0 Launch Baseline
+
+The first public release should prove that an agent run can be captured, inspected, evaluated, scanned, shared, and reproduced without a hosted service.
+
+Shipped:
+
+- Trace v1 JSON schema and validation.
+- CLI for `init`, `demo`, `inspect`, `replay`, `eval`, `scan`, `ci`, `redact`, `share`, `dashboard`, `serve`, `diff`, and `validate`.
+- Local security scan for leaked secrets, prompt injection phrases, and risky tool calls.
+- SARIF export for scan findings.
+- CI scan gates through `agentlens ci --scan` and the composite GitHub Action.
+- Redacted share bundles with dashboard, eval report, scan report, and summary.
+- Static dashboards with timeline filters and a Security Scan panel.
+- Deterministic replay and before/after trace diff dashboards.
+- JSON eval rules for core agent quality checks, cost, latency, citations, MCP policies, and reviewed MCP risk exceptions.
+- Generic LLM wrapper plus OpenAI-compatible, Anthropic-compatible, LangGraph-style, MCP-style, and MCP stdio tracing helpers.
+- JSONL streaming trace writer and materializer.
+- Release audit, release preflight, launch GIF, launch post draft, issue templates, and community docs.
+
+Launch blockers:
+
+- Push `main` to the public repository.
+- Refresh GitHub auth with `workflow` scope so `.github/workflows/ci.yml` can be pushed.
+- Tag `v0.1.0` after GitHub CI passes.
+
+## v0.2.0 Integration Release
+
+Goal: make AgentLens feel useful with real agent stacks, not just demos.
+
+Planned:
+
+- Harden the LangGraph adapter against common node and graph shapes.
+- Add AutoGen and CrewAI-style examples without adding runtime dependencies.
+- Add a cookbook for wrapping arbitrary LLM SDK calls.
+- Add a runnable "agent regression PR" example that shows eval, scan, dashboard, SARIF, and diff together.
+- Improve dashboard navigation for long traces and repeated tool calls.
+- Add more scan rules with documented false-positive tradeoffs.
+
+## v0.3.0 Team Workflow Release
+
+Goal: make trace review ergonomic for teams using GitHub issues, PRs, and CI.
+
+Candidates:
+
+- Batch SARIF export for run directories.
+- PR comment renderer for CI summaries.
+- Trace bundle index pages for multiple runs.
+- Configurable dashboard sections for eval, scan, MCP risk, and diff.
+- Governance docs for reviewed MCP risk exceptions.
+
+## Good First Issues
+
+- Add focused eval assertion tests.
+- Improve dashboard empty states and mobile layout.
+- Add more examples for provider-style SDK wrappers.
+- Improve scan rule descriptions and false-positive examples.
+- Add docs for common CI layouts.
+
+## Non-Goals For Now
+
+- Agent orchestration framework features.
+- Hosted trace storage.
+- Vendor-specific lock-in.
+- Heavy runtime dependencies.
+- Claims of complete observability or security coverage.
+
+## Success Metrics
+
+- A new user can run the five-minute demo from a clean clone.
+- A real project can add `agentlens ci --scan` without changing its agent framework.
+- A failing trace can be attached to an issue as a redacted share bundle.
+- A maintainer can inspect an agent regression without rerunning the model.
