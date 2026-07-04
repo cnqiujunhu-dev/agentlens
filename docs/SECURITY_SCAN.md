@@ -8,6 +8,7 @@
 agentlens scan .agentlens/runs/demo.json
 agentlens scan .agentlens/runs/demo.json --fail-on medium
 agentlens scan .agentlens/runs/demo.json --json
+agentlens scan .agentlens/runs/demo.json --sarif .agentlens/reports/agentlens-scan.sarif
 agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fail-on high
 ```
 
@@ -16,6 +17,7 @@ Default behavior:
 - `high` and `critical` findings fail the command.
 - `medium` findings are reported but do not fail unless `--fail-on medium` is used.
 - `--fail-on none` reports findings without changing the exit code.
+- `--sarif <path>` writes a SARIF 2.1.0 report for GitHub code scanning or other SARIF consumers.
 
 ## What It Checks
 
@@ -27,12 +29,13 @@ Default behavior:
 ## API
 
 ```js
-import { formatScanReport, readTrace, scanTrace } from "agentlens";
+import { formatScanReport, formatScanSarif, readTrace, scanTrace } from "agentlens";
 
 const trace = readTrace(".agentlens/runs/demo.json");
 const report = scanTrace(trace, { failOnSeverity: "medium" });
 
 console.log(formatScanReport(report));
+console.log(formatScanSarif(report, { traceFile: ".agentlens/runs/demo.json" }));
 ```
 
 ## Share Bundles
@@ -54,6 +57,26 @@ agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fa
 ```
 
 The composite GitHub Action enables scan by default. Use `scan: false` when you want eval-only CI.
+
+## SARIF Upload
+
+Single-trace scan findings can be exported as SARIF:
+
+```bash
+agentlens scan .agentlens/runs/demo.json --sarif .agentlens/reports/agentlens-scan.sarif --fail-on none
+```
+
+In GitHub Actions, upload that file with `github/codeql-action/upload-sarif`:
+
+```yaml
+- name: Export AgentLens SARIF
+  run: node ./bin/agentlens.js scan .agentlens/runs/demo.json --sarif .agentlens/reports/agentlens-scan.sarif --fail-on none
+
+- name: Upload AgentLens SARIF
+  uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: .agentlens/reports/agentlens-scan.sarif
+```
 
 ## Limits
 

@@ -45,6 +45,7 @@ Initial MVP.
 - Release preflight script for final GitHub publication checks.
 - Local security scan CLI and API for secret-shaped values, prompt injection phrases, and risky tool calls.
 - CI can combine eval rules with local scan gates via `agentlens ci --scan`.
+- `agentlens scan --sarif` exports SARIF 2.1.0 for GitHub code scanning and compatible tools.
 - Share bundles include `scan.txt` generated from the redacted trace.
 - Public GitHub repository target and publication blocker notes.
 - Release checklist, demo recording guide, and launch post draft.

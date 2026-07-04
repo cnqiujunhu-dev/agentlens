@@ -12,6 +12,7 @@ AgentLens is local-first DevTools for AI agents: trace, replay, eval, scan, reda
 - Replay failed agent runs without calling the model again.
 - CI checks and scan gates for tool-using agents.
 - Secret and prompt-injection scans for agent traces.
+- SARIF output for agent trace findings.
 - Static trace reports for GitHub issues.
 - MCP policy checks for agent tool calls.
 
@@ -41,6 +42,7 @@ Current MVP:
 - batch CI command
 - local security scan
 - GitHub Action scan gate
+- SARIF export for scan findings
 - static HTML dashboard
 - local dashboard server
 - JSONL streaming traces
@@ -75,6 +77,7 @@ From one trace you can:
 - run eval rules
 - fail CI
 - scan for leaked secrets and risky tool calls
+- upload scan findings as SARIF
 - redact secrets
 - generate a static dashboard
 - attach the report to a GitHub issue

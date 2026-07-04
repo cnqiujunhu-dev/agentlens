@@ -59,6 +59,7 @@ const requiredReadmeSnippets = [
   "agentlens scan",
   "--scan",
   "scan-fail-on",
+  "SARIF",
   "Security Scan",
   "agentlens validate",
   "share bundle",

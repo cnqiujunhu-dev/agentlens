@@ -13,6 +13,7 @@ import {
   formatTraceDiff,
   finishRun,
   formatScanReport,
+  formatScanSarif,
   JsonlTraceWriter,
   McpStdioTraceSession,
   readSchema,
@@ -55,6 +56,7 @@ test("public API exports core trace and eval helpers", () => {
   assert.match(formatTraceDiff(diff), /AgentLens Trace Diff/);
   assert.match(renderDiffDashboard(diff), /AgentLens Trace Diff/);
   assert.match(formatScanReport(scan), /Scan:/);
+  assert.equal(formatScanSarif(scan).version, "2.1.0");
   assert.match(formatDoctorReport(doctorWorkspace(process.cwd())), /AgentLens Doctor/);
   assert.match(renderReplay(run), /LLM RESPONSE/);
   assert.equal(redactTrace(run).metadata.redacted, true);

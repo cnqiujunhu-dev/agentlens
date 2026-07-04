@@ -50,12 +50,13 @@ console.log(formatEvalReport(report));
 ## Security Scan
 
 ```js
-import { formatScanReport, readTrace, scanTrace } from "agentlens";
+import { formatScanReport, formatScanSarif, readTrace, scanTrace } from "agentlens";
 
 const trace = readTrace(".agentlens/runs/refund.json");
 const report = scanTrace(trace, { failOnSeverity: "high" });
 
 console.log(formatScanReport(report));
+console.log(JSON.stringify(formatScanSarif(report, { traceFile: ".agentlens/runs/refund.json" }), null, 2));
 ```
 
 ## Trace Diff
@@ -76,7 +77,7 @@ const html = renderDiffDashboard(diff);
 ```bash
 agentlens inspect .agentlens/runs/demo.json --json
 agentlens eval .agentlens/runs/demo.json --config evals/default.json --json
-agentlens scan .agentlens/runs/demo.json --json
+agentlens scan .agentlens/runs/demo.json --json --sarif .agentlens/reports/agentlens-scan.sarif
 agentlens ci --runs .agentlens/runs --config evals/default.json --scan --json
 agentlens diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json --json
 agentlens diff-dashboard .agentlens/runs/baseline.json .agentlens/runs/candidate.json --out .agentlens/reports/diff.html

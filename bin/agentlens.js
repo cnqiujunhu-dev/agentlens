@@ -21,7 +21,7 @@ function usage() {
     "  agentlens diff <baseline-trace> <candidate-trace> [--json]",
     "  agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]",
     "  agentlens eval <trace-file> [--config path] [--json]",
-    "  agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none]",
+    "  agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]",
     "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--scan] [--scan-fail-on severity]",
     "  agentlens schema <trace|eval> [--out path]",
     "  agentlens validate <trace|eval> <file> [--json]",
@@ -145,9 +145,13 @@ async function main() {
 
   if (command === "scan") {
     const traceFile = positional(1);
-    if (!traceFile) throw new Error("Missing trace file. Usage: agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none]");
-    const { formatScanReport, scanTrace } = await import("../src/scan.js");
+    if (!traceFile) throw new Error("Missing trace file. Usage: agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]");
+    const { formatScanReport, formatScanSarif, scanTrace } = await import("../src/scan.js");
     const report = scanTrace(readTrace(traceFile), { failOnSeverity: option("--fail-on", "high") });
+    const sarifPath = option("--sarif", undefined);
+    if (sarifPath) {
+      writeText(sarifPath, `${JSON.stringify(formatScanSarif(report, { traceFile }), null, 2)}\n`);
+    }
     console.log(flag("--json") ? JSON.stringify(report, null, 2) : formatScanReport(report));
     if (!report.passed) process.exitCode = 1;
     return;

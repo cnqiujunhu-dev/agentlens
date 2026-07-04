@@ -351,3 +351,81 @@ export function formatScanReport(report) {
 
   return lines.join("\n");
 }
+
+function sarifLevel(severity) {
+  if (severity === "critical" || severity === "high") return "error";
+  if (severity === "medium") return "warning";
+  return "note";
+}
+
+function sarifRules(findings) {
+  const rules = new Map();
+  for (const finding of findings) {
+    if (rules.has(finding.ruleId)) continue;
+    rules.set(finding.ruleId, {
+      id: finding.ruleId,
+      name: finding.ruleId,
+      shortDescription: { text: finding.message },
+      fullDescription: { text: `${finding.category} finding with ${finding.severity} severity.` },
+      helpUri: "https://github.com/cnqiujunhu-dev/agentlens/blob/main/docs/SECURITY_SCAN.md",
+      properties: {
+        category: finding.category,
+        severity: finding.severity
+      }
+    });
+  }
+  return [...rules.values()].sort((a, b) => a.id.localeCompare(b.id));
+}
+
+export function formatScanSarif(report, { traceFile = "trace.json" } = {}) {
+  return {
+    version: "2.1.0",
+    $schema: "https://json.schemastore.org/sarif-2.1.0.json",
+    runs: [
+      {
+        tool: {
+          driver: {
+            name: "AgentLens",
+            informationUri: "https://github.com/cnqiujunhu-dev/agentlens",
+            rules: sarifRules(report.findings)
+          }
+        },
+        results: report.findings.map((finding) => ({
+          ruleId: finding.ruleId,
+          level: sarifLevel(finding.severity),
+          message: {
+            text: `${finding.message} at ${finding.path}`
+          },
+          locations: [
+            {
+              physicalLocation: {
+                artifactLocation: {
+                  uri: traceFile
+                },
+                region: {
+                  startLine: 1,
+                  startColumn: 1
+                }
+              },
+              logicalLocations: [
+                {
+                  name: finding.path,
+                  kind: "jsonpath"
+                }
+              ]
+            }
+          ],
+          properties: {
+            severity: finding.severity,
+            category: finding.category,
+            path: finding.path,
+            ...(finding.eventId ? { eventId: finding.eventId } : {}),
+            ...(finding.eventType ? { eventType: finding.eventType } : {}),
+            ...(finding.eventName ? { eventName: finding.eventName } : {}),
+            ...(finding.sample ? { sample: finding.sample } : {})
+          }
+        }))
+      }
+    ]
+  };
+}

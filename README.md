@@ -46,6 +46,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Workspace doctor for checking local setup, traces, eval config, and CI wiring.
 - Validation command for trace files and eval configs.
 - Local security scan for secret leaks, prompt injection phrases, and high-risk tool calls.
+- SARIF output for uploading agent trace scan findings to GitHub code scanning.
 - Redacted share bundle generation for GitHub issues, PRs, and support threads.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
@@ -248,7 +249,7 @@ agentlens replay <trace-file>
 agentlens diff <baseline-trace> <candidate-trace> [--json]
 agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]
 agentlens eval <trace-file> [--config path] [--json]
-agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none]
+agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]
 agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]
 agentlens schema <trace|eval> [--out path]
 agentlens validate <trace|eval> <file> [--json]
@@ -341,10 +342,11 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 agentlens scan .agentlens/runs/demo.json
 agentlens scan .agentlens/runs/demo.json --fail-on medium
 agentlens scan .agentlens/runs/demo.json --json
+agentlens scan .agentlens/runs/demo.json --sarif .agentlens/reports/agentlens-scan.sarif
 agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fail-on high
 ```
 
-The default threshold fails on `high` and `critical` findings. Medium findings, such as prompt-injection phrases, are reported as warnings unless you opt into `--fail-on medium`. CI can run the same scan with `--scan --scan-fail-on high`. Share bundles include `scan.txt` generated from the redacted trace.
+The default threshold fails on `high` and `critical` findings. Medium findings, such as prompt-injection phrases, are reported as warnings unless you opt into `--fail-on medium`. CI can run the same scan with `--scan --scan-fail-on high`. Use `--sarif` when you want GitHub code scanning or another SARIF consumer to ingest trace findings. Share bundles include `scan.txt` generated from the redacted trace.
 
 ## Use Cases
 
@@ -361,6 +363,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Review RAG evidence and citation behavior.
 - Add eval checks to CI.
 - Scan traces for secret leaks, prompt injection text, and risky tool calls.
+- Upload trace scan findings as SARIF for security dashboards.
 - Trace MCP-style tool calls.
 - Trace real stdio MCP JSON-RPC tool calls.
 - Reuse MCP stdio trace sessions across multiple tool calls.

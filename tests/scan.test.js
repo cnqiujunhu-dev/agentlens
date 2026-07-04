@@ -5,7 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { formatScanReport, scanTrace } from "../src/scan.js";
+import { formatScanReport, formatScanSarif, scanTrace } from "../src/scan.js";
 import { writeTrace } from "../src/store.js";
 import { addEvent, createRun, finishRun } from "../src/trace.js";
 
@@ -45,6 +45,20 @@ test("scanTrace flags sensitive keys and secret-shaped values", () => {
   assert.equal(report.findings.some((finding) => finding.ruleId === "sensitive-key"), true);
   assert.equal(report.findings.some((finding) => finding.ruleId === "openai-api-key"), true);
   assert.doesNotMatch(formatScanReport(report), /1234567890abcdefghijklmnopqrstuvwxyz/);
+});
+
+test("formatScanSarif emits GitHub-compatible scan results", () => {
+  const trace = healthyTrace();
+  trace.metadata.apiKey = "plain-test-secret";
+
+  const report = scanTrace(trace);
+  const sarif = formatScanSarif(report, { traceFile: "runs/trace.json" });
+
+  assert.equal(sarif.version, "2.1.0");
+  assert.equal(sarif.runs[0].tool.driver.name, "AgentLens");
+  assert.equal(sarif.runs[0].results[0].ruleId, "sensitive-key");
+  assert.equal(sarif.runs[0].results[0].level, "error");
+  assert.equal(sarif.runs[0].results[0].locations[0].physicalLocation.artifactLocation.uri, "runs/trace.json");
 });
 
 test("scanTrace warns on prompt injection phrases by default", () => {
@@ -97,4 +111,22 @@ test("CLI scan emits JSON and exits on blocking findings", () => {
   const report = JSON.parse(result.stdout);
   assert.equal(report.passed, false);
   assert.equal(report.findings[0].ruleId, "sensitive-key");
+});
+
+test("CLI scan can write SARIF while returning a blocking exit code", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-scan-sarif-"));
+  const traceFile = path.join(dir, "trace.json");
+  const sarifFile = path.join(dir, "scan.sarif");
+  const trace = healthyTrace();
+  trace.metadata.token = "secret-token-value";
+  writeTrace(traceFile, trace);
+
+  const result = spawnSync(process.execPath, [binPath, "scan", traceFile, "--sarif", sarifFile], {
+    cwd: dir,
+    encoding: "utf8"
+  });
+
+  assert.equal(result.status, 1);
+  const sarif = JSON.parse(fs.readFileSync(sarifFile, "utf8"));
+  assert.equal(sarif.runs[0].results[0].ruleId, "sensitive-key");
 });

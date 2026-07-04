@@ -74,6 +74,20 @@ By default, the action appends a Markdown report to `GITHUB_STEP_SUMMARY`. Disab
     scan: false
 ```
 
+## SARIF Upload
+
+For GitHub code scanning, export SARIF with the CLI and upload it in a later step:
+
+```yaml
+- name: Export AgentLens SARIF
+  run: node ./bin/agentlens.js scan .agentlens/runs/demo.json --sarif .agentlens/reports/agentlens-scan.sarif --fail-on none
+
+- name: Upload AgentLens SARIF
+  uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: .agentlens/reports/agentlens-scan.sarif
+```
+
 ## Local Repository Smoke Test
 
 Inside this repository, CI also tests the action with:
