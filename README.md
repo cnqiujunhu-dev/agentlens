@@ -50,6 +50,7 @@ node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json
 node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
+node ./bin/agentlens.js serve .agentlens/runs --port 4317
 ```
 
 Need schemas for editor or CI tooling?
@@ -179,6 +180,7 @@ agentlens schema <trace|eval> [--out path]
 agentlens materialize <jsonl-file> [--out path]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
 agentlens dashboard <trace-file> [--out path]
+agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 ```
 
 ## JavaScript API
@@ -246,6 +248,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Stream long-running traces as JSONL.
 - Redact secrets before sharing traces.
 - Publish JSON Schemas for external tooling.
+- Browse local runs with a zero-dependency dashboard server.
 - Generate launch-ready demo artifacts.
 - Share compact run reports in GitHub issues.
 - Build policy packs for MCP servers and internal tools.
@@ -257,6 +260,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Trace redaction CLI and API.
 - Trace/Eval JSON Schemas.
 - Generic LLM call adapter.
+- Local dashboard server.
 - Launch demo artifact generator.
 - JavaScript SDK wrapper for common LLM calls.
 - LangGraph, AutoGen, CrewAI, and OpenAI/Anthropic-style adapter examples.

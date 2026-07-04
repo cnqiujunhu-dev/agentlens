@@ -115,6 +115,20 @@ console.log(schemaPath("trace"));
 console.log(readSchema("eval"));
 ```
 
+## Dashboard Server
+
+```js
+import { createDashboardServer, listen } from "agentlens";
+
+const server = createDashboardServer(".agentlens/runs");
+const address = await listen(server, {
+  host: "127.0.0.1",
+  port: 4317
+});
+
+console.log(address);
+```
+
 ## MCP-Style Tool Calls
 
 ```js

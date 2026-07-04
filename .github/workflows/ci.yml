@@ -35,6 +35,7 @@ jobs:
           node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
           node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json
           node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
+          timeout 5s node ./bin/agentlens.js serve .agentlens/runs --port 4317 || test $? -eq 124
 
       - name: MCP adapter demo
         run: |

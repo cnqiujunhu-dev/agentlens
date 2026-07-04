@@ -23,6 +23,7 @@ function usage() {
     "  agentlens materialize <jsonl-file> [--out path]",
     "  agentlens redact <trace-file> [--out path] [--keys key1,key2]",
     "  agentlens dashboard <trace-file> [--out path]",
+    "  agentlens serve [trace-file|runs-dir] [--host host] [--port port]",
     "",
     "Examples:",
     "  node ./bin/agentlens.js demo --out .agentlens/runs/demo.json",
@@ -146,6 +147,19 @@ async function main() {
     const html = renderDashboard(readTrace(traceFile));
     writeText(out, html);
     console.log(`Wrote dashboard: ${out}`);
+    return;
+  }
+
+  if (command === "serve") {
+    const target = positional(1) ?? ".agentlens/runs";
+    const host = option("--host", "127.0.0.1");
+    const port = Number(option("--port", "4317"));
+    const { createDashboardServer, listen } = await import("../src/server.js");
+    const server = createDashboardServer(target);
+    const address = await listen(server, { host, port });
+    const actualHost = address.address === "::" ? "localhost" : address.address;
+    console.log(`AgentLens dashboard server listening at http://${actualHost}:${address.port}`);
+    console.log(`Serving ${target}`);
     return;
   }
 

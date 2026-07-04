@@ -15,6 +15,7 @@ Built:
 - JSON eval engine.
 - Generic LLM call adapter.
 - Static HTML dashboard.
+- Local dashboard server.
 - Apache-2.0 license.
 - Contribution and security docs.
 - GitHub Actions smoke-test workflow.
@@ -58,7 +59,7 @@ The MVP becomes much more credible when it works with one real ecosystem:
 2. Add MCP tool schema capture and policy reporting.
 3. Add a LangGraph or generic tool-call adapter example.
 4. Add a scanner for dangerous MCP capabilities.
-5. Add a live local dashboard mode.
+5. Add file watching and live refresh to the local dashboard server.
 
 ## Priority 3: Make The README Convert
 

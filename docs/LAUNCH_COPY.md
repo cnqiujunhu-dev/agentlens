@@ -39,6 +39,7 @@ Current MVP:
 - LLM-specific eval pack
 - batch CI command
 - static HTML dashboard
+- local dashboard server
 - JSONL streaming traces
 - MCP-style tool-call adapter
 - stdio JSON-RPC MCP transport demo

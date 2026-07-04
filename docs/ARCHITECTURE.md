@@ -34,6 +34,7 @@ The project should stay framework-neutral. It should integrate with agent framew
 4. Presentation Layer
    - CLI summaries
    - Static HTML dashboard
+   - Local dashboard server
    - Later: live local server and VS Code extension
 
 5. Integration Layer
@@ -138,5 +139,5 @@ The first dashboard is a generated static HTML file. It does not require a web s
 - OpenAI/Anthropic SDK wrappers.
 - MCP server scanner.
 - GitHub Action.
-- Live mode.
+- Live mode and richer run browsing.
 - VS Code extension.

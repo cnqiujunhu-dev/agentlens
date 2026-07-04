@@ -19,6 +19,7 @@ Initial MVP.
 - Trace redaction CLI and API.
 - Trace and eval JSON Schemas.
 - Static HTML dashboard renderer.
+- Local dashboard server for trace files and runs directories.
 - Launch demo artifact generator.
 - Public JavaScript API and package exports.
 - GitHub Actions CI workflow.
