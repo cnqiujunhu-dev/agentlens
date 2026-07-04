@@ -59,6 +59,15 @@ const diff = compareTraces(baseline, candidate);
 console.log(formatTraceDiff(diff));
 ```
 
+## CLI JSON Output
+
+```bash
+agentlens inspect .agentlens/runs/demo.json --json
+agentlens eval .agentlens/runs/demo.json --config evals/default.json --json
+agentlens ci --runs .agentlens/runs --config evals/default.json --json
+agentlens diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json --json
+```
+
 ## Generic LLM Calls
 
 ```js

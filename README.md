@@ -36,6 +36,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - Trace diff reports for before/after agent regressions.
+- JSON output for inspect, eval, CI, and diff automation.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
 - MCP tool inventory and risk scanning.
@@ -207,11 +208,11 @@ The MVP stores each run as a single JSON file:
 ```text
 agentlens init
 agentlens demo [--out path]
-agentlens inspect <trace-file>
+agentlens inspect <trace-file> [--json]
 agentlens replay <trace-file>
-agentlens diff <baseline-trace> <candidate-trace>
-agentlens eval <trace-file> [--config path]
-agentlens ci [--runs dir] [--config path]
+agentlens diff <baseline-trace> <candidate-trace> [--json]
+agentlens eval <trace-file> [--config path] [--json]
+agentlens ci [--runs dir] [--config path] [--json]
 agentlens schema <trace|eval> [--out path]
 agentlens materialize <jsonl-file> [--out path]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
@@ -277,6 +278,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Debug tool-using AI agents.
 - Trace model calls without binding to one LLM SDK.
 - Compare before/after traces when an agent regresses.
+- Emit JSON reports for CI bots, scripts, and PR comments.
 - Wrap OpenAI-compatible and Anthropic-compatible SDK calls.
 - Reproduce flaky agent failures.
 - Review RAG evidence and citation behavior.
@@ -305,6 +307,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Trace redaction CLI and API.
 - Trace/Eval JSON Schemas.
 - Trace diff CLI and API.
+- JSON report output for automation.
 - Init scaffolding for starter evals and GitHub Action examples.
 - Generic LLM call adapter.
 - Local dashboard server.

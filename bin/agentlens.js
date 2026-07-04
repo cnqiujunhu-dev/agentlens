@@ -15,11 +15,11 @@ function usage() {
     "Usage:",
     "  agentlens init",
     "  agentlens demo [--out path]",
-    "  agentlens inspect <trace-file>",
+    "  agentlens inspect <trace-file> [--json]",
     "  agentlens replay <trace-file>",
-    "  agentlens diff <baseline-trace> <candidate-trace>",
-    "  agentlens eval <trace-file> [--config path]",
-    "  agentlens ci [--runs dir] [--config path]",
+    "  agentlens diff <baseline-trace> <candidate-trace> [--json]",
+    "  agentlens eval <trace-file> [--config path] [--json]",
+    "  agentlens ci [--runs dir] [--config path] [--json]",
     "  agentlens schema <trace|eval> [--out path]",
     "  agentlens materialize <jsonl-file> [--out path]",
     "  agentlens redact <trace-file> [--out path] [--keys key1,key2]",
@@ -38,6 +38,10 @@ function option(name, fallback = undefined) {
   const index = args.indexOf(name);
   if (index === -1) return fallback;
   return args[index + 1] ?? fallback;
+}
+
+function flag(name) {
+  return args.includes(name);
 }
 
 function positional(index) {
@@ -75,7 +79,8 @@ async function main() {
     const traceFile = positional(1);
     if (!traceFile) throw new Error("Missing trace file. Usage: agentlens inspect <trace-file>");
     const trace = readTrace(traceFile);
-    console.log(formatSummary(summarizeTrace(trace)));
+    const summary = summarizeTrace(trace);
+    console.log(flag("--json") ? JSON.stringify(summary, null, 2) : formatSummary(summary));
     return;
   }
 
@@ -92,7 +97,8 @@ async function main() {
     const candidateFile = positional(2);
     if (!baselineFile || !candidateFile) throw new Error("Missing trace files. Usage: agentlens diff <baseline-trace> <candidate-trace>");
     const { compareTraces, formatTraceDiff } = await import("../src/diff.js");
-    console.log(formatTraceDiff(compareTraces(readTrace(baselineFile), readTrace(candidateFile))));
+    const diff = compareTraces(readTrace(baselineFile), readTrace(candidateFile));
+    console.log(flag("--json") ? JSON.stringify(diff, null, 2) : formatTraceDiff(diff));
     return;
   }
 
@@ -102,7 +108,7 @@ async function main() {
     const { evaluateTrace, formatEvalReport, loadEvalConfig } = await import("../src/eval.js");
     const configPath = option("--config", "evals/default.json");
     const report = evaluateTrace(readTrace(traceFile), loadEvalConfig(configPath));
-    console.log(formatEvalReport(report));
+    console.log(flag("--json") ? JSON.stringify(report, null, 2) : formatEvalReport(report));
     if (!report.passed) process.exitCode = 1;
     return;
   }
@@ -113,7 +119,7 @@ async function main() {
     const runsDir = option("--runs", ".agentlens/runs");
     const configPath = option("--config", "evals/default.json");
     const report = runCi({ runsDir, config: loadEvalConfig(configPath) });
-    console.log(formatCiReport(report));
+    console.log(flag("--json") ? JSON.stringify(report, null, 2) : formatCiReport(report));
     if (report.failed > 0 || report.total === 0) process.exitCode = 1;
     return;
   }

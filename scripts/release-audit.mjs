@@ -37,6 +37,7 @@ const requiredReadmeSnippets = [
   "Timeline filters",
   "starter files",
   "agentlens diff",
+  "JSON output",
   "agentlens serve",
   "dashboard-screenshot.png"
 ];

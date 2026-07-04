@@ -14,6 +14,7 @@ Built:
 - Inspect summary.
 - Replay transcript.
 - Trace diff CLI and API.
+- JSON report output for CLI automation.
 - JSON eval engine.
 - Generic LLM call adapter.
 - Static HTML dashboard.

@@ -1,0 +1,58 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { addEvent, createRun, finishRun } from "../src/trace.js";
+import { writeJson, writeTrace } from "../src/store.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const binPath = path.resolve(__dirname, "../bin/agentlens.js");
+
+function makeTrace(name = "cli json") {
+  const run = createRun({ app: "cli-test", name });
+  addEvent(run, { type: "llm.prompt", name: "planner" });
+  addEvent(run, { type: "llm.response", name: "final", output: { content: "ok", citations: ["doc"] } });
+  return finishRun(run, "passed");
+}
+
+function runCli(args, cwd) {
+  const result = spawnSync(process.execPath, [binPath, ...args], {
+    cwd,
+    encoding: "utf8"
+  });
+  assert.equal(result.status, 0, result.stderr);
+  return JSON.parse(result.stdout);
+}
+
+test("CLI emits JSON for inspect, eval, ci, and diff", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-cli-json-"));
+  const runsDir = path.join(dir, "runs");
+  fs.mkdirSync(runsDir);
+  const baselineFile = path.join(runsDir, "baseline.json");
+  const candidateFile = path.join(runsDir, "candidate.json");
+  const configFile = path.join(dir, "eval.json");
+
+  writeTrace(baselineFile, makeTrace("baseline"));
+  writeTrace(candidateFile, makeTrace("candidate"));
+  writeJson(configFile, {
+    version: "agentlens.eval.v1",
+    name: "cli-json",
+    assertions: [{ id: "has-answer", type: "required-final-response" }]
+  });
+
+  const inspect = runCli(["inspect", baselineFile, "--json"], dir);
+  assert.equal(inspect.name, "baseline");
+
+  const evaluation = runCli(["eval", baselineFile, "--config", configFile, "--json"], dir);
+  assert.equal(evaluation.passed, true);
+
+  const ci = runCli(["ci", "--runs", runsDir, "--config", configFile, "--json"], dir);
+  assert.equal(ci.total, 2);
+  assert.equal(ci.failed, 0);
+
+  const diff = runCli(["diff", baselineFile, candidateFile, "--json"], dir);
+  assert.equal(diff.deltas.eventCount, 0);
+});
