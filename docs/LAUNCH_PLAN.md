@@ -14,6 +14,7 @@ Built:
 - Inspect summary.
 - Replay transcript.
 - Trace diff CLI and API.
+- Static trace diff dashboards.
 - JSON report output for CLI automation.
 - GitHub Actions Markdown summary output.
 - JSON eval engine.
@@ -68,8 +69,8 @@ Do these before asking strangers to star it:
 The MVP becomes much more credible when it works with one real ecosystem:
 
 1. Add a LangGraph or generic tool-call adapter example.
-2. Add dashboard diff views using the trace diff API.
-3. Add richer dashboards for MCP exception review history.
+2. Add richer dashboards for MCP exception review history.
+3. Add framework adapter examples.
 
 ## Priority 3: Make The README Convert
 

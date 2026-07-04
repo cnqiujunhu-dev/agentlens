@@ -18,6 +18,7 @@ function usage() {
     "  agentlens inspect <trace-file> [--json]",
     "  agentlens replay <trace-file>",
     "  agentlens diff <baseline-trace> <candidate-trace> [--json]",
+    "  agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]",
     "  agentlens eval <trace-file> [--config path] [--json]",
     "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]",
     "  agentlens schema <trace|eval> [--out path]",
@@ -99,6 +100,19 @@ async function main() {
     const { compareTraces, formatTraceDiff } = await import("../src/diff.js");
     const diff = compareTraces(readTrace(baselineFile), readTrace(candidateFile));
     console.log(flag("--json") ? JSON.stringify(diff, null, 2) : formatTraceDiff(diff));
+    return;
+  }
+
+  if (command === "diff-dashboard") {
+    const baselineFile = positional(1);
+    const candidateFile = positional(2);
+    if (!baselineFile || !candidateFile) throw new Error("Missing trace files. Usage: agentlens diff-dashboard <baseline-trace> <candidate-trace>");
+    const { compareTraces } = await import("../src/diff.js");
+    const { renderDiffDashboard } = await import("../src/diff-dashboard.js");
+    const out = option("--out", ".agentlens/reports/agentlens-diff.html");
+    const html = renderDiffDashboard(compareTraces(readTrace(baselineFile), readTrace(candidateFile)));
+    writeText(out, html);
+    console.log(`Wrote diff dashboard: ${out}`);
     return;
   }
 

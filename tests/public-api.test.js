@@ -11,6 +11,7 @@ import {
   JsonlTraceWriter,
   readSchema,
   redactTrace,
+  renderDiffDashboard,
   renderReplay,
   scanMcpTools,
   summarizeTrace,
@@ -37,6 +38,7 @@ test("public API exports core trace and eval helpers", () => {
   assert.equal(report.passed, true);
   assert.equal(diff.deltas.eventCount, 0);
   assert.match(formatTraceDiff(diff), /AgentLens Trace Diff/);
+  assert.match(renderDiffDashboard(diff), /AgentLens Trace Diff/);
   assert.match(renderReplay(run), /LLM RESPONSE/);
   assert.equal(redactTrace(run).metadata.redacted, true);
   assert.equal(readSchema("trace").title, "AgentLens Trace v1");

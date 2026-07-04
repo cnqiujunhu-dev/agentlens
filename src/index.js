@@ -2,6 +2,7 @@ export { addEvent, createRun, finishRun, TRACE_SCHEMA_VERSION, validateTrace } f
 export { appendText, initWorkspace, readTrace, writeTrace, readJson, writeJson, writeText } from "./store.js";
 export { formatSummary, summarizeTrace } from "./inspect.js";
 export { compareTraces, formatTraceDiff } from "./diff.js";
+export { renderDiffDashboard } from "./diff-dashboard.js";
 export { renderReplay } from "./replay.js";
 export { DEFAULT_EVAL_CONFIG, evaluateTrace, formatEvalReport, loadEvalConfig } from "./eval.js";
 export { discoverTraceFiles, formatCiReport, runCi } from "./ci.js";

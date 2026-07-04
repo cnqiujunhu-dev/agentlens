@@ -36,6 +36,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - Trace diff reports for before/after agent regressions.
+- Static diff dashboards for sharing before/after regressions.
 - JSON output for inspect, eval, CI, and diff automation.
 - Markdown CI summaries for GitHub Actions.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
@@ -93,6 +94,7 @@ Want to compare a regression against the healthy demo?
 ```bash
 npm run demo
 npm run diff:demo
+npm run diff:dashboard
 ```
 
 Want to wrap a generic LLM call?
@@ -212,6 +214,7 @@ agentlens demo [--out path]
 agentlens inspect <trace-file> [--json]
 agentlens replay <trace-file>
 agentlens diff <baseline-trace> <candidate-trace> [--json]
+agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]
 agentlens eval <trace-file> [--config path] [--json]
 agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]
 agentlens schema <trace|eval> [--out path]
@@ -279,6 +282,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Debug tool-using AI agents.
 - Trace model calls without binding to one LLM SDK.
 - Compare before/after traces when an agent regresses.
+- Share before/after trace diff dashboards in issues and PRs.
 - Emit JSON reports for CI bots, scripts, and PR comments.
 - Add Markdown summaries to GitHub Actions runs.
 - Wrap OpenAI-compatible and Anthropic-compatible SDK calls.
@@ -310,6 +314,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Trace redaction CLI and API.
 - Trace/Eval JSON Schemas.
 - Trace diff CLI and API.
+- Static trace diff dashboards.
 - JSON report output for automation.
 - GitHub Actions Markdown summaries.
 - Init scaffolding for starter evals and GitHub Action examples.

@@ -50,13 +50,14 @@ console.log(formatEvalReport(report));
 ## Trace Diff
 
 ```js
-import { compareTraces, formatTraceDiff, readTrace } from "agentlens";
+import { compareTraces, formatTraceDiff, readTrace, renderDiffDashboard } from "agentlens";
 
 const baseline = readTrace(".agentlens/runs/baseline.json");
 const candidate = readTrace(".agentlens/runs/candidate.json");
 const diff = compareTraces(baseline, candidate);
 
 console.log(formatTraceDiff(diff));
+const html = renderDiffDashboard(diff);
 ```
 
 ## CLI JSON Output
@@ -66,6 +67,7 @@ agentlens inspect .agentlens/runs/demo.json --json
 agentlens eval .agentlens/runs/demo.json --config evals/default.json --json
 agentlens ci --runs .agentlens/runs --config evals/default.json --json
 agentlens diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json --json
+agentlens diff-dashboard .agentlens/runs/baseline.json .agentlens/runs/candidate.json --out .agentlens/reports/diff.html
 ```
 
 For GitHub Actions summaries or local reports:
