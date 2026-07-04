@@ -59,6 +59,14 @@ function packageVersion() {
   return JSON.parse(fs.readFileSync("package.json", "utf8")).version;
 }
 
+function githubRepoFromRemote(remoteUrl) {
+  const ssh = remoteUrl.match(/^git@github\.com:([^/]+\/[^.]+)(?:\.git)?$/);
+  if (ssh) return ssh[1];
+  const https = remoteUrl.match(/^https:\/\/github\.com\/([^/]+\/[^.]+)(?:\.git)?$/);
+  if (https) return https[1];
+  return null;
+}
+
 function checkCleanWorktree() {
   const status = commandText("git", ["status", "--short"]);
   if (!status.ok) {
@@ -74,14 +82,53 @@ function checkCleanWorktree() {
   }
 }
 
-function checkRemote() {
+function remoteUrl() {
   const remote = commandText("git", ["remote", "get-url", "origin"]);
   if (remote.ok && remote.text) {
     pass("git-remote", `origin is configured: ${remote.text}`);
+    return remote.text;
   } else if (localMode) {
     warn("git-remote", "origin is not configured; required before public release");
   } else {
     fail("git-remote", "origin remote is required before public release");
+  }
+  return null;
+}
+
+function checkGitHubAuth() {
+  const status = commandText("gh", ["auth", "status"]);
+  if (!status.ok) {
+    if (localMode) warn("github-auth", "gh auth status failed; required before publishing");
+    else fail("github-auth", "gh auth status failed; required before publishing");
+    return;
+  }
+
+  const scopeLine = status.text.split(/\r?\n/).find((line) => line.includes("Token scopes:")) ?? "";
+  const hasWorkflow = scopeLine.includes("workflow");
+  if (hasWorkflow) {
+    pass("github-auth", "GitHub token includes workflow scope");
+  } else if (localMode) {
+    warn("github-auth", "GitHub token is missing workflow scope; run: gh auth refresh -s workflow");
+  } else {
+    fail("github-auth", "GitHub token is missing workflow scope; run: gh auth refresh -s workflow");
+  }
+}
+
+function checkRemoteBranch(remote) {
+  const repo = remote ? githubRepoFromRemote(remote) : null;
+  if (!repo) {
+    if (localMode) warn("github-default-branch", "origin is not a GitHub remote that preflight can inspect");
+    else fail("github-default-branch", "origin must be a GitHub remote");
+    return;
+  }
+
+  const result = commandText("gh", ["repo", "view", repo, "--json", "defaultBranchRef", "--jq", ".defaultBranchRef.name"]);
+  if (result.ok && result.text) {
+    pass("github-default-branch", `remote default branch is ${result.text}`);
+  } else if (localMode) {
+    warn("github-default-branch", "remote has no default branch yet; push main before release");
+  } else {
+    fail("github-default-branch", "remote has no default branch yet; push main before release");
   }
 }
 
@@ -129,7 +176,9 @@ function runVerify() {
 }
 
 checkCleanWorktree();
-checkRemote();
+const origin = remoteUrl();
+checkGitHubAuth();
+checkRemoteBranch(origin);
 checkTag();
 checkDemoGif();
 runReleaseAudit();

@@ -37,7 +37,7 @@ Expected result:
 - `agentlens validate` reports no trace or eval config errors.
 - `agentlens share` writes a redacted share bundle.
 - Release audit prints `AgentLens release audit passed`.
-- Local release preflight warns only for missing remote/tag while the repository is still unpublished.
+- Local release preflight warns only for expected unpublished-release gaps such as missing `workflow` scope, unpushed default branch, or missing tag.
 - Dry-run packaging includes `README.md`, `LICENSE`, `bin/agentlens.js`, `src/index.js`, and `docs/assets/dashboard-screenshot.png`.
 
 ## Demo Assets
@@ -66,6 +66,7 @@ Follow [DEMO_RECORDING.md](DEMO_RECORDING.md) for the shot list and export check
 
 Use this repository metadata at launch:
 
+- Repository: `https://github.com/cnqiujunhu-dev/agentlens`
 - Description: `Local-first DevTools for AI agents: trace, replay, eval, redact, and share model/tool-call runs.`
 - Topics: `ai-agent`, `llm`, `observability`, `evals`, `mcp`, `devtools`, `ci`.
 - Website: leave blank until there is a real project site.
@@ -85,6 +86,8 @@ Recommended pinned links:
 Only tag after local validation and the GitHub workflow pass:
 
 ```bash
+gh auth refresh -s workflow
+git push origin main
 git tag v0.1.0
 git push origin v0.1.0
 ```
@@ -113,5 +116,5 @@ Before posting publicly:
 
 Track these honestly until resolved:
 
-- No public GitHub remote has been configured in this workspace.
-- One production-oriented framework adapter or hardened MCP transport integration would make the MVP more credible.
+- Public GitHub repository exists, but `main` has not been pushed yet.
+- Current GitHub CLI token is missing `workflow` scope, so pushing `.github/workflows/ci.yml` over HTTPS is blocked until `gh auth refresh -s workflow` succeeds or a write-capable SSH key is used.

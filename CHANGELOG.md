@@ -43,6 +43,7 @@ Initial MVP.
 - Launch demo artifact for the LangGraph-style adapter.
 - README launch GIF generated from launch dashboard artifacts.
 - Release preflight script for final GitHub publication checks.
+- Public GitHub repository target and publication blocker notes.
 - Release checklist, demo recording guide, and launch post draft.
 - Public JavaScript API and package exports.
 - GitHub Actions CI workflow.

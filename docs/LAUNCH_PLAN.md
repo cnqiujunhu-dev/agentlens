@@ -60,15 +60,16 @@ Built:
 
 Missing before a serious public launch:
 
+- Push `main` to `https://github.com/cnqiujunhu-dev/agentlens`.
+- GitHub CLI token needs `workflow` scope or a matching write-capable SSH key for workflow file pushes.
 - Release tag.
-- Public repository remote.
 
 ## Priority 1: Make The Project Trustworthy
 
 Do these before asking strangers to star it:
 
 1. Add the release tag.
-2. Publish the GitHub repository.
+2. Push `main` to the public GitHub repository.
 3. Run the release checklist before public posting.
 4. Run `npm run release:preflight` after tagging.
 5. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
