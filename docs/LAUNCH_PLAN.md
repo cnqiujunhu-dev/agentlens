@@ -33,6 +33,7 @@ Built:
 - MCP stdio JSON-RPC transport demo.
 - MCP policy eval rules.
 - MCP tool inventory and risk scanner.
+- Reviewed-risk policy exceptions for MCP tools.
 - JSONL streaming trace writer and materializer.
 - Public JavaScript API and package exports.
 - Launch demo artifact generator.
@@ -61,7 +62,7 @@ Do these before asking strangers to star it:
 
 The MVP becomes much more credible when it works with one real ecosystem:
 
-1. Add richer policy reports for reviewed-but-approved risky tools.
+1. Add expiring owners for reviewed MCP risk exceptions.
 2. Add a LangGraph or generic tool-call adapter example.
 3. Add richer local dashboard filters and diff views.
 

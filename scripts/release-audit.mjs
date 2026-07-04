@@ -32,6 +32,7 @@ const requiredReadmeSnippets = [
   "Roadmap",
   "GitHub Actions",
   "MCP tool inventory",
+  "Reviewed MCP risk exceptions",
   "file-change refresh",
   "starter files",
   "agentlens serve",

@@ -43,6 +43,22 @@ function fail(assertion, message, details = {}) {
   return { id: assertion.id ?? assertion.type, type: assertion.type, passed: false, message, details };
 }
 
+function lower(value) {
+  return String(value ?? "").toLowerCase();
+}
+
+function matchesField(expected, actual) {
+  return expected === undefined || expected === "*" || lower(expected) === lower(actual);
+}
+
+function matchesException(violation, exception) {
+  return (
+    matchesField(exception.server, violation.server) &&
+    matchesField(exception.tool, violation.tool) &&
+    matchesField(exception.risk, violation.risk)
+  );
+}
+
 function runAssertion(trace, assertion) {
   if (assertion.type === "required-event-types") {
     const counts = eventCountByType(trace);
@@ -101,21 +117,24 @@ function runAssertion(trace, assertion) {
 
   if (assertion.type === "forbidden-mcp-tool-risks") {
     const forbidden = new Set((assertion.risks ?? []).map((risk) => risk.toLowerCase()));
+    const exceptions = assertion.exceptions ?? assertion.allow ?? [];
     const callViolations = trace.events
       .filter((event) => event.type === "tool.call")
       .filter((event) => forbidden.has(String(event.metadata?.toolRisk ?? "").toLowerCase()))
-      .map((event) => ({ tool: event.name, risk: event.metadata?.toolRisk ?? null }));
+      .map((event) => ({ server: event.metadata?.server ?? null, tool: event.name, risk: event.metadata?.toolRisk ?? null }));
     const manifestViolations = trace.events
       .filter((event) => event.type === "mcp.tools")
-      .flatMap((event) => event.output?.tools ?? [])
+      .flatMap((event) => (event.output?.tools ?? []).map((tool) => ({ server: event.metadata?.server ?? event.name ?? null, ...tool })))
       .filter((tool) => forbidden.has(String(tool.risk ?? "").toLowerCase()))
-      .map((tool) => ({ tool: tool.name, risk: tool.risk ?? null }));
-    const violations = [...callViolations, ...manifestViolations];
+      .map((tool) => ({ server: tool.server ?? null, tool: tool.name, risk: tool.risk ?? null }));
+    const violations = [...callViolations, ...manifestViolations].filter(
+      (violation) => !exceptions.some((exception) => matchesException(violation, exception))
+    );
 
     if (violations.length > 0) {
       return fail(assertion, `Forbidden MCP tool risks found: ${violations.map((item) => `${item.tool}:${item.risk}`).join(", ")}`, { violations });
     }
-    return pass(assertion, "No forbidden MCP tool risks were found");
+    return pass(assertion, "No forbidden MCP tool risks were found", { exceptions: exceptions.length });
   }
 
   if (assertion.type === "required-tool-metadata") {

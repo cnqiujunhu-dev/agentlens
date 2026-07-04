@@ -127,6 +127,33 @@ test("evaluateTrace enforces forbidden MCP tool risks", () => {
   assert.match(report.results[0].message, /Forbidden MCP tool risks/);
 });
 
+test("evaluateTrace allows reviewed MCP tool risk exceptions", () => {
+  const trace = createRun({ app: "eval-test", name: "mcp reviewed risk" });
+  addEvent(trace, {
+    type: "mcp.tools",
+    name: "database-server",
+    metadata: { server: "database-server" },
+    output: {
+      tools: [{ name: "database.delete", risk: "critical" }]
+    }
+  });
+
+  const report = evaluateTrace(trace, {
+    name: "mcp-risk",
+    assertions: [
+      {
+        id: "risk",
+        type: "forbidden-mcp-tool-risks",
+        risks: ["critical"],
+        exceptions: [{ server: "database-server", tool: "database.delete", risk: "critical", reason: "reviewed in change request 42" }]
+      }
+    ]
+  });
+
+  assert.equal(report.passed, true);
+  assert.equal(report.results[0].details.exceptions, 1);
+});
+
 test("evaluateTrace enforces required tool metadata", () => {
   const trace = baseTrace();
   addEvent(trace, {

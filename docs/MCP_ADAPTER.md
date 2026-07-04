@@ -130,7 +130,25 @@ Risk rule example:
 }
 ```
 
+Reviewed exception example:
+
+```json
+{
+  "id": "reviewed-risk-policy",
+  "type": "forbidden-mcp-tool-risks",
+  "risks": ["high", "critical"],
+  "exceptions": [
+    {
+      "server": "internal-db-tools",
+      "tool": "database.backup",
+      "risk": "high",
+      "reason": "reviewed backup-only operation"
+    }
+  ]
+}
+```
+
 ## Next Steps
 
 - Add server/tool allowlists.
-- Add richer policy reports for reviewed-but-approved risky tools.
+- Add richer policy reports for expired or ownerless exceptions.

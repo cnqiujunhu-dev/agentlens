@@ -24,6 +24,7 @@ Initial MVP.
 - Composite GitHub Action for running `agentlens ci` in PR workflows.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - MCP tool inventory events, schema capture, and risk scanning.
+- Reviewed exceptions for MCP high-risk tool policies.
 - Local dashboard JSON APIs and file-change refresh.
 - `agentlens init` scaffolds starter eval config and a GitHub Action example.
 - Launch demo artifact generator.
