@@ -29,6 +29,7 @@ Initial MVP.
 - Dashboard timeline filters for event type, status, text, and MCP risk.
 - Trace diff CLI and API for before/after run comparisons.
 - JSON output for inspect, eval, CI, and diff CLI reports.
+- Markdown CI summaries for GitHub Actions.
 - `agentlens init` scaffolds starter eval config and a GitHub Action example.
 - Launch demo artifact generator.
 - Public JavaScript API and package exports.

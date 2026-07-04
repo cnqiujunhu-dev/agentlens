@@ -34,6 +34,20 @@ The action fails the job when any trace fails its eval config or when no trace f
 | `runs` | `.agentlens/runs` | Directory containing AgentLens trace JSON files. |
 | `config` | `evals/default.json` | Eval config JSON file. |
 | `node-version` | `20` | Node.js version used to run AgentLens. |
+| `summary` | `true` | Write a Markdown report to the GitHub Actions step summary. |
+
+## Step Summary
+
+By default, the action appends a Markdown report to `GITHUB_STEP_SUMMARY`. Disable it when you only want logs:
+
+```yaml
+- name: Run AgentLens evals
+  uses: your-org/agentlens@v0
+  with:
+    runs: .agentlens/runs
+    config: evals/default.json
+    summary: false
+```
 
 ## Local Repository Smoke Test
 

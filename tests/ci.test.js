@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { formatCiReport, runCi } from "../src/ci.js";
+import { formatCiMarkdown, formatCiReport, runCi } from "../src/ci.js";
 import { addEvent, createRun, finishRun } from "../src/trace.js";
 import { writeTrace } from "../src/store.js";
 
@@ -37,4 +37,6 @@ test("runCi evaluates every trace file in a run directory", () => {
   assert.equal(summary.passed, 1);
   assert.equal(summary.failed, 1);
   assert.match(formatCiReport(summary), /Status: FAIL/);
+  assert.match(formatCiMarkdown(summary), /## AgentLens CI/);
+  assert.match(formatCiMarkdown(summary), /citations:/);
 });

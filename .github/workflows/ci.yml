@@ -42,6 +42,7 @@ jobs:
         with:
           runs: .agentlens/runs
           config: evals/default.json
+          summary: false
 
       - name: MCP adapter demo
         run: |

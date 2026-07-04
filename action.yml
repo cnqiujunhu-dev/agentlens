@@ -14,6 +14,10 @@ inputs:
     description: Node.js version used to run AgentLens.
     required: false
     default: "20"
+  summary:
+    description: Write a Markdown report to the GitHub Actions step summary.
+    required: false
+    default: "true"
 
 runs:
   using: composite
@@ -25,4 +29,9 @@ runs:
 
     - name: Run AgentLens CI
       shell: bash
-      run: node "$GITHUB_ACTION_PATH/bin/agentlens.js" ci --runs "${{ inputs.runs }}" --config "${{ inputs.config }}"
+      run: |
+        args=(ci --runs "${{ inputs.runs }}" --config "${{ inputs.config }}")
+        if [[ "${{ inputs.summary }}" == "true" && -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+          args+=(--summary-md "$GITHUB_STEP_SUMMARY")
+        fi
+        node "$GITHUB_ACTION_PATH/bin/agentlens.js" "${args[@]}"

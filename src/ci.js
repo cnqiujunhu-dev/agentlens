@@ -89,3 +89,44 @@ export function formatCiReport(summary) {
 
   return lines.join("\n");
 }
+
+function escapeMarkdownCell(value) {
+  return String(value ?? "")
+    .replaceAll("|", "\\|")
+    .replaceAll("\r", " ")
+    .replaceAll("\n", " ");
+}
+
+function failedAssertions(result) {
+  if (result.error) return [result.error];
+  return (result.report?.results ?? [])
+    .filter((item) => !item.passed)
+    .map((item) => `${item.id}: ${item.message}`);
+}
+
+export function formatCiMarkdown(summary) {
+  const status = summary.failed === 0 && summary.total > 0 ? "PASS" : "FAIL";
+  const lines = [
+    "## AgentLens CI",
+    "",
+    `**Status:** ${status}`,
+    `**Runs:** \`${escapeMarkdownCell(summary.runsDir)}\``,
+    `**Total:** ${summary.total} | **Passed:** ${summary.passed} | **Failed:** ${summary.failed}`,
+    ""
+  ];
+
+  if (summary.total === 0) {
+    lines.push("No trace files found.");
+    return lines.join("\n");
+  }
+
+  lines.push("| Trace | Status | Failures |");
+  lines.push("| --- | --- | --- |");
+
+  for (const result of summary.results) {
+    const failures = failedAssertions(result);
+    lines.push(`| \`${escapeMarkdownCell(result.file)}\` | ${result.passed ? "PASS" : "FAIL"} | ${failures.length > 0 ? escapeMarkdownCell(failures.join("; ")) : "none"} |`);
+  }
+
+  return lines.join("\n");
+}

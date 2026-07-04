@@ -37,6 +37,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - Trace diff reports for before/after agent regressions.
 - JSON output for inspect, eval, CI, and diff automation.
+- Markdown CI summaries for GitHub Actions.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
 - MCP tool inventory and risk scanning.
@@ -212,7 +213,7 @@ agentlens inspect <trace-file> [--json]
 agentlens replay <trace-file>
 agentlens diff <baseline-trace> <candidate-trace> [--json]
 agentlens eval <trace-file> [--config path] [--json]
-agentlens ci [--runs dir] [--config path] [--json]
+agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]
 agentlens schema <trace|eval> [--out path]
 agentlens materialize <jsonl-file> [--out path]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
@@ -279,6 +280,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Trace model calls without binding to one LLM SDK.
 - Compare before/after traces when an agent regresses.
 - Emit JSON reports for CI bots, scripts, and PR comments.
+- Add Markdown summaries to GitHub Actions runs.
 - Wrap OpenAI-compatible and Anthropic-compatible SDK calls.
 - Reproduce flaky agent failures.
 - Review RAG evidence and citation behavior.
@@ -308,6 +310,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Trace/Eval JSON Schemas.
 - Trace diff CLI and API.
 - JSON report output for automation.
+- GitHub Actions Markdown summaries.
 - Init scaffolding for starter evals and GitHub Action examples.
 - Generic LLM call adapter.
 - Local dashboard server.

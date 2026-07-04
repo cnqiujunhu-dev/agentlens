@@ -56,3 +56,29 @@ test("CLI emits JSON for inspect, eval, ci, and diff", () => {
   const diff = runCli(["diff", baselineFile, candidateFile, "--json"], dir);
   assert.equal(diff.deltas.eventCount, 0);
 });
+
+test("CLI writes CI markdown summaries", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-cli-summary-"));
+  const runsDir = path.join(dir, "runs");
+  fs.mkdirSync(runsDir);
+  const traceFile = path.join(runsDir, "trace.json");
+  const configFile = path.join(dir, "eval.json");
+  const summaryFile = path.join(dir, "summary.md");
+
+  writeTrace(traceFile, makeTrace("summary"));
+  writeJson(configFile, {
+    version: "agentlens.eval.v1",
+    name: "cli-summary",
+    assertions: [{ id: "has-answer", type: "required-final-response" }]
+  });
+
+  const result = spawnSync(process.execPath, [binPath, "ci", "--runs", runsDir, "--config", configFile, "--summary-md", summaryFile], {
+    cwd: dir,
+    encoding: "utf8"
+  });
+
+  assert.equal(result.status, 0, result.stderr);
+  const markdown = fs.readFileSync(summaryFile, "utf8");
+  assert.match(markdown, /## AgentLens CI/);
+  assert.match(markdown, /summary/);
+});

@@ -68,6 +68,12 @@ agentlens ci --runs .agentlens/runs --config evals/default.json --json
 agentlens diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json --json
 ```
 
+For GitHub Actions summaries or local reports:
+
+```bash
+agentlens ci --runs .agentlens/runs --config evals/default.json --summary-md agentlens-summary.md
+```
+
 ## Generic LLM Calls
 
 ```js

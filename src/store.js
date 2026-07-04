@@ -118,6 +118,11 @@ export function writeText(filePath, value) {
   fs.writeFileSync(filePath, value, "utf8");
 }
 
+export function appendText(filePath, value) {
+  ensureParent(filePath);
+  fs.appendFileSync(filePath, value, "utf8");
+}
+
 export function readTrace(filePath) {
   const trace = readJson(filePath);
   const result = validateTrace(trace);

@@ -1,5 +1,5 @@
 export { addEvent, createRun, finishRun, TRACE_SCHEMA_VERSION, validateTrace } from "./trace.js";
-export { initWorkspace, readTrace, writeTrace, readJson, writeJson, writeText } from "./store.js";
+export { appendText, initWorkspace, readTrace, writeTrace, readJson, writeJson, writeText } from "./store.js";
 export { formatSummary, summarizeTrace } from "./inspect.js";
 export { compareTraces, formatTraceDiff } from "./diff.js";
 export { renderReplay } from "./replay.js";

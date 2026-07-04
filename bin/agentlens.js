@@ -3,7 +3,7 @@
 import process from "node:process";
 import { createDemoRun } from "../src/demo.js";
 import { formatSummary, summarizeTrace } from "../src/inspect.js";
-import { initWorkspace, readTrace, writeText, writeTrace } from "../src/store.js";
+import { appendText, initWorkspace, readTrace, writeText, writeTrace } from "../src/store.js";
 
 const args = process.argv.slice(2);
 const command = args[0] ?? "help";
@@ -19,7 +19,7 @@ function usage() {
     "  agentlens replay <trace-file>",
     "  agentlens diff <baseline-trace> <candidate-trace> [--json]",
     "  agentlens eval <trace-file> [--config path] [--json]",
-    "  agentlens ci [--runs dir] [--config path] [--json]",
+    "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]",
     "  agentlens schema <trace|eval> [--out path]",
     "  agentlens materialize <jsonl-file> [--out path]",
     "  agentlens redact <trace-file> [--out path] [--keys key1,key2]",
@@ -114,11 +114,13 @@ async function main() {
   }
 
   if (command === "ci") {
-    const { formatCiReport, runCi } = await import("../src/ci.js");
+    const { formatCiMarkdown, formatCiReport, runCi } = await import("../src/ci.js");
     const { loadEvalConfig } = await import("../src/eval.js");
     const runsDir = option("--runs", ".agentlens/runs");
     const configPath = option("--config", "evals/default.json");
     const report = runCi({ runsDir, config: loadEvalConfig(configPath) });
+    const summaryMdPath = option("--summary-md", undefined);
+    if (summaryMdPath) appendText(summaryMdPath, `${formatCiMarkdown(report)}\n\n`);
     console.log(flag("--json") ? JSON.stringify(report, null, 2) : formatCiReport(report));
     if (report.failed > 0 || report.total === 0) process.exitCode = 1;
     return;

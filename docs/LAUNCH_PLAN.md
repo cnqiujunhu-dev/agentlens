@@ -15,6 +15,7 @@ Built:
 - Replay transcript.
 - Trace diff CLI and API.
 - JSON report output for CLI automation.
+- GitHub Actions Markdown summary output.
 - JSON eval engine.
 - Generic LLM call adapter.
 - Static HTML dashboard.

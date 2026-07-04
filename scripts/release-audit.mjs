@@ -38,6 +38,7 @@ const requiredReadmeSnippets = [
   "starter files",
   "agentlens diff",
   "JSON output",
+  "Markdown CI summaries",
   "agentlens serve",
   "dashboard-screenshot.png"
 ];
