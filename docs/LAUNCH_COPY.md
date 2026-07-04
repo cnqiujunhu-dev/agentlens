@@ -47,6 +47,7 @@ Current MVP:
 - combined CI SARIF export
 - static HTML dashboard
 - dashboard Security Scan panel
+- static run bundle artifacts
 - local dashboard server
 - JSONL streaming traces
 - MCP-style tool-call adapter
@@ -120,6 +121,7 @@ Highlights:
 - Run JSON eval rules and scan gates locally or in CI.
 - Scan traces for leaked secrets, prompt injection phrases, and risky tool calls.
 - Generate static HTML dashboards.
+- Generate static run bundle artifacts for trace directories.
 - Stream long-running traces as JSONL.
 - Trace MCP-style tool calls and enforce MCP policy rules.
 - Redact secrets before sharing traces publicly.

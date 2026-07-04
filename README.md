@@ -40,6 +40,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - Trace diff reports for before/after agent regressions.
 - Static diff dashboards for sharing before/after regressions.
+- Static run bundles for reviewing a directory of traces as a CI artifact.
 - JSON output for inspect, eval, CI, and diff automation.
 - Markdown CI summaries for GitHub Actions.
 - GitHub Action outputs for downstream workflow steps.
@@ -76,6 +77,7 @@ node ./bin/agentlens.js validate trace .agentlens/runs/demo.json
 node ./bin/agentlens.js validate eval .agentlens/evals/default.json
 node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json --scan
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
+node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle
 node ./bin/agentlens.js serve .agentlens/runs --port 4317
 ```
 
@@ -168,6 +170,7 @@ Preparing launch screenshots or a demo recording?
 ```bash
 npm run launch:demo
 npm run release:gif
+npm run bundle:demo
 npm run share:demo
 npm run release:audit
 npm run release:preflight:local
@@ -258,6 +261,7 @@ agentlens materialize <jsonl-file> [--out path]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
 agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]
 agentlens dashboard <trace-file> [--out path]
+agentlens bundle [runs-dir] [--out dir]
 agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 ```
 
@@ -295,6 +299,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Launch post draft](docs/LAUNCH_POST.md)
 - [Roadmap](docs/ROADMAP.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
+- [Run bundles](docs/RUN_BUNDLES.md)
 - [Security scan](docs/SECURITY_SCAN.md)
 - [LangGraph-style adapter](docs/LANGGRAPH_ADAPTER.md)
 - [Changelog](CHANGELOG.md)
@@ -381,6 +386,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Publish JSON Schemas for external tooling.
 - Validate trace and eval files before sharing or running CI.
 - Browse local runs with a zero-dependency dashboard server.
+- Generate static run bundles for CI artifacts and support handoffs.
 - Poll local trace files while agents are running.
 - Filter long traces by event type, status, text, and MCP risk.
 - Start with editable init scaffolding for evals and CI examples.
@@ -401,6 +407,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for launch blockers, integration milestones, g
 - Trace/Eval JSON Schemas.
 - Trace diff CLI and API.
 - Static trace diff dashboards.
+- Static run bundle indexes.
 - JSON report output for automation.
 - GitHub Actions Markdown summaries.
 - Init scaffolding for starter evals and GitHub Action examples.

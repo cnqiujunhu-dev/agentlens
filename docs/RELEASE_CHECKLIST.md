@@ -23,6 +23,7 @@ npm run verify
 npm run doctor
 npm run validate:demo
 npm run scan:demo
+npm run bundle:demo
 npm run share:demo
 npm run release:audit
 npm run release:preflight:local
@@ -37,6 +38,7 @@ Expected result:
 - `agentlens doctor` reports no failed checks.
 - `agentlens validate` reports no trace or eval config errors.
 - `agentlens scan` reports no blocking high or critical findings for the demo trace.
+- `agentlens bundle` writes a static run bundle index and per-trace dashboards.
 - `agentlens share` writes a redacted share bundle.
 - Release audit prints `AgentLens release audit passed`.
 - Local release preflight warns only for expected unpublished-release gaps such as missing `workflow` scope, unpushed default branch, or missing tag.

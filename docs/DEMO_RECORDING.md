@@ -12,6 +12,7 @@ The clip should show:
 - An eval report that can pass or fail CI.
 - A static dashboard that can be shared in an issue or PR.
 - A Security Scan panel that catches leaked secrets and risky trace content.
+- A run bundle index for multiple traces.
 - MCP policy checks for tool-using agents.
 - A before/after diff dashboard for regressions.
 
@@ -23,6 +24,7 @@ Run:
 npm run verify
 npm run launch:demo
 npm run release:gif
+npm run bundle:demo
 npm run diff:dashboard
 ```
 
@@ -33,6 +35,7 @@ Open:
 .agentlens/launch/mcp-policy.html
 .agentlens/launch/langgraph-style.html
 .agentlens/launch/unsafe-agent.html
+.agentlens/reports/bundle-demo/index.html
 .agentlens/reports/diff-demo.html
 README.md
 ```
@@ -49,7 +52,7 @@ Use a 1280x720 or 1440x900 browser window. Keep the terminal font at a readable 
 | 40-55s | CI and evals | Passing eval output, scan gate, and policy rule names |
 | 55-68s | MCP policy | MCP tool metadata, risk labels, and blocked unsafe action |
 | 68-80s | Framework adapter | LangGraph-style node start/end events |
-| 80-90s | Diff dashboard | Baseline vs candidate regressions and tool/event deltas |
+| 80-90s | Bundle and diff | Run bundle index, baseline vs candidate regressions, and tool/event deltas |
 
 ## Narration
 

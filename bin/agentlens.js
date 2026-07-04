@@ -29,6 +29,7 @@ function usage() {
     "  agentlens redact <trace-file> [--out path] [--keys key1,key2]",
     "  agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]",
     "  agentlens dashboard <trace-file> [--out path]",
+    "  agentlens bundle [runs-dir] [--out dir]",
     "  agentlens serve [trace-file|runs-dir] [--host host] [--port port]",
     "",
     "Examples:",
@@ -39,7 +40,8 @@ function usage() {
     "  node ./bin/agentlens.js validate trace .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js scan .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json",
-    "  node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json --scan"
+    "  node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json --scan",
+    "  node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle"
   ].join("\n");
 }
 
@@ -251,6 +253,20 @@ async function main() {
     const html = renderDashboard(readTrace(traceFile));
     writeText(out, html);
     console.log(`Wrote dashboard: ${out}`);
+    return;
+  }
+
+  if (command === "bundle") {
+    const { writeRunBundle } = await import("../src/bundle.js");
+    const runsDir = positional(1) ?? ".agentlens/runs";
+    const result = writeRunBundle({
+      runsDir,
+      outDir: option("--out", ".agentlens/reports/bundle")
+    });
+    console.log(`Wrote run bundle: ${result.outDir}`);
+    console.log(`- ${result.index}`);
+    for (const file of result.dashboards) console.log(`- ${file}`);
+    console.log(`Traces: ${result.total}, Valid: ${result.valid}, Invalid: ${result.invalid}`);
     return;
   }
 

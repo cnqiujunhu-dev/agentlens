@@ -14,6 +14,7 @@ export { buildShareBundle, writeShareBundle } from "./share.js";
 export { listSchemas, readSchema, schemaPath } from "./schemas.js";
 export { formatValidationReport, validateArtifact, validateEvalConfig } from "./validate.js";
 export { renderDashboard } from "./dashboard.js";
+export { buildRunBundle, renderRunBundleIndex, writeRunBundle } from "./bundle.js";
 export { createDashboardServer, listen, listTraceFiles } from "./server.js";
 export { addMcpToolManifest, createMcpRun, finishMcpRun, scanMcpTools, traceMcpToolCall } from "./adapters/mcp.js";
 export { MCP_PROTOCOL_VERSION, McpStdioClient, McpStdioTraceSession, traceMcpStdioSession, traceMcpStdioToolCall } from "./adapters/mcp-stdio.js";

@@ -14,6 +14,7 @@ Shipped:
 - Single-trace and batch SARIF export for scan findings.
 - CI scan gates through `agentlens ci --scan` and the composite GitHub Action.
 - Redacted share bundles with dashboard, eval report, scan report, and summary.
+- Static run bundles with an index page and per-trace dashboards.
 - Static dashboards with timeline filters and a Security Scan panel.
 - Deterministic replay and before/after trace diff dashboards.
 - JSON eval rules for core agent quality checks, cost, latency, citations, MCP policies, and reviewed MCP risk exceptions.
@@ -47,7 +48,6 @@ Goal: make trace review ergonomic for teams using GitHub issues, PRs, and CI.
 Candidates:
 
 - PR comment renderer for CI summaries.
-- Trace bundle index pages for multiple runs.
 - Configurable dashboard sections for eval, scan, MCP risk, and diff.
 - Governance docs for reviewed MCP risk exceptions.
 

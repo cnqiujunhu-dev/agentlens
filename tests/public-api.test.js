@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   addEvent,
+  buildRunBundle,
   compareTraces,
   createLangGraphRun,
   createMcpRun,
@@ -60,6 +61,7 @@ test("public API exports core trace and eval helpers", () => {
   assert.match(formatScanReport(scan), /Scan:/);
   assert.equal(formatScanSarif(scan).version, "2.1.0");
   assert.equal(ciSarif.version, "2.1.0");
+  assert.equal(typeof buildRunBundle, "function");
   assert.match(formatDoctorReport(doctorWorkspace(process.cwd())), /AgentLens Doctor/);
   assert.match(renderReplay(run), /LLM RESPONSE/);
   assert.equal(redactTrace(run).metadata.redacted, true);
