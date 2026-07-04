@@ -18,6 +18,7 @@ Built:
 - Static HTML dashboard.
 - Local dashboard server.
 - Dashboard JSON APIs and live file-change refresh.
+- Dashboard timeline filters for long traces.
 - Release audit script.
 - Composite GitHub Action for `agentlens ci`.
 - Apache-2.0 license.
@@ -64,7 +65,7 @@ The MVP becomes much more credible when it works with one real ecosystem:
 
 1. Add expiring owners for reviewed MCP risk exceptions.
 2. Add a LangGraph or generic tool-call adapter example.
-3. Add richer local dashboard filters and diff views.
+3. Add dashboard diff views for before/after agent regressions.
 
 ## Priority 3: Make The README Convert
 

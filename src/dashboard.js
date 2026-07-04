@@ -59,13 +59,76 @@ function renderTypeCounts(summary) {
     .join("");
 }
 
+function uniqueValues(values) {
+  return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b));
+}
+
+function renderOptions(values, allLabel) {
+  return [`<option value="">${escapeHtml(allLabel)}</option>`, ...values.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`)].join("");
+}
+
+function renderFilters(trace) {
+  const types = uniqueValues(trace.events.map((event) => event.type));
+  const statuses = uniqueValues(trace.events.map((event) => event.status ?? "ok"));
+  const risks = uniqueValues(trace.events.map((event) => event.metadata?.toolRisk));
+
+  return `
+    <section class="section filters" data-agentlens-filters>
+      <div class="filter-header">
+        <h2>Timeline Filters</h2>
+        <span id="agentlens-filter-count">${trace.events.length} events</span>
+      </div>
+      <div class="filter-controls">
+        <label>
+          <span>Search</span>
+          <input id="agentlens-filter-search" type="search" placeholder="tool, prompt, citation, error">
+        </label>
+        <label>
+          <span>Type</span>
+          <select id="agentlens-filter-type">${renderOptions(types, "All types")}</select>
+        </label>
+        <label>
+          <span>Status</span>
+          <select id="agentlens-filter-status">${renderOptions(statuses, "All statuses")}</select>
+        </label>
+        <label>
+          <span>MCP Risk</span>
+          <select id="agentlens-filter-risk">${renderOptions(risks, "All risks")}</select>
+        </label>
+      </div>
+    </section>
+  `;
+}
+
+function eventSearchText(event) {
+  return [
+    event.type,
+    event.name,
+    event.status,
+    event.metadata?.server,
+    event.metadata?.permission,
+    event.metadata?.toolRisk,
+    event.input === undefined ? "" : JSON.stringify(event.input),
+    event.output === undefined ? "" : JSON.stringify(event.output)
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
 function renderTimeline(trace) {
   return trace.events
     .map((event, index) => {
       const status = event.status ?? "ok";
       const duration = typeof event.durationMs === "number" ? `${event.durationMs}ms` : "";
+      const risk = event.metadata?.toolRisk;
       return `
-        <article class="event event-${escapeHtml(event.type.replaceAll(".", "-"))} status-${escapeHtml(status)}">
+        <article
+          class="event event-${escapeHtml(event.type.replaceAll(".", "-"))} status-${escapeHtml(status)}${risk ? ` risk-${escapeHtml(risk)}` : ""}"
+          data-event-type="${escapeHtml(event.type)}"
+          data-event-status="${escapeHtml(status)}"
+          data-event-risk="${escapeHtml(risk ?? "")}"
+          data-event-search="${escapeHtml(eventSearchText(event))}">
           <div class="event-index">${index + 1}</div>
           <div class="event-main">
             <div class="event-header">
@@ -76,6 +139,7 @@ function renderTimeline(trace) {
               <div class="event-meta">
                 <span>${escapeHtml(status)}</span>
                 ${duration ? `<span>${escapeHtml(duration)}</span>` : ""}
+                ${risk ? `<span class="risk-badge">${escapeHtml(risk)} risk</span>` : ""}
               </div>
             </div>
             ${eventBody(event)}
@@ -110,6 +174,46 @@ function renderLiveReload(options) {
         } catch {}
       }
       window.setInterval(poll, state.intervalMs);
+    })();
+  </script>`;
+}
+
+function renderFilterScript() {
+  return `<script id="agentlens-dashboard-filters">
+    (() => {
+      const events = Array.from(document.querySelectorAll(".event"));
+      const search = document.getElementById("agentlens-filter-search");
+      const type = document.getElementById("agentlens-filter-type");
+      const status = document.getElementById("agentlens-filter-status");
+      const risk = document.getElementById("agentlens-filter-risk");
+      const count = document.getElementById("agentlens-filter-count");
+      if (!search || !type || !status || !risk || !count) return;
+
+      function applyFilters() {
+        const query = search.value.trim().toLowerCase();
+        const selectedType = type.value;
+        const selectedStatus = status.value;
+        const selectedRisk = risk.value;
+        let visible = 0;
+
+        for (const event of events) {
+          const matches =
+            (!query || event.dataset.eventSearch.includes(query)) &&
+            (!selectedType || event.dataset.eventType === selectedType) &&
+            (!selectedStatus || event.dataset.eventStatus === selectedStatus) &&
+            (!selectedRisk || event.dataset.eventRisk === selectedRisk);
+          event.hidden = !matches;
+          if (matches) visible += 1;
+        }
+
+        count.textContent = visible + " of " + events.length + " events";
+      }
+
+      for (const control of [search, type, status, risk]) {
+        control.addEventListener("input", applyFilters);
+        control.addEventListener("change", applyFilters);
+      }
+      applyFilters();
     })();
   </script>`;
 }
@@ -234,6 +338,14 @@ export function renderDashboard(trace, options = {}) {
       background: var(--danger-soft);
       color: var(--danger);
     }
+    .risk-high .event-index, .risk-critical .event-index {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+    .risk-medium .event-index {
+      background: #fff7ed;
+      color: #9a3412;
+    }
     .event-header {
       display: flex;
       justify-content: space-between;
@@ -263,6 +375,54 @@ export function renderDashboard(trace, options = {}) {
       color: var(--muted);
       font-size: 12px;
       white-space: nowrap;
+    }
+    .event-meta .risk-badge {
+      color: #7a271a;
+      border-color: #fecaca;
+      background: #fff1f2;
+    }
+    .filters {
+      padding: 16px 18px;
+    }
+    .filter-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .filter-header h2 {
+      margin: 0;
+    }
+    #agentlens-filter-count {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .filter-controls {
+      display: grid;
+      grid-template-columns: minmax(220px, 1.5fr) repeat(3, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    .filter-controls label {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .filter-controls input, .filter-controls select {
+      width: 100%;
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 7px 9px;
+      color: var(--text);
+      background: #fff;
+      font: inherit;
+      font-size: 13px;
+    }
+    .event[hidden] {
+      display: none;
     }
     .event-block {
       margin-top: 10px;
@@ -294,11 +454,13 @@ export function renderDashboard(trace, options = {}) {
       header { padding: 24px 18px; }
       main { width: min(100% - 20px, 1180px); }
       .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .filter-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .event-header { flex-direction: column; }
       .event-meta { justify-content: flex-start; }
     }
     @media (max-width: 520px) {
       .grid { grid-template-columns: 1fr; }
+      .filter-controls { grid-template-columns: 1fr; }
       .event { grid-template-columns: 32px minmax(0, 1fr); }
     }
   </style>
@@ -316,12 +478,14 @@ export function renderDashboard(trace, options = {}) {
       <h2>Event Types</h2>
       <div class="pills">${renderTypeCounts(summary)}</div>
     </section>
+    ${renderFilters(trace)}
     <section class="section">
       <h2>Timeline</h2>
       ${renderTimeline(trace)}
     </section>
     <footer>Generated by AgentLens. Static report, no external assets.</footer>
   </main>
+  ${renderFilterScript()}
   ${renderLiveReload(options)}
 </body>
 </html>`;

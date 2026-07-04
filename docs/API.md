@@ -162,6 +162,8 @@ GET /api/stat/<relative-trace-path>
 
 When serving a single trace file, use `GET /api/trace` and `GET /api/stat`. HTML pages rendered by `agentlens serve` poll the stat endpoint and refresh when the underlying trace file changes.
 
+Dashboard HTML includes timeline filters for event type, status, text search, and MCP risk. The static `agentlens dashboard` output keeps the same filtering UI without requiring a server.
+
 ## MCP-Style Tool Calls
 
 ```js

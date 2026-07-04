@@ -26,6 +26,7 @@ Initial MVP.
 - MCP tool inventory events, schema capture, and risk scanning.
 - Reviewed exceptions for MCP high-risk tool policies.
 - Local dashboard JSON APIs and file-change refresh.
+- Dashboard timeline filters for event type, status, text, and MCP risk.
 - `agentlens init` scaffolds starter eval config and a GitHub Action example.
 - Launch demo artifact generator.
 - Public JavaScript API and package exports.

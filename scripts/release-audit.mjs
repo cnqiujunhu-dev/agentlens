@@ -34,6 +34,7 @@ const requiredReadmeSnippets = [
   "MCP tool inventory",
   "Reviewed MCP risk exceptions",
   "file-change refresh",
+  "Timeline filters",
   "starter files",
   "agentlens serve",
   "dashboard-screenshot.png"
