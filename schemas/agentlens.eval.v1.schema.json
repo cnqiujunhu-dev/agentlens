@@ -33,6 +33,7 @@
           "type": "string",
           "enum": [
             "allowed-mcp-servers",
+            "forbidden-mcp-tool-risks",
             "forbidden-tool-permissions",
             "forbidden-tools",
             "max-errors",
@@ -48,6 +49,18 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        },
+        "allow": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/riskException"
+          }
+        },
+        "exceptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/riskException"
           }
         },
         "keys": {
@@ -68,6 +81,18 @@
             "type": "string"
           }
         },
+        "requireExceptionExpiry": {
+          "type": "boolean"
+        },
+        "requireExceptionOwner": {
+          "type": "boolean"
+        },
+        "risks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "servers": {
           "type": "array",
           "items": {
@@ -79,6 +104,28 @@
           "items": {
             "type": "string"
           }
+        }
+      },
+      "additionalProperties": true
+    },
+    "riskException": {
+      "type": "object",
+      "properties": {
+        "server": {
+          "type": "string"
+        },
+        "tool": {
+          "type": "string"
+        },
+        "risk": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
         }
       },
       "additionalProperties": true

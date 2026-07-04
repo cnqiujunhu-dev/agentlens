@@ -14,6 +14,7 @@
     "./ci": "./src/ci.js",
     "./jsonl": "./src/jsonl.js",
     "./share": "./src/share.js",
+    "./validate": "./src/validate.js",
     "./dashboard": "./src/dashboard.js",
     "./server": "./src/server.js",
     "./adapters/llm": "./src/adapters/llm.js",
@@ -61,13 +62,14 @@
     "diff:dashboard": "node ./bin/agentlens.js diff-dashboard .agentlens/runs/demo.json .agentlens/runs/failing-demo.json --out .agentlens/reports/diff-demo.html",
     "ci": "node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json",
     "schema:trace": "node ./bin/agentlens.js schema trace",
+    "validate:demo": "node ./bin/agentlens.js validate trace .agentlens/runs/demo.json && node ./bin/agentlens.js validate eval evals/default.json",
     "serve:demo": "node ./bin/agentlens.js serve .agentlens/runs --port 4317",
     "release:audit": "node ./scripts/release-audit.mjs",
     "ci:demo": "node ./bin/agentlens.js demo --out .agentlens/ci-runs/demo.json && node ./bin/agentlens.js ci --runs .agentlens/ci-runs --config evals/default.json",
     "dashboard": "node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html",
     "test": "node --test",
-    "check": "node --check ./bin/agentlens.js && node --check ./src/index.js && node --check ./src/trace.js && node --check ./src/store.js && node --check ./src/demo.js && node --check ./src/inspect.js && node --check ./src/diff.js && node --check ./src/diff-dashboard.js && node --check ./src/doctor.js && node --check ./src/replay.js && node --check ./src/eval.js && node --check ./src/ci.js && node --check ./src/jsonl.js && node --check ./src/redact.js && node --check ./src/share.js && node --check ./src/schemas.js && node --check ./src/server.js && node --check ./src/dashboard.js && node --check ./src/adapters/llm.js && node --check ./src/adapters/mcp.js && node --check ./src/adapters/mcp-stdio.js && node --check ./examples/basic-run.mjs && node --check ./examples/failing-run.mjs && node --check ./examples/mcp-tool-run.mjs && node --check ./examples/mcp-stdio-server.mjs && node --check ./examples/mcp-stdio-run.mjs && node --check ./examples/llm-wrapper-run.mjs && node --check ./examples/provider-adapters-run.mjs && node --check ./examples/jsonl-run.mjs && node --check ./scripts/launch-demo.mjs && node --check ./scripts/release-audit.mjs",
-    "verify": "npm run check && npm test && npm run demo && npm run doctor && npm run inspect && npm run eval && npm run schema:trace && npm run redact:demo && npm run share:demo && npm run diff:demo && npm run diff:dashboard && npm run ci:demo && npm run demo:mcp && npm run eval:mcp && npm run demo:mcp:stdio && npm run eval:mcp:stdio && npm run demo:llm && npm run eval:llm && npm run demo:providers && npm run eval:providers && npm run demo:jsonl && npm run launch:demo && npm run dashboard && npm run release:audit"
+    "check": "node --check ./bin/agentlens.js && node --check ./src/index.js && node --check ./src/trace.js && node --check ./src/store.js && node --check ./src/demo.js && node --check ./src/inspect.js && node --check ./src/diff.js && node --check ./src/diff-dashboard.js && node --check ./src/doctor.js && node --check ./src/replay.js && node --check ./src/eval.js && node --check ./src/ci.js && node --check ./src/jsonl.js && node --check ./src/redact.js && node --check ./src/share.js && node --check ./src/schemas.js && node --check ./src/validate.js && node --check ./src/server.js && node --check ./src/dashboard.js && node --check ./src/adapters/llm.js && node --check ./src/adapters/mcp.js && node --check ./src/adapters/mcp-stdio.js && node --check ./examples/basic-run.mjs && node --check ./examples/failing-run.mjs && node --check ./examples/mcp-tool-run.mjs && node --check ./examples/mcp-stdio-server.mjs && node --check ./examples/mcp-stdio-run.mjs && node --check ./examples/llm-wrapper-run.mjs && node --check ./examples/provider-adapters-run.mjs && node --check ./examples/jsonl-run.mjs && node --check ./scripts/launch-demo.mjs && node --check ./scripts/release-audit.mjs",
+    "verify": "npm run check && npm test && npm run demo && npm run doctor && npm run inspect && npm run eval && npm run schema:trace && npm run validate:demo && npm run redact:demo && npm run share:demo && npm run diff:demo && npm run diff:dashboard && npm run ci:demo && npm run demo:mcp && npm run eval:mcp && npm run demo:mcp:stdio && npm run eval:mcp:stdio && npm run demo:llm && npm run eval:llm && npm run demo:providers && npm run eval:providers && npm run demo:jsonl && npm run launch:demo && npm run dashboard && npm run release:audit"
   },
   "keywords": [
     "ai-agent",

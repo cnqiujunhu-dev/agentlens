@@ -23,6 +23,7 @@ function usage() {
     "  agentlens eval <trace-file> [--config path] [--json]",
     "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]",
     "  agentlens schema <trace|eval> [--out path]",
+    "  agentlens validate <trace|eval> <file> [--json]",
     "  agentlens materialize <jsonl-file> [--out path]",
     "  agentlens redact <trace-file> [--out path] [--keys key1,key2]",
     "  agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]",
@@ -34,6 +35,7 @@ function usage() {
     "  node ./bin/agentlens.js demo --out .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json",
     "  node ./bin/agentlens.js share .agentlens/runs/demo.json --config evals/default.json",
+    "  node ./bin/agentlens.js validate trace .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json",
     "  node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json"
   ].join("\n");
@@ -164,6 +166,17 @@ async function main() {
     } else {
       console.log(text.trimEnd());
     }
+    return;
+  }
+
+  if (command === "validate") {
+    const kind = positional(1);
+    const file = positional(2);
+    if (!kind || !file) throw new Error("Missing validation target. Usage: agentlens validate <trace|eval> <file> [--json]");
+    const { formatValidationReport, validateArtifact } = await import("../src/validate.js");
+    const report = validateArtifact(kind, file);
+    console.log(flag("--json") ? JSON.stringify(report, null, 2) : formatValidationReport(report));
+    if (!report.valid) process.exitCode = 1;
     return;
   }
 

@@ -16,6 +16,13 @@ node ./bin/agentlens.js schema trace
 node ./bin/agentlens.js schema eval
 ```
 
+Validate a file:
+
+```bash
+node ./bin/agentlens.js validate trace .agentlens/runs/demo.json
+node ./bin/agentlens.js validate eval evals/default.json
+```
+
 Write a schema to a file:
 
 ```bash
@@ -34,4 +41,4 @@ console.log(readSchema("eval"));
 
 ## Notes
 
-The schemas are intended for editor completion, CI integration, and external tooling. AgentLens still uses its own lightweight runtime validation for trace reads so the CLI can stay dependency-free.
+The schemas are intended for editor completion, CI integration, and external tooling. AgentLens also uses its own lightweight runtime validation for trace and eval files so the CLI can stay dependency-free and return focused terminal errors.

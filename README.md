@@ -41,6 +41,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Markdown CI summaries for GitHub Actions.
 - GitHub Action outputs for downstream workflow steps.
 - Workspace doctor for checking local setup, traces, eval config, and CI wiring.
+- Validation command for trace files and eval configs.
 - Redacted share bundle generation for GitHub issues, PRs, and support threads.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
@@ -63,6 +64,8 @@ node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
 node ./bin/agentlens.js share .agentlens/runs/demo.json --config .agentlens/evals/default.json --out .agentlens/share/demo
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
+node ./bin/agentlens.js validate trace .agentlens/runs/demo.json
+node ./bin/agentlens.js validate eval .agentlens/evals/default.json
 node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
 node ./bin/agentlens.js serve .agentlens/runs --port 4317
@@ -225,6 +228,7 @@ agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]
 agentlens eval <trace-file> [--config path] [--json]
 agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]
 agentlens schema <trace|eval> [--out path]
+agentlens validate <trace|eval> <file> [--json]
 agentlens materialize <jsonl-file> [--out path]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
 agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]
@@ -318,6 +322,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Redact secrets before sharing traces.
 - Generate a redacted share bundle for support threads.
 - Publish JSON Schemas for external tooling.
+- Validate trace and eval files before sharing or running CI.
 - Browse local runs with a zero-dependency dashboard server.
 - Poll local trace files while agents are running.
 - Filter long traces by event type, status, text, and MCP risk.

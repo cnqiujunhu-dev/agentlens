@@ -112,6 +112,29 @@ CLI:
 agentlens share .agentlens/runs/demo.json --config evals/default.json --out .agentlens/share/demo
 ```
 
+## Validation
+
+```js
+import { formatValidationReport, validateArtifact, validateEvalConfig } from "agentlens";
+
+const traceReport = validateArtifact("trace", ".agentlens/runs/demo.json");
+const evalReport = validateEvalConfig({
+  version: "agentlens.eval.v1",
+  name: "local",
+  assertions: []
+});
+
+console.log(formatValidationReport(traceReport));
+console.log(evalReport.valid);
+```
+
+CLI:
+
+```bash
+agentlens validate trace .agentlens/runs/demo.json
+agentlens validate eval evals/default.json --json
+```
+
 ## Generic LLM Calls
 
 ```js

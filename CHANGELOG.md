@@ -34,6 +34,7 @@ Initial MVP.
 - Markdown CI summaries for GitHub Actions.
 - GitHub Action status and count outputs for downstream workflow steps.
 - Workspace doctor CLI and API for local setup, trace, eval config, and CI checks.
+- Trace and eval validation CLI and API.
 - Redacted share bundle CLI and API for issue, PR, and support handoffs.
 - `agentlens init` scaffolds starter eval config and a GitHub Action example.
 - Launch demo artifact generator.

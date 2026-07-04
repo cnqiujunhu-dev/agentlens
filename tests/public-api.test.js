@@ -21,7 +21,8 @@ import {
   traceAnthropicCompatibleMessage,
   traceLlmCall,
   traceOpenAiCompatibleChat,
-  traceMcpToolCall
+  traceMcpToolCall,
+  validateEvalConfig
 } from "../src/index.js";
 
 test("public API exports core trace and eval helpers", () => {
@@ -40,6 +41,7 @@ test("public API exports core trace and eval helpers", () => {
 
   assert.equal(summary.eventCount, 2);
   assert.equal(report.passed, true);
+  assert.equal(validateEvalConfig({ version: "agentlens.eval.v1", name: "api", assertions: [] }).valid, true);
   assert.equal(diff.deltas.eventCount, 0);
   assert.match(bundle.summaryMarkdown, /AgentLens Share Bundle/);
   assert.match(formatTraceDiff(diff), /AgentLens Trace Diff/);
