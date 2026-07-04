@@ -39,6 +39,7 @@ Current MVP:
 - static HTML dashboard
 - JSONL streaming traces
 - MCP-style tool-call adapter
+- stdio JSON-RPC MCP transport demo
 - MCP policy checks
 - trace redaction before sharing
 

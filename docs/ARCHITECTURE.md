@@ -36,6 +36,7 @@ The project should stay framework-neutral. It should integrate with agent framew
 5. Integration Layer
    - CI exit codes
    - MCP-style tool-call adapter
+   - MCP stdio JSON-RPC transport demo
    - GitHub Action
    - Framework plugins
    - Enterprise policy packs
@@ -129,7 +130,7 @@ The first dashboard is a generated static HTML file. It does not require a web s
 
 ### Post-MVP
 
-- Real MCP transport adapter.
+- Harden MCP transport adapter.
 - LangGraph adapter.
 - OpenAI/Anthropic SDK wrappers.
 - MCP server scanner.

@@ -11,6 +11,7 @@ Initial MVP.
 - Deterministic replay transcript.
 - JSON eval engine with baseline rules.
 - MCP-style tool-call adapter.
+- Zero-dependency MCP stdio JSON-RPC transport demo.
 - MCP policy eval pack for server allowlists, required metadata, and forbidden permissions.
 - JSONL streaming trace writer and materializer.
 - Trace redaction CLI and API.

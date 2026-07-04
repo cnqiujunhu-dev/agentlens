@@ -8,3 +8,4 @@ export { JsonlTraceWriter, readJsonlTrace } from "./jsonl.js";
 export { DEFAULT_REDACT_KEYS, parseRedactKeys, redactTrace } from "./redact.js";
 export { renderDashboard } from "./dashboard.js";
 export { createMcpRun, finishMcpRun, traceMcpToolCall } from "./adapters/mcp.js";
+export { MCP_PROTOCOL_VERSION, McpStdioClient, traceMcpStdioToolCall } from "./adapters/mcp-stdio.js";

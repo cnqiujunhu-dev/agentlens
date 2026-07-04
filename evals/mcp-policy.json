@@ -10,7 +10,7 @@
     {
       "id": "mcp-server-allowlist",
       "type": "allowed-mcp-servers",
-      "servers": ["local-policy-server"]
+      "servers": ["local-policy-server", "agentlens-demo-policy-server"]
     },
     {
       "id": "mcp-tool-metadata",

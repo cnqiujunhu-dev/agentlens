@@ -1,4 +1,7 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { createMcpRun, finishMcpRun, traceMcpToolCall } from "../src/adapters/mcp.js";
+import { traceMcpStdioToolCall } from "../src/adapters/mcp-stdio.js";
 import { renderDashboard } from "../src/dashboard.js";
 import { createDemoRun } from "../src/demo.js";
 import { evaluateTrace, formatEvalReport, loadEvalConfig } from "../src/eval.js";
@@ -7,6 +10,8 @@ import { ensureDir, initWorkspace, writeText, writeTrace } from "../src/store.js
 import { addEvent, finishRun } from "../src/trace.js";
 
 const launchDir = ".agentlens/launch";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const mcpStdioServerPath = path.resolve(__dirname, "../examples/mcp-stdio-server.mjs");
 initWorkspace(process.cwd());
 ensureDir(launchDir);
 
@@ -64,6 +69,43 @@ writeTrace(`${launchDir}/mcp-policy.json`, mcpTrace);
 writeText(`${launchDir}/mcp-policy.html`, renderDashboard(mcpTrace));
 writeEvalReport(`${launchDir}/mcp-policy.eval.txt`, mcpTrace, "evals/mcp-policy.json");
 
+const mcpStdioTrace = createMcpRun({
+  app: "mcp-stdio-demo-agent",
+  name: "launch demo: MCP stdio policy lookup",
+  server: "agentlens-demo-policy-server"
+});
+
+addEvent(mcpStdioTrace, {
+  type: "llm.prompt",
+  name: "planner",
+  input: {
+    messages: [{ role: "user", content: "Can a damaged item be refunded?" }]
+  }
+});
+
+const mcpStdioResult = await traceMcpStdioToolCall(mcpStdioTrace, {
+  command: process.execPath,
+  args: [mcpStdioServerPath],
+  server: "agentlens-demo-policy-server",
+  tool: "policy.lookup",
+  input: { topic: "damaged item refund" },
+  permission: "read-only"
+});
+
+addEvent(mcpStdioTrace, {
+  type: "llm.response",
+  name: "final-answer",
+  output: {
+    content: `Refund is available: ${mcpStdioResult.structuredContent.text}`,
+    citations: [mcpStdioResult.structuredContent.sourceId]
+  }
+});
+
+finishMcpRun(mcpStdioTrace, "passed");
+writeTrace(`${launchDir}/mcp-stdio.json`, mcpStdioTrace);
+writeText(`${launchDir}/mcp-stdio.html`, renderDashboard(mcpStdioTrace));
+writeEvalReport(`${launchDir}/mcp-stdio.eval.txt`, mcpStdioTrace, "evals/mcp-policy.json");
+
 const failingTrace = createDemoRun();
 failingTrace.app = "unsafe-agent";
 failingTrace.name = "launch demo: unsafe tool call";
@@ -102,5 +144,6 @@ writeEvalReport(`${launchDir}/streaming-agent.eval.txt`, jsonlTrace, "evals/defa
 console.log(`Launch demo artifacts written to ${launchDir}`);
 console.log(`- ${launchDir}/support-agent.html`);
 console.log(`- ${launchDir}/mcp-policy.html`);
+console.log(`- ${launchDir}/mcp-stdio.html`);
 console.log(`- ${launchDir}/unsafe-agent.html`);
 console.log(`- ${launchDir}/streaming-agent.jsonl`);

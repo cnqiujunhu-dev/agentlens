@@ -39,6 +39,8 @@ jobs:
           npm run demo:mcp
           node ./bin/agentlens.js eval .agentlens/runs/mcp-demo.json --config evals/default.json
           node ./bin/agentlens.js eval .agentlens/runs/mcp-demo.json --config evals/mcp-policy.json
+          npm run demo:mcp:stdio
+          node ./bin/agentlens.js eval .agentlens/runs/mcp-stdio-demo.json --config evals/mcp-policy.json
 
       - name: JSONL streaming demo
         run: |

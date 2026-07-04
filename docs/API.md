@@ -101,3 +101,26 @@ await traceMcpToolCall(
 
 finishMcpRun(run, "passed");
 ```
+
+## MCP Stdio Transport
+
+```js
+import { createMcpRun, finishMcpRun, traceMcpStdioToolCall } from "agentlens";
+
+const run = createMcpRun({
+  app: "mcp-agent",
+  name: "stdio policy lookup",
+  server: "agentlens-demo-policy-server"
+});
+
+await traceMcpStdioToolCall(run, {
+  command: process.execPath,
+  args: ["./examples/mcp-stdio-server.mjs"],
+  server: "agentlens-demo-policy-server",
+  tool: "policy.lookup",
+  input: { topic: "refund policy" },
+  permission: "read-only"
+});
+
+finishMcpRun(run, "passed");
+```

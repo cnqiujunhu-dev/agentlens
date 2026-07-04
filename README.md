@@ -35,6 +35,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
+- Zero-dependency stdio JSON-RPC MCP transport demo.
 - Static HTML dashboard for sharing runs in GitHub issues, PRs, and incident notes.
 - Zero runtime dependencies in the MVP.
 
@@ -63,6 +64,14 @@ Want to trace an MCP-style tool call?
 npm run demo:mcp
 node ./bin/agentlens.js replay .agentlens/runs/mcp-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/mcp-demo.json --config evals/mcp-policy.json
+```
+
+Want a real stdio JSON-RPC MCP transport demo?
+
+```bash
+npm run demo:mcp:stdio
+node ./bin/agentlens.js replay .agentlens/runs/mcp-stdio-demo.json
+node ./bin/agentlens.js eval .agentlens/runs/mcp-stdio-demo.json --config evals/mcp-policy.json
 ```
 
 Want append-friendly streaming traces?
@@ -213,6 +222,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Review RAG evidence and citation behavior.
 - Add eval checks to CI.
 - Trace MCP-style tool calls.
+- Trace real stdio MCP JSON-RPC tool calls.
 - Enforce MCP server and permission policies.
 - Stream long-running traces as JSONL.
 - Redact secrets before sharing traces.

@@ -24,6 +24,7 @@ Built:
 - Batch `agentlens ci` command.
 - MCP-style tool-call adapter MVP.
 - MCP adapter documentation and demo.
+- MCP stdio JSON-RPC transport demo.
 - MCP policy eval rules.
 - JSONL streaming trace writer and materializer.
 - Public JavaScript API and package exports.
@@ -32,7 +33,7 @@ Built:
 
 Missing before a serious public launch:
 
-- One real framework adapter or real MCP transport integration.
+- One production-oriented framework adapter or hardened MCP transport integration.
 - Real browser screenshot or GIF generated from `.agentlens/launch/*.html`.
 - Release tag.
 
@@ -40,7 +41,7 @@ Missing before a serious public launch:
 
 Do these before asking strangers to star it:
 
-1. Upgrade the MCP-style helper into a real adapter demo against an MCP client/server workflow.
+1. Harden the MCP stdio transport demo into a production-oriented adapter.
 2. Replace the SVG preview with a real screenshot or GIF.
 3. Record a short launch GIF from `.agentlens/launch/support-agent.html`.
 4. Tag the first release.
@@ -51,10 +52,10 @@ Do these before asking strangers to star it:
 The MVP becomes much more credible when it works with one real ecosystem:
 
 1. Add a tiny JavaScript wrapper for LLM calls.
-2. Add a real MCP client/server trace example.
+2. Add MCP tool schema capture and policy reporting.
 3. Add a LangGraph or generic tool-call adapter example.
-4. Add schema capture for MCP tool definitions.
-5. Add real MCP tool schema capture.
+4. Add a scanner for dangerous MCP capabilities.
+5. Add a live local dashboard mode.
 
 ## Priority 3: Make The README Convert
 
@@ -110,6 +111,6 @@ Avoid hooks that sound like every other agent project:
 
 Target `v0.2.0`:
 
-- Real MCP transport demo or one popular framework adapter.
-- Real GIF or screenshot.
+- Hardened MCP transport adapter or one popular framework adapter.
 - Real launch GIF or screenshot.
+- First release tag.

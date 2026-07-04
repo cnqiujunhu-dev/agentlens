@@ -1,6 +1,6 @@
 # MCP Adapter MVP
 
-AgentLens currently includes a lightweight MCP-style tracing helper. It does not implement the MCP transport protocol yet. Instead, it wraps the tool-call boundary used by an agent or MCP client and records the call as AgentLens trace events.
+AgentLens includes a lightweight MCP-style tracing helper and a zero-dependency stdio JSON-RPC transport demo. The helper wraps the tool-call boundary used by an agent or MCP client and records the call as AgentLens trace events.
 
 ## Why This Exists
 
@@ -58,6 +58,16 @@ node ./bin/agentlens.js eval .agentlens/runs/mcp-demo.json --config evals/defaul
 node ./bin/agentlens.js eval .agentlens/runs/mcp-demo.json --config evals/mcp-policy.json
 ```
 
+Run the stdio transport demo:
+
+```bash
+npm run demo:mcp:stdio
+node ./bin/agentlens.js replay .agentlens/runs/mcp-stdio-demo.json
+node ./bin/agentlens.js eval .agentlens/runs/mcp-stdio-demo.json --config evals/mcp-policy.json
+```
+
+The stdio demo starts `examples/mcp-stdio-server.mjs` as a child process and uses newline-delimited JSON-RPC messages for `initialize`, `tools/list`, and `tools/call`.
+
 ## Policy Evals
 
 `evals/mcp-policy.json` includes the first MCP-focused policy pack:
@@ -82,7 +92,6 @@ This lets teams fail CI when an agent calls a write-capable or destructive tool 
 
 ## Next Steps
 
-- Add a real MCP client/server transport example.
 - Add server/tool allowlists.
 - Add schema capture for tool definitions.
 - Add a scanner for dangerous MCP capabilities.
