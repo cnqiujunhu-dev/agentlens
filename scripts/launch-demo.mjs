@@ -1,5 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createLangGraphRun, wrapLangGraphNode } from "../src/adapters/langgraph.js";
 import { createMcpRun, finishMcpRun, traceMcpToolCall } from "../src/adapters/mcp.js";
 import { traceMcpStdioToolCall } from "../src/adapters/mcp-stdio.js";
 import { renderDashboard } from "../src/dashboard.js";
@@ -106,6 +107,43 @@ writeTrace(`${launchDir}/mcp-stdio.json`, mcpStdioTrace);
 writeText(`${launchDir}/mcp-stdio.html`, renderDashboard(mcpStdioTrace));
 writeEvalReport(`${launchDir}/mcp-stdio.eval.txt`, mcpStdioTrace, "evals/mcp-policy.json");
 
+const langGraphTrace = createLangGraphRun({
+  app: "langgraph-style-demo",
+  name: "launch demo: LangGraph-style support flow",
+  graph: "support-refund-flow"
+});
+
+const plannerNode = wrapLangGraphNode(langGraphTrace, "planner", async (state) => ({
+  ...state,
+  steps: [...(state.steps ?? []), "lookup-refund-policy"],
+  messages: [
+    ...(state.messages ?? []),
+    { role: "assistant", content: "I should look up refund policy before answering." }
+  ]
+}));
+const responderNode = wrapLangGraphNode(langGraphTrace, "responder", async (state) => ({
+  ...state,
+  final: {
+    content: "Damaged items can be refunded within 30 days with proof of purchase.",
+    citations: ["policy-refund-30d"]
+  },
+  messages: [
+    ...(state.messages ?? []),
+    { role: "assistant", content: "Damaged items can be refunded within 30 days with proof of purchase." }
+  ]
+}));
+
+let graphState = {
+  messages: [{ role: "user", content: "Can I refund a damaged item?" }],
+  steps: []
+};
+graphState = await plannerNode(graphState);
+graphState = await responderNode(graphState);
+finishRun(langGraphTrace, "passed");
+writeTrace(`${launchDir}/langgraph-style.json`, langGraphTrace);
+writeText(`${launchDir}/langgraph-style.html`, renderDashboard(langGraphTrace));
+writeEvalReport(`${launchDir}/langgraph-style.eval.txt`, langGraphTrace, "evals/langgraph-basic.json");
+
 const failingTrace = createDemoRun();
 failingTrace.app = "unsafe-agent";
 failingTrace.name = "launch demo: unsafe tool call";
@@ -145,5 +183,6 @@ console.log(`Launch demo artifacts written to ${launchDir}`);
 console.log(`- ${launchDir}/support-agent.html`);
 console.log(`- ${launchDir}/mcp-policy.html`);
 console.log(`- ${launchDir}/mcp-stdio.html`);
+console.log(`- ${launchDir}/langgraph-style.html`);
 console.log(`- ${launchDir}/unsafe-agent.html`);
 console.log(`- ${launchDir}/streaming-agent.jsonl`);

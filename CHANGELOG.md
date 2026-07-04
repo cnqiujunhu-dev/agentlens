@@ -40,6 +40,7 @@ Initial MVP.
 - Redacted share bundle CLI and API for issue, PR, and support handoffs.
 - `agentlens init` scaffolds starter eval config and a GitHub Action example.
 - Launch demo artifact generator.
+- Launch demo artifact for the LangGraph-style adapter.
 - Release checklist, demo recording guide, and launch post draft.
 - Public JavaScript API and package exports.
 - GitHub Actions CI workflow.

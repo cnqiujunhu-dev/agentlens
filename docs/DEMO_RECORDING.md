@@ -29,6 +29,7 @@ Open:
 ```text
 .agentlens/launch/support-agent.html
 .agentlens/launch/mcp-policy.html
+.agentlens/launch/langgraph-style.html
 .agentlens/launch/unsafe-agent.html
 .agentlens/reports/diff-demo.html
 README.md
@@ -44,8 +45,9 @@ Use a 1280x720 or 1440x900 browser window. Keep the terminal font at a readable 
 | 8-22s | Quick demo commands | `init`, `demo`, `inspect`, `replay`, `eval`, `dashboard` |
 | 22-40s | Support dashboard | Timeline, costs, latency, final answer, citations |
 | 40-55s | CI and evals | Passing eval output and policy rule names |
-| 55-70s | MCP policy | MCP tool metadata, risk labels, and blocked unsafe action |
-| 70-90s | Diff dashboard | Baseline vs candidate regressions and tool/event deltas |
+| 55-68s | MCP policy | MCP tool metadata, risk labels, and blocked unsafe action |
+| 68-80s | Framework adapter | LangGraph-style node start/end events |
+| 80-90s | Diff dashboard | Baseline vs candidate regressions and tool/event deltas |
 
 ## Narration
 

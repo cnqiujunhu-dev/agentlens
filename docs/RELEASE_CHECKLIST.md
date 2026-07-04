@@ -52,6 +52,7 @@ Open these files before recording:
 - `.agentlens/launch/support-agent.html`
 - `.agentlens/launch/mcp-policy.html`
 - `.agentlens/launch/mcp-stdio.html`
+- `.agentlens/launch/langgraph-style.html`
 - `.agentlens/launch/unsafe-agent.html`
 - `.agentlens/reports/diff-demo.html`
 
