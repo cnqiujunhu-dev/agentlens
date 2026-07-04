@@ -99,6 +99,25 @@ function runAssertion(trace, assertion) {
     return pass(assertion, "No forbidden tool permissions were used");
   }
 
+  if (assertion.type === "forbidden-mcp-tool-risks") {
+    const forbidden = new Set((assertion.risks ?? []).map((risk) => risk.toLowerCase()));
+    const callViolations = trace.events
+      .filter((event) => event.type === "tool.call")
+      .filter((event) => forbidden.has(String(event.metadata?.toolRisk ?? "").toLowerCase()))
+      .map((event) => ({ tool: event.name, risk: event.metadata?.toolRisk ?? null }));
+    const manifestViolations = trace.events
+      .filter((event) => event.type === "mcp.tools")
+      .flatMap((event) => event.output?.tools ?? [])
+      .filter((tool) => forbidden.has(String(tool.risk ?? "").toLowerCase()))
+      .map((tool) => ({ tool: tool.name, risk: tool.risk ?? null }));
+    const violations = [...callViolations, ...manifestViolations];
+
+    if (violations.length > 0) {
+      return fail(assertion, `Forbidden MCP tool risks found: ${violations.map((item) => `${item.tool}:${item.risk}`).join(", ")}`, { violations });
+    }
+    return pass(assertion, "No forbidden MCP tool risks were found");
+  }
+
   if (assertion.type === "required-tool-metadata") {
     const keys = assertion.keys ?? [];
     const violations = trace.events

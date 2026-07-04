@@ -37,6 +37,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
+- MCP tool inventory and risk scanning.
 - Zero-dependency stdio JSON-RPC MCP transport demo.
 - Static HTML dashboard for sharing runs in GitHub issues, PRs, and incident notes.
 - Composite GitHub Action for failing PRs on agent eval regressions.
@@ -268,6 +269,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Trace MCP-style tool calls.
 - Trace real stdio MCP JSON-RPC tool calls.
 - Enforce MCP server and permission policies.
+- Scan MCP tool schemas for risky capabilities.
 - Stream long-running traces as JSONL.
 - Redact secrets before sharing traces.
 - Publish JSON Schemas for external tooling.
@@ -286,10 +288,11 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Generic LLM call adapter.
 - Local dashboard server.
 - GitHub Action for agent regression tests.
+- MCP tool inventory and risk scanner.
 - Launch demo artifact generator.
 - JavaScript SDK wrapper for common LLM calls.
 - LangGraph, AutoGen, and CrewAI adapter examples.
-- MCP server scanner and policy pack.
+- Reviewed-risk policy exceptions for MCP servers.
 - Live local dashboard mode.
 - VS Code extension.
 - JSONL streaming trace reader and writer.

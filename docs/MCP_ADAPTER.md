@@ -14,9 +14,11 @@ The MVP focuses on capturing:
 
 - server name
 - tool name
+- tool schemas and tool inventory
 - input
 - output
 - permission metadata
+- inferred tool risk
 - duration
 - errors
 
@@ -49,6 +51,33 @@ const result = await traceMcpToolCall(
 finishMcpRun(run, "passed");
 ```
 
+## Tool Inventory And Risk Scan
+
+Use `scanMcpTools` when you have a `tools/list` response or a local list of MCP-style tool definitions:
+
+```js
+import { addMcpToolManifest, scanMcpTools } from "agentlens";
+
+const tools = [
+  {
+    name: "policy.lookup",
+    description: "Read refund policy text by topic.",
+    permission: "read-only",
+    inputSchema: {
+      type: "object",
+      properties: {
+        topic: { type: "string" }
+      }
+    }
+  }
+];
+
+const scan = scanMcpTools({ server: "local-policy-server", tools });
+addMcpToolManifest(run, { server: "local-policy-server", tools });
+```
+
+The scanner classifies tools as `low`, `medium`, `high`, or `critical` risk from explicit permissions, annotations, tool names, descriptions, and schema input keys. The manifest is stored as an `mcp.tools` event so a trace can show both the tool call and the server capability surface.
+
 Run the local demo:
 
 ```bash
@@ -75,6 +104,7 @@ The stdio demo starts `examples/mcp-stdio-server.mjs` as a child process and use
 - `allowed-mcp-servers`
 - `required-tool-metadata`
 - `forbidden-tool-permissions`
+- `forbidden-mcp-tool-risks`
 - `max-errors`
 - `required-citations`
 
@@ -90,8 +120,17 @@ Example rule:
 
 This lets teams fail CI when an agent calls a write-capable or destructive tool without an explicit policy change.
 
+Risk rule example:
+
+```json
+{
+  "id": "no-high-risk-tools",
+  "type": "forbidden-mcp-tool-risks",
+  "risks": ["high", "critical"]
+}
+```
+
 ## Next Steps
 
 - Add server/tool allowlists.
-- Add schema capture for tool definitions.
-- Add a scanner for dangerous MCP capabilities.
+- Add richer policy reports for reviewed-but-approved risky tools.

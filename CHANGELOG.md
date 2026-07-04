@@ -23,6 +23,7 @@ Initial MVP.
 - Release audit script for required files, README sections, exports, and pack contents.
 - Composite GitHub Action for running `agentlens ci` in PR workflows.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
+- MCP tool inventory events, schema capture, and risk scanning.
 - Launch demo artifact generator.
 - Public JavaScript API and package exports.
 - GitHub Actions CI workflow.

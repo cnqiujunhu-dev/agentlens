@@ -10,6 +10,7 @@ import {
   readSchema,
   redactTrace,
   renderReplay,
+  scanMcpTools,
   summarizeTrace,
   traceAnthropicCompatibleMessage,
   traceLlmCall,
@@ -48,6 +49,7 @@ test("public API exports streaming and MCP helpers", async () => {
 
   assert.deepEqual(result, { value: "ok" });
   assert.equal(run.events.length, 2);
+  assert.equal(scanMcpTools({ tools: [{ name: "search", permission: "read-only" }] }).tools[0].risk, "low");
 });
 
 test("public API exports LLM helper", async () => {

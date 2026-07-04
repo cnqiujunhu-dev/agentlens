@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
 import readline from "node:readline";
 import { addEvent } from "../trace.js";
+import { scanMcpTools } from "./mcp.js";
 
 export const MCP_PROTOCOL_VERSION = "2025-06-18";
 
@@ -199,6 +200,7 @@ export async function traceMcpStdioToolCall(run, options = {}) {
     const initializeResult = await client.initialize();
     const toolsResult = await client.listTools();
     const toolDefinition = toolsResult?.tools?.find((item) => item.name === tool);
+    const scannedTool = scanMcpTools({ server, tools: toolsResult?.tools ?? [] }).tools.find((item) => item.name === tool);
     const startedAtMs = Date.now();
 
     addEvent(run, {
@@ -208,7 +210,9 @@ export async function traceMcpStdioToolCall(run, options = {}) {
       metadata: {
         ...metadata,
         protocolVersion: initializeResult?.protocolVersion,
-        toolSchema: toolDefinition?.inputSchema
+        toolSchema: toolDefinition?.inputSchema,
+        toolRisk: scannedTool?.risk,
+        toolRiskReasons: scannedTool?.reasons
       }
     });
 

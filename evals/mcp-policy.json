@@ -23,6 +23,11 @@
       "permissions": ["write", "admin", "destructive"]
     },
     {
+      "id": "no-high-risk-tools",
+      "type": "forbidden-mcp-tool-risks",
+      "risks": ["high", "critical"]
+    },
+    {
       "id": "no-errors",
       "type": "max-errors",
       "max": 0

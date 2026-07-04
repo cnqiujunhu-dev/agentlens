@@ -31,6 +31,7 @@ const requiredReadmeSnippets = [
   "Use Cases",
   "Roadmap",
   "GitHub Actions",
+  "MCP tool inventory",
   "agentlens serve",
   "dashboard-screenshot.png"
 ];

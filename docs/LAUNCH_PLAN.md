@@ -30,6 +30,7 @@ Built:
 - MCP adapter documentation and demo.
 - MCP stdio JSON-RPC transport demo.
 - MCP policy eval rules.
+- MCP tool inventory and risk scanner.
 - JSONL streaming trace writer and materializer.
 - Public JavaScript API and package exports.
 - Launch demo artifact generator.
@@ -58,10 +59,9 @@ Do these before asking strangers to star it:
 
 The MVP becomes much more credible when it works with one real ecosystem:
 
-1. Add MCP tool schema capture and policy reporting.
+1. Add richer policy reports for reviewed-but-approved risky tools.
 2. Add a LangGraph or generic tool-call adapter example.
-3. Add a scanner for dangerous MCP capabilities.
-4. Add file watching and live refresh to the local dashboard server.
+3. Add file watching and live refresh to the local dashboard server.
 
 ## Priority 3: Make The README Convert
 

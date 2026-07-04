@@ -1,4 +1,4 @@
-import { createMcpRun, finishMcpRun, traceMcpToolCall } from "../src/adapters/mcp.js";
+import { addMcpToolManifest, createMcpRun, finishMcpRun, traceMcpToolCall } from "../src/adapters/mcp.js";
 import { initWorkspace, writeTrace } from "../src/store.js";
 import { addEvent } from "../src/trace.js";
 
@@ -29,13 +29,34 @@ const tools = {
   })
 };
 
+const toolDefinitions = [
+  {
+    name: "policy.lookup",
+    description: "Read refund policy text by topic.",
+    permission: "read-only",
+    inputSchema: {
+      type: "object",
+      required: ["topic"],
+      properties: {
+        topic: { type: "string" }
+      }
+    }
+  }
+];
+
+addMcpToolManifest(run, {
+  server: "local-policy-server",
+  tools: toolDefinitions
+});
+
 const result = await traceMcpToolCall(
   run,
   {
     server: "local-policy-server",
     tool: "policy.lookup",
     input: { topic: "damaged item refund" },
-    permission: "read-only"
+    permission: "read-only",
+    toolDefinition: toolDefinitions[0]
   },
   (input) => tools["policy.lookup"](input)
 );
