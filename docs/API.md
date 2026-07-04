@@ -47,6 +47,18 @@ const report = evaluateTrace(trace, {
 console.log(formatEvalReport(report));
 ```
 
+## Trace Diff
+
+```js
+import { compareTraces, formatTraceDiff, readTrace } from "agentlens";
+
+const baseline = readTrace(".agentlens/runs/baseline.json");
+const candidate = readTrace(".agentlens/runs/candidate.json");
+const diff = compareTraces(baseline, candidate);
+
+console.log(formatTraceDiff(diff));
+```
+
 ## Generic LLM Calls
 
 ```js

@@ -35,6 +35,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Generic LLM wrapper for tracing model calls from any SDK.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - Deterministic replay that reconstructs the timeline without calling a model again.
+- Trace diff reports for before/after agent regressions.
 - JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
 - MCP tool inventory and risk scanning.
@@ -52,6 +53,7 @@ node ./bin/agentlens.js init
 node ./bin/agentlens.js demo --out .agentlens/runs/demo.json
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
+node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
 node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
@@ -82,6 +84,13 @@ Want to see eval failures?
 ```bash
 npm run demo:fail
 node ./bin/agentlens.js eval .agentlens/runs/failing-demo.json --config evals/default.json
+```
+
+Want to compare a regression against the healthy demo?
+
+```bash
+npm run demo
+npm run diff:demo
 ```
 
 Want to wrap a generic LLM call?
@@ -200,6 +209,7 @@ agentlens init
 agentlens demo [--out path]
 agentlens inspect <trace-file>
 agentlens replay <trace-file>
+agentlens diff <baseline-trace> <candidate-trace>
 agentlens eval <trace-file> [--config path]
 agentlens ci [--runs dir] [--config path]
 agentlens schema <trace|eval> [--out path]
@@ -266,6 +276,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 
 - Debug tool-using AI agents.
 - Trace model calls without binding to one LLM SDK.
+- Compare before/after traces when an agent regresses.
 - Wrap OpenAI-compatible and Anthropic-compatible SDK calls.
 - Reproduce flaky agent failures.
 - Review RAG evidence and citation behavior.
@@ -293,6 +304,7 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
 - Public JavaScript API and package exports.
 - Trace redaction CLI and API.
 - Trace/Eval JSON Schemas.
+- Trace diff CLI and API.
 - Init scaffolding for starter evals and GitHub Action examples.
 - Generic LLM call adapter.
 - Local dashboard server.

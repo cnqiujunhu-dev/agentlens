@@ -27,6 +27,7 @@ Initial MVP.
 - Reviewed exceptions for MCP high-risk tool policies.
 - Local dashboard JSON APIs and file-change refresh.
 - Dashboard timeline filters for event type, status, text, and MCP risk.
+- Trace diff CLI and API for before/after run comparisons.
 - `agentlens init` scaffolds starter eval config and a GitHub Action example.
 - Launch demo artifact generator.
 - Public JavaScript API and package exports.

@@ -13,6 +13,7 @@ Built:
 - Demo trace generator.
 - Inspect summary.
 - Replay transcript.
+- Trace diff CLI and API.
 - JSON eval engine.
 - Generic LLM call adapter.
 - Static HTML dashboard.
@@ -65,7 +66,7 @@ The MVP becomes much more credible when it works with one real ecosystem:
 
 1. Add expiring owners for reviewed MCP risk exceptions.
 2. Add a LangGraph or generic tool-call adapter example.
-3. Add dashboard diff views for before/after agent regressions.
+3. Add dashboard diff views using the trace diff API.
 
 ## Priority 3: Make The README Convert
 

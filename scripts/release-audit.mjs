@@ -36,6 +36,7 @@ const requiredReadmeSnippets = [
   "file-change refresh",
   "Timeline filters",
   "starter files",
+  "agentlens diff",
   "agentlens serve",
   "dashboard-screenshot.png"
 ];
@@ -43,6 +44,7 @@ const requiredReadmeSnippets = [
 const requiredPackageExports = [
   ".",
   "./trace",
+  "./diff",
   "./eval",
   "./ci",
   "./jsonl",

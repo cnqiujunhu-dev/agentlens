@@ -17,6 +17,7 @@ function usage() {
     "  agentlens demo [--out path]",
     "  agentlens inspect <trace-file>",
     "  agentlens replay <trace-file>",
+    "  agentlens diff <baseline-trace> <candidate-trace>",
     "  agentlens eval <trace-file> [--config path]",
     "  agentlens ci [--runs dir] [--config path]",
     "  agentlens schema <trace|eval> [--out path]",
@@ -27,6 +28,7 @@ function usage() {
     "",
     "Examples:",
     "  node ./bin/agentlens.js demo --out .agentlens/runs/demo.json",
+    "  node ./bin/agentlens.js diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json",
     "  node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json",
     "  node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json"
   ].join("\n");
@@ -82,6 +84,15 @@ async function main() {
     if (!traceFile) throw new Error("Missing trace file. Usage: agentlens replay <trace-file>");
     const { renderReplay } = await import("../src/replay.js");
     console.log(renderReplay(readTrace(traceFile)));
+    return;
+  }
+
+  if (command === "diff") {
+    const baselineFile = positional(1);
+    const candidateFile = positional(2);
+    if (!baselineFile || !candidateFile) throw new Error("Missing trace files. Usage: agentlens diff <baseline-trace> <candidate-trace>");
+    const { compareTraces, formatTraceDiff } = await import("../src/diff.js");
+    console.log(formatTraceDiff(compareTraces(readTrace(baselineFile), readTrace(candidateFile))));
     return;
   }
 

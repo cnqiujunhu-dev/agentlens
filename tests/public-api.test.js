@@ -2,9 +2,11 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   addEvent,
+  compareTraces,
   createMcpRun,
   createRun,
   evaluateTrace,
+  formatTraceDiff,
   finishRun,
   JsonlTraceWriter,
   readSchema,
@@ -29,9 +31,12 @@ test("public API exports core trace and eval helpers", () => {
     name: "api",
     assertions: [{ id: "citations", type: "required-citations", min: 1 }]
   });
+  const diff = compareTraces(run, run);
 
   assert.equal(summary.eventCount, 2);
   assert.equal(report.passed, true);
+  assert.equal(diff.deltas.eventCount, 0);
+  assert.match(formatTraceDiff(diff), /AgentLens Trace Diff/);
   assert.match(renderReplay(run), /LLM RESPONSE/);
   assert.equal(redactTrace(run).metadata.redacted, true);
   assert.equal(readSchema("trace").title, "AgentLens Trace v1");
