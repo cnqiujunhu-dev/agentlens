@@ -219,7 +219,7 @@ function scanScalarValue(trace, value, path, findings) {
         ruleId: "sensitive-key",
         message: `Sensitive key "${key}" contains an unredacted value`,
         path,
-        sample: typeof value === "string" ? maskSecretSample(value) : String(value)
+        sample: "[REDACTED]"
       })
     );
   }

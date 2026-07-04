@@ -1,4 +1,5 @@
 import { summarizeTrace } from "./inspect.js";
+import { scanTrace } from "./scan.js";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -36,7 +37,7 @@ function deltaMs(trace, event) {
   return Math.max(0, new Date(event.ts).getTime() - new Date(trace.startedAt).getTime());
 }
 
-function renderCards(summary) {
+function renderCards(summary, scanReport) {
   const cards = [
     ["Status", summary.status],
     ["Events", summary.eventCount],
@@ -45,12 +46,56 @@ function renderCards(summary) {
     ["LLM tokens", summary.totalLlmTokens],
     ["Cost", `$${summary.totalCostUsd.toFixed(4)}`],
     ["Errors", summary.errors],
-    ["Tools", summary.tools.length]
+    ["Tools", summary.tools.length],
+    ["Scan", scanReport.summary.findings === 0 ? "PASS" : `${scanReport.summary.findings} findings`]
   ];
 
   return cards
     .map(([label, value]) => `<div class="card"><div class="card-label">${escapeHtml(label)}</div><div class="card-value">${escapeHtml(value)}</div></div>`)
     .join("");
+}
+
+function renderScanFindings(scanReport) {
+  if (scanReport.findings.length === 0) {
+    return `<p class="empty-state">No scan findings.</p>`;
+  }
+
+  return scanReport.findings
+    .map((finding) => {
+      const event = [finding.eventType, finding.eventName].filter(Boolean).join(" / ");
+      return `
+        <article class="scan-finding severity-${escapeHtml(finding.severity)}">
+          <div class="scan-finding-header">
+            <span class="severity-badge">${escapeHtml(finding.severity.toUpperCase())}</span>
+            <div>
+              <h3>${escapeHtml(finding.ruleId)}</h3>
+              <p>${escapeHtml(finding.message)}</p>
+            </div>
+          </div>
+          <dl>
+            <div><dt>Category</dt><dd>${escapeHtml(finding.category)}</dd></div>
+            <div><dt>Path</dt><dd>${escapeHtml(finding.path)}</dd></div>
+            ${event ? `<div><dt>Event</dt><dd>${escapeHtml(event)}</dd></div>` : ""}
+            ${finding.sample ? `<div><dt>Sample</dt><dd>${escapeHtml(finding.sample)}</dd></div>` : ""}
+          </dl>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function renderScanSection(scanReport) {
+  const status = scanReport.passed ? "PASS" : "FAIL";
+  return `
+    <section class="section scan-section">
+      <div class="section-title">
+        <h2>Security Scan</h2>
+        <span class="scan-status scan-status-${status.toLowerCase()}">${status}</span>
+      </div>
+      <p class="section-note">${scanReport.summary.findings} findings. Fails on ${escapeHtml(scanReport.failOnSeverity)} severity.</p>
+      <div class="scan-findings">${renderScanFindings(scanReport)}</div>
+    </section>
+  `;
 }
 
 function renderTypeCounts(summary) {
@@ -220,6 +265,7 @@ function renderFilterScript() {
 
 export function renderDashboard(trace, options = {}) {
   const summary = summarizeTrace(trace);
+  const scanReport = scanTrace(trace);
 
   return `<!doctype html>
 <html lang="en">
@@ -301,6 +347,99 @@ export function renderDashboard(trace, options = {}) {
     .section h2 {
       margin: 0 0 14px;
       font-size: 18px;
+    }
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .section-title h2 {
+      margin: 0;
+    }
+    .section-note {
+      color: var(--muted);
+      margin: 0 0 14px;
+      font-size: 13px;
+    }
+    .empty-state {
+      color: var(--muted);
+      margin: 0;
+    }
+    .scan-status, .severity-badge {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      padding: 3px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .scan-status-pass {
+      background: #ecfdf3;
+      border-color: #abefc6;
+      color: #067647;
+    }
+    .scan-status-fail, .severity-high .severity-badge, .severity-critical .severity-badge {
+      background: var(--danger-soft);
+      border-color: #fecaca;
+      color: var(--danger);
+    }
+    .severity-medium .severity-badge {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: #9a3412;
+    }
+    .severity-low .severity-badge {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #1d4ed8;
+    }
+    .scan-findings {
+      display: grid;
+      gap: 10px;
+    }
+    .scan-finding {
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+    .scan-finding:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .scan-finding-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .scan-finding h3 {
+      margin: 0;
+      font-size: 14px;
+    }
+    .scan-finding p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .scan-finding dl {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 12px;
+      margin: 10px 0 0;
+    }
+    .scan-finding dl div {
+      min-width: 0;
+    }
+    .scan-finding dt {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .scan-finding dd {
+      margin: 2px 0 0;
+      overflow-wrap: anywhere;
+      font-size: 13px;
     }
     .pills {
       display: flex;
@@ -457,6 +596,7 @@ export function renderDashboard(trace, options = {}) {
       .filter-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .event-header { flex-direction: column; }
       .event-meta { justify-content: flex-start; }
+      .scan-finding dl { grid-template-columns: 1fr; }
     }
     @media (max-width: 520px) {
       .grid { grid-template-columns: 1fr; }
@@ -472,12 +612,13 @@ export function renderDashboard(trace, options = {}) {
   </header>
   <main>
     <section class="grid">
-      ${renderCards(summary)}
+      ${renderCards(summary, scanReport)}
     </section>
     <section class="section">
       <h2>Event Types</h2>
       <div class="pills">${renderTypeCounts(summary)}</div>
     </section>
+    ${renderScanSection(scanReport)}
     ${renderFilters(trace)}
     <section class="section">
       <h2>Timeline</h2>

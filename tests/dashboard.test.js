@@ -56,3 +56,23 @@ test("renderDashboard includes timeline filters and MCP risk metadata", () => {
   assert.match(html, /data-event-risk="critical"/);
   assert.match(html, /critical risk/);
 });
+
+test("renderDashboard includes security scan findings", () => {
+  const trace = createRun({
+    app: "dashboard-test",
+    name: "scan panel",
+    metadata: {
+      apiKey: "plain-secret-value"
+    }
+  });
+  addEvent(trace, { type: "llm.response", name: "final", output: { content: "ok" } });
+  finishRun(trace, "passed");
+
+  const html = renderDashboard(trace);
+
+  assert.match(html, /Security Scan/);
+  assert.match(html, /sensitive-key/);
+  assert.match(html, /metadata\.apiKey/);
+  assert.match(html, /\[REDACTED\]/);
+  assert.doesNotMatch(html, /plain-secret-value/);
+});

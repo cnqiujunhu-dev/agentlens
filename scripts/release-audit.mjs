@@ -48,6 +48,7 @@ const requiredReadmeSnippets = [
   "expiry metadata",
   "file-change refresh",
   "Timeline filters",
+  "Security Scan panel",
   "starter files",
   "agentlens diff",
   "diff-dashboard",

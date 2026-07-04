@@ -44,6 +44,7 @@ Current MVP:
 - GitHub Action scan gate
 - SARIF export for scan findings
 - static HTML dashboard
+- dashboard Security Scan panel
 - local dashboard server
 - JSONL streaming traces
 - MCP-style tool-call adapter

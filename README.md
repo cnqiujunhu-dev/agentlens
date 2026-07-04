@@ -53,7 +53,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - MCP tool inventory and risk scanning.
 - Zero-dependency stdio JSON-RPC MCP transport demo.
 - MCP stdio trace sessions for reusing a server process across multiple tool calls.
-- Static HTML dashboard for sharing runs in GitHub issues, PRs, and incident notes.
+- Static HTML dashboard with timeline filters and security scan findings for issues, PRs, and incident notes.
 - Local dashboard server with JSON APIs and file-change refresh.
 - Timeline filters for event type, status, search text, and MCP risk.
 - Composite GitHub Action for failing PRs on agent eval regressions and scan findings.
@@ -346,7 +346,7 @@ agentlens scan .agentlens/runs/demo.json --sarif .agentlens/reports/agentlens-sc
 agentlens ci --runs .agentlens/runs --config evals/default.json --scan --scan-fail-on high
 ```
 
-The default threshold fails on `high` and `critical` findings. Medium findings, such as prompt-injection phrases, are reported as warnings unless you opt into `--fail-on medium`. CI can run the same scan with `--scan --scan-fail-on high`. Use `--sarif` when you want GitHub code scanning or another SARIF consumer to ingest trace findings. Share bundles include `scan.txt` generated from the redacted trace.
+The default threshold fails on `high` and `critical` findings. Medium findings, such as prompt-injection phrases, are reported as warnings unless you opt into `--fail-on medium`. CI can run the same scan with `--scan --scan-fail-on high`. Use `--sarif` when you want GitHub code scanning or another SARIF consumer to ingest trace findings. Static dashboards include a Security Scan panel, and share bundles include `scan.txt` generated from the redacted trace.
 
 ## Use Cases
 
