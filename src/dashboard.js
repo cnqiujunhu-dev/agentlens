@@ -40,6 +40,10 @@ function eventTitle(event) {
   return [event.type, event.name].filter(Boolean).join(" / ");
 }
 
+function eventAnchor(index) {
+  return `agentlens-event-${index + 1}`;
+}
+
 function eventBody(event) {
   const blocks = [];
   if (event.input !== undefined) blocks.push(["input", event.input]);
@@ -133,6 +137,46 @@ function renderOptions(values, allLabel) {
   return [`<option value="">${escapeHtml(allLabel)}</option>`, ...values.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`)].join("");
 }
 
+function findLastIndex(values, predicate) {
+  for (let index = values.length - 1; index >= 0; index -= 1) {
+    if (predicate(values[index], index)) return index;
+  }
+  return -1;
+}
+
+function renderJumpLink(trace, label, index) {
+  if (index < 0) return "";
+  const event = trace.events[index];
+  return `
+    <a class="jump-link" href="#${eventAnchor(index)}">
+      <span>${escapeHtml(label)}</span>
+      <strong>#${index + 1}</strong>
+      <em>${escapeHtml(eventTitle(event) || event.type)}</em>
+    </a>
+  `;
+}
+
+function renderTimelineJumps(trace) {
+  const highRisk = new Set(["high", "critical"]);
+  const jumps = [
+    ["First error", trace.events.findIndex((event) => event.status === "error" || event.type === "error")],
+    ["First high risk", trace.events.findIndex((event) => highRisk.has(String(event.metadata?.toolRisk ?? "").toLowerCase()))],
+    ["First tool call", trace.events.findIndex((event) => event.type === "tool.call")],
+    ["Final response", findLastIndex(trace.events, (event) => event.type === "llm.response")],
+    ["Last event", trace.events.length - 1]
+  ]
+    .map(([label, index]) => renderJumpLink(trace, label, index))
+    .filter(Boolean)
+    .join("");
+
+  if (!jumps) return "";
+  return `
+    <nav class="timeline-jumps" aria-label="Timeline jumps">
+      ${jumps}
+    </nav>
+  `;
+}
+
 function renderFilters(trace) {
   const types = uniqueValues(trace.events.map((event) => event.type));
   const statuses = uniqueValues(trace.events.map((event) => event.status ?? "ok"));
@@ -162,6 +206,7 @@ function renderFilters(trace) {
           <select id="agentlens-filter-risk">${renderOptions(risks, "All risks")}</select>
         </label>
       </div>
+      ${renderTimelineJumps(trace)}
     </section>
   `;
 }
@@ -190,6 +235,7 @@ function renderTimeline(trace) {
       const risk = event.metadata?.toolRisk;
       return `
         <article
+          id="${eventAnchor(index)}"
           class="event event-${escapeHtml(event.type.replaceAll(".", "-"))} status-${escapeHtml(status)}${risk ? ` risk-${escapeHtml(risk)}` : ""}"
           data-event-type="${escapeHtml(event.type)}"
           data-event-status="${escapeHtml(status)}"
@@ -582,6 +628,40 @@ export function renderDashboard(trace, options = {}) {
       font: inherit;
       font-size: 13px;
     }
+    .timeline-jumps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .jump-link {
+      display: grid;
+      gap: 2px;
+      min-height: 70px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #f9fafb;
+      color: var(--text);
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+    .jump-link:hover {
+      border-color: #5eead4;
+      background: #f0fdfa;
+    }
+    .jump-link span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .jump-link strong {
+      color: var(--accent);
+      font-size: 13px;
+    }
+    .jump-link em {
+      font-style: normal;
+      font-size: 13px;
+    }
     .event[hidden] {
       display: none;
     }
@@ -616,6 +696,7 @@ export function renderDashboard(trace, options = {}) {
       main { width: min(100% - 20px, 1180px); }
       .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .filter-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .timeline-jumps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .event-header { flex-direction: column; }
       .event-meta { justify-content: flex-start; }
       .scan-finding dl { grid-template-columns: 1fr; }
@@ -623,6 +704,7 @@ export function renderDashboard(trace, options = {}) {
     @media (max-width: 520px) {
       .grid { grid-template-columns: 1fr; }
       .filter-controls { grid-template-columns: 1fr; }
+      .timeline-jumps { grid-template-columns: 1fr; }
       .event { grid-template-columns: 32px minmax(0, 1fr); }
     }
   </style>

@@ -60,6 +60,7 @@ const requiredReadmeSnippets = [
   "expiry metadata",
   "file-change refresh",
   "Timeline filters",
+  "Timeline jumps",
   "Security Scan panel",
   "Configurable dashboard sections",
   "--sections",

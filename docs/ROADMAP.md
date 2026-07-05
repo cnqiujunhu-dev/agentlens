@@ -58,9 +58,11 @@ Started after v0.2.0:
 - PR comment renderer for CI summaries.
 - Configurable dashboard sections for summary, event types, scan, filters, and timeline.
 - Governance docs for reviewed MCP risk exceptions.
+- Timeline jump links for errors, high-risk calls, final responses, and last events.
 
 Candidates:
 
+- Repeated tool-call grouping for long trace review.
 - Richer dashboards for MCP exception review history.
 
 ## Good First Issues

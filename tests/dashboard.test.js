@@ -77,6 +77,36 @@ test("renderDashboard includes security scan findings", () => {
   assert.doesNotMatch(html, /plain-secret-value/);
 });
 
+test("renderDashboard includes timeline jump anchors", () => {
+  const trace = createRun({
+    app: "dashboard-test",
+    name: "timeline jumps"
+  });
+  addEvent(trace, { type: "llm.prompt", name: "planner" });
+  addEvent(trace, {
+    type: "tool.call",
+    name: "database.delete",
+    metadata: {
+      toolRisk: "high"
+    }
+  });
+  addEvent(trace, { type: "llm.response", name: "final", status: "error", output: { content: "failed" } });
+  finishRun(trace, "failed");
+
+  const html = renderDashboard(trace);
+
+  assert.match(html, /aria-label="Timeline jumps"/);
+  assert.match(html, /First error/);
+  assert.match(html, /First high risk/);
+  assert.match(html, /First tool call/);
+  assert.match(html, /Final response/);
+  assert.match(html, /Last event/);
+  assert.match(html, /href="#agentlens-event-2"/);
+  assert.match(html, /id="agentlens-event-2"/);
+  assert.match(html, /href="#agentlens-event-3"/);
+  assert.match(html, /id="agentlens-event-3"/);
+});
+
 test("renderDashboard can render selected sections only", () => {
   const trace = createRun({
     app: "dashboard-test",

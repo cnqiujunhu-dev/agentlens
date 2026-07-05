@@ -9,6 +9,7 @@
 - Marker-based GitHub Actions example for upserting AgentLens PR comments.
 - Configurable static dashboard sections via `agentlens dashboard --sections`, `agentlens share --sections`, and `agentlens bundle --sections`.
 - Governance guide for reviewed MCP risk exceptions with owner and expiry review workflow.
+- Static dashboard timeline jumps for errors, high-risk calls, final responses, and last events.
 
 ## 0.2.0
 
