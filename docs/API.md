@@ -39,6 +39,7 @@ Python projects can write the same trace schema with the zero-dependency example
 
 ```bash
 npm run demo:python
+npm run demo:python:frameworks
 python examples/python-basic-run.py --out .agentlens/runs/python-basic-demo.json
 python examples/python-async-run.py --out .agentlens/runs/python-async-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/python-basic-demo.json --config evals/default.json

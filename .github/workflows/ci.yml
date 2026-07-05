@@ -77,6 +77,9 @@ jobs:
       - name: Python trace writer demo
         run: npm run demo:python
 
+      - name: Python framework cookbook demo
+        run: npm run demo:python:frameworks
+
       - name: Multi-agent demo
         run: |
           npm run demo:autogen

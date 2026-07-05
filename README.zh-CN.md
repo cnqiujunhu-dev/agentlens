@@ -52,6 +52,7 @@ AgentLens 的差异化是：
 - OpenAI-compatible 和 Anthropic-compatible provider adapter。
 - LLM SDK cookbook，帮助把现有 provider client 接入本地 trace、CI 和 redaction workflow。
 - 零依赖 sync/async Python trace writer 示例，方便 Python Agent、RAG 和 notebook 项目写出 AgentLens trace。
+- Python framework cookbook，覆盖 LangChain-style、LlamaIndex-style 和 CrewAI-style trace 边界。
 - OpenTelemetry/OpenInference-style OTLP JSON 导出，便于接入已有 observability stack。
 - LangGraph-style node adapter。
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。
@@ -75,6 +76,7 @@ node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
 npm run demo:python
+npm run demo:python:frameworks
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json
 node ./bin/agentlens.js scan .agentlens/runs/demo.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
@@ -170,6 +172,7 @@ agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 - [市场分析](docs/MARKET_ANALYSIS.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
+- [Python framework cookbook](docs/PYTHON_FRAMEWORK_COOKBOOK.md)
 - [OpenTelemetry export](docs/OTEL_EXPORT.md)
 - [路线图](docs/ROADMAP.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)

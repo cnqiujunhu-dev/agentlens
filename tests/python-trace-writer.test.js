@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const runnerPath = path.resolve(__dirname, "../scripts/run-python-demo.mjs");
+const frameworkRunnerPath = path.resolve(__dirname, "../scripts/run-python-framework-demo.mjs");
 
 test("Python trace writer demo produces AgentLens-compatible artifacts", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-python-demo-"));
@@ -50,4 +51,33 @@ test("Python trace writer demo produces AgentLens-compatible artifacts", () => {
 
   const asyncOtel = JSON.parse(fs.readFileSync(asyncOtelFile, "utf8"));
   assert.equal(asyncOtel.resourceSpans.length, 1);
+});
+
+test("Python framework cookbook demo produces framework-shaped traces", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-python-framework-demo-"));
+  const runsDir = path.join(dir, "runs");
+  const reportsDir = path.join(dir, "reports");
+
+  const result = spawnSync(process.execPath, [frameworkRunnerPath, "--out-dir", runsDir, "--otel-dir", reportsDir], {
+    cwd: dir,
+    encoding: "utf8"
+  });
+
+  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+
+  for (const [file, app] of [
+    ["python-langchain-style-demo.json", "python-langchain-style-agent"],
+    ["python-llamaindex-style-demo.json", "python-llamaindex-style-agent"],
+    ["python-crewai-style-demo.json", "python-crewai-style-agent"]
+  ]) {
+    const trace = JSON.parse(fs.readFileSync(path.join(runsDir, file), "utf8"));
+    assert.equal(trace.schemaVersion, "agentlens.trace.v1");
+    assert.equal(trace.app, app);
+    assert.equal(trace.status, "passed");
+    assert.equal(trace.events.some((event) => event.type === "tool.call"), true);
+    assert.equal(trace.events.some((event) => event.type === "llm.response" && event.output?.citations?.length > 0), true);
+
+    const otel = JSON.parse(fs.readFileSync(path.join(reportsDir, file.replace(/\.json$/u, ".otlp.json")), "utf8"));
+    assert.equal(otel.resourceSpans.length, 1);
+  }
 });

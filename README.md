@@ -56,6 +56,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - LLM SDK cookbook for wiring existing provider clients into local traces.
 - Zero-dependency sync/async Python trace writer example for Python agent and RAG projects.
+- Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.
 - OpenTelemetry/OpenInference-style OTLP JSON export for existing observability stacks.
 - LangGraph-style node adapter for tracing graph-based agent steps.
 - Multi-agent helpers with AutoGen-style and CrewAI-style runnable examples.
@@ -103,6 +104,7 @@ node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
 node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
 npm run demo:python
+npm run demo:python:frameworks
 node ./bin/agentlens.js share .agentlens/runs/demo.json --config .agentlens/evals/default.json --out .agentlens/share/demo --sections summary,timeline
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
 node ./bin/agentlens.js scan .agentlens/runs/demo.json
@@ -119,6 +121,8 @@ npm run demo:regression-pr
 `agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example.
 
 Python users can start from `examples/python-basic-run.py` and `examples/python-async-run.py`, or run `npm run demo:python` to write AgentLens-compatible sync/async traces, validate them, evaluate them, scan them, and export OTLP JSON. The helper exposes `trace_llm_call` and `trace_async_llm_call`.
+
+For framework-shaped Python projects, run `npm run demo:python:frameworks` or see `examples/python-framework-cookbook-run.py` for LangChain-style callbacks, LlamaIndex-style event hooks, and CrewAI-style task boundaries.
 
 Want this in GitHub Actions?
 
@@ -354,6 +358,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Market analysis](docs/MARKET_ANALYSIS.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
+- [Python framework cookbook](docs/PYTHON_FRAMEWORK_COOKBOOK.md)
 - [OpenTelemetry export](docs/OTEL_EXPORT.md)
 - [Agent regression PR example](docs/AGENT_REGRESSION_PR.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
@@ -423,6 +428,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Trace model calls without binding to one LLM SDK.
 - Add AgentLens around existing provider SDK calls with a copyable cookbook.
 - Write AgentLens-compatible sync/async traces from Python agent, RAG, and notebook code.
+- Add trace boundaries around LangChain-style, LlamaIndex-style, and CrewAI-style Python projects without adding framework dependencies to AgentLens.
 - Export local traces as OTLP JSON with OpenTelemetry/OpenInference-style attributes.
 - Trace LangGraph-style node functions without adding a framework dependency.
 - Trace AutoGen-style and CrewAI-style multi-agent workflows without adding framework dependencies.
@@ -487,6 +493,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - Init scaffolding for starter evals and GitHub Action examples.
 - Generic LLM call adapter.
 - Minimal sync/async Python trace writer example.
+- Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
 - OpenTelemetry/OpenInference-style OTLP JSON export.
 - LangGraph-style node adapter.
 - Multi-agent adapter helpers and AutoGen-style/CrewAI-style examples.

@@ -67,11 +67,12 @@ Started after v0.2.0:
 - LLM SDK wrapper cookbook for existing provider clients, error handling, CI, and redaction patterns.
 - OpenTelemetry/OpenInference-style OTLP JSON export for local trace files.
 - Minimal zero-dependency sync/async Python trace writer examples and verified demo.
+- Python framework cookbook patterns for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.
 
 Candidates:
 
 - Collector/protobuf export hardening for teams that already use Langfuse, Phoenix, OpenLIT, or existing APM.
-- Package the Python trace writer as a small SDK with framework examples.
+- Package the Python trace writer as a small SDK with maintained framework adapters.
 - Richer dashboards for MCP exception review history.
 
 ## Good First Issues
