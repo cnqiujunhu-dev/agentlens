@@ -8,6 +8,8 @@ Run the local example:
 npm run demo:regression-pr
 ```
 
+![AgentLens regression PR diff](assets/regression-pr-diff.png)
+
 It writes a complete PR review bundle to `.agentlens/regression-pr/`:
 
 ```text

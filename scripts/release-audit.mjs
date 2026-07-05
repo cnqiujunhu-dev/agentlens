@@ -32,6 +32,8 @@ const requiredFiles = [
   "docs/SCHEMAS.md",
   "docs/assets/agentlens-demo.gif",
   "docs/assets/dashboard-screenshot.png",
+  "docs/assets/regression-pr-diff.png",
+  "scripts/generate-regression-screenshot.mjs",
   "scripts/release-preflight.mjs",
   "schemas/agentlens.trace.v1.schema.json",
   "schemas/agentlens.eval.v1.schema.json"
@@ -87,7 +89,8 @@ const requiredReadmeSnippets = [
   "agentlens serve",
   "agentlens-demo.gif",
   "release:preflight",
-  "dashboard-screenshot.png"
+  "dashboard-screenshot.png",
+  "regression-pr-diff.png"
 ];
 
 const requiredPackageExports = [
@@ -163,7 +166,8 @@ function assertPackDryRun() {
     "bin/agentlens.js",
     "src/index.js",
     "docs/assets/agentlens-demo.gif",
-    "docs/assets/dashboard-screenshot.png"
+    "docs/assets/dashboard-screenshot.png",
+    "docs/assets/regression-pr-diff.png"
   ]) {
     if (!output.includes(file)) fail(`npm pack dry-run missing ${file}`);
   }
@@ -173,6 +177,12 @@ function assertDemoGif() {
   const stats = fs.statSync("docs/assets/agentlens-demo.gif");
   const maxBytes = 10 * 1024 * 1024;
   if (stats.size > maxBytes) fail("docs/assets/agentlens-demo.gif must stay under 10 MB");
+}
+
+function assertScreenshotAssets() {
+  const stats = fs.statSync("docs/assets/regression-pr-diff.png");
+  const maxBytes = 1024 * 1024;
+  if (stats.size > maxBytes) fail("docs/assets/regression-pr-diff.png must stay under 1 MB");
 }
 
 function assertActionVersions() {
@@ -204,6 +214,7 @@ for (const file of requiredFiles) assertFile(file);
 assertReadme();
 assertPackage();
 assertDemoGif();
+assertScreenshotAssets();
 assertActionVersions();
 assertPackDryRun();
 

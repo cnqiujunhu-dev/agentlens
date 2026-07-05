@@ -16,6 +16,16 @@ agent run -> trace -> replay -> eval -> dashboard
 
 Static screenshot: [dashboard-screenshot.png](docs/assets/dashboard-screenshot.png)
 
+## PR Regression Review
+
+AgentLens can turn recorded before/after agent runs into pull request artifacts: a CI summary, SARIF scan findings, a static diff dashboard, and a run bundle reviewers can open without rerunning the model.
+
+```bash
+npm run demo:regression-pr
+```
+
+![AgentLens regression PR diff](docs/assets/regression-pr-diff.png)
+
 ## Why AgentLens
 
 AI agents are easy to demo and hard to debug.
