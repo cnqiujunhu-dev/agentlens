@@ -93,4 +93,5 @@ test("Python package smoke check produces an AgentLens-compatible trace", () => 
 
   assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
   assert.match(result.stdout, /Python package smoke trace:/);
+  assert.match(result.stdout, /Python adapters smoke trace:/);
 });

@@ -22,6 +22,7 @@ Run these from the repository root:
 npm run verify
 node ./bin/agentlens.js quickstart --python
 npm run python:package
+PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
 npm run doctor
 npm run validate:demo
 npm run scan:demo

@@ -86,6 +86,7 @@ node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/
 npm run demo:python
 npm run demo:python:frameworks
 npm run python:package
+PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json
 node ./bin/agentlens.js scan .agentlens/runs/demo.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html

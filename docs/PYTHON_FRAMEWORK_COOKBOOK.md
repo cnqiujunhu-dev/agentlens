@@ -12,6 +12,7 @@ Start a Python project with `agentlens init --python` if you want the trace writ
 
 ```bash
 npm run demo:python:frameworks
+PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
 ```
 
 The demo writes and verifies:

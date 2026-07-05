@@ -29,6 +29,7 @@ Local development from the AgentLens repository:
 
 ```bash
 PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace --out .agentlens/runs/python-package-demo.json
+PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
 node ./bin/agentlens.js validate trace .agentlens/runs/python-package-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/python-package-demo.json --config evals/default.json
 ```
@@ -44,4 +45,10 @@ from agentlens_trace.adapters import AgentLensLangChainBridge, AgentLensLlamaInd
 run = AgentLensRun(app="support-agent", name="framework answer")
 bridge = AgentLensLangChainBridge(run, provider="openai-compatible", model="gpt-example")
 bridge.on_retriever_start({"name": "policy-retriever"}, "refund policy")
+```
+
+The adapter package also exposes a runnable demo:
+
+```bash
+PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
 ```

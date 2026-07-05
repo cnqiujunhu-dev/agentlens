@@ -11,6 +11,7 @@ const packageSrc = path.join(packageRoot, "src");
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-python-package-"));
 const pycache = path.join(tmp, "pycache");
 const traceFile = path.join(tmp, "python-package-demo.json");
+const adaptersTraceFile = path.join(tmp, "python-adapters-demo.json");
 const bin = path.join(root, "bin", "agentlens.js");
 const evalConfig = path.join(root, "evals", "default.json");
 const adapterSmoke = String.raw`
@@ -120,7 +121,8 @@ run(pythonCommand, [
   "py_compile",
   path.join(packageSrc, "agentlens_trace", "__init__.py"),
   path.join(packageSrc, "agentlens_trace", "__main__.py"),
-  path.join(packageSrc, "agentlens_trace", "adapters", "__init__.py")
+  path.join(packageSrc, "agentlens_trace", "adapters", "__init__.py"),
+  path.join(packageSrc, "agentlens_trace", "adapters", "__main__.py")
 ]);
 run(pythonCommand, [
   ...pythonBaseArgs,
@@ -131,5 +133,10 @@ run(pythonCommand, [...pythonBaseArgs, "-m", "agentlens_trace", "--out", traceFi
 run(process.execPath, [bin, "validate", "trace", traceFile], { stdio: "inherit" });
 run(process.execPath, [bin, "eval", traceFile, "--config", evalConfig], { stdio: "inherit" });
 run(process.execPath, [bin, "scan", traceFile], { stdio: "inherit" });
+run(pythonCommand, [...pythonBaseArgs, "-m", "agentlens_trace.adapters", "--out", adaptersTraceFile], { stdio: "inherit" });
+run(process.execPath, [bin, "validate", "trace", adaptersTraceFile], { stdio: "inherit" });
+run(process.execPath, [bin, "eval", adaptersTraceFile, "--config", evalConfig], { stdio: "inherit" });
+run(process.execPath, [bin, "scan", adaptersTraceFile], { stdio: "inherit" });
 
 console.log(`Python package smoke trace: ${traceFile}`);
+console.log(`Python adapters smoke trace: ${adaptersTraceFile}`);

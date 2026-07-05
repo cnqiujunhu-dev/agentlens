@@ -114,6 +114,7 @@ node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/
 npm run demo:python
 npm run demo:python:frameworks
 npm run python:package
+PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
 node ./bin/agentlens.js share .agentlens/runs/demo.json --config .agentlens/evals/default.json --out .agentlens/share/demo --sections summary,timeline
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
 node ./bin/agentlens.js scan .agentlens/runs/demo.json
@@ -134,6 +135,8 @@ npm run demo:regression-pr
 Python users can start from the `agentlens-trace` package skeleton in `python/agentlens-trace/`, from `examples/python-basic-run.py` and `examples/python-async-run.py`, or run `npm run demo:python` to write AgentLens-compatible sync/async traces, validate them, evaluate them, scan them, and export OTLP JSON. The package exposes `AgentLensRun`, `trace_llm_call`, `trace_async_llm_call`, and framework helpers through `agentlens_trace.adapters`.
 
 For framework-shaped Python projects, run `npm run demo:python:frameworks` or see `examples/python-framework-cookbook-run.py` for LangChain-style callbacks, LlamaIndex-style event hooks, and CrewAI-style task boundaries backed by `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge`.
+
+Package-style users can also run `PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json` to generate an adapter demo trace directly from the Python package.
 
 Want this in GitHub Actions?
 

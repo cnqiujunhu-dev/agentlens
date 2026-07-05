@@ -19,6 +19,7 @@ For package-style local development from this repository:
 
 ```bash
 PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace --out .agentlens/runs/python-package-demo.json
+PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
 node ./bin/agentlens.js validate trace .agentlens/runs/python-package-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/python-package-demo.json --config evals/default.json
 ```
@@ -146,6 +147,13 @@ langchain.on_retriever_start({"name": "policy-retriever"}, "refund policy")
 ```
 
 These helpers do not import LangChain, LlamaIndex, or CrewAI. They provide stable, framework-shaped boundaries for callbacks, event hooks, task spans, tool calls, and final answer calls while keeping traces as local JSON artifacts. The package smoke test covers object-shaped prompts and responses, enum-like LlamaIndex event payloads, usage metadata, and source document metadata for citations. See [PYTHON_FRAMEWORK_COOKBOOK.md](PYTHON_FRAMEWORK_COOKBOOK.md) for runnable examples.
+
+You can generate a package-level adapter trace without opening the repository examples:
+
+```bash
+PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
+node ./bin/agentlens.js eval .agentlens/runs/python-adapters-demo.json --config evals/default.json
+```
 
 ## CI Pattern
 
