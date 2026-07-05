@@ -60,6 +60,7 @@ const requiredReadmeSnippets = [
   "expiry metadata",
   "file-change refresh",
   "Timeline filters",
+  "shareable filtered view link",
   "Timeline jumps",
   "Tool call groups",
   "one-click timeline filters",

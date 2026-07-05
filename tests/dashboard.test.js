@@ -52,6 +52,13 @@ test("renderDashboard includes timeline filters and MCP risk metadata", () => {
 
   assert.match(html, /agentlens-dashboard-filters/);
   assert.match(html, /agentlens-filter-search/);
+  assert.match(html, /agentlens-copy-filter-link/);
+  assert.match(html, /Copy view link/);
+  assert.match(html, /#agentlens-filter\?/);
+  assert.match(html, /parseFilterHash/);
+  assert.match(html, /currentViewUrl/);
+  assert.match(html, /navigator\.clipboard/);
+  assert.match(html, /hashchange/);
   assert.match(html, /data-event-type="tool\.call"/);
   assert.match(html, /data-event-risk="critical"/);
   assert.match(html, /critical risk/);

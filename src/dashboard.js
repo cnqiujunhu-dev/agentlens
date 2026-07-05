@@ -297,7 +297,10 @@ function renderFilters(trace) {
     <section class="section filters" data-agentlens-filters>
       <div class="filter-header">
         <h2>Timeline Filters</h2>
-        <span id="agentlens-filter-count">${trace.events.length} events</span>
+        <div class="filter-actions">
+          <span id="agentlens-filter-count">${trace.events.length} events</span>
+          <button id="agentlens-copy-filter-link" type="button">Copy view link</button>
+        </div>
       </div>
       <div class="filter-controls">
         <label>
@@ -410,10 +413,73 @@ function renderFilterScript() {
       const status = document.getElementById("agentlens-filter-status");
       const risk = document.getElementById("agentlens-filter-risk");
       const count = document.getElementById("agentlens-filter-count");
+      const copyLink = document.getElementById("agentlens-copy-filter-link");
       const toolFilters = Array.from(document.querySelectorAll("[data-tool-filter]"));
       if (!search || !type || !status || !risk || !count) return;
+      const hashPrefix = "#agentlens-filter?";
 
-      function applyFilters() {
+      function selectValue(control, value) {
+        control.value = Array.from(control.options).some((option) => option.value === value) ? value : "";
+      }
+
+      function filterState() {
+        return {
+          q: search.value.trim(),
+          type: type.value,
+          status: status.value,
+          risk: risk.value
+        };
+      }
+
+      function filterHash() {
+        const params = new URLSearchParams();
+        const state = filterState();
+        if (state.q) params.set("q", state.q);
+        if (state.type) params.set("type", state.type);
+        if (state.status) params.set("status", state.status);
+        if (state.risk) params.set("risk", state.risk);
+        const encoded = params.toString();
+        return encoded ? hashPrefix + encoded : "";
+      }
+
+      function currentViewUrl() {
+        const url = new URL(window.location.href);
+        const hash = filterHash();
+        url.hash = hash ? hash.slice(1) : "";
+        return url.toString();
+      }
+
+      function syncHash() {
+        const nextHash = filterHash();
+        if (nextHash) {
+          window.history.replaceState(null, "", nextHash);
+        } else if (window.location.hash.startsWith(hashPrefix)) {
+          window.history.replaceState(null, "", window.location.pathname + window.location.search);
+        }
+      }
+
+      function parseFilterHash() {
+        if (!window.location.hash.startsWith(hashPrefix)) return null;
+        const params = new URLSearchParams(window.location.hash.slice(hashPrefix.length));
+        return {
+          q: params.get("q") || "",
+          type: params.get("type") || "",
+          status: params.get("status") || "",
+          risk: params.get("risk") || ""
+        };
+      }
+
+      function restoreFilterHash() {
+        const state = parseFilterHash();
+        if (!state) return false;
+        search.value = state.q;
+        selectValue(type, state.type);
+        selectValue(status, state.status);
+        selectValue(risk, state.risk);
+        return true;
+      }
+
+      function applyFilters({ updateHash = true } = {}) {
         const query = search.value.trim().toLowerCase();
         const selectedType = type.value;
         const selectedStatus = status.value;
@@ -431,12 +497,41 @@ function renderFilterScript() {
         }
 
         count.textContent = visible + " of " + events.length + " events";
+        if (updateHash) syncHash();
+      }
+
+      async function copyCurrentViewLink() {
+        if (!copyLink) return;
+        const url = currentViewUrl();
+        try {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(url);
+          } else {
+            const textarea = document.createElement("textarea");
+            textarea.value = url;
+            textarea.setAttribute("readonly", "");
+            textarea.style.position = "fixed";
+            textarea.style.left = "-9999px";
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            textarea.remove();
+          }
+          copyLink.textContent = "Copied";
+        } catch {
+          copyLink.textContent = "Copy failed";
+        } finally {
+          window.setTimeout(() => {
+            copyLink.textContent = "Copy view link";
+          }, 1600);
+        }
       }
 
       for (const control of [search, type, status, risk]) {
         control.addEventListener("input", applyFilters);
         control.addEventListener("change", applyFilters);
       }
+      copyLink?.addEventListener("click", copyCurrentViewLink);
       for (const button of toolFilters) {
         button.addEventListener("click", () => {
           search.value = button.dataset.toolFilter || "";
@@ -447,7 +542,11 @@ function renderFilterScript() {
           document.querySelector("[data-agentlens-filters]")?.scrollIntoView({ block: "start" });
         });
       }
-      applyFilters();
+      window.addEventListener("hashchange", () => {
+        if (restoreFilterHash()) applyFilters({ updateHash: false });
+      });
+      restoreFilterHash();
+      applyFilters({ updateHash: false });
     })();
   </script>`;
 }
@@ -727,6 +826,29 @@ export function renderDashboard(trace, options = {}) {
       color: var(--muted);
       font-size: 13px;
       white-space: nowrap;
+    }
+    .filter-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    #agentlens-copy-filter-link {
+      min-height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      color: var(--accent);
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    #agentlens-copy-filter-link:hover {
+      border-color: #5eead4;
+      background: #f0fdfa;
     }
     .filter-controls {
       display: grid;

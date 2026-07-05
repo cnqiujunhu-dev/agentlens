@@ -11,6 +11,7 @@
 - Governance guide for reviewed MCP risk exceptions with owner and expiry review workflow.
 - Static dashboard timeline jumps for errors, high-risk calls, final responses, and last events.
 - Static dashboard tool call groups for repeated-call review by risk, latency, server, permission, and one-click timeline filtering.
+- Shareable static dashboard filter links for PR and issue review.
 
 ## 0.2.0
 

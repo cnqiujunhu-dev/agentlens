@@ -60,6 +60,7 @@ Started after v0.2.0:
 - Governance docs for reviewed MCP risk exceptions.
 - Timeline jump links for errors, high-risk calls, final responses, and last events.
 - Tool call groups for repeated-call review by risk, latency, server, permission, and one-click timeline filtering.
+- Shareable dashboard filter links for PR and issue review.
 
 Candidates:
 

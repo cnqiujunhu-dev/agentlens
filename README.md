@@ -73,7 +73,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Configurable dashboard sections for compact PR comments, support bundles, and focused trace reviews.
 - Tool call groups that summarize repeated tool calls with risk, latency, first/last links, and one-click timeline filters.
 - Local dashboard server with JSON APIs and file-change refresh.
-- Timeline filters for event type, status, search text, and MCP risk.
+- Timeline filters for event type, status, search text, MCP risk, and shareable filtered view links.
 - Timeline jumps for errors, high-risk tool calls, final responses, and last events.
 - Composite GitHub Action for failing PRs on agent eval regressions and scan findings.
 - Zero runtime dependencies in the MVP.
@@ -424,7 +424,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Browse local runs with a zero-dependency dashboard server.
 - Generate static run bundles for CI artifacts and support handoffs.
 - Poll local trace files while agents are running.
-- Filter long traces by event type, status, text, and MCP risk.
+- Filter long traces by event type, status, text, and MCP risk, then copy a shareable filtered view link.
 - Review repeated tool calls by grouped count, risk, latency, server, permission, and one-click timeline filtering.
 - Jump directly to the first error, first high-risk call, final response, or last event in long traces.
 - Render compact dashboard sections for PR comments, incident notes, and support handoffs.
@@ -461,6 +461,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - MCP stdio trace sessions.
 - Live local dashboard refresh.
 - Dashboard timeline filters.
+- Dashboard shareable filter links.
 - Dashboard timeline jumps.
 - Dashboard tool call groups.
 - Configurable dashboard sections.
