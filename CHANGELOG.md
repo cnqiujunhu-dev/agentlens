@@ -7,6 +7,7 @@
 - PR comment Markdown renderer for `agentlens ci` via `--pr-comment-md`.
 - Composite GitHub Action `pr-comment` input for writing reusable PR comment bodies.
 - Marker-based GitHub Actions example for upserting AgentLens PR comments.
+- Configurable static dashboard sections via `agentlens dashboard --sections`.
 
 ## 0.2.0
 

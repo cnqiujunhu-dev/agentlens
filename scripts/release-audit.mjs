@@ -59,6 +59,8 @@ const requiredReadmeSnippets = [
   "file-change refresh",
   "Timeline filters",
   "Security Scan panel",
+  "Configurable dashboard sections",
+  "--sections",
   "starter files",
   "agentlens diff",
   "diff-dashboard",

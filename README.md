@@ -70,6 +70,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Zero-dependency stdio JSON-RPC MCP transport demo.
 - MCP stdio trace sessions for reusing a server process across multiple tool calls.
 - Static HTML dashboard with timeline filters and security scan findings for issues, PRs, and incident notes.
+- Configurable dashboard sections for compact PR comments, support bundles, and focused trace reviews.
 - Local dashboard server with JSON APIs and file-change refresh.
 - Timeline filters for event type, status, search text, and MCP risk.
 - Composite GitHub Action for failing PRs on agent eval regressions and scan findings.
@@ -91,7 +92,7 @@ node ./bin/agentlens.js validate trace .agentlens/runs/demo.json
 node ./bin/agentlens.js validate eval .agentlens/evals/default.json
 node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json --scan
 node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json --scan --pr-comment-md .agentlens/reports/pr-comment.md
-node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
+node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html --sections summary,timeline
 node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle
 node ./bin/agentlens.js serve .agentlens/runs --port 4317
 npm run demo:regression-pr
@@ -287,7 +288,7 @@ agentlens validate <trace|eval> <file> [--json]
 agentlens materialize <jsonl-file> [--out path]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
 agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]
-agentlens dashboard <trace-file> [--out path]
+agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,filters,timeline]
 agentlens bundle [runs-dir] [--out dir]
 agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 ```
@@ -421,6 +422,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Generate static run bundles for CI artifacts and support handoffs.
 - Poll local trace files while agents are running.
 - Filter long traces by event type, status, text, and MCP risk.
+- Render compact dashboard sections for PR comments, incident notes, and support handoffs.
 - Start with editable init scaffolding for evals and CI examples.
 - Fail GitHub PRs when recorded agent runs violate eval rules or scan gates.
 - Generate launch-ready demo artifacts.
@@ -454,6 +456,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - MCP stdio trace sessions.
 - Live local dashboard refresh.
 - Dashboard timeline filters.
+- Configurable dashboard sections.
 - Reviewed MCP risk exceptions.
 - Owner and expiry checks for MCP risk exceptions.
 - Launch demo artifact generator.

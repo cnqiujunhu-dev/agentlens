@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { renderDashboard } from "../src/dashboard.js";
+import { normalizeDashboardSections, renderDashboard } from "../src/dashboard.js";
 import { addEvent, createRun, finishRun } from "../src/trace.js";
 
 test("renderDashboard escapes user-controlled trace content", () => {
@@ -75,4 +75,27 @@ test("renderDashboard includes security scan findings", () => {
   assert.match(html, /metadata\.apiKey/);
   assert.match(html, /\[REDACTED\]/);
   assert.doesNotMatch(html, /plain-secret-value/);
+});
+
+test("renderDashboard can render selected sections only", () => {
+  const trace = createRun({
+    app: "dashboard-test",
+    name: "sections"
+  });
+  addEvent(trace, { type: "llm.response", name: "final", output: { content: "ok" } });
+  finishRun(trace, "passed");
+
+  const html = renderDashboard(trace, { sections: ["summary", "timeline"] });
+
+  assert.match(html, /Timeline/);
+  assert.match(html, /Status/);
+  assert.doesNotMatch(html, /Security Scan/);
+  assert.doesNotMatch(html, /Timeline Filters/);
+  assert.doesNotMatch(html, /agentlens-dashboard-filters/);
+  assert.doesNotMatch(html, /Event Types/);
+});
+
+test("normalizeDashboardSections validates section names", () => {
+  assert.deepEqual(normalizeDashboardSections("summary,scan,timeline"), ["summary", "scan", "timeline"]);
+  assert.throws(() => normalizeDashboardSections("summary,unknown"), /Unknown dashboard section/);
 });

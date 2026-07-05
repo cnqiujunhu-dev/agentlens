@@ -28,7 +28,7 @@ function usage() {
     "  agentlens materialize <jsonl-file> [--out path]",
     "  agentlens redact <trace-file> [--out path] [--keys key1,key2]",
     "  agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]",
-    "  agentlens dashboard <trace-file> [--out path]",
+    "  agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,filters,timeline]",
     "  agentlens bundle [runs-dir] [--out dir]",
     "  agentlens serve [trace-file|runs-dir] [--host host] [--port port]",
     "",
@@ -260,7 +260,7 @@ async function main() {
     if (!traceFile) throw new Error("Missing trace file. Usage: agentlens dashboard <trace-file>");
     const { renderDashboard } = await import("../src/dashboard.js");
     const out = option("--out", ".agentlens/reports/agentlens-report.html");
-    const html = renderDashboard(readTrace(traceFile));
+    const html = renderDashboard(readTrace(traceFile), { sections: option("--sections", undefined) });
     writeText(out, html);
     console.log(`Wrote dashboard: ${out}`);
     return;

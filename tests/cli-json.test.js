@@ -124,6 +124,35 @@ test("CLI writes PR comment markdown", () => {
   assert.match(markdown, /Run bundle: https:\/\/example\.com\/bundle/);
 });
 
+test("CLI writes dashboard with selected sections", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-cli-dashboard-sections-"));
+  const traceFile = path.join(dir, "trace.json");
+  const reportFile = path.join(dir, "report.html");
+
+  writeTrace(traceFile, makeTrace("dashboard sections"));
+
+  const result = spawnSync(process.execPath, [
+    binPath,
+    "dashboard",
+    traceFile,
+    "--out",
+    reportFile,
+    "--sections",
+    "summary,timeline"
+  ], {
+    cwd: dir,
+    encoding: "utf8"
+  });
+
+  assert.equal(result.status, 0, result.stderr);
+  const html = fs.readFileSync(reportFile, "utf8");
+  assert.match(html, /Timeline/);
+  assert.match(html, /Status/);
+  assert.doesNotMatch(html, /Security Scan/);
+  assert.doesNotMatch(html, /Timeline Filters/);
+  assert.doesNotMatch(html, /Event Types/);
+});
+
 test("CLI writes combined SARIF for scanned CI runs", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-cli-sarif-"));
   const runsDir = path.join(dir, "runs");

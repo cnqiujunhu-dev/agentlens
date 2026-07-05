@@ -56,10 +56,10 @@ Goal: make trace review ergonomic for teams using GitHub issues, PRs, and CI.
 Started after v0.2.0:
 
 - PR comment renderer for CI summaries.
+- Configurable dashboard sections for summary, event types, scan, filters, and timeline.
 
 Candidates:
 
-- Configurable dashboard sections for eval, scan, MCP risk, and diff.
 - Governance docs for reviewed MCP risk exceptions.
 
 ## Good First Issues

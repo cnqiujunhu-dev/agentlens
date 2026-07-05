@@ -9,6 +9,7 @@ import {
   createMcpRun,
   createMultiAgentRun,
   createRun,
+  DEFAULT_DASHBOARD_SECTIONS,
   doctorWorkspace,
   evaluateTrace,
   buildShareBundle,
@@ -21,8 +22,10 @@ import {
   formatScanSarif,
   JsonlTraceWriter,
   McpStdioTraceSession,
+  normalizeDashboardSections,
   readSchema,
   redactTrace,
+  renderDashboard,
   renderDiffDashboard,
   renderReplay,
   scanTrace,
@@ -62,6 +65,9 @@ test("public API exports core trace and eval helpers", () => {
   assert.match(bundle.summaryMarkdown, /AgentLens Share Bundle/);
   assert.match(formatTraceDiff(diff), /AgentLens Trace Diff/);
   assert.match(formatCiPrComment({ runsDir: "runs", total: 1, passed: 1, failed: 0, scan: { enabled: false }, results: [{ file: "trace.json", passed: true }] }), /agentlens-ci-comment/);
+  assert.equal(DEFAULT_DASHBOARD_SECTIONS.includes("timeline"), true);
+  assert.deepEqual(normalizeDashboardSections("summary,timeline"), ["summary", "timeline"]);
+  assert.match(renderDashboard(run, { sections: ["summary"] }), /AgentLens Report/);
   assert.match(renderDiffDashboard(diff), /AgentLens Trace Diff/);
   assert.match(formatScanReport(scan), /Scan:/);
   assert.equal(formatScanSarif(scan).version, "2.1.0");
