@@ -213,6 +213,7 @@ function renderToolCallGroup(group) {
         <div><dt>Risks</dt><dd>${escapeHtml(formatList(group.risks))}</dd></div>
       </dl>
       <div class="tool-call-links">
+        <button type="button" class="tool-call-filter" data-tool-filter="${escapeHtml(group.tool)}">Filter timeline</button>
         <a href="#${eventAnchor(group.firstIndex)}">First #${group.firstIndex + 1}</a>
         <a href="#${eventAnchor(group.lastIndex)}">Last #${group.lastIndex + 1}</a>
       </div>
@@ -409,6 +410,7 @@ function renderFilterScript() {
       const status = document.getElementById("agentlens-filter-status");
       const risk = document.getElementById("agentlens-filter-risk");
       const count = document.getElementById("agentlens-filter-count");
+      const toolFilters = Array.from(document.querySelectorAll("[data-tool-filter]"));
       if (!search || !type || !status || !risk || !count) return;
 
       function applyFilters() {
@@ -434,6 +436,16 @@ function renderFilterScript() {
       for (const control of [search, type, status, risk]) {
         control.addEventListener("input", applyFilters);
         control.addEventListener("change", applyFilters);
+      }
+      for (const button of toolFilters) {
+        button.addEventListener("click", () => {
+          search.value = button.dataset.toolFilter || "";
+          type.value = "tool.call";
+          status.value = "";
+          risk.value = "";
+          applyFilters();
+          document.querySelector("[data-agentlens-filters]")?.scrollIntoView({ block: "start" });
+        });
       }
       applyFilters();
     })();
@@ -834,7 +846,7 @@ export function renderDashboard(trace, options = {}) {
       flex-wrap: wrap;
       padding: 0 14px 14px;
     }
-    .tool-call-links a {
+    .tool-call-links a, .tool-call-filter {
       border: 1px solid var(--line);
       border-radius: 999px;
       padding: 3px 9px;
@@ -843,7 +855,12 @@ export function renderDashboard(trace, options = {}) {
       font-weight: 700;
       text-decoration: none;
     }
-    .tool-call-links a:hover {
+    .tool-call-filter {
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+    }
+    .tool-call-links a:hover, .tool-call-filter:hover {
       border-color: #5eead4;
       background: #f0fdfa;
     }

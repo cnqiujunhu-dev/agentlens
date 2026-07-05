@@ -71,7 +71,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - MCP stdio trace sessions for reusing a server process across multiple tool calls.
 - Static HTML dashboard with timeline filters and security scan findings for issues, PRs, and incident notes.
 - Configurable dashboard sections for compact PR comments, support bundles, and focused trace reviews.
-- Tool call groups that summarize repeated tool calls with risk, latency, and first/last links.
+- Tool call groups that summarize repeated tool calls with risk, latency, first/last links, and one-click timeline filters.
 - Local dashboard server with JSON APIs and file-change refresh.
 - Timeline filters for event type, status, search text, and MCP risk.
 - Timeline jumps for errors, high-risk tool calls, final responses, and last events.
@@ -425,7 +425,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Generate static run bundles for CI artifacts and support handoffs.
 - Poll local trace files while agents are running.
 - Filter long traces by event type, status, text, and MCP risk.
-- Review repeated tool calls by grouped count, risk, latency, server, and permission.
+- Review repeated tool calls by grouped count, risk, latency, server, permission, and one-click timeline filtering.
 - Jump directly to the first error, first high-risk call, final response, or last event in long traces.
 - Render compact dashboard sections for PR comments, incident notes, and support handoffs.
 - Start with editable init scaffolding for evals and CI examples.

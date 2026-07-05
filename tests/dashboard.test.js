@@ -150,6 +150,8 @@ test("renderDashboard groups repeated tool calls", () => {
   assert.match(html, /Tool Calls/);
   assert.match(html, /3 calls \/ 2 tools/);
   assert.match(html, /database\.delete/);
+  assert.match(html, /data-tool-filter="database\.delete"/);
+  assert.match(html, /Filter timeline/);
   assert.match(html, /2 calls/);
   assert.match(html, /critical/);
   assert.match(html, /destructive/);
@@ -159,6 +161,8 @@ test("renderDashboard groups repeated tool calls", () => {
   assert.match(html, /href="#agentlens-event-3"/);
   assert.match(html, /kb\.search/);
   assert.match(html, /read-only/);
+  assert.match(html, /button\.dataset\.toolFilter/);
+  assert.match(html, /type\.value = "tool\.call"/);
 });
 
 test("renderDashboard can render selected sections only", () => {

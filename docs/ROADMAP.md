@@ -59,7 +59,7 @@ Started after v0.2.0:
 - Configurable dashboard sections for summary, event types, scan, tool calls, filters, and timeline.
 - Governance docs for reviewed MCP risk exceptions.
 - Timeline jump links for errors, high-risk calls, final responses, and last events.
-- Tool call groups for repeated-call review by risk, latency, server, and permission.
+- Tool call groups for repeated-call review by risk, latency, server, permission, and one-click timeline filtering.
 
 Candidates:
 

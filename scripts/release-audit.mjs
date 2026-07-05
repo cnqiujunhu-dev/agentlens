@@ -62,6 +62,7 @@ const requiredReadmeSnippets = [
   "Timeline filters",
   "Timeline jumps",
   "Tool call groups",
+  "one-click timeline filters",
   "Security Scan panel",
   "Configurable dashboard sections",
   "--sections",
