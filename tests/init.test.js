@@ -19,7 +19,9 @@ test("initWorkspace scaffolds starter files without overwriting", () => {
   assert.equal(evalConfig.version, "agentlens.eval.v1");
   const actionExample = fs.readFileSync(path.join(workspace.examplesDir, "github-action.yml"), "utf8");
   assert.match(actionExample, /actions\/checkout@v7/);
+  assert.match(actionExample, /cnqiujunhu-dev\/agentlens@v0\.2\.0/);
   assert.doesNotMatch(actionExample, /actions\/checkout@v4/);
+  assert.doesNotMatch(actionExample, /your-org\/agentlens@v0/);
 
   fs.writeFileSync(path.join(workspace.evalsDir, "default.json"), "{ \"custom\": true }\n", "utf8");
   const second = initWorkspace(dir, { scaffold: true });

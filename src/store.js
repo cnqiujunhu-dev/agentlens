@@ -46,7 +46,7 @@ jobs:
         run: npm test
 
       - name: Run AgentLens evals
-        uses: your-org/agentlens@v0
+        uses: cnqiujunhu-dev/agentlens@v0.2.0
         with:
           runs: .agentlens/runs
           config: .agentlens/evals/default.json

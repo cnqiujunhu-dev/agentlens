@@ -20,6 +20,7 @@ test("composite GitHub Action exposes CI outputs", () => {
   assert.match(action, /GITHUB_OUTPUT/);
   assert.match(action, /actions\/setup-node@v6/);
   assert.doesNotMatch(action, /actions\/setup-node@v4/);
+  assert.doesNotMatch(action, /your-org\/agentlens@v0/);
 });
 
 test("repository workflow verifies GitHub Action outputs", () => {

@@ -27,18 +27,21 @@ Release status:
 - Public repository: `https://github.com/cnqiujunhu-dev/agentlens`.
 - Default branch: `main`.
 - First release: `v0.1.0`.
+- Latest release target: `v0.2.0`.
 - GitHub CI is expected to stay green for `main` and release tags.
 
 ## v0.2.0 Integration Release
 
 Goal: make AgentLens feel useful with real agent stacks, not just demos.
 
-Started after v0.1.0:
+Shipped:
 
 - Multi-agent adapter helpers with AutoGen-style and CrewAI-style runnable examples.
 - Runnable agent regression PR example that shows eval, scan, dashboard, SARIF, and diff together.
+- README regression PR screenshot and reproducible screenshot generation script.
+- Node 24-backed GitHub Action dependencies and Node 22 default runtime.
 
-Planned:
+Next:
 
 - Harden the LangGraph adapter against common node and graph shapes.
 - Expand AutoGen and CrewAI-style examples into deeper cookbook notes.

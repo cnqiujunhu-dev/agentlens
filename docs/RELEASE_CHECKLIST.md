@@ -92,8 +92,8 @@ Only tag after local validation and the GitHub workflow pass:
 ```bash
 gh auth refresh -s workflow
 git push origin main
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.2.0
+git push origin v0.2.0
 ```
 
 After tagging and configuring `origin`, run the strict gate:
@@ -118,9 +118,9 @@ Before posting publicly:
 
 ## Current Release Status
 
-As of the first public release:
+As of the latest public release:
 
 - Public GitHub repository: `https://github.com/cnqiujunhu-dev/agentlens`.
 - Default branch: `main`.
-- Release tag: `v0.1.0`.
+- Latest release tag: `v0.2.0`.
 - Strict release preflight should pass before any new release is published.

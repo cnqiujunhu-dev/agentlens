@@ -115,6 +115,10 @@ const requiredPackageExports = [
   "./adapters/mcp-stdio"
 ];
 
+const releaseVersion = "0.2.0";
+const publicActionRef = `cnqiujunhu-dev/agentlens@v${releaseVersion}`;
+const placeholderActionRef = "your-org/agentlens@v0";
+
 function fail(message) {
   throw new Error(message);
 }
@@ -132,10 +136,25 @@ function assertReadme() {
 
 function assertPackage() {
   const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
+  if (packageJson.version !== releaseVersion) fail(`package.json version must be ${releaseVersion}`);
   if (packageJson.license !== "Apache-2.0") fail("package.json license must be Apache-2.0");
   if (!packageJson.bin?.agentlens) fail("package.json must expose agentlens bin");
   for (const key of requiredPackageExports) {
     if (!packageJson.exports?.[key]) fail(`package.json missing export: ${key}`);
+  }
+}
+
+function assertVersionDocs() {
+  const changelog = fs.readFileSync("CHANGELOG.md", "utf8");
+  if (!changelog.includes(`## ${releaseVersion}`)) fail(`CHANGELOG.md missing ${releaseVersion}`);
+  if (!changelog.includes(publicActionRef)) fail(`CHANGELOG.md missing ${publicActionRef}`);
+}
+
+function assertPublicActionReferences() {
+  for (const file of ["README.md", "docs/GITHUB_ACTION.md", "docs/AGENT_REGRESSION_PR.md", "src/store.js"]) {
+    const text = fs.readFileSync(file, "utf8");
+    if (text.includes(placeholderActionRef)) fail(`${file} must not include placeholder action ref ${placeholderActionRef}`);
+    if (!text.includes(publicActionRef)) fail(`${file} must include public action ref ${publicActionRef}`);
   }
 }
 
@@ -213,6 +232,8 @@ function assertActionVersions() {
 for (const file of requiredFiles) assertFile(file);
 assertReadme();
 assertPackage();
+assertVersionDocs();
+assertPublicActionReferences();
 assertDemoGif();
 assertScreenshotAssets();
 assertActionVersions();

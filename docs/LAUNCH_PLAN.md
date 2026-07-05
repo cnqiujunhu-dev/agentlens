@@ -68,8 +68,8 @@ Public launch status:
 
 - Repository is public at `https://github.com/cnqiujunhu-dev/agentlens`.
 - `main` is pushed and configured as the default branch.
-- `v0.1.0` is tagged and released.
-- GitHub Actions has passed for both `main` and `v0.1.0`.
+- `v0.2.0` is the current integration release target.
+- GitHub Actions is expected to pass for both `main` and each release tag.
 
 ## Priority 1: Keep The Project Trustworthy
 
@@ -142,7 +142,8 @@ Avoid hooks that sound like every other agent project:
 
 ## Next Milestone
 
-Target `v0.2.0`:
+Target `v0.3.0`:
 
-- One popular framework adapter.
-- Batch SARIF for run directories.
+- PR comment renderer for CI summaries.
+- Configurable dashboard sections for eval, scan, MCP risk, and diff.
+- Governance docs for reviewed MCP risk exceptions.

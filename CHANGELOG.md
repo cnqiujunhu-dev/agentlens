@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+No changes yet.
+
+## 0.2.0
+
 ### Added
 
 - Multi-agent adapter helpers for agent messages and task spans.
@@ -14,6 +18,7 @@
 - Updated GitHub Actions references to Node 24-backed major versions: `actions/checkout@v7` and `actions/setup-node@v6`.
 - Updated the composite action default Node.js version to 22.
 - Added GitHub CI smoke coverage for the multi-agent demos.
+- Replaced placeholder GitHub Action examples with the public `cnqiujunhu-dev/agentlens@v0.2.0` action reference.
 
 ## 0.1.0
 

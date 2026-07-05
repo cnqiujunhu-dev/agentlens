@@ -112,21 +112,23 @@ Local-first DevTools for AI agents. Trace, replay, evaluate, scan, redact, and s
 ## GitHub Release Notes
 
 ```text
-AgentLens v0.1.0 is the first MVP release.
+AgentLens v0.2.0 is the integration release after the initial MVP.
 
 Highlights:
 - Trace AI agent runs as readable local JSON.
 - Wrap generic LLM calls without binding to one SDK.
+- Trace LangGraph-style, AutoGen-style, CrewAI-style, MCP-style, and MCP stdio workflows without adding runtime dependencies.
 - Replay model/tool/retrieval timelines deterministically.
 - Run JSON eval rules and scan gates locally or in CI.
 - Scan traces for leaked secrets, prompt injection phrases, and risky tool calls.
 - Generate static HTML dashboards.
 - Generate static run bundle artifacts for trace directories.
+- Generate pull request review artifacts with CI summaries, SARIF, diff dashboards, and run bundles.
 - Stream long-running traces as JSONL.
 - Trace MCP-style tool calls and enforce MCP policy rules.
 - Redact secrets before sharing traces publicly.
 
-This release is designed for early feedback from agent, RAG, MCP, and AI infrastructure builders.
+This release is designed for early feedback from developers wiring AgentLens into real agent stacks and GitHub CI.
 ```
 
 ## Demo Flow

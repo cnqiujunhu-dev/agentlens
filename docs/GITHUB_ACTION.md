@@ -20,7 +20,7 @@ jobs:
 
       - name: Run AgentLens evals
         id: agentlens
-        uses: your-org/agentlens@v0
+        uses: cnqiujunhu-dev/agentlens@v0.2.0
         with:
           runs: .agentlens/runs
           config: evals/default.json
@@ -67,7 +67,7 @@ By default, the action appends a Markdown report to `GITHUB_STEP_SUMMARY`. Disab
 
 ```yaml
 - name: Run AgentLens evals
-  uses: your-org/agentlens@v0
+  uses: cnqiujunhu-dev/agentlens@v0.2.0
   with:
     runs: .agentlens/runs
     config: evals/default.json
@@ -94,7 +94,7 @@ For all traces in a run directory, let the AgentLens Action write combined SARIF
 ```yaml
 - name: Run AgentLens evals
   id: agentlens
-  uses: your-org/agentlens@v0
+  uses: cnqiujunhu-dev/agentlens@v0.2.0
   with:
     runs: .agentlens/runs
     config: evals/default.json
