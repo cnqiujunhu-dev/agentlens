@@ -13,6 +13,57 @@ const pycache = path.join(tmp, "pycache");
 const traceFile = path.join(tmp, "python-package-demo.json");
 const bin = path.join(root, "bin", "agentlens.js");
 const evalConfig = path.join(root, "evals", "default.json");
+const adapterSmoke = String.raw`
+from agentlens_trace import AgentLensRun, TRACE_SCHEMA_VERSION, trace_async_llm_call, trace_llm_call
+from agentlens_trace.adapters import AgentLensCrewAIBridge, AgentLensLangChainBridge, AgentLensLlamaIndexBridge
+
+class Obj:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+class PromptValue:
+    def to_messages(self):
+        return [Obj(type="human", content="Can object-shaped prompts be traced?")]
+
+class EnumLike:
+    def __init__(self, value=None, name=None):
+        self.value = value
+        self.name = name
+    def __str__(self):
+        return self.value or self.name or "EnumLike"
+
+assert TRACE_SCHEMA_VERSION == "agentlens.trace.v1"
+run = AgentLensRun(app="adapter-smoke", name="object payload smoke")
+
+langchain = AgentLensLangChainBridge(run, provider="mock-provider")
+langchain.on_llm_start(Obj(model_name="object-model"), PromptValue())
+langchain.on_llm_end(Obj(
+    content="Object-shaped LangChain responses work.",
+    citations=[Obj(metadata={"doc_id": "doc_object"})],
+    usage_metadata={"inputTokens": 3, "outputTokens": 4, "totalTokens": 7},
+))
+
+llamaindex = AgentLensLlamaIndexBridge(run)
+llamaindex.event_start(EnumLike(value="retrieve"), {EnumLike(name="QUERY_STR"): "refund policy"})
+llamaindex.event_end(EnumLike(value="retrieve"), {EnumLike(value="nodes"): [{"id": "node_object", "score": 0.9}]})
+
+crewai = AgentLensCrewAIBridge(run, provider="mock-provider", model="object-model")
+crewai.agent_message("planner", Obj(content="Plan with object payloads."))
+crewai.final_answer(
+    "crew-final-answer",
+    {"messages": [{"role": "user", "content": "Can CrewAI helpers call models?"}]},
+    lambda _input: {"content": "Yes.", "citations": ["crew_doc"]},
+    agent="reviewer",
+)
+
+events = run.to_dict()["events"]
+assert any(event.get("metadata", {}).get("adapter") == "agentlens_trace.adapters" for event in events)
+assert any(event.get("input", {}).get("messages", [{}])[0].get("role") == "human" for event in events if event["type"] == "llm.prompt")
+assert any("doc_object" in event.get("output", {}).get("citations", []) for event in events if event["type"] == "llm.response")
+assert any(event["type"] == "retrieval.query" and event.get("input", {}).get("query") == "refund policy" for event in events)
+assert AgentLensLangChainBridge and AgentLensLlamaIndexBridge and AgentLensCrewAIBridge
+assert trace_async_llm_call and trace_llm_call
+`;
 
 function pythonCandidates() {
   if (process.env.PYTHON) return [[process.env.PYTHON, []]];
@@ -74,7 +125,7 @@ run(pythonCommand, [
 run(pythonCommand, [
   ...pythonBaseArgs,
   "-c",
-  "from agentlens_trace import AgentLensRun, TRACE_SCHEMA_VERSION, trace_async_llm_call, trace_llm_call; from agentlens_trace.adapters import AgentLensCrewAIBridge, AgentLensLangChainBridge, AgentLensLlamaIndexBridge; assert TRACE_SCHEMA_VERSION == 'agentlens.trace.v1'; run = AgentLensRun(); AgentLensLangChainBridge(run).on_retriever_start({'name': 'retriever'}, 'query'); assert AgentLensLlamaIndexBridge; assert AgentLensCrewAIBridge; assert trace_async_llm_call; assert trace_llm_call"
+  adapterSmoke
 ]);
 run(pythonCommand, [...pythonBaseArgs, "-m", "agentlens_trace", "--out", traceFile], { stdio: "inherit" });
 run(process.execPath, [bin, "validate", "trace", traceFile], { stdio: "inherit" });

@@ -26,6 +26,7 @@
 - PyPI-ready `agentlens-trace` package skeleton and `npm run python:package` smoke verification.
 - Python project starter scaffolding through `agentlens init --python`.
 - Zero-dependency Python bridge helpers under `agentlens_trace.adapters`.
+- Python adapter smoke coverage for object-shaped prompts, enum-like payload keys, usage metadata, and source document citations.
 - Python framework cookbook and `npm run demo:python:frameworks` verification flow for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.
 
 ## 0.2.0

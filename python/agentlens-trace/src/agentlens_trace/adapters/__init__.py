@@ -21,15 +21,31 @@ def _json_safe(value: Any) -> Any:
         if callable(method):
             try:
                 return _json_safe(method())
-            except TypeError:
+            except Exception:
                 pass
 
     return repr(value)
 
 
+def _key_label(value: Any) -> str:
+    raw = getattr(value, "value", None)
+    if raw is None:
+        raw = getattr(value, "name", None)
+    if raw is None:
+        raw = str(value)
+    tail = str(raw).split(".")[-1]
+    return "".join(char for char in tail.lower() if char.isalnum())
+
+
 def _lookup(value: Any, key: str, default: Any = None) -> Any:
     if isinstance(value, dict):
-        return value.get(key, default)
+        if key in value:
+            return value[key]
+        target = _key_label(key)
+        for candidate_key, candidate_value in value.items():
+            if _key_label(candidate_key) == target:
+                return candidate_value
+        return default
     return getattr(value, key, default)
 
 
@@ -83,6 +99,13 @@ def _serialized_model(serialized: Any, fallback: Optional[str]) -> Optional[str]
 
 
 def _messages_from_prompts(prompts: Any) -> List[Dict[str, Any]]:
+    to_messages = getattr(prompts, "to_messages", None)
+    if callable(to_messages):
+        try:
+            return _messages_from_prompts(to_messages())
+        except Exception:
+            pass
+
     if isinstance(prompts, dict):
         messages = prompts.get("messages")
         if isinstance(messages, list):
@@ -104,7 +127,9 @@ def _messages_from_prompts(prompts: Any) -> List[Dict[str, Any]]:
         if isinstance(prompt, dict) and "role" in prompt and "content" in prompt:
             messages.append(_json_safe(prompt))
         else:
-            messages.append({"role": "user", "content": _as_text(prompt)})
+            role = _first_value(prompt, ("role", "type"), "user")
+            content = _first_value(prompt, ("content", "text"), prompt)
+            messages.append({"role": str(role or "user"), "content": _as_text(content)})
     return messages
 
 
@@ -130,13 +155,22 @@ def _response_citations(response: Any) -> Optional[List[str]]:
     if isinstance(value, str):
         return [value]
     try:
-        return [_as_text(_first_value(item, ("id", "source", "name"), item)) for item in value]
+        citations = []
+        for item in value:
+            citation = _first_value(item, ("id", "source", "name"), None)
+            if citation is None:
+                citation = _first_value(_lookup(item, "metadata", None), ("id", "source", "doc_id"), item)
+            citations.append(_as_text(citation))
+        return citations
     except TypeError:
         return [_as_text(value)]
 
 
 def _response_usage(response: Any) -> Optional[Dict[str, Any]]:
-    value = _first_value(response, ("usage", "token_usage", "llm_output"), None)
+    value = _first_value(response, ("usage", "usage_metadata", "token_usage", "response_metadata", "llm_output"), None)
+    nested = _first_value(value, ("token_usage", "usage", "usage_metadata"), None)
+    if isinstance(nested, dict):
+        return _json_safe(nested)
     if isinstance(value, dict):
         return _json_safe(value)
     return None
@@ -144,6 +178,15 @@ def _response_usage(response: Any) -> Optional[Dict[str, Any]]:
 
 def _payload_value(payload: Any, keys: Iterable[str], default: Any = None) -> Any:
     return _first_value(payload, keys, default)
+
+
+def _event_type(value: Any) -> str:
+    raw = getattr(value, "value", None)
+    if raw is None:
+        raw = getattr(value, "name", None)
+    if raw is None:
+        raw = value
+    return str(raw).split(".")[-1].upper()
 
 
 class AgentLensLangChainBridge:
@@ -303,7 +346,7 @@ class AgentLensLlamaIndexBridge:
 
     def event_start(self, event_type: str, payload: Any, **kwargs: Any) -> Optional[Dict[str, Any]]:
         data = dict(kwargs)
-        event = event_type.upper()
+        event = _event_type(event_type)
         if event in {"RETRIEVE", "RETRIEVAL"}:
             name = str(data.pop("name", self.retrieve_name))
             tool_name = str(data.pop("tool_name", self.tool_name))
@@ -336,7 +379,7 @@ class AgentLensLlamaIndexBridge:
     def event_end(self, event_type: str, payload: Any, **kwargs: Any) -> Optional[Dict[str, Any]]:
         data = dict(kwargs)
         duration_ms = _pop_duration(data)
-        event = event_type.upper()
+        event = _event_type(event_type)
         if event in {"RETRIEVE", "RETRIEVAL"}:
             name = str(data.pop("name", self.retrieve_name))
             tool_name = str(data.pop("tool_name", self.tool_name))

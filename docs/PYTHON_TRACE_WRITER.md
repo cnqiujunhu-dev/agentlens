@@ -145,7 +145,7 @@ langchain = AgentLensLangChainBridge(run, provider="openai-compatible", model="g
 langchain.on_retriever_start({"name": "policy-retriever"}, "refund policy")
 ```
 
-These helpers do not import LangChain, LlamaIndex, or CrewAI. They provide stable, framework-shaped boundaries for callbacks, event hooks, task spans, tool calls, and final answer calls while keeping traces as local JSON artifacts. See [PYTHON_FRAMEWORK_COOKBOOK.md](PYTHON_FRAMEWORK_COOKBOOK.md) for runnable examples.
+These helpers do not import LangChain, LlamaIndex, or CrewAI. They provide stable, framework-shaped boundaries for callbacks, event hooks, task spans, tool calls, and final answer calls while keeping traces as local JSON artifacts. The package smoke test covers object-shaped prompts and responses, enum-like LlamaIndex event payloads, usage metadata, and source document metadata for citations. See [PYTHON_FRAMEWORK_COOKBOOK.md](PYTHON_FRAMEWORK_COOKBOOK.md) for runnable examples.
 
 ## CI Pattern
 
