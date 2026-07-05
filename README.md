@@ -330,6 +330,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [GitHub Action](docs/GITHUB_ACTION.md)
 - [Run bundles](docs/RUN_BUNDLES.md)
 - [Security scan](docs/SECURITY_SCAN.md)
+- [MCP risk exceptions](docs/MCP_RISK_EXCEPTIONS.md)
 - [LangGraph-style adapter](docs/LANGGRAPH_ADAPTER.md)
 - [Multi-agent adapters](docs/MULTI_AGENT_ADAPTERS.md)
 - [Changelog](CHANGELOG.md)

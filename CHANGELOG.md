@@ -8,6 +8,7 @@
 - Composite GitHub Action `pr-comment` input for writing reusable PR comment bodies.
 - Marker-based GitHub Actions example for upserting AgentLens PR comments.
 - Configurable static dashboard sections via `agentlens dashboard --sections`, `agentlens share --sections`, and `agentlens bundle --sections`.
+- Governance guide for reviewed MCP risk exceptions with owner and expiry review workflow.
 
 ## 0.2.0
 

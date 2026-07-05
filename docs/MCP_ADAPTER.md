@@ -192,6 +192,8 @@ Reviewed exception example:
 
 If an exception has `expiresAt` in the past, AgentLens treats it as invalid and the risk is no longer suppressed. Use `requireExceptionOwner` and `requireExceptionExpiry` when you want CI to fail ownerless or permanent high-risk exceptions.
 
+For the team review workflow, see [MCP risk exceptions](MCP_RISK_EXCEPTIONS.md).
+
 ## Next Steps
 
 - Add richer dashboards for exception review history.
