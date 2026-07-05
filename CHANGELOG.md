@@ -10,6 +10,7 @@
 - Configurable static dashboard sections via `agentlens dashboard --sections`, `agentlens share --sections`, and `agentlens bundle --sections`.
 - Governance guide for reviewed MCP risk exceptions with owner and expiry review workflow.
 - Static dashboard timeline jumps for errors, high-risk calls, final responses, and last events.
+- Static dashboard tool call groups for repeated-call review by risk, latency, server, and permission.
 
 ## 0.2.0
 

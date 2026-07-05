@@ -66,7 +66,8 @@ test("public API exports core trace and eval helpers", () => {
   assert.match(formatTraceDiff(diff), /AgentLens Trace Diff/);
   assert.match(formatCiPrComment({ runsDir: "runs", total: 1, passed: 1, failed: 0, scan: { enabled: false }, results: [{ file: "trace.json", passed: true }] }), /agentlens-ci-comment/);
   assert.equal(DEFAULT_DASHBOARD_SECTIONS.includes("timeline"), true);
-  assert.deepEqual(normalizeDashboardSections("summary,timeline"), ["summary", "timeline"]);
+  assert.equal(DEFAULT_DASHBOARD_SECTIONS.includes("tool-calls"), true);
+  assert.deepEqual(normalizeDashboardSections("summary,tool-calls,timeline"), ["summary", "tool-calls", "timeline"]);
   assert.match(renderDashboard(run, { sections: ["summary"] }), /AgentLens Report/);
   assert.match(renderDiffDashboard(diff), /AgentLens Trace Diff/);
   assert.match(formatScanReport(scan), /Scan:/);

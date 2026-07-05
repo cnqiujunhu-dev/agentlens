@@ -1,7 +1,7 @@
 import { summarizeTrace } from "./inspect.js";
 import { scanTrace } from "./scan.js";
 
-export const DEFAULT_DASHBOARD_SECTIONS = ["summary", "event-types", "scan", "filters", "timeline"];
+export const DEFAULT_DASHBOARD_SECTIONS = ["summary", "event-types", "scan", "tool-calls", "filters", "timeline"];
 
 export function normalizeDashboardSections(sections = DEFAULT_DASHBOARD_SECTIONS) {
   const values =
@@ -127,6 +127,116 @@ function renderTypeCounts(summary) {
   return Object.entries(summary.byType)
     .map(([type, count]) => `<span class="pill">${escapeHtml(type)} <strong>${count}</strong></span>`)
     .join("");
+}
+
+function uniqueList(values) {
+  return [...new Set(values.filter(Boolean).map((value) => String(value)))].sort((a, b) => a.localeCompare(b));
+}
+
+function formatList(values) {
+  return values.length > 0 ? values.join(", ") : "none";
+}
+
+function formatMs(value) {
+  return Number.isFinite(value) ? `${Math.round(value)}ms` : "n/a";
+}
+
+function topRisk(risks) {
+  const rank = { critical: 4, high: 3, medium: 2, low: 1 };
+  return risks.sort((a, b) => (rank[b] ?? 0) - (rank[a] ?? 0))[0] ?? "none";
+}
+
+function summarizeToolCallGroups(trace) {
+  const groups = new Map();
+  trace.events.forEach((event, index) => {
+    if (event.type !== "tool.call") return;
+    const tool = event.name || "(unnamed tool)";
+    if (!groups.has(tool)) {
+      groups.set(tool, {
+        tool,
+        count: 0,
+        errors: 0,
+        highRisk: 0,
+        durations: [],
+        servers: [],
+        permissions: [],
+        risks: [],
+        firstIndex: index,
+        lastIndex: index
+      });
+    }
+
+    const group = groups.get(tool);
+    const risk = String(event.metadata?.toolRisk ?? "").toLowerCase();
+    group.count += 1;
+    group.errors += event.status === "error" ? 1 : 0;
+    group.highRisk += risk === "high" || risk === "critical" ? 1 : 0;
+    if (typeof event.durationMs === "number") group.durations.push(event.durationMs);
+    group.servers.push(event.metadata?.server);
+    group.permissions.push(event.metadata?.permission);
+    group.risks.push(event.metadata?.toolRisk);
+    group.lastIndex = index;
+  });
+
+  return [...groups.values()]
+    .map((group) => {
+      const maxDuration = group.durations.length > 0 ? Math.max(...group.durations) : Number.NaN;
+      const avgDuration = group.durations.length > 0 ? group.durations.reduce((sum, value) => sum + value, 0) / group.durations.length : Number.NaN;
+      const risks = uniqueList(group.risks);
+      return {
+        ...group,
+        servers: uniqueList(group.servers),
+        permissions: uniqueList(group.permissions),
+        risks,
+        topRisk: topRisk(risks),
+        avgDuration,
+        maxDuration
+      };
+    })
+    .sort((a, b) => b.highRisk - a.highRisk || b.errors - a.errors || b.count - a.count || a.tool.localeCompare(b.tool));
+}
+
+function renderToolCallGroup(group) {
+  return `
+    <details class="tool-call-group risk-${escapeHtml(group.topRisk)}" open>
+      <summary>
+        <span class="tool-call-name">${escapeHtml(group.tool)}</span>
+        <span class="tool-call-count">${group.count} call${group.count === 1 ? "" : "s"}</span>
+      </summary>
+      <dl class="tool-call-stats">
+        <div><dt>Errors</dt><dd>${group.errors}</dd></div>
+        <div><dt>High risk</dt><dd>${group.highRisk}</dd></div>
+        <div><dt>Avg duration</dt><dd>${formatMs(group.avgDuration)}</dd></div>
+        <div><dt>Max duration</dt><dd>${formatMs(group.maxDuration)}</dd></div>
+        <div><dt>Servers</dt><dd>${escapeHtml(formatList(group.servers))}</dd></div>
+        <div><dt>Permissions</dt><dd>${escapeHtml(formatList(group.permissions))}</dd></div>
+        <div><dt>Risks</dt><dd>${escapeHtml(formatList(group.risks))}</dd></div>
+      </dl>
+      <div class="tool-call-links">
+        <a href="#${eventAnchor(group.firstIndex)}">First #${group.firstIndex + 1}</a>
+        <a href="#${eventAnchor(group.lastIndex)}">Last #${group.lastIndex + 1}</a>
+      </div>
+    </details>
+  `;
+}
+
+function renderToolCallsSection(trace) {
+  const groups = summarizeToolCallGroups(trace);
+  const calls = groups.reduce((sum, group) => sum + group.count, 0);
+  return `
+    <section class="section tool-calls-section">
+      <div class="section-title">
+        <h2>Tool Calls</h2>
+        <span class="section-badge">${calls} calls / ${groups.length} tools</span>
+      </div>
+      <p class="section-note">Grouped by tool name with risk, latency, and first/last timeline links.</p>
+      ${
+        groups.length > 0
+          ? `<div class="tool-call-groups">${groups.map((group) => renderToolCallGroup(group)).join("")}</div>`
+          : `<p class="empty-state">No tool calls recorded.</p>`
+      }
+    </section>
+  `;
 }
 
 function uniqueValues(values) {
@@ -435,7 +545,7 @@ export function renderDashboard(trace, options = {}) {
       color: var(--muted);
       margin: 0;
     }
-    .scan-status, .severity-badge {
+    .scan-status, .severity-badge, .section-badge {
       border-radius: 999px;
       border: 1px solid var(--line);
       padding: 3px 9px;
@@ -662,6 +772,84 @@ export function renderDashboard(trace, options = {}) {
       font-style: normal;
       font-size: 13px;
     }
+    .section-badge {
+      color: var(--muted);
+      background: #f9fafb;
+    }
+    .tool-call-groups {
+      display: grid;
+      gap: 10px;
+    }
+    .tool-call-group {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f9fafb;
+      overflow: hidden;
+    }
+    .tool-call-group[open] {
+      background: #fff;
+    }
+    .tool-call-group summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+    .tool-call-name {
+      min-width: 0;
+    }
+    .tool-call-count {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .tool-call-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px 12px;
+      margin: 0;
+      padding: 0 14px 12px;
+    }
+    .tool-call-stats div {
+      min-width: 0;
+    }
+    .tool-call-stats dt {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .tool-call-stats dd {
+      margin: 2px 0 0;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+    .tool-call-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 0 14px 14px;
+    }
+    .tool-call-links a {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px 9px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .tool-call-links a:hover {
+      border-color: #5eead4;
+      background: #f0fdfa;
+    }
+    .tool-call-group.risk-high, .tool-call-group.risk-critical {
+      border-color: #fecaca;
+    }
     .event[hidden] {
       display: none;
     }
@@ -697,6 +885,7 @@ export function renderDashboard(trace, options = {}) {
       .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .filter-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .timeline-jumps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tool-call-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .event-header { flex-direction: column; }
       .event-meta { justify-content: flex-start; }
       .scan-finding dl { grid-template-columns: 1fr; }
@@ -705,6 +894,7 @@ export function renderDashboard(trace, options = {}) {
       .grid { grid-template-columns: 1fr; }
       .filter-controls { grid-template-columns: 1fr; }
       .timeline-jumps { grid-template-columns: 1fr; }
+      .tool-call-stats { grid-template-columns: 1fr; }
       .event { grid-template-columns: 32px minmax(0, 1fr); }
     }
   </style>
@@ -731,6 +921,7 @@ export function renderDashboard(trace, options = {}) {
         : ""
     }
     ${hasSection(sections, "scan") ? renderScanSection(scanReport) : ""}
+    ${hasSection(sections, "tool-calls") ? renderToolCallsSection(trace) : ""}
     ${hasSection(sections, "filters") ? renderFilters(trace) : ""}
     ${
       hasSection(sections, "timeline")

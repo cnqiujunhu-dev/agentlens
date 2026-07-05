@@ -27,9 +27,9 @@ function usage() {
     "  agentlens validate <trace|eval> <file> [--json]",
     "  agentlens materialize <jsonl-file> [--out path]",
     "  agentlens redact <trace-file> [--out path] [--keys key1,key2]",
-    "  agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,filters,timeline]",
-    "  agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,filters,timeline]",
-    "  agentlens bundle [runs-dir] [--out dir] [--sections summary,event-types,scan,filters,timeline]",
+    "  agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,tool-calls,filters,timeline]",
+    "  agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,tool-calls,filters,timeline]",
+    "  agentlens bundle [runs-dir] [--out dir] [--sections summary,event-types,scan,tool-calls,filters,timeline]",
     "  agentlens serve [trace-file|runs-dir] [--host host] [--port port]",
     "",
     "Examples:",
@@ -241,7 +241,7 @@ async function main() {
 
   if (command === "share") {
     const traceFile = positional(1);
-    if (!traceFile) throw new Error("Missing trace file. Usage: agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,filters,timeline]");
+    if (!traceFile) throw new Error("Missing trace file. Usage: agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,tool-calls,filters,timeline]");
     const { parseRedactKeys } = await import("../src/redact.js");
     const { writeShareBundle } = await import("../src/share.js");
     const result = writeShareBundle({

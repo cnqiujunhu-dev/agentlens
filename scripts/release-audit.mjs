@@ -61,6 +61,7 @@ const requiredReadmeSnippets = [
   "file-change refresh",
   "Timeline filters",
   "Timeline jumps",
+  "Tool call groups",
   "Security Scan panel",
   "Configurable dashboard sections",
   "--sections",

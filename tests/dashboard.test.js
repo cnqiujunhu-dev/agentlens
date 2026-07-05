@@ -107,6 +107,60 @@ test("renderDashboard includes timeline jump anchors", () => {
   assert.match(html, /id="agentlens-event-3"/);
 });
 
+test("renderDashboard groups repeated tool calls", () => {
+  const trace = createRun({
+    app: "dashboard-test",
+    name: "tool groups"
+  });
+  addEvent(trace, {
+    type: "tool.call",
+    name: "kb.search",
+    durationMs: 12,
+    metadata: {
+      server: "kb-server",
+      permission: "read-only",
+      toolRisk: "low"
+    }
+  });
+  addEvent(trace, {
+    type: "tool.call",
+    name: "database.delete",
+    status: "error",
+    durationMs: 50,
+    metadata: {
+      server: "database-server",
+      permission: "destructive",
+      toolRisk: "critical"
+    }
+  });
+  addEvent(trace, {
+    type: "tool.call",
+    name: "database.delete",
+    durationMs: 150,
+    metadata: {
+      server: "database-server",
+      permission: "destructive",
+      toolRisk: "critical"
+    }
+  });
+  finishRun(trace, "failed");
+
+  const html = renderDashboard(trace);
+
+  assert.match(html, /Tool Calls/);
+  assert.match(html, /3 calls \/ 2 tools/);
+  assert.match(html, /database\.delete/);
+  assert.match(html, /2 calls/);
+  assert.match(html, /critical/);
+  assert.match(html, /destructive/);
+  assert.match(html, /100ms/);
+  assert.match(html, /150ms/);
+  assert.match(html, /href="#agentlens-event-2"/);
+  assert.match(html, /href="#agentlens-event-3"/);
+  assert.match(html, /kb\.search/);
+  assert.match(html, /read-only/);
+});
+
 test("renderDashboard can render selected sections only", () => {
   const trace = createRun({
     app: "dashboard-test",
@@ -123,6 +177,7 @@ test("renderDashboard can render selected sections only", () => {
   assert.doesNotMatch(html, /Timeline Filters/);
   assert.doesNotMatch(html, /agentlens-dashboard-filters/);
   assert.doesNotMatch(html, /Event Types/);
+  assert.doesNotMatch(html, /Tool Calls/);
 });
 
 test("normalizeDashboardSections validates section names", () => {

@@ -335,7 +335,7 @@ GET /api/stat/<relative-trace-path>
 
 When serving a single trace file, use `GET /api/trace` and `GET /api/stat`. HTML pages rendered by `agentlens serve` poll the stat endpoint and refresh when the underlying trace file changes.
 
-Dashboard HTML includes timeline filters for event type, status, text search, and MCP risk. It also includes timeline jump links for the first error, first high-risk tool call, first tool call, final response, and last event. The static `agentlens dashboard` output keeps the same filtering UI without requiring a server. Pass `--sections summary,event-types,scan,filters,timeline` to render a focused report for PR comments, incident notes, or support handoffs.
+Dashboard HTML includes timeline filters for event type, status, text search, and MCP risk. It also includes tool call groups with repeated-call counts, risk, latency, server, permission, and first/last links. Timeline jump links point to the first error, first high-risk tool call, first tool call, final response, and last event. The static `agentlens dashboard` output keeps the same filtering UI without requiring a server. Pass `--sections summary,event-types,scan,tool-calls,filters,timeline` to render a focused report for PR comments, incident notes, or support handoffs.
 
 ## MCP-Style Tool Calls
 
