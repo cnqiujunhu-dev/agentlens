@@ -37,6 +37,9 @@ jobs:
           node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
           timeout 5s node ./bin/agentlens.js serve .agentlens/runs --port 4317 || test $? -eq 124
 
+      - name: Generate review smoke traces
+        run: npm run demo:regression-pr
+
       - name: GitHub Action smoke test
         id: agentlens-action
         uses: ./
@@ -47,6 +50,10 @@ jobs:
           pr-comment: .agentlens/reports/pr-comment.md
           bundle: .agentlens/reports/action-bundle
           bundle-sections: summary,scan,tool-calls,timeline
+          review-baseline: .agentlens/regression-pr/runs/baseline.json
+          review-candidate: .agentlens/regression-pr/runs/candidate.json
+          review: .agentlens/reports/action-review
+          review-sections: summary,scan,tool-calls,timeline
 
       - name: Verify GitHub Action outputs
         shell: bash
@@ -56,10 +63,18 @@ jobs:
           test "${{ steps.agentlens-action.outputs.total }}" != "0"
           test "${{ steps.agentlens-action.outputs.bundle }}" = ".agentlens/reports/action-bundle"
           test "${{ steps.agentlens-action.outputs.bundle-manifest }}" = ".agentlens/reports/action-bundle/manifest.json"
+          test "${{ steps.agentlens-action.outputs.review }}" = ".agentlens/reports/action-review"
+          test "${{ steps.agentlens-action.outputs.review-pr-comment }}" = ".agentlens/reports/action-review/reports/pr-comment.md"
+          test "${{ steps.agentlens-action.outputs.review-bundle }}" = ".agentlens/reports/action-review/reports/bundle"
+          test "${{ steps.agentlens-action.outputs.review-bundle-manifest }}" = ".agentlens/reports/action-review/reports/bundle/manifest.json"
           grep -q "agentlens-ci-comment" .agentlens/reports/pr-comment.md
           test -f .agentlens/reports/action-bundle/index.html
           test -f .agentlens/reports/action-bundle/manifest.json
           grep -q "agentlens.run-bundle.v1" .agentlens/reports/action-bundle/manifest.json
+          grep -q "agentlens-ci-comment" .agentlens/reports/action-review/reports/pr-comment.md
+          test -f .agentlens/reports/action-review/reports/diff.html
+          test -f .agentlens/reports/action-review/reports/bundle/index.html
+          test -f .agentlens/reports/action-review/reports/bundle/manifest.json
 
       - name: MCP adapter demo
         run: |

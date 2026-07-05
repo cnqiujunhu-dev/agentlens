@@ -134,6 +134,7 @@ const requiredReadmeSnippets = [
   "Upsert PR comment",
   "agentlens-ci-comment",
   "GitHub Action outputs",
+  "GitHub Action review pack outputs",
   "agentlens doctor",
   "Quickstart artifacts",
   "agentlens share",
@@ -345,6 +346,25 @@ function assertActionVersions() {
   if (!action.includes(setupNodeAction)) fail(`action.yml must use ${setupNodeAction}`);
 }
 
+function assertActionReviewPackSupport() {
+  const action = fs.readFileSync("action.yml", "utf8");
+  const docs = fs.readFileSync("docs/GITHUB_ACTION.md", "utf8");
+  const workflow = fs.readFileSync(".github/workflows/ci.yml", "utf8");
+  for (const snippet of [
+    "review-baseline",
+    "review-candidate",
+    "review-fail-on-failure",
+    "review-pr-comment",
+    "review-bundle-manifest"
+  ]) {
+    if (!action.includes(snippet)) fail(`action.yml missing review pack snippet: ${snippet}`);
+    if (!docs.includes(snippet)) fail(`docs/GITHUB_ACTION.md missing review pack snippet: ${snippet}`);
+  }
+  for (const snippet of ["action-review", "review-baseline", "review-candidate", "review-pr-comment"]) {
+    if (!workflow.includes(snippet)) fail(`.github/workflows/ci.yml missing review pack snippet: ${snippet}`);
+  }
+}
+
 for (const file of requiredFiles) assertFile(file);
 assertReadme();
 assertChineseReadme();
@@ -354,6 +374,7 @@ assertPublicActionReferences();
 assertDemoGif();
 assertScreenshotAssets();
 assertActionVersions();
+assertActionReviewPackSupport();
 assertPackDryRun();
 
 console.log("AgentLens release audit passed");

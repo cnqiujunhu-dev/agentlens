@@ -20,6 +20,7 @@ Built:
 - JSON report output for CLI automation.
 - GitHub Actions Markdown summary output.
 - GitHub Action status/count outputs for downstream workflow steps.
+- GitHub Action review pack outputs for baseline/candidate trace handoffs.
 - Workspace doctor for local setup, trace, eval config, and CI checks.
 - Validation command for trace and eval files.
 - Redacted share bundles for issues, pull requests, and support threads.

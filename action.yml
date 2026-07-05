@@ -30,6 +30,26 @@ inputs:
     description: Optional dashboard sections for the generated run bundle.
     required: false
     default: summary,scan,tool-calls,filters,timeline
+  review-baseline:
+    description: Optional baseline trace file for a before/after AgentLens review pack.
+    required: false
+    default: ""
+  review-candidate:
+    description: Optional candidate trace file for a before/after AgentLens review pack.
+    required: false
+    default: ""
+  review:
+    description: Optional directory to write an AgentLens review pack for review-baseline and review-candidate.
+    required: false
+    default: ""
+  review-sections:
+    description: Optional dashboard sections for the generated review pack run bundle.
+    required: false
+    default: summary,scan,tool-calls,filters,timeline
+  review-fail-on-failure:
+    description: Fail the action when the generated review pack reports failing eval or scan gates.
+    required: false
+    default: "false"
   scan:
     description: Run AgentLens security scan after evals.
     required: false
@@ -62,6 +82,18 @@ outputs:
   bundle-manifest:
     description: Path to the generated run bundle manifest when the bundle input is set.
     value: ${{ steps.agentlens.outputs.bundle-manifest }}
+  review:
+    description: Directory containing the generated review pack when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review }}
+  review-pr-comment:
+    description: Path to the generated review PR comment Markdown when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review-pr-comment }}
+  review-bundle:
+    description: Directory containing the generated review run bundle when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review-bundle }}
+  review-bundle-manifest:
+    description: Path to the generated review run bundle manifest when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review-bundle-manifest }}
 
 runs:
   using: composite
@@ -118,6 +150,48 @@ runs:
           {
             echo "bundle="
             echo "bundle-manifest="
+          } >> "$GITHUB_OUTPUT"
+        fi
+        review_baseline="${{ inputs.review-baseline }}"
+        review_candidate="${{ inputs.review-candidate }}"
+        review_dir="${{ inputs.review }}"
+        if [[ -n "$review_baseline" || -n "$review_candidate" || -n "$review_dir" ]]; then
+          if [[ -z "$review_baseline" || -z "$review_candidate" || -z "$review_dir" ]]; then
+            echo "review-baseline, review-candidate, and review must be provided together" >&2
+            exit_code=1
+          else
+            review_args=(review "$review_baseline" "$review_candidate" --config "${{ inputs.config }}" --out "$review_dir")
+            if [[ "${{ inputs.scan }}" == "true" ]]; then
+              review_args+=(--scan-fail-on "${{ inputs.scan-fail-on }}")
+            else
+              review_args+=(--no-scan)
+            fi
+            if [[ -n "${{ inputs.review-sections }}" ]]; then
+              review_args+=(--sections "${{ inputs.review-sections }}")
+            fi
+            if [[ "${{ inputs.review-fail-on-failure }}" == "true" ]]; then
+              review_args+=(--fail-on-failure)
+            fi
+            set +e
+            node "$GITHUB_ACTION_PATH/bin/agentlens.js" "${review_args[@]}"
+            review_exit_code=$?
+            set -e
+            if [[ "$review_exit_code" -ne 0 ]]; then
+              exit_code="$review_exit_code"
+            fi
+            {
+              echo "review=$review_dir"
+              echo "review-pr-comment=$review_dir/reports/pr-comment.md"
+              echo "review-bundle=$review_dir/reports/bundle"
+              echo "review-bundle-manifest=$review_dir/reports/bundle/manifest.json"
+            } >> "$GITHUB_OUTPUT"
+          fi
+        else
+          {
+            echo "review="
+            echo "review-pr-comment="
+            echo "review-bundle="
+            echo "review-bundle-manifest="
           } >> "$GITHUB_OUTPUT"
         fi
         exit "$exit_code"

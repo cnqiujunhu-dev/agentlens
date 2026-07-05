@@ -64,6 +64,7 @@ Started after v0.2.0:
 - Agent review packs through `agentlens review`.
 - Run bundle `manifest.json` for PR bots, dashboard indexes, and CI artifact automation.
 - GitHub Action `bundle` and `bundle-sections` inputs for uploadable run bundle artifacts.
+- GitHub Action review pack inputs and outputs for baseline/candidate traces.
 - Market analysis and bilingual README positioning for English and Chinese launch audiences.
 - Quickstart artifact pack through `agentlens quickstart`.
 - LLM SDK wrapper cookbook for existing provider clients, error handling, CI, and redaction patterns.

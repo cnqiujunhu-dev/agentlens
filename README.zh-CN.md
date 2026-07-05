@@ -67,6 +67,7 @@ AgentLens 的差异化是：
 - 静态 dashboard，支持 timeline filter、timeline jump、tool call group、security scan panel。
 - 静态 run bundle，包含 `index.html`、每条 trace 的 dashboard 和 `manifest.json`。
 - GitHub Action，可输出 status、count、PR comment、run bundle、bundle manifest。
+- GitHub Action 可为 baseline/candidate trace 输出 review pack。
 - Redacted share bundle，便于公开 issue、PR 或支持线程。
 - MCP stdio JSON-RPC demo、MCP tool inventory、MCP risk scanner 和 policy exception workflow。
 

@@ -48,6 +48,11 @@ The action fails the job when any trace fails its eval config, any enabled scan 
 | `pr-comment` | empty | Optional path to write Markdown suitable for a GitHub PR comment. |
 | `bundle` | empty | Optional directory to write a static AgentLens run bundle. |
 | `bundle-sections` | `summary,scan,tool-calls,filters,timeline` | Dashboard sections used when `bundle` is set. |
+| `review-baseline` | empty | Optional baseline trace file for a before/after review pack. |
+| `review-candidate` | empty | Optional candidate trace file for a before/after review pack. |
+| `review` | empty | Optional directory to write a review pack. Must be used with `review-baseline` and `review-candidate`. |
+| `review-sections` | `summary,scan,tool-calls,filters,timeline` | Dashboard sections used for the review pack run bundle. |
+| `review-fail-on-failure` | `false` | Fail the action when the generated review pack reports failing eval or scan gates. |
 | `scan` | `true` | Run the local AgentLens security scan after evals. |
 | `scan-fail-on` | `high` | Lowest scan severity that fails the action: `low`, `medium`, `high`, `critical`, or `none`. |
 | `sarif` | empty | Optional path for combined SARIF scan findings. Requires `scan: true`. |
@@ -62,6 +67,10 @@ The action fails the job when any trace fails its eval config, any enabled scan 
 | `failed` | Number of trace files that failed. |
 | `bundle` | Directory containing the generated run bundle when `bundle` is set. |
 | `bundle-manifest` | Path to the generated run bundle `manifest.json` when `bundle` is set. |
+| `review` | Directory containing the generated review pack when review inputs are set. |
+| `review-pr-comment` | Path to the generated review PR comment Markdown. |
+| `review-bundle` | Directory containing the generated review run bundle. |
+| `review-bundle-manifest` | Path to the generated review run bundle `manifest.json`. |
 
 Use these outputs in later steps:
 
@@ -144,6 +153,32 @@ Use `bundle` when you want the action to generate a static review bundle even if
 The generated bundle includes `index.html`, `manifest.json`, and one dashboard per valid trace. The `bundle-manifest` output points directly to the manifest for later workflow steps.
 
 For a complete PR review handoff with uploaded dashboard bundles, compact sections, and filtered view links, see [Dashboard Review Workflow](DASHBOARD_REVIEW.md).
+
+## Review Pack Artifact
+
+Use `review-baseline`, `review-candidate`, and `review` when a workflow has before/after traces and should produce a static PR review pack:
+
+```yaml
+- name: Run AgentLens evals and review
+  id: agentlens
+  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  with:
+    runs: .agentlens/runs
+    config: evals/default.json
+    review-baseline: .agentlens/baseline/refund.json
+    review-candidate: .agentlens/candidate/refund.json
+    review: .agentlens/reports/review
+    review-sections: summary,scan,tool-calls,timeline
+
+- name: Upload AgentLens review pack
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: agentlens-review
+    path: ${{ steps.agentlens.outputs.review }}
+```
+
+The review pack includes copied traces, `eval.json`, `reports/pr-comment.md`, `reports/diff.html`, `reports/agentlens-ci.sarif`, and `reports/bundle/index.html`. Add `review-fail-on-failure: true` when the before/after review should fail the job if the candidate violates eval or scan gates.
 
 ## SARIF Upload
 
