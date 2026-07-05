@@ -9,7 +9,7 @@ The first public release should prove that an agent run can be captured, inspect
 Shipped:
 
 - Trace v1 JSON schema and validation.
-- CLI for `init`, `demo`, `inspect`, `replay`, `eval`, `scan`, `ci`, `redact`, `share`, `dashboard`, `serve`, `diff`, and `validate`.
+- CLI for `init`, `quickstart`, `demo`, `inspect`, `replay`, `eval`, `scan`, `ci`, `redact`, `share`, `dashboard`, `serve`, `diff`, and `validate`.
 - Local security scan for leaked secrets, prompt injection phrases, and risky tool calls.
 - Single-trace and batch SARIF export for scan findings.
 - CI scan gates through `agentlens ci --scan` and the composite GitHub Action.
@@ -64,6 +64,7 @@ Started after v0.2.0:
 - Run bundle `manifest.json` for PR bots, dashboard indexes, and CI artifact automation.
 - GitHub Action `bundle` and `bundle-sections` inputs for uploadable run bundle artifacts.
 - Market analysis and bilingual README positioning for English and Chinese launch audiences.
+- Quickstart artifact pack through `agentlens quickstart`.
 - LLM SDK wrapper cookbook for existing provider clients, error handling, CI, and redaction patterns.
 - OpenTelemetry/OpenInference-style OTLP JSON export for local trace files.
 - Minimal zero-dependency sync/async Python trace writer examples and verified demo.

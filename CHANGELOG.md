@@ -15,6 +15,7 @@
 - Dashboard review workflow guide for PR artifacts, dashboard sections, and filtered view links.
 - Run bundle `manifest.json` output with summary counts and per-trace review metadata.
 - Composite GitHub Action `bundle` and `bundle-sections` inputs for generating static run bundle artifacts.
+- Quickstart artifact pack through `agentlens quickstart`, generating trace, eval, scan, dashboard, PR comment, OTLP, run bundle, and share bundle outputs.
 - Market analysis and positioning guide comparing AgentLens with Langfuse, LangSmith, Phoenix, Helicone, OpenLLMetry, OpenLIT, and Braintrust.
 - Simplified Chinese README with language switching from the English README.
 - LLM SDK wrapper cookbook for OpenAI-compatible, Anthropic-compatible, custom SDK, error handling, CI, and redaction workflows.

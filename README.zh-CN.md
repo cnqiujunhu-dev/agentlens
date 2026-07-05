@@ -48,6 +48,7 @@ AgentLens 的差异化是：
 ## 你能得到什么
 
 - 统一 trace schema，记录 prompt、response、tool call、retrieval、error、usage 和 metadata。
+- `agentlens quickstart` 一条命令生成本地 artifact pack：trace、eval、scan、dashboard、PR comment、OTLP、run bundle 和 share bundle。
 - 通用 LLM wrapper，可包住任意 SDK 调用。
 - OpenAI-compatible 和 Anthropic-compatible provider adapter。
 - LLM SDK cookbook，帮助把现有 provider client 接入本地 trace、CI 和 redaction workflow。
@@ -72,6 +73,7 @@ AgentLens 的差异化是：
 
 ```bash
 npm install
+node ./bin/agentlens.js quickstart --python
 node ./bin/agentlens.js init --python
 npm run demo
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
@@ -84,6 +86,8 @@ node ./bin/agentlens.js scan .agentlens/runs/demo.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
 node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,filters,timeline
 ```
+
+`agentlens quickstart` 会把完整演示输出到 `.agentlens/quickstart/`，不会混入你自己的 `.agentlens/runs`。详见 [QUICKSTART_ARTIFACTS.md](docs/QUICKSTART_ARTIFACTS.md)。
 
 想完整验证仓库当前能力：
 
@@ -152,6 +156,7 @@ AgentLens 当前不是：
 ```text
 agentlens init
 agentlens init [--python]
+agentlens quickstart [--python]
 agentlens doctor [--json]
 agentlens demo [--out path]
 agentlens inspect <trace-file> [--json]
@@ -173,6 +178,7 @@ agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 
 - [API](docs/API.md)
 - [市场分析](docs/MARKET_ANALYSIS.md)
+- [Quickstart artifacts](docs/QUICKSTART_ARTIFACTS.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
 - [Python framework cookbook](docs/PYTHON_FRAMEWORK_COOKBOOK.md)
@@ -194,4 +200,4 @@ AgentLens 不是另一个 Agent 框架。
 
 ## 当前状态
 
-早期 MVP。当前版本已经适合本地 trace、deterministic replay、JSON eval、security scan、redacted share bundle、CI gate、静态 dashboard、run bundle、MCP policy、多 Agent demo、sync/async Python trace writer、`agentlens init --python` 和 OpenTelemetry/OpenInference-style OTLP JSON 导出。下一阶段重点是更深的框架接入、collector/protobuf 级互通、Python SDK 化和更完整的 cookbook。
+早期 MVP。当前版本已经适合本地 trace、deterministic replay、JSON eval、security scan、redacted share bundle、CI gate、静态 dashboard、run bundle、MCP policy、多 Agent demo、`agentlens quickstart`、sync/async Python trace writer、`agentlens init --python` 和 OpenTelemetry/OpenInference-style OTLP JSON 导出。下一阶段重点是更深的框架接入、collector/protobuf 级互通、Python SDK 化和更完整的 cookbook。

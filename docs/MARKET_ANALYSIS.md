@@ -13,6 +13,7 @@ AgentLens is currently weaker than mature platforms in hosted collaboration, pro
 - zero-account local traces
 - deterministic replay from plain files
 - GitHub-native CI gates and PR artifacts
+- one-command quickstart artifact pack for first-run evaluation
 - static HTML dashboards and run bundles
 - machine-readable bundle manifests
 - SARIF output for trace scan findings
@@ -88,7 +89,7 @@ Do not compete head-on with Langfuse, LangSmith, Phoenix, or Braintrust on "comp
 - **Pre-merge agent regression review**: diff a baseline trace against a candidate trace, fail CI, attach static dashboards, and let reviewers inspect without rerunning the model.
 - **Portable evidence bundles**: produce `index.html`, trace dashboards, `manifest.json`, SARIF, redacted traces, scan reports, and eval reports that can move through GitHub, Slack, support tickets, and incident notes.
 - **MCP and tool governance**: make tool risk, server identity, permissions, reviewed exceptions, owners, and expiry dates visible in the same trace review flow.
-- **No-account debugging**: let a developer clone the repo, run a demo, generate a trace, and inspect it locally in minutes.
+- **No-account debugging**: let a developer clone the repo, run `agentlens quickstart`, generate a trace, and inspect local review artifacts in minutes.
 - **Complement, not replace**: export AgentLens traces as OTLP JSON now, then add richer collector/protobuf paths so AgentLens can be used before or beside Langfuse/Phoenix/OpenLIT.
 
 ## Recommended Product Positioning

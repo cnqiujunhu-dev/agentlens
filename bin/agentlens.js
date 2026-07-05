@@ -14,6 +14,7 @@ function usage() {
     "",
     "Usage:",
     "  agentlens init [--python]",
+    "  agentlens quickstart [--python]",
     "  agentlens doctor [--json]",
     "  agentlens demo [--out path]",
     "  agentlens inspect <trace-file> [--json]",
@@ -34,6 +35,7 @@ function usage() {
     "  agentlens serve [trace-file|runs-dir] [--host host] [--port port]",
     "",
     "Examples:",
+    "  node ./bin/agentlens.js quickstart --python",
     "  node ./bin/agentlens.js init --python",
     "  node ./bin/agentlens.js doctor",
     "  node ./bin/agentlens.js demo --out .agentlens/runs/demo.json",
@@ -78,6 +80,19 @@ async function main() {
       console.log("Starter files:");
       for (const file of workspace.createdFiles) console.log(`  ${file}`);
     }
+    return;
+  }
+
+  if (command === "quickstart") {
+    const { formatQuickstartReport, runQuickstart } = await import("../src/quickstart.js");
+    const result = runQuickstart({
+      root: process.cwd(),
+      python: flag("--python"),
+      sections: option("--sections", undefined),
+      scanFailOnSeverity: option("--scan-fail-on", "high")
+    });
+    console.log(formatQuickstartReport(result, { root: process.cwd() }));
+    if (!result.status.passed) process.exitCode = 1;
     return;
   }
 

@@ -22,6 +22,7 @@ Useful commands:
 
 \`\`\`bash
 agentlens demo --out .agentlens/runs/demo.json
+agentlens quickstart --python
 agentlens init --python
 agentlens inspect .agentlens/runs/demo.json
 agentlens replay .agentlens/runs/demo.json

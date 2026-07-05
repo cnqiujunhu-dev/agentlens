@@ -52,6 +52,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 ## What You Get
 
 - Trace model for LLM prompts, responses, tool calls, retrieval, errors, usage, and metadata.
+- `agentlens quickstart` artifact pack for a one-command local demo with trace, eval, scan, dashboard, PR comment, OTLP, run bundle, and share bundle outputs.
 - Generic LLM wrapper for tracing model calls from any SDK.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - LLM SDK cookbook for wiring existing provider clients into local traces.
@@ -97,6 +98,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 ## Quick Demo
 
 ```bash
+node ./bin/agentlens.js quickstart --python
 node ./bin/agentlens.js init
 node ./bin/agentlens.js init --python
 node ./bin/agentlens.js doctor
@@ -119,6 +121,8 @@ node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle -
 node ./bin/agentlens.js serve .agentlens/runs --port 4317
 npm run demo:regression-pr
 ```
+
+`agentlens quickstart` writes an isolated artifact pack under `.agentlens/quickstart/`, including a passing demo trace, eval report, scan report, dashboard, OTLP JSON, PR comment Markdown, run bundle, and redacted share bundle. See [QUICKSTART_ARTIFACTS.md](docs/QUICKSTART_ARTIFACTS.md).
 
 `agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example. `agentlens init --python` also creates `.agentlens/python/basic_run.py`, `.agentlens/python/agentlens_trace.py`, and `.agentlens/examples/python-github-action.yml`.
 
@@ -305,6 +309,7 @@ The MVP stores each run as a single JSON file:
 ```text
 agentlens init
 agentlens init [--python]
+agentlens quickstart [--python]
 agentlens doctor [--json]
 agentlens demo [--out path]
 agentlens inspect <trace-file> [--json]
@@ -359,6 +364,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Launch post draft](docs/LAUNCH_POST.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Market analysis](docs/MARKET_ANALYSIS.md)
+- [Quickstart artifacts](docs/QUICKSTART_ARTIFACTS.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
 - [Python framework cookbook](docs/PYTHON_FRAMEWORK_COOKBOOK.md)
@@ -430,6 +436,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Debug tool-using AI agents.
 - Trace model calls without binding to one LLM SDK.
 - Add AgentLens around existing provider SDK calls with a copyable cookbook.
+- Generate a clean quickstart artifact pack with `agentlens quickstart` before wiring your own traces.
 - Write AgentLens-compatible sync/async traces from Python agent, RAG, and notebook code.
 - Bootstrap a Python project with `agentlens init --python`, then run `.agentlens/python/basic_run.py` in CI.
 - Add trace boundaries around LangChain-style, LlamaIndex-style, and CrewAI-style Python projects without adding framework dependencies to AgentLens.
@@ -495,6 +502,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - GitHub Actions Markdown summaries.
 - GitHub PR comment Markdown renderer.
 - Init scaffolding for starter evals and GitHub Action examples.
+- Quickstart artifact pack via `agentlens quickstart`.
 - Python init scaffolding via `agentlens init --python`.
 - Generic LLM call adapter.
 - Minimal sync/async Python trace writer example.
@@ -529,4 +537,4 @@ It is the missing engineering layer around agent frameworks: trace, replay, eval
 
 ## Status
 
-Early MVP. The current version is useful for local traces, deterministic replay, JSON evals, security scans, share bundles, CI checks, static dashboard reports, zero-dependency multi-agent examples, and a minimal sync/async Python trace writer. The next milestone is deeper framework adapters and richer governance reports.
+Early MVP. The current version is useful for local traces, quickstart artifact packs, deterministic replay, JSON evals, security scans, share bundles, CI checks, static dashboard reports, zero-dependency multi-agent examples, and a minimal sync/async Python trace writer. The next milestone is deeper framework adapters and richer governance reports.

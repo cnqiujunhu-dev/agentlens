@@ -2,6 +2,22 @@
 
 AgentLens can be used as a CLI or imported as a JavaScript library.
 
+## Quickstart
+
+```bash
+agentlens quickstart
+agentlens quickstart --python
+```
+
+```js
+import { formatQuickstartReport, runQuickstart } from "agentlens";
+
+const result = runQuickstart({ python: true });
+console.log(formatQuickstartReport(result));
+```
+
+Quickstart writes an isolated artifact pack under `.agentlens/quickstart/`, including a trace, dashboard, eval report, scan report, CI summary, PR comment Markdown, OTLP JSON, run bundle, and redacted share bundle. See [QUICKSTART_ARTIFACTS.md](QUICKSTART_ARTIFACTS.md).
+
 ## Core Trace
 
 ```js

@@ -65,6 +65,7 @@ Built:
 - Public roadmap.
 - Market analysis against Langfuse, LangSmith, Phoenix, Helicone, OpenLLMetry, OpenLIT, and Braintrust.
 - Bilingual README entry points for English and Simplified Chinese audiences.
+- Quickstart artifact pack through `agentlens quickstart`.
 - LLM SDK wrapper cookbook for wiring existing provider clients into AgentLens traces.
 - OpenTelemetry/OpenInference-style OTLP JSON export for local trace files.
 - Minimal zero-dependency sync/async Python trace writer demo for Python agent and RAG projects.
