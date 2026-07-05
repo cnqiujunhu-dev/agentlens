@@ -5,6 +5,7 @@ export { compareTraces, formatTraceDiff } from "./diff.js";
 export { renderDiffDashboard } from "./diff-dashboard.js";
 export { doctorWorkspace, formatDoctorReport } from "./doctor.js";
 export { renderReplay } from "./replay.js";
+export { formatReviewReport, writeReviewBundle } from "./review.js";
 export { DEFAULT_EVAL_CONFIG, evaluateTrace, formatEvalReport, loadEvalConfig } from "./eval.js";
 export { DEFAULT_SCAN_OPTIONS, SEVERITY_ORDER, formatScanReport, formatScanReportsSarif, formatScanSarif, scanTrace } from "./scan.js";
 export { discoverTraceFiles, formatCiMarkdown, formatCiPrComment, formatCiReport, formatCiSarif, runCi } from "./ci.js";

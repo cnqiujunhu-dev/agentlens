@@ -19,6 +19,7 @@ function usage() {
     "  agentlens demo [--out path]",
     "  agentlens inspect <trace-file> [--json]",
     "  agentlens replay <trace-file>",
+    "  agentlens review <baseline-trace> <candidate-trace> [--config path] [--out dir] [--no-scan] [--scan-fail-on severity] [--sections summary,event-types,scan,tool-calls,filters,timeline] [--fail-on-failure]",
     "  agentlens diff <baseline-trace> <candidate-trace> [--json]",
     "  agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]",
     "  agentlens eval <trace-file> [--config path] [--json]",
@@ -39,6 +40,7 @@ function usage() {
     "  node ./bin/agentlens.js init --python",
     "  node ./bin/agentlens.js doctor",
     "  node ./bin/agentlens.js demo --out .agentlens/runs/demo.json",
+    "  node ./bin/agentlens.js review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json",
     "  node ./bin/agentlens.js diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json",
     "  node ./bin/agentlens.js share .agentlens/runs/demo.json --config evals/default.json",
     "  node ./bin/agentlens.js validate trace .agentlens/runs/demo.json",
@@ -127,6 +129,29 @@ async function main() {
     if (!traceFile) throw new Error("Missing trace file. Usage: agentlens replay <trace-file>");
     const { renderReplay } = await import("../src/replay.js");
     console.log(renderReplay(readTrace(traceFile)));
+    return;
+  }
+
+  if (command === "review") {
+    const baselineFile = positional(1);
+    const candidateFile = positional(2);
+    if (!baselineFile || !candidateFile) {
+      throw new Error("Missing trace files. Usage: agentlens review <baseline-trace> <candidate-trace>");
+    }
+    const { formatReviewReport, writeReviewBundle } = await import("../src/review.js");
+    const result = writeReviewBundle({
+      baselineFile,
+      candidateFile,
+      configPath: option("--config", "evals/default.json"),
+      outDir: option("--out", ".agentlens/review"),
+      scan: !flag("--no-scan"),
+      scanFailOnSeverity: option("--scan-fail-on", "high"),
+      sections: option("--sections", undefined),
+      artifactUrl: option("--artifact-url", undefined),
+      sarifUrl: option("--sarif-url", undefined)
+    });
+    console.log(formatReviewReport(result, { root: process.cwd() }));
+    if (flag("--fail-on-failure") && !result.status.passed) process.exitCode = 1;
     return;
   }
 

@@ -20,6 +20,7 @@ import {
   formatTraceDiff,
   formatCiPrComment,
   formatQuickstartReport,
+  formatReviewReport,
   finishRun,
   formatCiSarif,
   formatScanReport,
@@ -43,7 +44,8 @@ import {
   traceOpenAiCompatibleChat,
   traceMcpToolCall,
   traceMcpStdioSession,
-  validateEvalConfig
+  validateEvalConfig,
+  writeReviewBundle
 } from "../src/index.js";
 
 test("public API exports core trace and eval helpers", () => {
@@ -83,6 +85,8 @@ test("public API exports core trace and eval helpers", () => {
   assert.equal(typeof writeOtelTrace, "function");
   assert.equal(typeof runQuickstart, "function");
   assert.equal(typeof formatQuickstartReport, "function");
+  assert.equal(typeof writeReviewBundle, "function");
+  assert.equal(typeof formatReviewReport, "function");
   assert.equal(buildOtelTrace(run).resourceSpans.length, 1);
   assert.equal(buildRunBundleManifest().schemaVersion, "agentlens.run-bundle.v1");
   assert.match(formatDoctorReport(doctorWorkspace(process.cwd())), /AgentLens Doctor/);

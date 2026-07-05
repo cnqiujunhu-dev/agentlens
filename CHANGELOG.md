@@ -13,6 +13,7 @@
 - Static dashboard tool call groups for repeated-call review by risk, latency, server, permission, and one-click timeline filtering.
 - Shareable static dashboard filter links for PR and issue review.
 - Dashboard review workflow guide for PR artifacts, dashboard sections, and filtered view links.
+- Agent review packs through `agentlens review` for baseline/candidate traces, PR comments, SARIF, diff dashboards, and run bundles.
 - Run bundle `manifest.json` output with summary counts and per-trace review metadata.
 - Composite GitHub Action `bundle` and `bundle-sections` inputs for generating static run bundle artifacts.
 - Quickstart artifact pack through `agentlens quickstart`, generating trace, eval, scan, dashboard, PR comment, OTLP, run bundle, and share bundle outputs.

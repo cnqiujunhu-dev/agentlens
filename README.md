@@ -65,6 +65,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - Trace diff reports for before/after agent regressions.
 - Static diff dashboards for sharing before/after regressions.
+- `agentlens review` for turning baseline/candidate traces into a PR-ready review pack.
 - Static run bundles for reviewing a directory of traces as a CI artifact.
 - Machine-readable `manifest.json` output for run bundle automation.
 - Dashboard review workflow for PR artifacts, compact sections, and filtered view links.
@@ -163,7 +164,10 @@ Want to compare a regression against the healthy demo?
 npm run demo
 npm run diff:demo
 npm run diff:dashboard
+node ./bin/agentlens.js review .agentlens/runs/demo.json .agentlens/runs/failing-demo.json --config evals/default.json --out .agentlens/review
 ```
+
+`agentlens review` writes a PR-ready artifact pack with copied traces, eval policy, CI summary, PR comment Markdown, SARIF, diff dashboard, and run bundle. See [AGENT_REVIEW.md](docs/AGENT_REVIEW.md).
 
 Want to wrap a generic LLM call?
 
@@ -314,6 +318,7 @@ agentlens doctor [--json]
 agentlens demo [--out path]
 agentlens inspect <trace-file> [--json]
 agentlens replay <trace-file>
+agentlens review <baseline-trace> <candidate-trace> [--config path] [--out dir] [--no-scan] [--fail-on-failure]
 agentlens diff <baseline-trace> <candidate-trace> [--json]
 agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]
 agentlens eval <trace-file> [--config path] [--json]
@@ -365,6 +370,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Roadmap](docs/ROADMAP.md)
 - [Market analysis](docs/MARKET_ANALYSIS.md)
 - [Quickstart artifacts](docs/QUICKSTART_ARTIFACTS.md)
+- [Agent review packs](docs/AGENT_REVIEW.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
 - [Python framework cookbook](docs/PYTHON_FRAMEWORK_COOKBOOK.md)
@@ -437,6 +443,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Trace model calls without binding to one LLM SDK.
 - Add AgentLens around existing provider SDK calls with a copyable cookbook.
 - Generate a clean quickstart artifact pack with `agentlens quickstart` before wiring your own traces.
+- Generate a PR-ready before/after review pack with `agentlens review`.
 - Write AgentLens-compatible sync/async traces from Python agent, RAG, and notebook code.
 - Bootstrap a Python project with `agentlens init --python`, then run `.agentlens/python/basic_run.py` in CI.
 - Add trace boundaries around LangChain-style, LlamaIndex-style, and CrewAI-style Python projects without adding framework dependencies to AgentLens.
@@ -503,6 +510,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - GitHub PR comment Markdown renderer.
 - Init scaffolding for starter evals and GitHub Action examples.
 - Quickstart artifact pack via `agentlens quickstart`.
+- Agent review artifact pack via `agentlens review`.
 - Python init scaffolding via `agentlens init --python`.
 - Generic LLM call adapter.
 - Minimal sync/async Python trace writer example.

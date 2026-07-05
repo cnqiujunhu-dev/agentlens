@@ -14,6 +14,7 @@ AgentLens is currently weaker than mature platforms in hosted collaboration, pro
 - deterministic replay from plain files
 - GitHub-native CI gates and PR artifacts
 - one-command quickstart artifact pack for first-run evaluation
+- baseline/candidate review packs through `agentlens review`
 - static HTML dashboards and run bundles
 - machine-readable bundle manifests
 - SARIF output for trace scan findings
@@ -46,7 +47,7 @@ The practical wedge is "agent regression review in GitHub", not "replace Langfus
 
 2. CI and PR review are first-class.
 
-   The current product can emit Markdown CI summaries, PR comment bodies, SARIF, diff dashboards, run bundles, and `manifest.json` metadata. This is a better fit for code review than a dashboard URL that requires an account.
+   The current product can emit Markdown CI summaries, PR comment bodies, SARIF, diff dashboards, review packs through `agentlens review`, run bundles, and `manifest.json` metadata. This is a better fit for code review than a dashboard URL that requires an account.
 
 3. Agent-specific failure review.
 

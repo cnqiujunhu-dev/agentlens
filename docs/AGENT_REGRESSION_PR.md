@@ -8,6 +8,8 @@ Run the local example:
 npm run demo:regression-pr
 ```
 
+For real baseline/candidate traces from your own tests or eval jobs, use [`agentlens review`](AGENT_REVIEW.md).
+
 ![AgentLens regression PR diff](assets/regression-pr-diff.png)
 
 It writes a complete PR review bundle to `.agentlens/regression-pr/`:

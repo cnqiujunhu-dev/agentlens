@@ -102,6 +102,30 @@ console.log(formatTraceDiff(diff));
 const html = renderDiffDashboard(diff);
 ```
 
+## Review Packs
+
+```js
+import { formatReviewReport, writeReviewBundle } from "agentlens";
+
+const review = writeReviewBundle({
+  baselineFile: ".agentlens/runs/baseline.json",
+  candidateFile: ".agentlens/runs/candidate.json",
+  configPath: "evals/default.json",
+  outDir: ".agentlens/review"
+});
+
+console.log(formatReviewReport(review));
+```
+
+CLI:
+
+```bash
+agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json --out .agentlens/review
+agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json --fail-on-failure
+```
+
+Review packs include copied traces, eval policy, CI summary, PR comment Markdown, SARIF, diff report, diff dashboard, and a static run bundle. See [AGENT_REVIEW.md](AGENT_REVIEW.md).
+
 ## CLI JSON Output
 
 ```bash

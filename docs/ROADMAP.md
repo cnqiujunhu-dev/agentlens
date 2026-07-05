@@ -9,7 +9,7 @@ The first public release should prove that an agent run can be captured, inspect
 Shipped:
 
 - Trace v1 JSON schema and validation.
-- CLI for `init`, `quickstart`, `demo`, `inspect`, `replay`, `eval`, `scan`, `ci`, `redact`, `share`, `dashboard`, `serve`, `diff`, and `validate`.
+- CLI for `init`, `quickstart`, `demo`, `inspect`, `replay`, `review`, `eval`, `scan`, `ci`, `redact`, `share`, `dashboard`, `serve`, `diff`, and `validate`.
 - Local security scan for leaked secrets, prompt injection phrases, and risky tool calls.
 - Single-trace and batch SARIF export for scan findings.
 - CI scan gates through `agentlens ci --scan` and the composite GitHub Action.
@@ -61,6 +61,7 @@ Started after v0.2.0:
 - Tool call groups for repeated-call review by risk, latency, server, permission, and one-click timeline filtering.
 - Shareable dashboard filter links for PR and issue review.
 - Dashboard review workflow docs for PR artifacts, compact sections, and filtered views.
+- Agent review packs through `agentlens review`.
 - Run bundle `manifest.json` for PR bots, dashboard indexes, and CI artifact automation.
 - GitHub Action `bundle` and `bundle-sections` inputs for uploadable run bundle artifacts.
 - Market analysis and bilingual README positioning for English and Chinese launch audiences.

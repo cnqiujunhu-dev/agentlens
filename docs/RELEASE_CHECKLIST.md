@@ -24,6 +24,8 @@ node ./bin/agentlens.js quickstart --python
 npm run doctor
 npm run validate:demo
 npm run scan:demo
+npm run diff:demo
+node ./bin/agentlens.js review .agentlens/runs/demo.json .agentlens/runs/failing-demo.json --config evals/default.json --out .agentlens/review
 npm run bundle:demo
 npm run share:demo
 npm run release:audit
@@ -40,6 +42,7 @@ Expected result:
 - `agentlens doctor` reports no failed checks.
 - `agentlens validate` reports no trace or eval config errors.
 - `agentlens scan` reports no blocking high or critical findings for the demo trace.
+- `agentlens review` writes a PR-ready baseline/candidate review pack.
 - `agentlens bundle` writes a static run bundle index and per-trace dashboards.
 - `agentlens share` writes a redacted share bundle.
 - Release audit prints `AgentLens release audit passed`.

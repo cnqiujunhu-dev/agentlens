@@ -60,6 +60,7 @@ AgentLens 的差异化是：
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。
 - Deterministic replay，不重新调用模型也能复盘时间线。
 - before/after trace diff 和静态 diff dashboard。
+- `agentlens review`，把 baseline/candidate trace 生成 PR-ready review pack。
 - JSON eval rules，用于 required events、forbidden tools、cost、latency、citation、MCP policy。
 - 本地 security scan，检查 secret-shaped value、prompt injection phrase、高风险工具调用。
 - SARIF 输出，可接入 GitHub code scanning。
@@ -99,7 +100,12 @@ npm run verify
 
 ```bash
 npm run demo:regression-pr
+npm run demo
+npm run diff:demo
+node ./bin/agentlens.js review .agentlens/runs/demo.json .agentlens/runs/failing-demo.json --config evals/default.json --out .agentlens/review
 ```
+
+`agentlens review` 会生成真实 PR 可用的 review pack，包括 CI summary、PR comment、SARIF、diff dashboard 和 run bundle。详见 [AGENT_REVIEW.md](docs/AGENT_REVIEW.md)。
 
 输出位置：
 
@@ -161,6 +167,7 @@ agentlens doctor [--json]
 agentlens demo [--out path]
 agentlens inspect <trace-file> [--json]
 agentlens replay <trace-file>
+agentlens review <baseline-trace> <candidate-trace> [--config path] [--out dir] [--no-scan] [--fail-on-failure]
 agentlens diff <baseline-trace> <candidate-trace> [--json]
 agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]
 agentlens eval <trace-file> [--config path] [--json]
@@ -179,6 +186,7 @@ agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 - [API](docs/API.md)
 - [市场分析](docs/MARKET_ANALYSIS.md)
 - [Quickstart artifacts](docs/QUICKSTART_ARTIFACTS.md)
+- [Agent review packs](docs/AGENT_REVIEW.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
 - [Python framework cookbook](docs/PYTHON_FRAMEWORK_COOKBOOK.md)
@@ -200,4 +208,4 @@ AgentLens 不是另一个 Agent 框架。
 
 ## 当前状态
 
-早期 MVP。当前版本已经适合本地 trace、deterministic replay、JSON eval、security scan、redacted share bundle、CI gate、静态 dashboard、run bundle、MCP policy、多 Agent demo、`agentlens quickstart`、sync/async Python trace writer、`agentlens init --python` 和 OpenTelemetry/OpenInference-style OTLP JSON 导出。下一阶段重点是更深的框架接入、collector/protobuf 级互通、Python SDK 化和更完整的 cookbook。
+早期 MVP。当前版本已经适合本地 trace、deterministic replay、JSON eval、security scan、redacted share bundle、CI gate、静态 dashboard、run bundle、MCP policy、多 Agent demo、`agentlens quickstart`、`agentlens review`、sync/async Python trace writer、`agentlens init --python` 和 OpenTelemetry/OpenInference-style OTLP JSON 导出。下一阶段重点是更深的框架接入、collector/protobuf 级互通、Python SDK 化和更完整的 cookbook。
