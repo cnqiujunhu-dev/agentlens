@@ -33,6 +33,8 @@ The index shows trace status, event counts, scan status, source file path, links
     path: .agentlens/reports/bundle
 ```
 
+For PR review order, compact dashboard sections, and shareable filtered links, see [Dashboard Review Workflow](DASHBOARD_REVIEW.md).
+
 ## API
 
 ```js

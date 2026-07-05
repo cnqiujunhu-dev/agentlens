@@ -61,6 +61,7 @@ Started after v0.2.0:
 - Timeline jump links for errors, high-risk calls, final responses, and last events.
 - Tool call groups for repeated-call review by risk, latency, server, permission, and one-click timeline filtering.
 - Shareable dashboard filter links for PR and issue review.
+- Dashboard review workflow docs for PR artifacts, compact sections, and filtered views.
 
 Candidates:
 

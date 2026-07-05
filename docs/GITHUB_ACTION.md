@@ -114,6 +114,8 @@ Use `pr-comment` when you want the action to write a stable Markdown body that a
 
 The generated body includes `<!-- agentlens-ci-comment -->` so the workflow can update the existing AgentLens comment instead of posting duplicates.
 
+For a complete PR review handoff with uploaded dashboard bundles, compact sections, and filtered view links, see [Dashboard Review Workflow](DASHBOARD_REVIEW.md).
+
 ## SARIF Upload
 
 For GitHub code scanning, export SARIF with the CLI and upload it in a later step:

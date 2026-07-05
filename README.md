@@ -52,6 +52,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Trace diff reports for before/after agent regressions.
 - Static diff dashboards for sharing before/after regressions.
 - Static run bundles for reviewing a directory of traces as a CI artifact.
+- Dashboard review workflow for PR artifacts, compact sections, and filtered view links.
 - Runnable agent regression PR demo that emits CI summary, SARIF, diff dashboard, and run bundle artifacts.
 - JSON output for inspect, eval, CI, and diff automation.
 - Markdown CI summaries for GitHub Actions.
@@ -331,6 +332,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Agent regression PR example](docs/AGENT_REGRESSION_PR.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
 - [Run bundles](docs/RUN_BUNDLES.md)
+- [Dashboard review workflow](docs/DASHBOARD_REVIEW.md)
 - [Security scan](docs/SECURITY_SCAN.md)
 - [MCP risk exceptions](docs/MCP_RISK_EXCEPTIONS.md)
 - [LangGraph-style adapter](docs/LANGGRAPH_ADAPTER.md)
