@@ -12,6 +12,10 @@ on:
 jobs:
   agentlens:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
     steps:
       - uses: actions/checkout@v7
 
@@ -89,14 +93,26 @@ Use `pr-comment` when you want the action to write a stable Markdown body that a
     config: evals/default.json
     pr-comment: .agentlens/reports/agentlens-pr-comment.md
 
-- name: Comment on PR
+- name: Upsert PR comment
   if: always() && github.event_name == 'pull_request'
   env:
     GH_TOKEN: ${{ github.token }}
-  run: gh pr comment "${{ github.event.pull_request.number }}" --body-file .agentlens/reports/agentlens-pr-comment.md
+    REPO: ${{ github.repository }}
+    PR_NUMBER: ${{ github.event.pull_request.number }}
+  run: |
+    marker='<!-- agentlens-ci-comment -->'
+    body_file='.agentlens/reports/agentlens-pr-comment.md'
+    body="$(cat "$body_file")"
+    comment_id="$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" --jq ".[] | select(.body | contains(\"$marker\")) | .id" | head -n 1)"
+
+    if [[ -n "$comment_id" ]]; then
+      gh api --method PATCH "repos/$REPO/issues/comments/$comment_id" -f body="$body"
+    else
+      gh api --method POST "repos/$REPO/issues/$PR_NUMBER/comments" -f body="$body"
+    fi
 ```
 
-The generated body includes `<!-- agentlens-ci-comment -->` so a workflow can find and replace the existing AgentLens comment instead of posting duplicates.
+The generated body includes `<!-- agentlens-ci-comment -->` so the workflow can update the existing AgentLens comment instead of posting duplicates.
 
 ## SARIF Upload
 

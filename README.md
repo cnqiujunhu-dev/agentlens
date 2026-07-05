@@ -56,6 +56,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - JSON output for inspect, eval, CI, and diff automation.
 - Markdown CI summaries for GitHub Actions.
 - PR comment Markdown output for GitHub review workflows.
+- Upsert PR comment workflow using the stable `agentlens-ci-comment` marker.
 - GitHub Action outputs for downstream workflow steps.
 - Workspace doctor for checking local setup, traces, eval config, and CI wiring.
 - Validation command for trace files and eval configs.

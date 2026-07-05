@@ -74,3 +74,5 @@ In a real repository, the shape is:
 ```
 
 Use `agentlens diff` and `agentlens diff-dashboard` when you have a known-good baseline trace and a candidate trace from the pull request.
+
+For a non-duplicating PR comment workflow, use the marker-based upsert example in [GITHUB_ACTION.md](GITHUB_ACTION.md).
