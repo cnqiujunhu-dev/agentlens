@@ -5,7 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildRunBundle, renderRunBundleIndex, writeRunBundle } from "../src/bundle.js";
+import { buildRunBundle, buildRunBundleManifest, renderRunBundleIndex, writeRunBundle } from "../src/bundle.js";
 import { writeTrace } from "../src/store.js";
 import { addEvent, createRun, finishRun } from "../src/trace.js";
 
@@ -57,13 +57,22 @@ test("writeRunBundle writes an index and dashboards for valid traces", () => {
   assert.equal(result.valid, 1);
   assert.equal(result.invalid, 1);
   assert.equal(fs.existsSync(result.index), true);
+  assert.equal(fs.existsSync(result.manifest), true);
   assert.equal(result.dashboards.length, 1);
   assert.equal(fs.existsSync(result.dashboards[0]), true);
 
   const index = fs.readFileSync(result.index, "utf8");
   assert.match(index, /AgentLens Run Bundle/);
+  assert.match(index, /manifest\.json/);
   assert.match(index, /support/);
   assert.match(index, /invalid/);
+
+  const manifest = JSON.parse(fs.readFileSync(result.manifest, "utf8"));
+  assert.equal(manifest.schemaVersion, "agentlens.run-bundle.v1");
+  assert.equal(manifest.summary.total, 2);
+  assert.equal(manifest.summary.valid, 1);
+  assert.equal(manifest.summary.invalid, 1);
+  assert.equal(manifest.items.find((item) => item.valid).dashboard.endsWith(".html"), true);
 });
 
 test("buildRunBundle includes scan finding counts", () => {
@@ -77,7 +86,40 @@ test("buildRunBundle includes scan finding counts", () => {
 
   assert.equal(bundle.items[0].scanStatus, "FAIL");
   assert.equal(bundle.items[0].scanFindings, 1);
+  assert.equal(bundle.manifest.summary.scanFindings, 1);
   assert.match(bundle.indexHtml, /1 findings/);
+});
+
+test("buildRunBundleManifest summarizes valid and invalid traces", () => {
+  const manifest = buildRunBundleManifest({
+    runsDir: "runs",
+    generatedAt: "2026-01-01T00:00:00.000Z",
+    items: [
+      {
+        valid: true,
+        source: "passed.json",
+        dashboard: "001-run.html",
+        traceId: "run_1",
+        app: "bundle-agent",
+        name: "passed",
+        status: "passed",
+        events: 2,
+        errors: 0,
+        scanStatus: "PASS",
+        scanFindings: 0
+      },
+      {
+        valid: false,
+        source: "invalid.json",
+        error: "Invalid trace"
+      }
+    ]
+  });
+
+  assert.equal(manifest.schemaVersion, "agentlens.run-bundle.v1");
+  assert.equal(manifest.generatedAt, "2026-01-01T00:00:00.000Z");
+  assert.deepEqual(manifest.summary, { total: 2, valid: 1, invalid: 1, failed: 0, scanFindings: 0 });
+  assert.deepEqual(manifest.items[1], { valid: false, source: "invalid.json", error: "Invalid trace" });
 });
 
 test("CLI bundle writes a static run bundle with selected dashboard sections", () => {
@@ -95,6 +137,7 @@ test("CLI bundle writes a static run bundle with selected dashboard sections", (
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /Wrote run bundle/);
   assert.equal(fs.existsSync(path.join(outDir, "index.html")), true);
+  assert.equal(fs.existsSync(path.join(outDir, "manifest.json")), true);
   const dashboardFile = fs.readdirSync(outDir).find((file) => file.endsWith(".html") && file !== "index.html");
   assert.ok(dashboardFile);
   const dashboard = fs.readFileSync(path.join(outDir, dashboardFile), "utf8");

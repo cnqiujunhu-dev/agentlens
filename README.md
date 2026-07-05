@@ -52,6 +52,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Trace diff reports for before/after agent regressions.
 - Static diff dashboards for sharing before/after regressions.
 - Static run bundles for reviewing a directory of traces as a CI artifact.
+- Machine-readable `manifest.json` output for run bundle automation.
 - Dashboard review workflow for PR artifacts, compact sections, and filtered view links.
 - Runnable agent regression PR demo that emits CI summary, SARIF, diff dashboard, and run bundle artifacts.
 - JSON output for inspect, eval, CI, and diff automation.
@@ -425,6 +426,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Validate trace and eval files before sharing or running CI.
 - Browse local runs with a zero-dependency dashboard server.
 - Generate static run bundles for CI artifacts and support handoffs.
+- Feed run bundle manifests into PR bots, dashboards, and CI artifact indexes.
 - Poll local trace files while agents are running.
 - Filter long traces by event type, status, text, and MCP risk, then copy a shareable filtered view link.
 - Review repeated tool calls by grouped count, risk, latency, server, permission, and one-click timeline filtering.

@@ -277,6 +277,7 @@ async function main() {
     });
     console.log(`Wrote run bundle: ${result.outDir}`);
     console.log(`- ${result.index}`);
+    console.log(`- ${result.manifest}`);
     for (const file of result.dashboards) console.log(`- ${file}`);
     console.log(`Traces: ${result.total}, Valid: ${result.valid}, Invalid: ${result.invalid}`);
     return;

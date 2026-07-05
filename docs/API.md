@@ -142,7 +142,10 @@ const result = writeRunBundle({
 });
 
 console.log(result.index);
+console.log(result.manifest);
 ```
+
+Run bundles also write `manifest.json` with `schemaVersion: "agentlens.run-bundle.v1"`, summary counts, per-trace dashboard filenames, scan status, and invalid trace errors for automation.
 
 ## Validation
 

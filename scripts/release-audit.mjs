@@ -67,6 +67,8 @@ const requiredReadmeSnippets = [
   "one-click timeline filters",
   "Dashboard review workflow",
   "DASHBOARD_REVIEW.md",
+  "manifest.json",
+  "run bundle manifests",
   "Security Scan panel",
   "Configurable dashboard sections",
   "--sections",

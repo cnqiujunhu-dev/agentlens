@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   addEvent,
   buildRunBundle,
+  buildRunBundleManifest,
   compareTraces,
   addAgentMessage,
   createLangGraphRun,
@@ -74,6 +75,7 @@ test("public API exports core trace and eval helpers", () => {
   assert.equal(formatScanSarif(scan).version, "2.1.0");
   assert.equal(ciSarif.version, "2.1.0");
   assert.equal(typeof buildRunBundle, "function");
+  assert.equal(buildRunBundleManifest().schemaVersion, "agentlens.run-bundle.v1");
   assert.match(formatDoctorReport(doctorWorkspace(process.cwd())), /AgentLens Doctor/);
   assert.match(renderReplay(run), /LLM RESPONSE/);
   assert.equal(redactTrace(run).metadata.redacted, true);

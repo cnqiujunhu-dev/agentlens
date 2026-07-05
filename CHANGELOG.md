@@ -13,6 +13,7 @@
 - Static dashboard tool call groups for repeated-call review by risk, latency, server, permission, and one-click timeline filtering.
 - Shareable static dashboard filter links for PR and issue review.
 - Dashboard review workflow guide for PR artifacts, dashboard sections, and filtered view links.
+- Run bundle `manifest.json` output with summary counts and per-trace review metadata.
 
 ## 0.2.0
 
