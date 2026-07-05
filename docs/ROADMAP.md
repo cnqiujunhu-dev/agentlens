@@ -45,7 +45,6 @@ Next:
 
 - Harden the LangGraph adapter against common node and graph shapes.
 - Expand AutoGen and CrewAI-style examples into deeper cookbook notes.
-- Add a cookbook for wrapping arbitrary LLM SDK calls.
 - Improve dashboard navigation for long traces and repeated tool calls.
 - Add more scan rules with documented false-positive tradeoffs.
 
@@ -65,6 +64,7 @@ Started after v0.2.0:
 - Run bundle `manifest.json` for PR bots, dashboard indexes, and CI artifact automation.
 - GitHub Action `bundle` and `bundle-sections` inputs for uploadable run bundle artifacts.
 - Market analysis and bilingual README positioning for English and Chinese launch audiences.
+- LLM SDK wrapper cookbook for existing provider clients, error handling, CI, and redaction patterns.
 
 Candidates:
 

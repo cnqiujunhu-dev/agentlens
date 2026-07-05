@@ -50,6 +50,7 @@ AgentLens 的差异化是：
 - 统一 trace schema，记录 prompt、response、tool call、retrieval、error、usage 和 metadata。
 - 通用 LLM wrapper，可包住任意 SDK 调用。
 - OpenAI-compatible 和 Anthropic-compatible provider adapter。
+- LLM SDK cookbook，帮助把现有 provider client 接入本地 trace、CI 和 redaction workflow。
 - LangGraph-style node adapter。
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。
 - Deterministic replay，不重新调用模型也能复盘时间线。
@@ -162,6 +163,7 @@ agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 
 - [API](docs/API.md)
 - [市场分析](docs/MARKET_ANALYSIS.md)
+- [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [路线图](docs/ROADMAP.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
 - [Dashboard review workflow](docs/DASHBOARD_REVIEW.md)

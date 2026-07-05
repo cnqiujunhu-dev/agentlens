@@ -65,6 +65,7 @@ Built:
 - Public roadmap.
 - Market analysis against Langfuse, LangSmith, Phoenix, Helicone, OpenLLMetry, OpenLIT, and Braintrust.
 - Bilingual README entry points for English and Simplified Chinese audiences.
+- LLM SDK wrapper cookbook for wiring existing provider clients into AgentLens traces.
 
 Public launch status:
 

@@ -17,6 +17,7 @@
 - Composite GitHub Action `bundle` and `bundle-sections` inputs for generating static run bundle artifacts.
 - Market analysis and positioning guide comparing AgentLens with Langfuse, LangSmith, Phoenix, Helicone, OpenLLMetry, OpenLIT, and Braintrust.
 - Simplified Chinese README with language switching from the English README.
+- LLM SDK wrapper cookbook for OpenAI-compatible, Anthropic-compatible, custom SDK, error handling, CI, and redaction workflows.
 
 ## 0.2.0
 

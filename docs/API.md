@@ -198,6 +198,8 @@ await traceLlmCall(
 finishRun(run, "passed");
 ```
 
+See [LLM_SDK_COOKBOOK.md](LLM_SDK_COOKBOOK.md) for OpenAI-compatible, Anthropic-compatible, custom SDK, error handling, CI, and redaction patterns.
+
 ## LangGraph-Style Nodes
 
 ```js

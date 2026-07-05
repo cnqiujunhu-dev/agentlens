@@ -19,6 +19,7 @@ const requiredFiles = [
   "docs/DASHBOARD_REVIEW.md",
   "docs/GITHUB_ACTION.md",
   "docs/LANGGRAPH_ADAPTER.md",
+  "docs/LLM_SDK_COOKBOOK.md",
   "docs/MULTI_AGENT_ADAPTERS.md",
   "docs/LAUNCH_COPY.md",
   "docs/LAUNCH_PLAN.md",
@@ -59,6 +60,8 @@ const requiredReadmeSnippets = [
   "README.zh-CN.md",
   "Market Positioning",
   "MARKET_ANALYSIS.md",
+  "LLM SDK cookbook",
+  "LLM_SDK_COOKBOOK.md",
   "GitHub Actions",
   "MCP tool inventory",
   "MCP stdio trace sessions",
@@ -128,6 +131,7 @@ const requiredChineseReadmeSnippets = [
   "快速演示",
   "GitHub Actions",
   "MARKET_ANALYSIS.md",
+  "LLM SDK cookbook",
   "不是另一个 Agent 框架"
 ];
 

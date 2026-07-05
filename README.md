@@ -54,6 +54,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Trace model for LLM prompts, responses, tool calls, retrieval, errors, usage, and metadata.
 - Generic LLM wrapper for tracing model calls from any SDK.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
+- LLM SDK cookbook for wiring existing provider clients into local traces.
 - LangGraph-style node adapter for tracing graph-based agent steps.
 - Multi-agent helpers with AutoGen-style and CrewAI-style runnable examples.
 - Deterministic replay that reconstructs the timeline without calling a model again.
@@ -155,6 +156,8 @@ npm run demo:llm
 node ./bin/agentlens.js replay .agentlens/runs/llm-wrapper-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/llm-wrapper-demo.json --config evals/llm-basic.json
 ```
+
+See the [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md) for OpenAI-compatible, Anthropic-compatible, custom SDK, error handling, CI, and redaction patterns.
 
 Want provider-style SDK adapters without adding SDK dependencies?
 
@@ -342,6 +345,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Launch post draft](docs/LAUNCH_POST.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Market analysis](docs/MARKET_ANALYSIS.md)
+- [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Agent regression PR example](docs/AGENT_REGRESSION_PR.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
 - [Run bundles](docs/RUN_BUNDLES.md)
@@ -408,6 +412,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 
 - Debug tool-using AI agents.
 - Trace model calls without binding to one LLM SDK.
+- Add AgentLens around existing provider SDK calls with a copyable cookbook.
 - Trace LangGraph-style node functions without adding a framework dependency.
 - Trace AutoGen-style and CrewAI-style multi-agent workflows without adding framework dependencies.
 - Compare before/after traces when an agent regresses.
