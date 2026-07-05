@@ -51,6 +51,7 @@ AgentLens 的差异化是：
 - 通用 LLM wrapper，可包住任意 SDK 调用。
 - OpenAI-compatible 和 Anthropic-compatible provider adapter。
 - LLM SDK cookbook，帮助把现有 provider client 接入本地 trace、CI 和 redaction workflow。
+- OpenTelemetry/OpenInference-style OTLP JSON 导出，便于接入已有 observability stack。
 - LangGraph-style node adapter。
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。
 - Deterministic replay，不重新调用模型也能复盘时间线。
@@ -71,6 +72,7 @@ npm install
 npm run demo
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
+node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json
 node ./bin/agentlens.js scan .agentlens/runs/demo.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
@@ -152,6 +154,7 @@ agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]
 agentlens eval <trace-file> [--config path] [--json]
 agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]
 agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--pr-comment-md path]
+agentlens otel <trace-file> [--out path] [--service-name name]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
 agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,tool-calls,filters,timeline]
 agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,tool-calls,filters,timeline]
@@ -164,6 +167,7 @@ agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 - [API](docs/API.md)
 - [市场分析](docs/MARKET_ANALYSIS.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
+- [OpenTelemetry export](docs/OTEL_EXPORT.md)
 - [路线图](docs/ROADMAP.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
 - [Dashboard review workflow](docs/DASHBOARD_REVIEW.md)
@@ -181,4 +185,4 @@ AgentLens 不是另一个 Agent 框架。
 
 ## 当前状态
 
-早期 MVP。当前版本已经适合本地 trace、deterministic replay、JSON eval、security scan、redacted share bundle、CI gate、静态 dashboard、run bundle、MCP policy 和多 Agent demo。下一阶段重点是更深的框架接入、OpenTelemetry/OpenInference 互通、Python trace writer 和更完整的 cookbook。
+早期 MVP。当前版本已经适合本地 trace、deterministic replay、JSON eval、security scan、redacted share bundle、CI gate、静态 dashboard、run bundle、MCP policy、多 Agent demo 和 OpenTelemetry/OpenInference-style OTLP JSON 导出。下一阶段重点是更深的框架接入、collector/protobuf 级互通、Python trace writer 和更完整的 cookbook。

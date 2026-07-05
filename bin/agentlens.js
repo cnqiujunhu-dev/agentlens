@@ -23,6 +23,7 @@ function usage() {
     "  agentlens eval <trace-file> [--config path] [--json]",
     "  agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]",
     "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--pr-comment-md path] [--scan] [--scan-fail-on severity] [--sarif path]",
+    "  agentlens otel <trace-file> [--out path] [--service-name name]",
     "  agentlens schema <trace|eval> [--out path]",
     "  agentlens validate <trace|eval> <file> [--json]",
     "  agentlens materialize <jsonl-file> [--out path]",
@@ -39,6 +40,7 @@ function usage() {
     "  node ./bin/agentlens.js share .agentlens/runs/demo.json --config evals/default.json",
     "  node ./bin/agentlens.js validate trace .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js scan .agentlens/runs/demo.json",
+    "  node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json",
     "  node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json",
     "  node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json --scan",
     "  node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle"
@@ -203,6 +205,23 @@ async function main() {
       console.log(`Wrote schema: ${out}`);
     } else {
       console.log(text.trimEnd());
+    }
+    return;
+  }
+
+  if (command === "otel") {
+    const traceFile = positional(1);
+    if (!traceFile) throw new Error("Missing trace file. Usage: agentlens otel <trace-file> [--out path] [--service-name name]");
+    const { buildOtelTrace, writeOtelTrace } = await import("../src/otel.js");
+    const serviceName = option("--service-name", undefined);
+    const out = option("--out", undefined);
+    if (out) {
+      const result = writeOtelTrace({ traceFile, out, serviceName });
+      console.log(`Wrote OTel trace: ${result.out}`);
+      console.log(`Trace ID: ${result.traceId}`);
+      console.log(`Spans: ${result.spans}`);
+    } else {
+      console.log(JSON.stringify(buildOtelTrace(readTrace(traceFile), { serviceName }), null, 2));
     }
     return;
   }

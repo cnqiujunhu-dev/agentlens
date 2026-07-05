@@ -20,6 +20,7 @@ const requiredFiles = [
   "docs/GITHUB_ACTION.md",
   "docs/LANGGRAPH_ADAPTER.md",
   "docs/LLM_SDK_COOKBOOK.md",
+  "docs/OTEL_EXPORT.md",
   "docs/MULTI_AGENT_ADAPTERS.md",
   "docs/LAUNCH_COPY.md",
   "docs/LAUNCH_PLAN.md",
@@ -62,6 +63,11 @@ const requiredReadmeSnippets = [
   "MARKET_ANALYSIS.md",
   "LLM SDK cookbook",
   "LLM_SDK_COOKBOOK.md",
+  "OpenTelemetry export",
+  "OTEL_EXPORT.md",
+  "OpenInference",
+  "OTLP JSON",
+  "agentlens otel",
   "GitHub Actions",
   "MCP tool inventory",
   "MCP stdio trace sessions",
@@ -132,6 +138,8 @@ const requiredChineseReadmeSnippets = [
   "GitHub Actions",
   "MARKET_ANALYSIS.md",
   "LLM SDK cookbook",
+  "OTEL_EXPORT.md",
+  "OpenTelemetry",
   "不是另一个 Agent 框架"
 ];
 
@@ -145,6 +153,7 @@ const requiredPackageExports = [
   "./scan",
   "./ci",
   "./jsonl",
+  "./otel",
   "./share",
   "./validate",
   "./dashboard",

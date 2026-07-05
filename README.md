@@ -55,6 +55,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Generic LLM wrapper for tracing model calls from any SDK.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - LLM SDK cookbook for wiring existing provider clients into local traces.
+- OpenTelemetry/OpenInference-style OTLP JSON export for existing observability stacks.
 - LangGraph-style node adapter for tracing graph-based agent steps.
 - Multi-agent helpers with AutoGen-style and CrewAI-style runnable examples.
 - Deterministic replay that reconstructs the timeline without calling a model again.
@@ -99,6 +100,7 @@ node ./bin/agentlens.js demo --out .agentlens/runs/demo.json
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
+node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
 node ./bin/agentlens.js share .agentlens/runs/demo.json --config .agentlens/evals/default.json --out .agentlens/share/demo --sections summary,timeline
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
 node ./bin/agentlens.js scan .agentlens/runs/demo.json
@@ -301,6 +303,7 @@ agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]
 agentlens eval <trace-file> [--config path] [--json]
 agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]
 agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--pr-comment-md path]
+agentlens otel <trace-file> [--out path] [--service-name name]
 agentlens schema <trace|eval> [--out path]
 agentlens validate <trace|eval> <file> [--json]
 agentlens materialize <jsonl-file> [--out path]
@@ -346,6 +349,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Roadmap](docs/ROADMAP.md)
 - [Market analysis](docs/MARKET_ANALYSIS.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
+- [OpenTelemetry export](docs/OTEL_EXPORT.md)
 - [Agent regression PR example](docs/AGENT_REGRESSION_PR.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
 - [Run bundles](docs/RUN_BUNDLES.md)
@@ -413,6 +417,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Debug tool-using AI agents.
 - Trace model calls without binding to one LLM SDK.
 - Add AgentLens around existing provider SDK calls with a copyable cookbook.
+- Export local traces as OTLP JSON with OpenTelemetry/OpenInference-style attributes.
 - Trace LangGraph-style node functions without adding a framework dependency.
 - Trace AutoGen-style and CrewAI-style multi-agent workflows without adding framework dependencies.
 - Compare before/after traces when an agent regresses.
@@ -475,6 +480,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - GitHub PR comment Markdown renderer.
 - Init scaffolding for starter evals and GitHub Action examples.
 - Generic LLM call adapter.
+- OpenTelemetry/OpenInference-style OTLP JSON export.
 - LangGraph-style node adapter.
 - Multi-agent adapter helpers and AutoGen-style/CrewAI-style examples.
 - Local dashboard server.

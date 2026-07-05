@@ -82,6 +82,7 @@ agentlens ci --runs .agentlens/runs --config evals/default.json --scan --json --
 agentlens bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,timeline
 agentlens diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json --json
 agentlens diff-dashboard .agentlens/runs/baseline.json .agentlens/runs/candidate.json --out .agentlens/reports/diff.html
+agentlens otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
 ```
 
 For GitHub Actions summaries or local reports:
@@ -129,6 +130,33 @@ agentlens share .agentlens/runs/demo.json --config evals/default.json --out .age
 ```
 
 Share bundles include `scan.txt`, generated after redaction.
+
+## OpenTelemetry Export
+
+```js
+import { buildOtelTrace, writeOtelTrace } from "agentlens";
+
+const otlp = buildOtelTrace(trace, {
+  serviceName: "support-agent"
+});
+
+const result = writeOtelTrace({
+  traceFile: ".agentlens/runs/demo.json",
+  out: ".agentlens/reports/demo.otlp.json",
+  serviceName: "support-agent"
+});
+
+console.log(otlp.resourceSpans.length);
+console.log(result.traceId, result.spans);
+```
+
+CLI:
+
+```bash
+agentlens otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
+```
+
+See [OTEL_EXPORT.md](OTEL_EXPORT.md) for OpenTelemetry/OpenInference attribute coverage and current limits.
 
 ## Run Bundles
 

@@ -18,6 +18,7 @@ AgentLens is currently weaker than mature platforms in hosted collaboration, pro
 - SARIF output for trace scan findings
 - MCP tool risk scanning and policy checks
 - redacted share bundles for issues and support threads
+- OTLP JSON export with OpenTelemetry/OpenInference-style attributes
 
 The practical wedge is "agent regression review in GitHub", not "replace Langfuse".
 
@@ -65,9 +66,9 @@ The practical wedge is "agent regression review in GitHub", not "replace Langfus
 
    Prompt registry, prompt labels, playgrounds, prompt datasets, prompt deployment, and prompt-performance analytics are not core features yet.
 
-3. Limited standards interoperability.
+3. Early standards interoperability.
 
-   AgentLens has a local JSON trace schema but no OpenTelemetry/OpenInference bridge yet. This will matter for teams already invested in Phoenix, Langfuse, OpenLIT, or existing APM stacks.
+   AgentLens now has an initial OpenTelemetry/OpenInference-style OTLP JSON export, but it does not yet send to collectors or emit protobuf/gRPC. Hardening this bridge will matter for teams already invested in Phoenix, Langfuse, OpenLIT, or existing APM stacks.
 
 4. JavaScript-first surface.
 
@@ -85,7 +86,7 @@ Do not compete head-on with Langfuse, LangSmith, Phoenix, or Braintrust on "comp
 - **Portable evidence bundles**: produce `index.html`, trace dashboards, `manifest.json`, SARIF, redacted traces, scan reports, and eval reports that can move through GitHub, Slack, support tickets, and incident notes.
 - **MCP and tool governance**: make tool risk, server identity, permissions, reviewed exceptions, owners, and expiry dates visible in the same trace review flow.
 - **No-account debugging**: let a developer clone the repo, run a demo, generate a trace, and inspect it locally in minutes.
-- **Complement, not replace**: later export AgentLens traces to OpenTelemetry or import OpenTelemetry spans so AgentLens can be used before or beside Langfuse/Phoenix/OpenLIT.
+- **Complement, not replace**: export AgentLens traces as OTLP JSON now, then add richer collector/protobuf paths so AgentLens can be used before or beside Langfuse/Phoenix/OpenLIT.
 
 ## Recommended Product Positioning
 
@@ -116,7 +117,7 @@ Highest leverage:
 
 1. LLM SDK wrapper cookbook for real projects.
 2. LangGraph, AutoGen, CrewAI, and MCP integration cookbooks with realistic examples.
-3. OpenTelemetry/OpenInference export so traces can flow into Phoenix, Langfuse, OpenLIT, or existing APM.
+3. Harden OpenTelemetry/OpenInference interoperability beyond the initial OTLP JSON export, including collector/protobuf paths.
 4. Python trace writer or minimal Python SDK.
 5. More dashboard panels for MCP governance and eval failure root causes.
 6. Better README localization and launch copy for Chinese and English developer communities.

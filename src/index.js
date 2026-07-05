@@ -9,6 +9,7 @@ export { DEFAULT_EVAL_CONFIG, evaluateTrace, formatEvalReport, loadEvalConfig } 
 export { DEFAULT_SCAN_OPTIONS, SEVERITY_ORDER, formatScanReport, formatScanReportsSarif, formatScanSarif, scanTrace } from "./scan.js";
 export { discoverTraceFiles, formatCiMarkdown, formatCiPrComment, formatCiReport, formatCiSarif, runCi } from "./ci.js";
 export { JsonlTraceWriter, readJsonlTrace } from "./jsonl.js";
+export { buildOtelTrace, writeOtelTrace } from "./otel.js";
 export { DEFAULT_REDACT_KEYS, parseRedactKeys, redactTrace } from "./redact.js";
 export { buildShareBundle, writeShareBundle } from "./share.js";
 export { listSchemas, readSchema, schemaPath } from "./schemas.js";

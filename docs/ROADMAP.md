@@ -65,10 +65,11 @@ Started after v0.2.0:
 - GitHub Action `bundle` and `bundle-sections` inputs for uploadable run bundle artifacts.
 - Market analysis and bilingual README positioning for English and Chinese launch audiences.
 - LLM SDK wrapper cookbook for existing provider clients, error handling, CI, and redaction patterns.
+- OpenTelemetry/OpenInference-style OTLP JSON export for local trace files.
 
 Candidates:
 
-- OpenTelemetry/OpenInference export for teams that already use Langfuse, Phoenix, OpenLIT, or existing APM.
+- Collector/protobuf export hardening for teams that already use Langfuse, Phoenix, OpenLIT, or existing APM.
 - Minimal Python trace writer for Python-heavy agent teams.
 - Richer dashboards for MCP exception review history.
 

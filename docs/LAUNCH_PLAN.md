@@ -66,6 +66,7 @@ Built:
 - Market analysis against Langfuse, LangSmith, Phoenix, Helicone, OpenLLMetry, OpenLIT, and Braintrust.
 - Bilingual README entry points for English and Simplified Chinese audiences.
 - LLM SDK wrapper cookbook for wiring existing provider clients into AgentLens traces.
+- OpenTelemetry/OpenInference-style OTLP JSON export for local trace files.
 
 Public launch status:
 
@@ -151,3 +152,4 @@ Target `v0.3.0`:
 - Started: PR comment renderer for CI summaries.
 - Configurable dashboard sections for eval, scan, MCP risk, and diff.
 - Governance docs for reviewed MCP risk exceptions.
+- Started: OpenTelemetry/OpenInference-style OTLP JSON export.

@@ -10,10 +10,12 @@ import {
   createMcpRun,
   createMultiAgentRun,
   createRun,
+  buildOtelTrace,
   DEFAULT_DASHBOARD_SECTIONS,
   doctorWorkspace,
   evaluateTrace,
   buildShareBundle,
+  writeOtelTrace,
   formatDoctorReport,
   formatTraceDiff,
   formatCiPrComment,
@@ -75,6 +77,9 @@ test("public API exports core trace and eval helpers", () => {
   assert.equal(formatScanSarif(scan).version, "2.1.0");
   assert.equal(ciSarif.version, "2.1.0");
   assert.equal(typeof buildRunBundle, "function");
+  assert.equal(typeof buildOtelTrace, "function");
+  assert.equal(typeof writeOtelTrace, "function");
+  assert.equal(buildOtelTrace(run).resourceSpans.length, 1);
   assert.equal(buildRunBundleManifest().schemaVersion, "agentlens.run-bundle.v1");
   assert.match(formatDoctorReport(doctorWorkspace(process.cwd())), /AgentLens Doctor/);
   assert.match(renderReplay(run), /LLM RESPONSE/);
