@@ -44,6 +44,7 @@ jobs:
           runs: .agentlens/runs
           config: evals/default.json
           summary: false
+          pr-comment: .agentlens/reports/pr-comment.md
 
       - name: Verify GitHub Action outputs
         shell: bash
@@ -51,6 +52,7 @@ jobs:
           test "${{ steps.agentlens-action.outputs.status }}" = "PASS"
           test "${{ steps.agentlens-action.outputs.failed }}" = "0"
           test "${{ steps.agentlens-action.outputs.total }}" != "0"
+          grep -q "agentlens-ci-comment" .agentlens/reports/pr-comment.md
 
       - name: MCP adapter demo
         run: |

@@ -144,6 +144,6 @@ Avoid hooks that sound like every other agent project:
 
 Target `v0.3.0`:
 
-- PR comment renderer for CI summaries.
+- Started: PR comment renderer for CI summaries.
 - Configurable dashboard sections for eval, scan, MCP risk, and diff.
 - Governance docs for reviewed MCP risk exceptions.

@@ -22,7 +22,7 @@ function usage() {
     "  agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]",
     "  agentlens eval <trace-file> [--config path] [--json]",
     "  agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]",
-    "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--scan] [--scan-fail-on severity] [--sarif path]",
+    "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--pr-comment-md path] [--scan] [--scan-fail-on severity] [--sarif path]",
     "  agentlens schema <trace|eval> [--out path]",
     "  agentlens validate <trace|eval> <file> [--json]",
     "  agentlens materialize <jsonl-file> [--out path]",
@@ -160,7 +160,7 @@ async function main() {
   }
 
   if (command === "ci") {
-    const { formatCiMarkdown, formatCiReport, formatCiSarif, runCi } = await import("../src/ci.js");
+    const { formatCiMarkdown, formatCiPrComment, formatCiReport, formatCiSarif, runCi } = await import("../src/ci.js");
     const { loadEvalConfig } = await import("../src/eval.js");
     const runsDir = option("--runs", ".agentlens/runs");
     const configPath = option("--config", "evals/default.json");
@@ -172,6 +172,16 @@ async function main() {
     });
     const summaryMdPath = option("--summary-md", undefined);
     if (summaryMdPath) appendText(summaryMdPath, `${formatCiMarkdown(report)}\n\n`);
+    const prCommentMdPath = option("--pr-comment-md", undefined);
+    if (prCommentMdPath) {
+      writeText(
+        prCommentMdPath,
+        `${formatCiPrComment(report, {
+          artifactUrl: option("--artifact-url", undefined),
+          sarifUrl: option("--sarif-url", undefined)
+        })}\n`
+      );
+    }
     const sarifPath = option("--sarif", undefined);
     if (sarifPath) {
       if (!report.scan.enabled) throw new Error("agentlens ci --sarif requires --scan");

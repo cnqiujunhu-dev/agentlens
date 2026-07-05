@@ -86,6 +86,44 @@ test("CLI writes CI markdown summaries", () => {
   assert.match(markdown, /summary/);
 });
 
+test("CLI writes PR comment markdown", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-cli-pr-comment-"));
+  const runsDir = path.join(dir, "runs");
+  fs.mkdirSync(runsDir);
+  const traceFile = path.join(runsDir, "trace.json");
+  const configFile = path.join(dir, "eval.json");
+  const commentFile = path.join(dir, "comment.md");
+
+  writeTrace(traceFile, makeTrace("pr comment"));
+  writeJson(configFile, {
+    version: "agentlens.eval.v1",
+    name: "cli-pr-comment",
+    assertions: [{ id: "has-answer", type: "required-final-response" }]
+  });
+
+  const result = spawnSync(process.execPath, [
+    binPath,
+    "ci",
+    "--runs",
+    runsDir,
+    "--config",
+    configFile,
+    "--pr-comment-md",
+    commentFile,
+    "--artifact-url",
+    "https://example.com/bundle"
+  ], {
+    cwd: dir,
+    encoding: "utf8"
+  });
+
+  assert.equal(result.status, 0, result.stderr);
+  const markdown = fs.readFileSync(commentFile, "utf8");
+  assert.match(markdown, /<!-- agentlens-ci-comment -->/);
+  assert.match(markdown, /AgentLens CI: PASS/);
+  assert.match(markdown, /Run bundle: https:\/\/example\.com\/bundle/);
+});
+
 test("CLI writes combined SARIF for scanned CI runs", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-cli-sarif-"));
   const runsDir = path.join(dir, "runs");

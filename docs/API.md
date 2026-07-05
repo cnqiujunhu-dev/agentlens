@@ -88,6 +88,7 @@ For GitHub Actions summaries or local reports:
 
 ```bash
 agentlens ci --runs .agentlens/runs --config evals/default.json --summary-md agentlens-summary.md
+agentlens ci --runs .agentlens/runs --config evals/default.json --scan --pr-comment-md agentlens-pr-comment.md
 ```
 
 ## Workspace Doctor

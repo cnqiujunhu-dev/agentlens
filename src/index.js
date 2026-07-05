@@ -7,7 +7,7 @@ export { doctorWorkspace, formatDoctorReport } from "./doctor.js";
 export { renderReplay } from "./replay.js";
 export { DEFAULT_EVAL_CONFIG, evaluateTrace, formatEvalReport, loadEvalConfig } from "./eval.js";
 export { DEFAULT_SCAN_OPTIONS, SEVERITY_ORDER, formatScanReport, formatScanReportsSarif, formatScanSarif, scanTrace } from "./scan.js";
-export { discoverTraceFiles, formatCiMarkdown, formatCiReport, formatCiSarif, runCi } from "./ci.js";
+export { discoverTraceFiles, formatCiMarkdown, formatCiPrComment, formatCiReport, formatCiSarif, runCi } from "./ci.js";
 export { JsonlTraceWriter, readJsonlTrace } from "./jsonl.js";
 export { DEFAULT_REDACT_KEYS, parseRedactKeys, redactTrace } from "./redact.js";
 export { buildShareBundle, writeShareBundle } from "./share.js";

@@ -18,6 +18,10 @@ inputs:
     description: Write a Markdown report to the GitHub Actions step summary.
     required: false
     default: "true"
+  pr-comment:
+    description: Optional path to write Markdown suitable for a GitHub PR comment.
+    required: false
+    default: ""
   scan:
     description: Run AgentLens security scan after evals.
     required: false
@@ -67,6 +71,9 @@ runs:
         fi
         if [[ "${{ inputs.summary }}" == "true" && -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
           args+=(--summary-md "$GITHUB_STEP_SUMMARY")
+        fi
+        if [[ -n "${{ inputs.pr-comment }}" ]]; then
+          args+=(--pr-comment-md "${{ inputs.pr-comment }}")
         fi
         set +e
         node "$GITHUB_ACTION_PATH/bin/agentlens.js" "${args[@]}" > "$report_json"

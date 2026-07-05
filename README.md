@@ -55,6 +55,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Runnable agent regression PR demo that emits CI summary, SARIF, diff dashboard, and run bundle artifacts.
 - JSON output for inspect, eval, CI, and diff automation.
 - Markdown CI summaries for GitHub Actions.
+- PR comment Markdown output for GitHub review workflows.
 - GitHub Action outputs for downstream workflow steps.
 - Workspace doctor for checking local setup, traces, eval config, and CI wiring.
 - Validation command for trace files and eval configs.
@@ -88,6 +89,7 @@ node ./bin/agentlens.js scan .agentlens/runs/demo.json
 node ./bin/agentlens.js validate trace .agentlens/runs/demo.json
 node ./bin/agentlens.js validate eval .agentlens/evals/default.json
 node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json --scan
+node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json --scan --pr-comment-md .agentlens/reports/pr-comment.md
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
 node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle
 node ./bin/agentlens.js serve .agentlens/runs --port 4317
@@ -278,7 +280,7 @@ agentlens diff <baseline-trace> <candidate-trace> [--json]
 agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]
 agentlens eval <trace-file> [--config path] [--json]
 agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]
-agentlens ci [--runs dir] [--config path] [--json] [--summary-md path]
+agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--pr-comment-md path]
 agentlens schema <trace|eval> [--out path]
 agentlens validate <trace|eval> <file> [--json]
 agentlens materialize <jsonl-file> [--out path]
@@ -393,6 +395,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Generate PR review artifacts for agent regressions.
 - Emit JSON reports for CI bots, scripts, and PR comments.
 - Add Markdown summaries to GitHub Actions runs.
+- Generate stable PR comment Markdown for trace regression reviews.
 - Feed GitHub Action status outputs into comments, notifications, or artifacts.
 - Wrap OpenAI-compatible and Anthropic-compatible SDK calls.
 - Reproduce flaky agent failures.
@@ -439,6 +442,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - Runnable agent regression PR artifact generator.
 - JSON report output for automation.
 - GitHub Actions Markdown summaries.
+- GitHub PR comment Markdown renderer.
 - Init scaffolding for starter evals and GitHub Action examples.
 - Generic LLM call adapter.
 - LangGraph-style node adapter.

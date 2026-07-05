@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { formatCiMarkdown, formatCiReport, formatCiSarif, runCi } from "../src/ci.js";
+import { formatCiMarkdown, formatCiPrComment, formatCiReport, formatCiSarif, runCi } from "../src/ci.js";
 import { addEvent, createRun, finishRun } from "../src/trace.js";
 import { writeTrace } from "../src/store.js";
 
@@ -51,6 +51,8 @@ test("runCi evaluates every trace file in a run directory", () => {
   assert.match(formatCiReport(summary), /Status: FAIL/);
   assert.match(formatCiMarkdown(summary), /## AgentLens CI/);
   assert.match(formatCiMarkdown(summary), /citations:/);
+  assert.match(formatCiPrComment(summary), /<!-- agentlens-ci-comment -->/);
+  assert.match(formatCiPrComment(summary), /Found 1 failing trace/);
 });
 
 test("runCi can fail traces on scan findings", () => {
@@ -72,6 +74,7 @@ test("runCi can fail traces on scan findings", () => {
   assert.equal(summary.results[0].scanReport.passed, false);
   assert.match(formatCiReport(summary), /scan failed/);
   assert.match(formatCiMarkdown(summary), /scan\/sensitive-key/);
+  assert.match(formatCiPrComment(summary, { artifactUrl: "https://example.com/bundle", sarifUrl: "https://example.com/sarif" }), /Run bundle: https:\/\/example\.com\/bundle/);
 });
 
 test("runCi scan fail-on none reports findings without failing traces", () => {

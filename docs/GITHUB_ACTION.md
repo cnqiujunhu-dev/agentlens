@@ -40,6 +40,7 @@ The action fails the job when any trace fails its eval config, any enabled scan 
 | `config` | `evals/default.json` | Eval config JSON file. |
 | `node-version` | `22` | Node.js version used to run AgentLens. |
 | `summary` | `true` | Write a Markdown report to the GitHub Actions step summary. |
+| `pr-comment` | empty | Optional path to write Markdown suitable for a GitHub PR comment. |
 | `scan` | `true` | Run the local AgentLens security scan after evals. |
 | `scan-fail-on` | `high` | Lowest scan severity that fails the action: `low`, `medium`, `high`, `critical`, or `none`. |
 | `sarif` | empty | Optional path for combined SARIF scan findings. Requires `scan: true`. |
@@ -74,6 +75,28 @@ By default, the action appends a Markdown report to `GITHUB_STEP_SUMMARY`. Disab
     summary: false
     scan: false
 ```
+
+## PR Comment Markdown
+
+Use `pr-comment` when you want the action to write a stable Markdown body that another step can publish or upsert on a pull request:
+
+```yaml
+- name: Run AgentLens evals
+  id: agentlens
+  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  with:
+    runs: .agentlens/runs
+    config: evals/default.json
+    pr-comment: .agentlens/reports/agentlens-pr-comment.md
+
+- name: Comment on PR
+  if: always() && github.event_name == 'pull_request'
+  env:
+    GH_TOKEN: ${{ github.token }}
+  run: gh pr comment "${{ github.event.pull_request.number }}" --body-file .agentlens/reports/agentlens-pr-comment.md
+```
+
+The generated body includes `<!-- agentlens-ci-comment -->` so a workflow can find and replace the existing AgentLens comment instead of posting duplicates.
 
 ## SARIF Upload
 

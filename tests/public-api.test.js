@@ -14,6 +14,7 @@ import {
   buildShareBundle,
   formatDoctorReport,
   formatTraceDiff,
+  formatCiPrComment,
   finishRun,
   formatCiSarif,
   formatScanReport,
@@ -60,6 +61,7 @@ test("public API exports core trace and eval helpers", () => {
   assert.equal(diff.deltas.eventCount, 0);
   assert.match(bundle.summaryMarkdown, /AgentLens Share Bundle/);
   assert.match(formatTraceDiff(diff), /AgentLens Trace Diff/);
+  assert.match(formatCiPrComment({ runsDir: "runs", total: 1, passed: 1, failed: 0, scan: { enabled: false }, results: [{ file: "trace.json", passed: true }] }), /agentlens-ci-comment/);
   assert.match(renderDiffDashboard(diff), /AgentLens Trace Diff/);
   assert.match(formatScanReport(scan), /Scan:/);
   assert.equal(formatScanSarif(scan).version, "2.1.0");
