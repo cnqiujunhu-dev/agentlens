@@ -4,7 +4,7 @@ import argparse
 import asyncio
 import time
 
-from python_trace_writer import AgentLensRun, init_workspace, trace_async_llm_call
+from agentlens_trace import AgentLensRun, init_workspace, trace_async_llm_call
 
 
 async def fake_retrieval(query):

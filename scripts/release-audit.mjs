@@ -48,6 +48,11 @@ const requiredFiles = [
   "examples/python-framework-cookbook-run.py",
   "examples/python_trace_writer/__init__.py",
   "examples/python_trace_writer/agentlens_trace.py",
+  "python/agentlens-trace/pyproject.toml",
+  "python/agentlens-trace/README.md",
+  "python/agentlens-trace/src/agentlens_trace/__init__.py",
+  "python/agentlens-trace/src/agentlens_trace/__main__.py",
+  "scripts/check-python-package.mjs",
   "scripts/run-python-framework-demo.mjs",
   "scripts/run-python-demo.mjs",
   "scripts/generate-regression-screenshot.mjs",
@@ -81,6 +86,9 @@ const requiredReadmeSnippets = [
   "LLM_SDK_COOKBOOK.md",
   "Python trace writer",
   "PYTHON_TRACE_WRITER.md",
+  "agentlens-trace",
+  "agentlens_trace",
+  "python:package",
   "agentlens init --python",
   ".agentlens/python/basic_run.py",
   "python-github-action.yml",
@@ -175,6 +183,9 @@ const requiredChineseReadmeSnippets = [
   "Python trace writer",
   "PYTHON_TRACE_WRITER.md",
   "agentlens init --python",
+  "agentlens-trace",
+  "agentlens_trace",
+  "python:package",
   "agentlens quickstart",
   "agentlens review",
   "QUICKSTART_ARTIFACTS.md",
@@ -242,6 +253,8 @@ function assertPackage() {
   if (packageJson.version !== releaseVersion) fail(`package.json version must be ${releaseVersion}`);
   if (packageJson.license !== "Apache-2.0") fail("package.json license must be Apache-2.0");
   if (!packageJson.bin?.agentlens) fail("package.json must expose agentlens bin");
+  if (!packageJson.files?.includes("python")) fail("package.json files must include python package sources");
+  if (!packageJson.scripts?.["python:package"]) fail("package.json must expose python:package");
   for (const key of requiredPackageExports) {
     if (!packageJson.exports?.[key]) fail(`package.json missing export: ${key}`);
   }
@@ -299,6 +312,11 @@ function assertPackDryRun() {
     "examples/python-framework-cookbook-run.py",
     "examples/python_trace_writer/__init__.py",
     "examples/python_trace_writer/agentlens_trace.py",
+    "python/agentlens-trace/pyproject.toml",
+    "python/agentlens-trace/README.md",
+    "python/agentlens-trace/src/agentlens_trace/__init__.py",
+    "python/agentlens-trace/src/agentlens_trace/__main__.py",
+    "scripts/check-python-package.mjs",
     "scripts/run-python-framework-demo.mjs",
     "scripts/run-python-demo.mjs",
     "docs/assets/agentlens-demo.gif",

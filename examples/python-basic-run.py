@@ -2,7 +2,7 @@
 
 import argparse
 
-from python_trace_writer import AgentLensRun, init_workspace, trace_llm_call
+from agentlens_trace import AgentLensRun, init_workspace, trace_llm_call
 
 
 def fake_llm(_input):

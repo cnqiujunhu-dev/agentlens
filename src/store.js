@@ -191,7 +191,7 @@ function writeIfMissing(filePath, content) {
 }
 
 function readPythonTraceWriterSource() {
-  return fs.readFileSync(new URL("../examples/python_trace_writer/agentlens_trace.py", import.meta.url), "utf8");
+  return fs.readFileSync(new URL("../python/agentlens-trace/src/agentlens_trace/__init__.py", import.meta.url), "utf8");
 }
 
 export function initWorkspace(root = process.cwd(), { scaffold = false, python = false } = {}) {

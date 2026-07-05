@@ -1,6 +1,6 @@
 # Python Trace Writer
 
-AgentLens is a JavaScript package, but the trace format is plain JSON. The Python trace writer example shows how Python-heavy agent, RAG, notebook, and evaluation projects can write AgentLens-compatible traces without adopting a hosted observability backend or adding a Python dependency. It includes sync and async wrappers for explicit model-call instrumentation.
+AgentLens is a JavaScript package, but the trace format is plain JSON. The Python trace writer package shows how Python-heavy agent, RAG, notebook, and evaluation projects can write AgentLens-compatible traces without adopting a hosted observability backend or adding a runtime dependency. It includes sync and async wrappers for explicit model-call instrumentation.
 
 ## Quick Start
 
@@ -14,6 +14,16 @@ agentlens scan .agentlens/runs/python-starter.json
 ```
 
 `agentlens init --python` writes `.agentlens/python/agentlens_trace.py`, `.agentlens/python/basic_run.py`, `.agentlens/python/README.md`, and `.agentlens/examples/python-github-action.yml` without overwriting existing files.
+
+For package-style local development from this repository:
+
+```bash
+PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace --out .agentlens/runs/python-package-demo.json
+node ./bin/agentlens.js validate trace .agentlens/runs/python-package-demo.json
+node ./bin/agentlens.js eval .agentlens/runs/python-package-demo.json --config evals/default.json
+```
+
+The package skeleton lives in `python/agentlens-trace/` with distribution name `agentlens-trace` and import name `agentlens_trace`.
 
 Run the Python demo and then validate, evaluate, scan, and export the generated trace:
 
@@ -41,10 +51,10 @@ node ./bin/agentlens.js otel .agentlens/runs/python-basic-demo.json --out .agent
 
 ## Minimal Usage
 
-Copy `examples/python_trace_writer/agentlens_trace.py` into a Python project, or import it from this repository when experimenting. If you import from this repository outside `examples/python-basic-run.py`, set `PYTHONPATH=examples`.
+Install or put `python/agentlens-trace/src` on `PYTHONPATH`, then import `agentlens_trace`.
 
 ```python
-from python_trace_writer import AgentLensRun, init_workspace, trace_llm_call
+from agentlens_trace import AgentLensRun, init_workspace, trace_llm_call
 
 init_workspace()
 
@@ -82,7 +92,7 @@ Use `trace_async_llm_call` when your model, retrieval, or tool code already runs
 ```python
 import asyncio
 
-from python_trace_writer import AgentLensRun, init_workspace, trace_async_llm_call
+from agentlens_trace import AgentLensRun, init_workspace, trace_async_llm_call
 
 init_workspace()
 
@@ -135,7 +145,7 @@ This keeps the Python application code simple while reusing AgentLens' evals, sc
 
 ## Current Limits
 
-- This is a copyable zero-dependency helper, not a packaged PyPI SDK.
+- The repository now includes a PyPI-ready package skeleton, but release publication is still a separate step.
 - It focuses on explicit instrumentation. It does not auto-instrument LangChain, LlamaIndex, CrewAI, or provider SDKs yet.
 - The helper supports synchronous and `asyncio` model-call wrappers.
 - The generated traces can contain prompts, tool arguments, and retrieved documents. Redact before sharing publicly.

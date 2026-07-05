@@ -3,7 +3,7 @@
 import argparse
 from pathlib import Path
 
-from python_trace_writer import AgentLensRun, init_workspace, trace_llm_call
+from agentlens_trace import AgentLensRun, init_workspace, trace_llm_call
 
 
 def write_langchain_style(out_dir: Path) -> Path:

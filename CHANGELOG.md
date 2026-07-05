@@ -23,6 +23,7 @@
 - LLM SDK wrapper cookbook for OpenAI-compatible, Anthropic-compatible, custom SDK, error handling, CI, and redaction workflows.
 - OpenTelemetry/OpenInference-style OTLP JSON export via `agentlens otel`, `buildOtelTrace`, and `writeOtelTrace`.
 - Zero-dependency sync/async Python trace writer examples and `npm run demo:python` verification flow.
+- PyPI-ready `agentlens-trace` package skeleton and `npm run python:package` smoke verification.
 - Python project starter scaffolding through `agentlens init --python`.
 - Python framework cookbook and `npm run demo:python:frameworks` verification flow for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.
 

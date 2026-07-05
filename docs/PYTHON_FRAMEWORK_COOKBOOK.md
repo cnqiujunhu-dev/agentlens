@@ -4,7 +4,7 @@ AgentLens' Python trace writer is intentionally plain JSON. This cookbook shows 
 
 The examples are runnable simulations. They do not import LangChain, LlamaIndex, or CrewAI, so the repository stays dependency-light. Copy the patterns into the matching framework boundary in your project.
 
-Start a Python project with `agentlens init --python` if you want the trace writer and a CI-ready starter under `.agentlens/python/`.
+Start a Python project with `agentlens init --python` if you want the trace writer and a CI-ready starter under `.agentlens/python/`. For package-style local development, use `PYTHONPATH=python/agentlens-trace/src` and import `agentlens_trace`.
 
 ## Quick Demo
 
@@ -35,7 +35,7 @@ Use framework-native callbacks when they already expose the details you need. Us
 LangChain's callback surface includes LLM, retriever, tool, chain, and agent events. In AgentLens, the useful minimum is to record retriever input/output, tool input/output, and the final model call.
 
 ```python
-from python_trace_writer import AgentLensRun
+from agentlens_trace import AgentLensRun
 
 run = AgentLensRun(app="support-agent", name="langchain-refund-answer")
 
@@ -66,7 +66,7 @@ Attach the handler where your LangChain version expects callbacks, or keep the s
 LlamaIndex callbacks expose event types for query, retrieve, synthesize, and LLM work. AgentLens does not need every internal event; start with retrieval and final synthesis.
 
 ```python
-from python_trace_writer import AgentLensRun
+from agentlens_trace import AgentLensRun
 
 run = AgentLensRun(app="rag-agent", name="llamaindex-refund-answer")
 
@@ -90,7 +90,7 @@ If your query engine does not expose enough callback payload, wrap `retrieve(...
 CrewAI often gives you useful boundaries at the crew, task, agent, and flow level. Record task start/end and tool evidence, then record the final answer.
 
 ```python
-from python_trace_writer import AgentLensRun, trace_llm_call
+from agentlens_trace import AgentLensRun, trace_llm_call
 
 run = AgentLensRun(app="crew-agent", name="crewai-refund-answer")
 

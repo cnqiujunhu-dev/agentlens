@@ -33,6 +33,7 @@ function run(command, commandArgs, options = {}) {
     env: {
       ...process.env,
       PYTHONPATH: [
+        path.join(root, "python", "agentlens-trace", "src"),
         path.join(root, "examples"),
         process.env.PYTHONPATH
       ].filter(Boolean).join(path.delimiter)

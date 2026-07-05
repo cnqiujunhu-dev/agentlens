@@ -71,6 +71,7 @@ Built:
 - LLM SDK wrapper cookbook for wiring existing provider clients into AgentLens traces.
 - OpenTelemetry/OpenInference-style OTLP JSON export for local trace files.
 - Minimal zero-dependency sync/async Python trace writer demo for Python agent and RAG projects.
+- PyPI-ready `agentlens-trace` package skeleton and smoke verification.
 - Python project starter scaffold through `agentlens init --python`.
 - Python framework cookbook demo for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
 

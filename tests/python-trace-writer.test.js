@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const runnerPath = path.resolve(__dirname, "../scripts/run-python-demo.mjs");
 const frameworkRunnerPath = path.resolve(__dirname, "../scripts/run-python-framework-demo.mjs");
+const packageCheckPath = path.resolve(__dirname, "../scripts/check-python-package.mjs");
 
 test("Python trace writer demo produces AgentLens-compatible artifacts", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-python-demo-"));
@@ -80,4 +81,14 @@ test("Python framework cookbook demo produces framework-shaped traces", () => {
     const otel = JSON.parse(fs.readFileSync(path.join(reportsDir, file.replace(/\.json$/u, ".otlp.json")), "utf8"));
     assert.equal(otel.resourceSpans.length, 1);
   }
+});
+
+test("Python package smoke check produces an AgentLens-compatible trace", () => {
+  const result = spawnSync(process.execPath, [packageCheckPath], {
+    cwd: fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-python-package-")),
+    encoding: "utf8"
+  });
+
+  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+  assert.match(result.stdout, /Python package smoke trace:/);
 });
