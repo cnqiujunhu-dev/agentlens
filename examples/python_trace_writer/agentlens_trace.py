@@ -5,7 +5,7 @@ import secrets
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterable, Optional
+from typing import Any, Awaitable, Callable, Dict, Iterable, Optional
 
 TRACE_SCHEMA_VERSION = "agentlens.trace.v1"
 
@@ -37,6 +37,66 @@ def write_trace(path: str, trace: Dict[str, Any]) -> None:
     with target.open("w", encoding="utf-8") as file:
         json.dump(trace, file, indent=2, ensure_ascii=False)
         file.write("\n")
+
+
+def _duration_ms(started: float) -> float:
+    return round((time.perf_counter() - started) * 1000, 3)
+
+
+def _normalize_llm_output(result: Any) -> Dict[str, Any]:
+    output = result if isinstance(result, dict) else {"content": str(result)}
+    if "content" not in output:
+        return {"content": json.dumps(output, ensure_ascii=False), "raw": output}
+    return output
+
+
+def _record_llm_error(
+    run: "AgentLensRun",
+    name: str,
+    exc: Exception,
+    duration_ms: float,
+    provider: Optional[str],
+    model: Optional[str],
+    metadata: Optional[Dict[str, Any]],
+) -> None:
+    run.add_event(
+        "llm.response",
+        name=name,
+        status="error",
+        output={"error": str(exc), "type": exc.__class__.__name__},
+        duration_ms=duration_ms,
+        provider=provider,
+        model=model,
+        metadata=metadata,
+    )
+    run.add_event(
+        "error",
+        name=name,
+        status="error",
+        output={"message": str(exc), "type": exc.__class__.__name__},
+    )
+
+
+def _record_llm_success(
+    run: "AgentLensRun",
+    name: str,
+    result: Any,
+    duration_ms: float,
+    provider: Optional[str],
+    model: Optional[str],
+    metadata: Optional[Dict[str, Any]],
+) -> None:
+    output = _normalize_llm_output(result)
+    run.add_event(
+        "llm.response",
+        name=name,
+        output=output,
+        duration_ms=duration_ms,
+        usage=output.get("usage") if isinstance(output.get("usage"), dict) else None,
+        provider=provider,
+        model=model,
+        metadata=metadata,
+    )
 
 
 class AgentLensRun:
@@ -187,37 +247,29 @@ def trace_llm_call(
     try:
         result = call(input)
     except Exception as exc:
-        duration_ms = round((time.perf_counter() - started) * 1000, 3)
-        run.add_event(
-            "llm.response",
-            name=name,
-            status="error",
-            output={"error": str(exc), "type": exc.__class__.__name__},
-            duration_ms=duration_ms,
-            provider=provider,
-            model=model,
-            metadata=metadata,
-        )
-        run.add_event(
-            "error",
-            name=name,
-            status="error",
-            output={"message": str(exc), "type": exc.__class__.__name__},
-        )
+        _record_llm_error(run, name, exc, _duration_ms(started), provider, model, metadata)
         raise
 
-    duration_ms = round((time.perf_counter() - started) * 1000, 3)
-    output = result if isinstance(result, dict) else {"content": str(result)}
-    if "content" not in output:
-        output = {"content": json.dumps(output, ensure_ascii=False), "raw": output}
-    run.add_event(
-        "llm.response",
-        name=name,
-        output=output,
-        duration_ms=duration_ms,
-        usage=output.get("usage") if isinstance(output.get("usage"), dict) else None,
-        provider=provider,
-        model=model,
-        metadata=metadata,
-    )
+    _record_llm_success(run, name, result, _duration_ms(started), provider, model, metadata)
+    return result
+
+
+async def trace_async_llm_call(
+    run: AgentLensRun,
+    name: str,
+    input: Dict[str, Any],
+    call: Callable[[Dict[str, Any]], Awaitable[Any]],
+    provider: Optional[str] = None,
+    model: Optional[str] = None,
+    metadata: Optional[Dict[str, Any]] = None,
+) -> Any:
+    run.add_event("llm.prompt", name=name, input=input, provider=provider, model=model, metadata=metadata)
+    started = time.perf_counter()
+    try:
+        result = await call(input)
+    except Exception as exc:
+        _record_llm_error(run, name, exc, _duration_ms(started), provider, model, metadata)
+        raise
+
+    _record_llm_success(run, name, result, _duration_ms(started), provider, model, metadata)
     return result

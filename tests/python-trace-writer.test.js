@@ -12,9 +12,21 @@ const runnerPath = path.resolve(__dirname, "../scripts/run-python-demo.mjs");
 test("Python trace writer demo produces AgentLens-compatible artifacts", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-python-demo-"));
   const traceFile = path.join(dir, "python-basic-demo.json");
+  const asyncTraceFile = path.join(dir, "python-async-demo.json");
   const otelFile = path.join(dir, "python-basic-demo.otlp.json");
+  const asyncOtelFile = path.join(dir, "python-async-demo.otlp.json");
 
-  const result = spawnSync(process.execPath, [runnerPath, "--out", traceFile, "--otel-out", otelFile], {
+  const result = spawnSync(process.execPath, [
+    runnerPath,
+    "--out",
+    traceFile,
+    "--async-out",
+    asyncTraceFile,
+    "--otel-out",
+    otelFile,
+    "--async-otel-out",
+    asyncOtelFile
+  ], {
     cwd: dir,
     encoding: "utf8"
   });
@@ -29,4 +41,13 @@ test("Python trace writer demo produces AgentLens-compatible artifacts", () => {
 
   const otel = JSON.parse(fs.readFileSync(otelFile, "utf8"));
   assert.equal(otel.resourceSpans.length, 1);
+
+  const asyncTrace = JSON.parse(fs.readFileSync(asyncTraceFile, "utf8"));
+  assert.equal(asyncTrace.schemaVersion, "agentlens.trace.v1");
+  assert.equal(asyncTrace.app, "python-async-agent");
+  assert.equal(asyncTrace.status, "passed");
+  assert.equal(asyncTrace.events.some((event) => event.type === "llm.response" && event.output?.citations?.includes("async-python-trace-writer")), true);
+
+  const asyncOtel = JSON.parse(fs.readFileSync(asyncOtelFile, "utf8"));
+  assert.equal(asyncOtel.resourceSpans.length, 1);
 });

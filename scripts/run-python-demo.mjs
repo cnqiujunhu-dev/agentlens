@@ -52,16 +52,28 @@ function findPython() {
 }
 
 const out = path.resolve(process.cwd(), option("--out", ".agentlens/runs/python-basic-demo.json"));
+const asyncOut = path.resolve(process.cwd(), option("--async-out", ".agentlens/runs/python-async-demo.json"));
 const otelOut = path.resolve(process.cwd(), option("--otel-out", ".agentlens/reports/python-basic-demo.otlp.json"));
+const asyncOtelOut = path.resolve(process.cwd(), option("--async-otel-out", ".agentlens/reports/python-async-demo.otlp.json"));
 const [pythonCommand, pythonBaseArgs] = findPython();
-const example = path.join(root, "examples", "python-basic-run.py");
+const syncExample = path.join(root, "examples", "python-basic-run.py");
+const asyncExample = path.join(root, "examples", "python-async-run.py");
 const bin = path.join(root, "bin", "agentlens.js");
 const evalConfig = path.join(root, "evals", "default.json");
 
-run(pythonCommand, [...pythonBaseArgs, example, "--out", out], { stdio: "inherit" });
-run(process.execPath, [bin, "validate", "trace", out], { stdio: "inherit" });
-run(process.execPath, [bin, "eval", out, "--config", evalConfig], { stdio: "inherit" });
-run(process.execPath, [bin, "scan", out], { stdio: "inherit" });
-run(process.execPath, [bin, "otel", out, "--out", otelOut], { stdio: "inherit" });
+function verifyTrace(traceFile, traceOtelOut) {
+  run(process.execPath, [bin, "validate", "trace", traceFile], { stdio: "inherit" });
+  run(process.execPath, [bin, "eval", traceFile, "--config", evalConfig], { stdio: "inherit" });
+  run(process.execPath, [bin, "scan", traceFile], { stdio: "inherit" });
+  run(process.execPath, [bin, "otel", traceFile, "--out", traceOtelOut], { stdio: "inherit" });
+}
+
+run(pythonCommand, [...pythonBaseArgs, syncExample, "--out", out], { stdio: "inherit" });
+verifyTrace(out, otelOut);
 
 console.log(`Python demo OTLP JSON: ${otelOut}`);
+
+run(pythonCommand, [...pythonBaseArgs, asyncExample, "--out", asyncOut], { stdio: "inherit" });
+verifyTrace(asyncOut, asyncOtelOut);
+
+console.log(`Python async demo OTLP JSON: ${asyncOtelOut}`);
