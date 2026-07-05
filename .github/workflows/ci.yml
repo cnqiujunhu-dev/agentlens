@@ -74,6 +74,9 @@ jobs:
           npm run demo:llm
           node ./bin/agentlens.js eval .agentlens/runs/llm-wrapper-demo.json --config evals/llm-basic.json
 
+      - name: Python trace writer demo
+        run: npm run demo:python
+
       - name: Multi-agent demo
         run: |
           npm run demo:autogen

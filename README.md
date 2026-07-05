@@ -55,6 +55,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Generic LLM wrapper for tracing model calls from any SDK.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - LLM SDK cookbook for wiring existing provider clients into local traces.
+- Zero-dependency Python trace writer example for Python agent and RAG projects.
 - OpenTelemetry/OpenInference-style OTLP JSON export for existing observability stacks.
 - LangGraph-style node adapter for tracing graph-based agent steps.
 - Multi-agent helpers with AutoGen-style and CrewAI-style runnable examples.
@@ -101,6 +102,7 @@ node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
 node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
+npm run demo:python
 node ./bin/agentlens.js share .agentlens/runs/demo.json --config .agentlens/evals/default.json --out .agentlens/share/demo --sections summary,timeline
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
 node ./bin/agentlens.js scan .agentlens/runs/demo.json
@@ -115,6 +117,8 @@ npm run demo:regression-pr
 ```
 
 `agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example.
+
+Python users can start from `examples/python-basic-run.py` or run `npm run demo:python` to write an AgentLens-compatible trace, validate it, evaluate it, scan it, and export OTLP JSON.
 
 Want this in GitHub Actions?
 
@@ -349,6 +353,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Roadmap](docs/ROADMAP.md)
 - [Market analysis](docs/MARKET_ANALYSIS.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
+- [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
 - [OpenTelemetry export](docs/OTEL_EXPORT.md)
 - [Agent regression PR example](docs/AGENT_REGRESSION_PR.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
@@ -417,6 +422,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Debug tool-using AI agents.
 - Trace model calls without binding to one LLM SDK.
 - Add AgentLens around existing provider SDK calls with a copyable cookbook.
+- Write AgentLens-compatible traces from Python agent, RAG, and notebook code.
 - Export local traces as OTLP JSON with OpenTelemetry/OpenInference-style attributes.
 - Trace LangGraph-style node functions without adding a framework dependency.
 - Trace AutoGen-style and CrewAI-style multi-agent workflows without adding framework dependencies.
@@ -480,6 +486,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - GitHub PR comment Markdown renderer.
 - Init scaffolding for starter evals and GitHub Action examples.
 - Generic LLM call adapter.
+- Minimal Python trace writer example.
 - OpenTelemetry/OpenInference-style OTLP JSON export.
 - LangGraph-style node adapter.
 - Multi-agent adapter helpers and AutoGen-style/CrewAI-style examples.
@@ -510,4 +517,4 @@ It is the missing engineering layer around agent frameworks: trace, replay, eval
 
 ## Status
 
-Early MVP. The current version is useful for local traces, deterministic replay, JSON evals, security scans, share bundles, CI checks, static dashboard reports, and zero-dependency multi-agent examples. The next milestone is deeper framework adapters and richer governance reports.
+Early MVP. The current version is useful for local traces, deterministic replay, JSON evals, security scans, share bundles, CI checks, static dashboard reports, zero-dependency multi-agent examples, and a minimal Python trace writer. The next milestone is deeper framework adapters and richer governance reports.

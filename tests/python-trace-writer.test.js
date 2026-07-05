@@ -1,0 +1,32 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const runnerPath = path.resolve(__dirname, "../scripts/run-python-demo.mjs");
+
+test("Python trace writer demo produces AgentLens-compatible artifacts", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-python-demo-"));
+  const traceFile = path.join(dir, "python-basic-demo.json");
+  const otelFile = path.join(dir, "python-basic-demo.otlp.json");
+
+  const result = spawnSync(process.execPath, [runnerPath, "--out", traceFile, "--otel-out", otelFile], {
+    cwd: dir,
+    encoding: "utf8"
+  });
+
+  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+  const trace = JSON.parse(fs.readFileSync(traceFile, "utf8"));
+  assert.equal(trace.schemaVersion, "agentlens.trace.v1");
+  assert.equal(trace.app, "python-support-agent");
+  assert.equal(trace.status, "passed");
+  assert.equal(trace.events.some((event) => event.type === "tool.call" && event.name === "kb.search"), true);
+  assert.equal(trace.events.some((event) => event.type === "llm.response" && event.output?.citations?.includes("python-trace-writer")), true);
+
+  const otel = JSON.parse(fs.readFileSync(otelFile, "utf8"));
+  assert.equal(otel.resourceSpans.length, 1);
+});

@@ -51,6 +51,7 @@ AgentLens 的差异化是：
 - 通用 LLM wrapper，可包住任意 SDK 调用。
 - OpenAI-compatible 和 Anthropic-compatible provider adapter。
 - LLM SDK cookbook，帮助把现有 provider client 接入本地 trace、CI 和 redaction workflow。
+- 零依赖 Python trace writer 示例，方便 Python Agent、RAG 和 notebook 项目写出 AgentLens trace。
 - OpenTelemetry/OpenInference-style OTLP JSON 导出，便于接入已有 observability stack。
 - LangGraph-style node adapter。
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。
@@ -73,6 +74,7 @@ npm run demo
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
+npm run demo:python
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json
 node ./bin/agentlens.js scan .agentlens/runs/demo.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
@@ -167,6 +169,7 @@ agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 - [API](docs/API.md)
 - [市场分析](docs/MARKET_ANALYSIS.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
+- [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
 - [OpenTelemetry export](docs/OTEL_EXPORT.md)
 - [路线图](docs/ROADMAP.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
@@ -185,4 +188,4 @@ AgentLens 不是另一个 Agent 框架。
 
 ## 当前状态
 
-早期 MVP。当前版本已经适合本地 trace、deterministic replay、JSON eval、security scan、redacted share bundle、CI gate、静态 dashboard、run bundle、MCP policy、多 Agent demo 和 OpenTelemetry/OpenInference-style OTLP JSON 导出。下一阶段重点是更深的框架接入、collector/protobuf 级互通、Python trace writer 和更完整的 cookbook。
+早期 MVP。当前版本已经适合本地 trace、deterministic replay、JSON eval、security scan、redacted share bundle、CI gate、静态 dashboard、run bundle、MCP policy、多 Agent demo、Python trace writer 和 OpenTelemetry/OpenInference-style OTLP JSON 导出。下一阶段重点是更深的框架接入、collector/protobuf 级互通、Python SDK 化和更完整的 cookbook。

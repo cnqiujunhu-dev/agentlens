@@ -18,6 +18,7 @@ AgentLens is currently weaker than mature platforms in hosted collaboration, pro
 - SARIF output for trace scan findings
 - MCP tool risk scanning and policy checks
 - redacted share bundles for issues and support threads
+- minimal Python trace writer for Python-heavy agent and RAG projects
 - OTLP JSON export with OpenTelemetry/OpenInference-style attributes
 
 The practical wedge is "agent regression review in GitHub", not "replace Langfuse".
@@ -70,9 +71,9 @@ The practical wedge is "agent regression review in GitHub", not "replace Langfus
 
    AgentLens now has an initial OpenTelemetry/OpenInference-style OTLP JSON export, but it does not yet send to collectors or emit protobuf/gRPC. Hardening this bridge will matter for teams already invested in Phoenix, Langfuse, OpenLIT, or existing APM stacks.
 
-4. JavaScript-first surface.
+4. Minimal Python surface.
 
-   Python users can still write AgentLens trace JSON, but the current SDK/adapters are JavaScript-oriented. The AI agent ecosystem has a large Python base.
+   Python users now have a zero-dependency trace writer example, but there is not yet a packaged PyPI SDK, async helper set, or framework-specific Python adapter. The AI agent ecosystem has a large Python base, so this still needs deeper investment.
 
 5. Collaboration is artifact-based, not product-based.
 
@@ -118,7 +119,7 @@ Highest leverage:
 1. LLM SDK wrapper cookbook for real projects.
 2. LangGraph, AutoGen, CrewAI, and MCP integration cookbooks with realistic examples.
 3. Harden OpenTelemetry/OpenInference interoperability beyond the initial OTLP JSON export, including collector/protobuf paths.
-4. Python trace writer or minimal Python SDK.
+4. Package and expand the Python trace writer into a minimal Python SDK.
 5. More dashboard panels for MCP governance and eval failure root causes.
 6. Better README localization and launch copy for Chinese and English developer communities.
 

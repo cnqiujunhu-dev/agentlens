@@ -67,6 +67,7 @@ Built:
 - Bilingual README entry points for English and Simplified Chinese audiences.
 - LLM SDK wrapper cookbook for wiring existing provider clients into AgentLens traces.
 - OpenTelemetry/OpenInference-style OTLP JSON export for local trace files.
+- Minimal zero-dependency Python trace writer demo for Python agent and RAG projects.
 
 Public launch status:
 
@@ -153,3 +154,4 @@ Target `v0.3.0`:
 - Configurable dashboard sections for eval, scan, MCP risk, and diff.
 - Governance docs for reviewed MCP risk exceptions.
 - Started: OpenTelemetry/OpenInference-style OTLP JSON export.
+- Started: Python trace writer path for Python-heavy teams.
