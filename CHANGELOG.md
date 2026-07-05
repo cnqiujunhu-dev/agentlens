@@ -50,7 +50,7 @@ Initial MVP.
 - Static dashboards include a Security Scan panel with severity, rule, path, event context, and redacted samples.
 - Static run bundles generate an index page and per-trace dashboards for run directories.
 - Share bundles include `scan.txt` generated from the redacted trace.
-- Public roadmap covering launch blockers, integration milestones, good first issues, and non-goals.
+- Public roadmap covering release status, integration milestones, good first issues, and non-goals.
 - Public GitHub repository target and publication blocker notes.
 - Release checklist, demo recording guide, and launch post draft.
 - Public JavaScript API and package exports.

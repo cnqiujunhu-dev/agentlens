@@ -41,7 +41,7 @@ Expected result:
 - `agentlens bundle` writes a static run bundle index and per-trace dashboards.
 - `agentlens share` writes a redacted share bundle.
 - Release audit prints `AgentLens release audit passed`.
-- Local release preflight warns only for expected unpublished-release gaps such as missing `workflow` scope, unpushed default branch, or missing tag.
+- Local release preflight warns only for expected unpublished-release gaps when run before pushing or tagging.
 - Dry-run packaging includes `README.md`, `LICENSE`, `bin/agentlens.js`, `src/index.js`, and `docs/assets/dashboard-screenshot.png`.
 
 ## Demo Assets
@@ -116,9 +116,11 @@ Before posting publicly:
 - Confirm the PR template asks for validation and trace safety.
 - Prepare the launch post from [LAUNCH_POST.md](LAUNCH_POST.md).
 
-## Known Launch Blockers
+## Current Release Status
 
-Track these honestly until resolved:
+As of the first public release:
 
-- Public GitHub repository exists, but `main` has not been pushed yet.
-- Current GitHub CLI token is missing `workflow` scope, so pushing `.github/workflows/ci.yml` over HTTPS is blocked until `gh auth refresh -s workflow` succeeds or a write-capable SSH key is used.
+- Public GitHub repository: `https://github.com/cnqiujunhu-dev/agentlens`.
+- Default branch: `main`.
+- Release tag: `v0.1.0`.
+- Strict release preflight should pass before any new release is published.

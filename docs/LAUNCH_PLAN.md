@@ -63,21 +63,21 @@ Built:
 - Dashboard Security Scan panel.
 - Public roadmap.
 
-Missing before a serious public launch:
+Public launch status:
 
-- Push `main` to `https://github.com/cnqiujunhu-dev/agentlens`.
-- GitHub CLI token needs `workflow` scope or a matching write-capable SSH key for workflow file pushes.
-- Release tag.
+- Repository is public at `https://github.com/cnqiujunhu-dev/agentlens`.
+- `main` is pushed and configured as the default branch.
+- `v0.1.0` is tagged and released.
+- GitHub Actions has passed for both `main` and `v0.1.0`.
 
-## Priority 1: Make The Project Trustworthy
+## Priority 1: Keep The Project Trustworthy
 
-Do these before asking strangers to star it:
+Do these before asking more strangers to star it:
 
-1. Add the release tag.
-2. Push `main` to the public GitHub repository.
-3. Run the release checklist before public posting.
-4. Run `npm run release:preflight` after tagging.
-5. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
+1. Run the release checklist before public posting.
+2. Run `npm run release:preflight` before each release.
+3. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
+4. Convert launch feedback into focused issues and docs updates.
 
 ## Priority 2: Make The Product Real
 
@@ -144,5 +144,4 @@ Avoid hooks that sound like every other agent project:
 Target `v0.2.0`:
 
 - One popular framework adapter.
-- First release tag.
 - Batch SARIF for run directories.

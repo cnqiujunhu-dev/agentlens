@@ -398,7 +398,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 
 ## Roadmap
 
-See [ROADMAP.md](docs/ROADMAP.md) for launch blockers, integration milestones, good first issues, and non-goals.
+See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, good first issues, and non-goals.
 
 - Unit tests, CI batch eval, failure-case demo, MCP adapter MVP, and MCP policy rules.
 - Public JavaScript API and package exports.

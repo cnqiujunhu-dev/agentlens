@@ -22,11 +22,12 @@ Shipped:
 - JSONL streaming trace writer and materializer.
 - Release audit, release preflight, launch GIF, launch post draft, issue templates, and community docs.
 
-Launch blockers:
+Release status:
 
-- Push `main` to the public repository.
-- Refresh GitHub auth with `workflow` scope so `.github/workflows/ci.yml` can be pushed.
-- Tag `v0.1.0` after GitHub CI passes.
+- Public repository: `https://github.com/cnqiujunhu-dev/agentlens`.
+- Default branch: `main`.
+- First release: `v0.1.0`.
+- GitHub CI is expected to stay green for `main` and release tags.
 
 ## v0.2.0 Integration Release
 
