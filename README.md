@@ -85,7 +85,7 @@ node ./bin/agentlens.js demo --out .agentlens/runs/demo.json
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
-node ./bin/agentlens.js share .agentlens/runs/demo.json --config .agentlens/evals/default.json --out .agentlens/share/demo
+node ./bin/agentlens.js share .agentlens/runs/demo.json --config .agentlens/evals/default.json --out .agentlens/share/demo --sections summary,timeline
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
 node ./bin/agentlens.js scan .agentlens/runs/demo.json
 node ./bin/agentlens.js validate trace .agentlens/runs/demo.json
@@ -93,7 +93,7 @@ node ./bin/agentlens.js validate eval .agentlens/evals/default.json
 node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json --scan
 node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/default.json --scan --pr-comment-md .agentlens/reports/pr-comment.md
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html --sections summary,timeline
-node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle
+node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,timeline
 node ./bin/agentlens.js serve .agentlens/runs --port 4317
 npm run demo:regression-pr
 ```
@@ -287,9 +287,9 @@ agentlens schema <trace|eval> [--out path]
 agentlens validate <trace|eval> <file> [--json]
 agentlens materialize <jsonl-file> [--out path]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
-agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]
+agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,filters,timeline]
 agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,filters,timeline]
-agentlens bundle [runs-dir] [--out dir]
+agentlens bundle [runs-dir] [--out dir] [--sections summary,event-types,scan,filters,timeline]
 agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 ```
 

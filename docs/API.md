@@ -79,7 +79,7 @@ agentlens inspect .agentlens/runs/demo.json --json
 agentlens eval .agentlens/runs/demo.json --config evals/default.json --json
 agentlens scan .agentlens/runs/demo.json --json --sarif .agentlens/reports/agentlens-scan.sarif
 agentlens ci --runs .agentlens/runs --config evals/default.json --scan --json --sarif .agentlens/reports/agentlens-ci.sarif
-agentlens bundle .agentlens/runs --out .agentlens/reports/bundle
+agentlens bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,timeline
 agentlens diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json --json
 agentlens diff-dashboard .agentlens/runs/baseline.json .agentlens/runs/candidate.json --out .agentlens/reports/diff.html
 ```
@@ -115,7 +115,8 @@ import { writeShareBundle } from "agentlens";
 const bundle = writeShareBundle({
   traceFile: ".agentlens/runs/demo.json",
   configPath: "evals/default.json",
-  outDir: ".agentlens/share/demo"
+  outDir: ".agentlens/share/demo",
+  sections: "summary,timeline"
 });
 
 console.log(bundle.files);
@@ -124,7 +125,7 @@ console.log(bundle.files);
 CLI:
 
 ```bash
-agentlens share .agentlens/runs/demo.json --config evals/default.json --out .agentlens/share/demo
+agentlens share .agentlens/runs/demo.json --config evals/default.json --out .agentlens/share/demo --sections summary,timeline
 ```
 
 Share bundles include `scan.txt`, generated after redaction.
@@ -136,7 +137,8 @@ import { writeRunBundle } from "agentlens";
 
 const result = writeRunBundle({
   runsDir: ".agentlens/runs",
-  outDir: ".agentlens/reports/bundle"
+  outDir: ".agentlens/reports/bundle",
+  sections: "summary,timeline"
 });
 
 console.log(result.index);

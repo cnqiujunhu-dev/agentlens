@@ -80,14 +80,14 @@ test("buildRunBundle includes scan finding counts", () => {
   assert.match(bundle.indexHtml, /1 findings/);
 });
 
-test("CLI bundle writes a static run bundle", () => {
+test("CLI bundle writes a static run bundle with selected dashboard sections", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-bundle-cli-"));
   const runsDir = path.join(dir, "runs");
   const outDir = path.join(dir, "bundle");
   fs.mkdirSync(runsDir);
   writeTrace(path.join(runsDir, "trace.json"), makeTrace("cli"));
 
-  const result = spawnSync(process.execPath, [binPath, "bundle", runsDir, "--out", outDir], {
+  const result = spawnSync(process.execPath, [binPath, "bundle", runsDir, "--out", outDir, "--sections", "summary,timeline"], {
     cwd: dir,
     encoding: "utf8"
   });
@@ -95,4 +95,11 @@ test("CLI bundle writes a static run bundle", () => {
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /Wrote run bundle/);
   assert.equal(fs.existsSync(path.join(outDir, "index.html")), true);
+  const dashboardFile = fs.readdirSync(outDir).find((file) => file.endsWith(".html") && file !== "index.html");
+  assert.ok(dashboardFile);
+  const dashboard = fs.readFileSync(path.join(outDir, dashboardFile), "utf8");
+  assert.match(dashboard, /Timeline/);
+  assert.doesNotMatch(dashboard, /Security Scan/);
+  assert.doesNotMatch(dashboard, /Timeline Filters/);
+  assert.doesNotMatch(dashboard, /Event Types/);
 });

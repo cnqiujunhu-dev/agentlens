@@ -27,9 +27,9 @@ function usage() {
     "  agentlens validate <trace|eval> <file> [--json]",
     "  agentlens materialize <jsonl-file> [--out path]",
     "  agentlens redact <trace-file> [--out path] [--keys key1,key2]",
-    "  agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]",
+    "  agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,filters,timeline]",
     "  agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,filters,timeline]",
-    "  agentlens bundle [runs-dir] [--out dir]",
+    "  agentlens bundle [runs-dir] [--out dir] [--sections summary,event-types,scan,filters,timeline]",
     "  agentlens serve [trace-file|runs-dir] [--host host] [--port port]",
     "",
     "Examples:",
@@ -241,14 +241,15 @@ async function main() {
 
   if (command === "share") {
     const traceFile = positional(1);
-    if (!traceFile) throw new Error("Missing trace file. Usage: agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2]");
+    if (!traceFile) throw new Error("Missing trace file. Usage: agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,filters,timeline]");
     const { parseRedactKeys } = await import("../src/redact.js");
     const { writeShareBundle } = await import("../src/share.js");
     const result = writeShareBundle({
       traceFile,
       outDir: option("--out", undefined),
       configPath: option("--config", undefined),
-      redactionKeys: parseRedactKeys(option("--keys", undefined))
+      redactionKeys: parseRedactKeys(option("--keys", undefined)),
+      sections: option("--sections", undefined)
     });
     console.log(`Wrote share bundle: ${result.outDir}`);
     for (const file of Object.values(result.files).filter(Boolean)) console.log(`- ${file}`);
@@ -271,7 +272,8 @@ async function main() {
     const runsDir = positional(1) ?? ".agentlens/runs";
     const result = writeRunBundle({
       runsDir,
-      outDir: option("--out", ".agentlens/reports/bundle")
+      outDir: option("--out", ".agentlens/reports/bundle"),
+      sections: option("--sections", undefined)
     });
     console.log(`Wrote run bundle: ${result.outDir}`);
     console.log(`- ${result.index}`);

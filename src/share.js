@@ -56,7 +56,7 @@ function formatShareSummary({ summary, evalReport, scanReport }) {
   return `${lines.join("\n")}\n`;
 }
 
-export function buildShareBundle(trace, { evalConfig = undefined, redactionKeys = undefined } = {}) {
+export function buildShareBundle(trace, { evalConfig = undefined, redactionKeys = undefined, sections = undefined } = {}) {
   const redactedTrace = redactTrace(trace, { keys: redactionKeys });
   const summary = summarizeTrace(redactedTrace);
   const evalReport = evalConfig ? evaluateTrace(redactedTrace, evalConfig) : null;
@@ -64,7 +64,7 @@ export function buildShareBundle(trace, { evalConfig = undefined, redactionKeys 
 
   return {
     redactedTrace,
-    dashboardHtml: renderDashboard(redactedTrace),
+    dashboardHtml: renderDashboard(redactedTrace, { sections }),
     summaryMarkdown: formatShareSummary({ summary, evalReport, scanReport }),
     scanText: `${formatScanReport(scanReport)}\n`,
     evalText: evalReport ? `${formatEvalReport(evalReport)}\n` : null,
@@ -73,13 +73,13 @@ export function buildShareBundle(trace, { evalConfig = undefined, redactionKeys 
   };
 }
 
-export function writeShareBundle({ traceFile, outDir = undefined, configPath = undefined, redactionKeys = undefined } = {}) {
+export function writeShareBundle({ traceFile, outDir = undefined, configPath = undefined, redactionKeys = undefined, sections = undefined } = {}) {
   if (!traceFile) throw new Error("writeShareBundle requires traceFile");
 
   const trace = readTrace(traceFile);
   const bundleDir = outDir ?? path.join(".agentlens", "share", safeName(trace.runId));
   const evalConfig = configPath ? loadEvalConfig(configPath) : undefined;
-  const bundle = buildShareBundle(trace, { evalConfig, redactionKeys });
+  const bundle = buildShareBundle(trace, { evalConfig, redactionKeys, sections });
 
   ensureDir(bundleDir);
 

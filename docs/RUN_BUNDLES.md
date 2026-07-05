@@ -7,7 +7,7 @@ Use it when you want to upload an artifact from CI, attach a compact run set to 
 ## CLI
 
 ```bash
-agentlens bundle .agentlens/runs --out .agentlens/reports/bundle
+agentlens bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,timeline
 ```
 
 Output:
@@ -24,7 +24,7 @@ The index shows trace status, event counts, scan status, source file path, links
 
 ```yaml
 - name: Build AgentLens run bundle
-  run: node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle
+  run: node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,timeline
 
 - name: Upload AgentLens run bundle
   uses: actions/upload-artifact@v4
@@ -40,7 +40,8 @@ import { writeRunBundle } from "agentlens";
 
 const result = writeRunBundle({
   runsDir: ".agentlens/runs",
-  outDir: ".agentlens/reports/bundle"
+  outDir: ".agentlens/reports/bundle",
+  sections: "summary,timeline"
 });
 
 console.log(result.index);
@@ -49,6 +50,6 @@ console.log(result.index);
 ## Notes
 
 - The bundle is static HTML with no external assets.
-- Each valid trace gets a full AgentLens dashboard.
+- Each valid trace gets an AgentLens dashboard. Use `--sections summary,timeline` for compact PR artifacts, or omit `--sections` for the full report.
 - Invalid trace JSON files are listed in the index instead of aborting the whole bundle.
 - Scan findings are generated from the local trace content at bundle time.

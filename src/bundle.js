@@ -134,7 +134,7 @@ export function renderRunBundleIndex({ runsDir, generatedAt = new Date().toISOSt
 </html>`;
 }
 
-export function buildRunBundle({ runsDir = ".agentlens/runs", outDir = ".agentlens/reports/bundle" } = {}) {
+export function buildRunBundle({ runsDir = ".agentlens/runs", outDir = ".agentlens/reports/bundle", sections = undefined } = {}) {
   const files = discoverTraceFiles(runsDir);
   const items = [];
   const dashboards = [];
@@ -159,7 +159,7 @@ export function buildRunBundle({ runsDir = ".agentlens/runs", outDir = ".agentle
         scanStatus: scanReport.passed ? "PASS" : "FAIL",
         scanFindings: scanReport.summary.findings
       });
-      dashboards.push({ file: path.join(outDir, dashboard), html: renderDashboard(trace) });
+      dashboards.push({ file: path.join(outDir, dashboard), html: renderDashboard(trace, { sections }) });
     } catch (error) {
       items.push({
         valid: false,

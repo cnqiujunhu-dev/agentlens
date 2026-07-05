@@ -79,13 +79,13 @@ test("writeShareBundle writes redacted trace, dashboard, summary, and eval repor
   assert.match(fs.readFileSync(result.files.eval, "utf8"), /Status: PASS/);
 });
 
-test("CLI share writes a share bundle", () => {
+test("CLI share writes a share bundle with selected dashboard sections", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-share-cli-"));
   const traceFile = path.join(dir, "trace.json");
   const outDir = path.join(dir, "share");
   writeTrace(traceFile, makeSensitiveTrace());
 
-  const result = spawnSync(process.execPath, [binPath, "share", traceFile, "--out", outDir], {
+  const result = spawnSync(process.execPath, [binPath, "share", traceFile, "--out", outDir, "--sections", "summary,timeline"], {
     cwd: dir,
     encoding: "utf8"
   });
@@ -96,4 +96,9 @@ test("CLI share writes a share bundle", () => {
   assert.equal(fs.existsSync(path.join(outDir, "dashboard.html")), true);
   assert.equal(fs.existsSync(path.join(outDir, "summary.md")), true);
   assert.equal(fs.existsSync(path.join(outDir, "scan.txt")), true);
+  const dashboard = fs.readFileSync(path.join(outDir, "dashboard.html"), "utf8");
+  assert.match(dashboard, /Timeline/);
+  assert.doesNotMatch(dashboard, /Security Scan/);
+  assert.doesNotMatch(dashboard, /Timeline Filters/);
+  assert.doesNotMatch(dashboard, /Event Types/);
 });
