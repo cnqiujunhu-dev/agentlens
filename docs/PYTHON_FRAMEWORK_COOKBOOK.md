@@ -2,7 +2,7 @@
 
 AgentLens' Python trace writer is intentionally plain JSON. This cookbook shows where to place that writer in Python agent frameworks without adding AgentLens as a framework dependency or running a hosted backend.
 
-The examples are runnable simulations. They do not import LangChain, LlamaIndex, or CrewAI, so the repository stays dependency-light. Copy the patterns into the matching framework boundary in your project.
+The examples are runnable simulations. They do not import LangChain, LlamaIndex, or CrewAI, so the repository stays dependency-light. The `agentlens-trace` package now includes importable zero-dependency bridge helpers under `agentlens_trace.adapters`; copy those helpers or wire them into the matching framework boundary in your project.
 
 Start a Python project with `agentlens init --python` if you want the trace writer and a CI-ready starter under `.agentlens/python/`. For package-style local development, use `PYTHONPATH=python/agentlens-trace/src` and import `agentlens_trace`.
 
@@ -36,27 +36,17 @@ LangChain's callback surface includes LLM, retriever, tool, chain, and agent eve
 
 ```python
 from agentlens_trace import AgentLensRun
+from agentlens_trace.adapters import AgentLensLangChainBridge
 
 run = AgentLensRun(app="support-agent", name="langchain-refund-answer")
+bridge = AgentLensLangChainBridge(run, provider="openai-compatible", model="gpt-example")
 
-class AgentLensLangChainBridge:
-    def on_retriever_start(self, serialized, query, **kwargs):
-        run.add_event("retrieval.query", name=serialized.get("name", "retriever"), input={"query": query})
-
-    def on_retriever_end(self, documents, **kwargs):
-        run.add_event("retrieval.result", name="retriever", output={"documents": documents})
-
-    def on_tool_start(self, serialized, input_str, **kwargs):
-        run.add_tool_call(serialized.get("name", "tool"), input={"input": input_str})
-
-    def on_tool_end(self, output, **kwargs):
-        run.add_tool_result("tool", output=output)
-
-    def on_llm_start(self, serialized, prompts, **kwargs):
-        run.add_llm_prompt("final-answer", [{"role": "user", "content": prompt} for prompt in prompts])
-
-    def on_llm_end(self, response, **kwargs):
-        run.add_llm_response("final-answer", response["content"], citations=response.get("citations", []))
+bridge.on_retriever_start({"name": "policy-retriever"}, "refund policy")
+bridge.on_retriever_end([{"id": "refund-policy", "score": 0.94}], duration_ms=54)
+bridge.on_tool_start({"name": "policy.lookup"}, "refund policy", permission="read-only", risk="low")
+bridge.on_tool_end({"policy": "Refunds are available within 30 days."}, duration_ms=73)
+bridge.on_llm_start({"model": "gpt-example"}, ["Can I refund this order?"])
+bridge.on_llm_end({"content": "Refunds are available within 30 days.", "citations": ["refund-policy"]})
 ```
 
 Attach the handler where your LangChain version expects callbacks, or keep the same event mapping inside a wrapper around the chain execution.
@@ -67,20 +57,15 @@ LlamaIndex callbacks expose event types for query, retrieve, synthesize, and LLM
 
 ```python
 from agentlens_trace import AgentLensRun
+from agentlens_trace.adapters import AgentLensLlamaIndexBridge
 
 run = AgentLensRun(app="rag-agent", name="llamaindex-refund-answer")
+bridge = AgentLensLlamaIndexBridge(run, provider="openai-compatible", model="gpt-example")
 
-def on_event_start(event_type, payload):
-    if event_type == "RETRIEVE":
-        run.add_event("retrieval.query", name="index-retrieve", input={"query": payload["query"]})
-    elif event_type == "LLM":
-        run.add_llm_prompt("synthesize-answer", [{"role": "user", "content": payload["prompt"]}])
-
-def on_event_end(event_type, payload):
-    if event_type == "RETRIEVE":
-        run.add_event("retrieval.result", name="index-retrieve", output={"documents": payload["nodes"]})
-    elif event_type == "LLM":
-        run.add_llm_response("synthesize-answer", payload["content"], citations=payload.get("citations", []))
+bridge.event_start("RETRIEVE", {"query": "return policy evidence"}, permission="read-only", risk="low")
+bridge.event_end("RETRIEVE", {"nodes": [{"id": "node_refund_policy", "score": 0.91}]}, duration_ms=46)
+bridge.event_start("LLM", {"prompt": "Use retrieved policy evidence to answer the refund question."})
+bridge.event_end("LLM", {"content": "Refunds are available within 30 days.", "citations": ["node_refund_policy"]})
 ```
 
 If your query engine does not expose enough callback payload, wrap `retrieve(...)`, `query(...)`, or `aquery(...)` directly and record the same events.
@@ -90,20 +75,23 @@ If your query engine does not expose enough callback payload, wrap `retrieve(...
 CrewAI often gives you useful boundaries at the crew, task, agent, and flow level. Record task start/end and tool evidence, then record the final answer.
 
 ```python
-from agentlens_trace import AgentLensRun, trace_llm_call
+from agentlens_trace import AgentLensRun
+from agentlens_trace.adapters import AgentLensCrewAIBridge
 
 run = AgentLensRun(app="crew-agent", name="crewai-refund-answer")
+bridge = AgentLensCrewAIBridge(run, provider="openai-compatible", model="gpt-example")
 
-run.add_event("agent.task.start", name="research-refund-policy", input={"task": "Find policy evidence"})
-run.add_tool_call("research.search", input={"query": "refund policy"})
-run.add_tool_result("research.search", output={"documents": [{"id": "refund-policy"}]})
-run.add_event("agent.task.end", name="research-refund-policy", output={"citations": ["refund-policy"]})
+bridge.agent_message("planner", "Research policy evidence before answering.")
+bridge.task_start("research-refund-policy", input={"task": "Find policy evidence"}, agent="researcher")
+bridge.tool_call("research.search", input={"query": "refund policy"}, agent="researcher", permission="read-only", risk="low")
+bridge.tool_result("research.search", output={"documents": [{"id": "refund-policy"}]}, agent="researcher")
+bridge.task_end("research-refund-policy", output={"citations": ["refund-policy"]}, agent="researcher")
 
-trace_llm_call(
-    run,
+bridge.llm_call(
     "crew-final-answer",
     {"messages": [{"role": "user", "content": "Can I refund this order?"}]},
     lambda _input: {"content": "Refunds are available within 30 days.", "citations": ["refund-policy"]},
+    agent="reviewer",
 )
 ```
 

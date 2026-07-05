@@ -73,6 +73,7 @@ Built:
 - Minimal zero-dependency sync/async Python trace writer demo for Python agent and RAG projects.
 - PyPI-ready `agentlens-trace` package skeleton and smoke verification.
 - Python project starter scaffold through `agentlens init --python`.
+- Zero-dependency Python bridge helpers under `agentlens_trace.adapters`.
 - Python framework cookbook demo for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
 
 Public launch status:

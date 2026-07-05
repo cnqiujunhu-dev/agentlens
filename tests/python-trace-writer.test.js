@@ -66,10 +66,10 @@ test("Python framework cookbook demo produces framework-shaped traces", () => {
 
   assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
 
-  for (const [file, app] of [
-    ["python-langchain-style-demo.json", "python-langchain-style-agent"],
-    ["python-llamaindex-style-demo.json", "python-llamaindex-style-agent"],
-    ["python-crewai-style-demo.json", "python-crewai-style-agent"]
+  for (const [file, app, framework] of [
+    ["python-langchain-style-demo.json", "python-langchain-style-agent", "langchain"],
+    ["python-llamaindex-style-demo.json", "python-llamaindex-style-agent", "llamaindex"],
+    ["python-crewai-style-demo.json", "python-crewai-style-agent", "crewai"]
   ]) {
     const trace = JSON.parse(fs.readFileSync(path.join(runsDir, file), "utf8"));
     assert.equal(trace.schemaVersion, "agentlens.trace.v1");
@@ -77,6 +77,8 @@ test("Python framework cookbook demo produces framework-shaped traces", () => {
     assert.equal(trace.status, "passed");
     assert.equal(trace.events.some((event) => event.type === "tool.call"), true);
     assert.equal(trace.events.some((event) => event.type === "llm.response" && event.output?.citations?.length > 0), true);
+    assert.equal(trace.events.some((event) => event.metadata?.framework === framework), true);
+    assert.equal(trace.events.some((event) => event.metadata?.adapter === "agentlens_trace.adapters"), true);
 
     const otel = JSON.parse(fs.readFileSync(path.join(reportsDir, file.replace(/\.json$/u, ".otlp.json")), "utf8"));
     assert.equal(otel.resourceSpans.length, 1);

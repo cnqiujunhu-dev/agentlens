@@ -40,7 +40,7 @@ Expected result:
 - Unit tests pass.
 - Demo traces, MCP demos, JSONL demos, diff dashboards, launch artifacts, and static dashboards generate.
 - `agentlens quickstart` writes an isolated `.agentlens/quickstart/` artifact pack.
-- `npm run python:package` verifies the `agentlens-trace` package import path and demo trace.
+- `npm run python:package` verifies the `agentlens-trace` package import path, `agentlens_trace.adapters`, and demo trace.
 - `agentlens doctor` reports no failed checks.
 - `agentlens validate` reports no trace or eval config errors.
 - `agentlens scan` reports no blocking high or critical findings for the demo trace.

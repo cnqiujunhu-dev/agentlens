@@ -43,6 +43,7 @@ The current MVP includes:
 - Markdown summaries for GitHub Actions.
 - JSONL streaming traces for long-running agents.
 - Generic LLM wrappers and OpenAI-compatible / Anthropic-compatible adapter helpers.
+- Zero-dependency Python trace writer plus framework-shaped bridge helpers.
 - MCP-style tool tracing, MCP stdio transport demo, tool inventory capture, and policy checks.
 - Local release audit and GitHub Action smoke tests.
 

@@ -68,12 +68,13 @@ run(pythonCommand, [
   "-m",
   "py_compile",
   path.join(packageSrc, "agentlens_trace", "__init__.py"),
-  path.join(packageSrc, "agentlens_trace", "__main__.py")
+  path.join(packageSrc, "agentlens_trace", "__main__.py"),
+  path.join(packageSrc, "agentlens_trace", "adapters", "__init__.py")
 ]);
 run(pythonCommand, [
   ...pythonBaseArgs,
   "-c",
-  "from agentlens_trace import AgentLensRun, TRACE_SCHEMA_VERSION, trace_async_llm_call, trace_llm_call; assert TRACE_SCHEMA_VERSION == 'agentlens.trace.v1'; assert AgentLensRun"
+  "from agentlens_trace import AgentLensRun, TRACE_SCHEMA_VERSION, trace_async_llm_call, trace_llm_call; from agentlens_trace.adapters import AgentLensCrewAIBridge, AgentLensLangChainBridge, AgentLensLlamaIndexBridge; assert TRACE_SCHEMA_VERSION == 'agentlens.trace.v1'; run = AgentLensRun(); AgentLensLangChainBridge(run).on_retriever_start({'name': 'retriever'}, 'query'); assert AgentLensLlamaIndexBridge; assert AgentLensCrewAIBridge; assert trace_async_llm_call; assert trace_llm_call"
 ]);
 run(pythonCommand, [...pythonBaseArgs, "-m", "agentlens_trace", "--out", traceFile], { stdio: "inherit" });
 run(process.execPath, [bin, "validate", "trace", traceFile], { stdio: "inherit" });

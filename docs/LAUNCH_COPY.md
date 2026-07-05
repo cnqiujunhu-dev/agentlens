@@ -118,6 +118,7 @@ Highlights:
 - Trace AI agent runs as readable local JSON.
 - Wrap generic LLM calls without binding to one SDK.
 - Trace LangGraph-style, AutoGen-style, CrewAI-style, MCP-style, and MCP stdio workflows without adding runtime dependencies.
+- Write Python traces with the zero-dependency `agentlens-trace` package and `agentlens_trace.adapters` bridge helpers.
 - Replay model/tool/retrieval timelines deterministically.
 - Run JSON eval rules and scan gates locally or in CI.
 - Scan traces for leaked secrets, prompt injection phrases, and risky tool calls.

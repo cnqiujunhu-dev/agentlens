@@ -58,8 +58,9 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - LLM SDK cookbook for wiring existing provider clients into local traces.
 - Zero-dependency sync/async Python trace writer example for Python agent and RAG projects.
 - PyPI-ready `agentlens-trace` package skeleton with import name `agentlens_trace`.
+- Zero-dependency Python adapter helpers under `agentlens_trace.adapters`.
 - `agentlens init --python` starter scaffold for Python projects.
-- Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.
+- Python framework cookbook for `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` trace boundaries.
 - OpenTelemetry/OpenInference-style OTLP JSON export for existing observability stacks.
 - LangGraph-style node adapter for tracing graph-based agent steps.
 - Multi-agent helpers with AutoGen-style and CrewAI-style runnable examples.
@@ -130,9 +131,9 @@ npm run demo:regression-pr
 
 `agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example. `agentlens init --python` also creates `.agentlens/python/basic_run.py`, `.agentlens/python/agentlens_trace.py`, and `.agentlens/examples/python-github-action.yml`.
 
-Python users can start from the `agentlens-trace` package skeleton in `python/agentlens-trace/`, from `examples/python-basic-run.py` and `examples/python-async-run.py`, or run `npm run demo:python` to write AgentLens-compatible sync/async traces, validate them, evaluate them, scan them, and export OTLP JSON. The package exposes `AgentLensRun`, `trace_llm_call`, and `trace_async_llm_call`.
+Python users can start from the `agentlens-trace` package skeleton in `python/agentlens-trace/`, from `examples/python-basic-run.py` and `examples/python-async-run.py`, or run `npm run demo:python` to write AgentLens-compatible sync/async traces, validate them, evaluate them, scan them, and export OTLP JSON. The package exposes `AgentLensRun`, `trace_llm_call`, `trace_async_llm_call`, and framework helpers through `agentlens_trace.adapters`.
 
-For framework-shaped Python projects, run `npm run demo:python:frameworks` or see `examples/python-framework-cookbook-run.py` for LangChain-style callbacks, LlamaIndex-style event hooks, and CrewAI-style task boundaries.
+For framework-shaped Python projects, run `npm run demo:python:frameworks` or see `examples/python-framework-cookbook-run.py` for LangChain-style callbacks, LlamaIndex-style event hooks, and CrewAI-style task boundaries backed by `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge`.
 
 Want this in GitHub Actions?
 
@@ -449,6 +450,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Generate a PR-ready before/after review pack with `agentlens review`.
 - Write AgentLens-compatible sync/async traces from Python agent, RAG, and notebook code.
 - Import `agentlens_trace` from the zero-dependency Python package skeleton.
+- Import `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` from `agentlens_trace.adapters`.
 - Bootstrap a Python project with `agentlens init --python`, then run `.agentlens/python/basic_run.py` in CI.
 - Add trace boundaries around LangChain-style, LlamaIndex-style, and CrewAI-style Python projects without adding framework dependencies to AgentLens.
 - Export local traces as OTLP JSON with OpenTelemetry/OpenInference-style attributes.
@@ -519,6 +521,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - Generic LLM call adapter.
 - Minimal sync/async Python trace writer example.
 - PyPI-ready `agentlens-trace` package skeleton.
+- Zero-dependency Python framework bridge helpers under `agentlens_trace.adapters`.
 - Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
 - OpenTelemetry/OpenInference-style OTLP JSON export.
 - LangGraph-style node adapter.
@@ -550,4 +553,4 @@ It is the missing engineering layer around agent frameworks: trace, replay, eval
 
 ## Status
 
-Early MVP. The current version is useful for local traces, quickstart artifact packs, review packs, deterministic replay, JSON evals, security scans, share bundles, CI checks, static dashboard reports, zero-dependency multi-agent examples, and a minimal sync/async Python trace writer with a PyPI-ready package skeleton. The next milestone is publishing the Python package, deeper framework adapters, and richer governance reports.
+Early MVP. The current version is useful for local traces, quickstart artifact packs, review packs, deterministic replay, JSON evals, security scans, share bundles, CI checks, static dashboard reports, zero-dependency multi-agent examples, and a minimal sync/async Python trace writer with a PyPI-ready package skeleton and importable Python framework bridge helpers. The next milestone is publishing the Python package, hardening adapters against real framework payloads, and richer governance reports.

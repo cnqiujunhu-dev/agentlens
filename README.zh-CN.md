@@ -54,8 +54,9 @@ AgentLens 的差异化是：
 - LLM SDK cookbook，帮助把现有 provider client 接入本地 trace、CI 和 redaction workflow。
 - 零依赖 sync/async Python trace writer 示例，方便 Python Agent、RAG 和 notebook 项目写出 AgentLens trace。
 - PyPI-ready `agentlens-trace` package skeleton，import 名称为 `agentlens_trace`。
+- `agentlens_trace.adapters` 零依赖 Python adapter helpers。
 - `agentlens init --python`，为 Python 项目生成 starter trace writer、示例 run 和 GitHub Action 模板。
-- Python framework cookbook，覆盖 LangChain-style、LlamaIndex-style 和 CrewAI-style trace 边界。
+- Python framework cookbook，覆盖 `AgentLensLangChainBridge`、`AgentLensLlamaIndexBridge` 和 `AgentLensCrewAIBridge` trace 边界。
 - OpenTelemetry/OpenInference-style OTLP JSON 导出，便于接入已有 observability stack。
 - LangGraph-style node adapter。
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。
@@ -211,4 +212,4 @@ AgentLens 不是另一个 Agent 框架。
 
 ## 当前状态
 
-早期 MVP。当前版本已经适合本地 trace、deterministic replay、JSON eval、security scan、redacted share bundle、CI gate、静态 dashboard、run bundle、MCP policy、多 Agent demo、`agentlens quickstart`、`agentlens review`、sync/async Python trace writer、`agentlens-trace` package skeleton、`agentlens init --python` 和 OpenTelemetry/OpenInference-style OTLP JSON 导出。下一阶段重点是更深的框架接入、collector/protobuf 级互通、Python package 发布和更完整的 cookbook。
+早期 MVP。当前版本已经适合本地 trace、deterministic replay、JSON eval、security scan、redacted share bundle、CI gate、静态 dashboard、run bundle、MCP policy、多 Agent demo、`agentlens quickstart`、`agentlens review`、sync/async Python trace writer、`agentlens-trace` package skeleton、`agentlens_trace.adapters`、`agentlens init --python` 和 OpenTelemetry/OpenInference-style OTLP JSON 导出。下一阶段重点是更深的框架接入、collector/protobuf 级互通、Python package 发布和更完整的 cookbook。

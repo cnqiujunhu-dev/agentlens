@@ -23,6 +23,7 @@ AgentLens is currently weaker than mature platforms in hosted collaboration, pro
 - minimal sync/async Python trace writer for Python-heavy agent and RAG projects
 - PyPI-ready `agentlens-trace` package skeleton for Python adoption
 - `agentlens init --python` scaffolding for Python project adoption
+- zero-dependency importable Python bridge helpers under `agentlens_trace.adapters`
 - Python framework cookbook patterns for LangChain-style, LlamaIndex-style, and CrewAI-style projects
 - OTLP JSON export with OpenTelemetry/OpenInference-style attributes
 
@@ -76,9 +77,9 @@ The practical wedge is "agent regression review in GitHub", not "replace Langfus
 
    AgentLens now has an initial OpenTelemetry/OpenInference-style OTLP JSON export, but it does not yet send to collectors or emit protobuf/gRPC. Hardening this bridge will matter for teams already invested in Phoenix, Langfuse, OpenLIT, or existing APM stacks.
 
-4. Minimal Python surface.
+4. Early Python surface.
 
-   Python users now have a zero-dependency sync/async trace writer, a PyPI-ready `agentlens-trace` package skeleton, `agentlens init --python`, and framework cookbook patterns, but the package is not yet published as a release artifact and there are no maintained importable adapters for specific framework versions. The AI agent ecosystem has a large Python base, so this still needs deeper investment.
+   Python users now have a zero-dependency sync/async trace writer, a PyPI-ready `agentlens-trace` package skeleton, `agentlens init --python`, framework cookbook patterns, and importable bridge helpers for LangChain-style, LlamaIndex-style, and CrewAI-style boundaries. The package is not yet published as a release artifact, and the helpers are not version-specific auto-instrumentation for each framework. The AI agent ecosystem has a large Python base, so this still needs deeper investment.
 
 5. Collaboration is artifact-based, not product-based.
 
@@ -124,7 +125,7 @@ Highest leverage:
 1. LLM SDK wrapper cookbook for real projects.
 2. LangGraph, AutoGen, CrewAI, and MCP integration cookbooks with realistic examples.
 3. Harden OpenTelemetry/OpenInference interoperability beyond the initial OTLP JSON export, including collector/protobuf paths.
-4. Package and expand the sync/async Python trace writer and framework cookbook patterns into a minimal Python SDK.
+4. Publish the sync/async Python trace writer package, then harden the zero-dependency bridge helpers against real framework payload shapes.
 5. More dashboard panels for MCP governance and eval failure root causes.
 6. Better README localization and launch copy for Chinese and English developer communities.
 

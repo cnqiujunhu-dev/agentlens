@@ -65,6 +65,17 @@ python examples/python-async-run.py --out .agentlens/runs/python-async-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/python-basic-demo.json --config evals/default.json
 ```
 
+Package-style Python projects can also import framework bridge helpers:
+
+```python
+from agentlens_trace import AgentLensRun
+from agentlens_trace.adapters import AgentLensCrewAIBridge, AgentLensLangChainBridge, AgentLensLlamaIndexBridge
+
+run = AgentLensRun(app="support-agent", name="framework-run")
+bridge = AgentLensLangChainBridge(run, provider="openai-compatible", model="gpt-example")
+bridge.on_retriever_start({"name": "policy-retriever"}, "refund policy")
+```
+
 ## Eval
 
 ```js

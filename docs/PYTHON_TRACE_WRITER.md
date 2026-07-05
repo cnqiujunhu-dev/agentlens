@@ -23,7 +23,7 @@ node ./bin/agentlens.js validate trace .agentlens/runs/python-package-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/python-package-demo.json --config evals/default.json
 ```
 
-The package skeleton lives in `python/agentlens-trace/` with distribution name `agentlens-trace` and import name `agentlens_trace`.
+The package skeleton lives in `python/agentlens-trace/` with distribution name `agentlens-trace` and import name `agentlens_trace`. Framework bridge helpers live under `agentlens_trace.adapters`.
 
 Run the Python demo and then validate, evaluate, scan, and export the generated trace:
 
@@ -132,6 +132,21 @@ The helper can write the same core events used by the JavaScript API:
 
 It also exposes `add_event(...)` for custom events, so Python teams can record framework-specific steps before AgentLens has a dedicated Python adapter.
 
+## Framework Adapter Helpers
+
+For package-style projects, import the zero-dependency framework bridge helpers from `agentlens_trace.adapters`:
+
+```python
+from agentlens_trace import AgentLensRun
+from agentlens_trace.adapters import AgentLensLangChainBridge, AgentLensLlamaIndexBridge, AgentLensCrewAIBridge
+
+run = AgentLensRun(app="support-agent", name="framework-run")
+langchain = AgentLensLangChainBridge(run, provider="openai-compatible", model="gpt-example")
+langchain.on_retriever_start({"name": "policy-retriever"}, "refund policy")
+```
+
+These helpers do not import LangChain, LlamaIndex, or CrewAI. They provide stable, framework-shaped boundaries for callbacks, event hooks, task spans, tool calls, and final answer calls while keeping traces as local JSON artifacts. See [PYTHON_FRAMEWORK_COOKBOOK.md](PYTHON_FRAMEWORK_COOKBOOK.md) for runnable examples.
+
 ## CI Pattern
 
 After a Python test suite writes one or more trace files, use the existing AgentLens CLI:
@@ -146,6 +161,6 @@ This keeps the Python application code simple while reusing AgentLens' evals, sc
 ## Current Limits
 
 - The repository now includes a PyPI-ready package skeleton, but release publication is still a separate step.
-- It focuses on explicit instrumentation. It does not auto-instrument LangChain, LlamaIndex, CrewAI, or provider SDKs yet.
+- It focuses on explicit instrumentation. It includes zero-dependency bridge helpers for LangChain-style, LlamaIndex-style, and CrewAI-style boundaries, but it does not auto-instrument framework internals or provider SDKs yet.
 - The helper supports synchronous and `asyncio` model-call wrappers.
 - The generated traces can contain prompts, tool arguments, and retrieved documents. Redact before sharing publicly.

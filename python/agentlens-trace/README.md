@@ -34,3 +34,14 @@ node ./bin/agentlens.js eval .agentlens/runs/python-package-demo.json --config e
 ```
 
 Runtime dependencies: none.
+
+Framework-shaped helpers are available without importing framework packages:
+
+```python
+from agentlens_trace import AgentLensRun
+from agentlens_trace.adapters import AgentLensLangChainBridge, AgentLensLlamaIndexBridge, AgentLensCrewAIBridge
+
+run = AgentLensRun(app="support-agent", name="framework answer")
+bridge = AgentLensLangChainBridge(run, provider="openai-compatible", model="gpt-example")
+bridge.on_retriever_start({"name": "policy-retriever"}, "refund policy")
+```

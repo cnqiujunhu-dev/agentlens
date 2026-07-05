@@ -3,7 +3,8 @@
 import argparse
 from pathlib import Path
 
-from agentlens_trace import AgentLensRun, init_workspace, trace_llm_call
+from agentlens_trace import AgentLensRun, init_workspace
+from agentlens_trace.adapters import AgentLensCrewAIBridge, AgentLensLangChainBridge, AgentLensLlamaIndexBridge
 
 
 def write_langchain_style(out_dir: Path) -> Path:
@@ -13,72 +14,17 @@ def write_langchain_style(out_dir: Path) -> Path:
         metadata={"language": "python", "framework": "langchain", "example": "python-framework-cookbook"},
     )
 
-    class AgentLensLangChainBridge:
-        def on_retriever_start(self, serialized, query, **kwargs):
-            run.add_event(
-                "retrieval.query",
-                name=serialized.get("name", "retriever"),
-                input={"query": query},
-                metadata={"framework": "langchain", **kwargs},
-            )
-
-        def on_retriever_end(self, documents, **kwargs):
-            run.add_event(
-                "retrieval.result",
-                name="policy-retriever",
-                duration_ms=54,
-                output={"documents": documents},
-                metadata={"framework": "langchain", **kwargs},
-            )
-
-        def on_tool_start(self, serialized, input_str, **kwargs):
-            run.add_tool_call(
-                serialized.get("name", "tool"),
-                input={"input": input_str},
-                metadata={"framework": "langchain", "permission": "read-only", "risk": "low", **kwargs},
-            )
-
-        def on_tool_end(self, output, **kwargs):
-            run.add_tool_result(
-                "policy.lookup",
-                output=output,
-                duration_ms=73,
-                metadata={"framework": "langchain", **kwargs},
-            )
-
-        def on_llm_start(self, serialized, prompts, **kwargs):
-            messages = [{"role": "user", "content": prompt} for prompt in prompts]
-            run.add_llm_prompt(
-                "final-answer",
-                messages,
-                provider="mock-langchain-provider",
-                model=serialized.get("model", "demo-model"),
-                metadata={"framework": "langchain", **kwargs},
-            )
-
-        def on_llm_end(self, response, **kwargs):
-            run.add_llm_response(
-                "final-answer",
-                response["content"],
-                citations=response["citations"],
-                duration_ms=118,
-                usage=response["usage"],
-                provider="mock-langchain-provider",
-                model="demo-model",
-                metadata={"framework": "langchain", **kwargs},
-            )
-
-    bridge = AgentLensLangChainBridge()
+    bridge = AgentLensLangChainBridge(run, provider="mock-langchain-provider", model="demo-model")
     bridge.on_retriever_start({"name": "policy-retriever"}, "refund policy", run_id="lc_retrieve")
-    bridge.on_retriever_end([{"id": "refund-policy", "score": 0.94}], run_id="lc_retrieve")
-    bridge.on_tool_start({"name": "policy.lookup"}, "refund policy", run_id="lc_tool")
-    bridge.on_tool_end({"policy": "Refunds are available within 30 days."}, run_id="lc_tool")
+    bridge.on_retriever_end([{"id": "refund-policy", "score": 0.94}], duration_ms=54, run_id="lc_retrieve")
+    bridge.on_tool_start({"name": "policy.lookup"}, "refund policy", permission="read-only", risk="low", run_id="lc_tool")
+    bridge.on_tool_end({"policy": "Refunds are available within 30 days."}, duration_ms=73, run_id="lc_tool")
     bridge.on_llm_start({"model": "demo-model"}, ["Can I refund this order?"], run_id="lc_llm")
     bridge.on_llm_end({
         "content": "Refunds are available within 30 days.",
         "citations": ["refund-policy"],
         "usage": {"inputTokens": 9, "outputTokens": 8, "totalTokens": 17, "costUsd": 0.0002},
-    }, run_id="lc_llm")
+    }, duration_ms=118, run_id="lc_llm")
 
     run.finish("passed")
     out = out_dir / "python-langchain-style-demo.json"
@@ -93,60 +39,15 @@ def write_llamaindex_style(out_dir: Path) -> Path:
         metadata={"language": "python", "framework": "llamaindex", "example": "python-framework-cookbook"},
     )
 
-    class AgentLensLlamaIndexBridge:
-        def event_start(self, event_type, payload):
-            if event_type == "RETRIEVE":
-                run.add_event("retrieval.query", name="index-retrieve", input={"query": payload["query"]}, metadata={"framework": "llamaindex"})
-                run.add_tool_call(
-                    "vector_index.retrieve",
-                    input={"query": payload["query"]},
-                    metadata={"framework": "llamaindex", "permission": "read-only", "risk": "low"},
-                )
-            elif event_type == "LLM":
-                run.add_llm_prompt(
-                    "synthesize-answer",
-                    [{"role": "user", "content": payload["prompt"]}],
-                    provider="mock-llamaindex-provider",
-                    model="demo-model",
-                    metadata={"framework": "llamaindex"},
-                )
-
-        def event_end(self, event_type, payload):
-            if event_type == "RETRIEVE":
-                run.add_event(
-                    "retrieval.result",
-                    name="index-retrieve",
-                    duration_ms=46,
-                    output={"documents": payload["nodes"]},
-                    metadata={"framework": "llamaindex"},
-                )
-                run.add_tool_result(
-                    "vector_index.retrieve",
-                    duration_ms=46,
-                    output={"documents": [{"id": node["id"]} for node in payload["nodes"]]},
-                    metadata={"framework": "llamaindex"},
-                )
-            elif event_type == "LLM":
-                run.add_llm_response(
-                    "synthesize-answer",
-                    payload["content"],
-                    citations=payload["citations"],
-                    duration_ms=109,
-                    usage=payload["usage"],
-                    provider="mock-llamaindex-provider",
-                    model="demo-model",
-                    metadata={"framework": "llamaindex"},
-                )
-
-    bridge = AgentLensLlamaIndexBridge()
-    bridge.event_start("RETRIEVE", {"query": "return policy evidence"})
-    bridge.event_end("RETRIEVE", {"nodes": [{"id": "node_refund_policy", "score": 0.91}]})
+    bridge = AgentLensLlamaIndexBridge(run, provider="mock-llamaindex-provider", model="demo-model")
+    bridge.event_start("RETRIEVE", {"query": "return policy evidence"}, permission="read-only", risk="low")
+    bridge.event_end("RETRIEVE", {"nodes": [{"id": "node_refund_policy", "score": 0.91}]}, duration_ms=46)
     bridge.event_start("LLM", {"prompt": "Use retrieved policy evidence to answer the refund question."})
     bridge.event_end("LLM", {
         "content": "The retrieved policy says refunds are allowed within 30 days.",
         "citations": ["node_refund_policy"],
         "usage": {"inputTokens": 11, "outputTokens": 10, "totalTokens": 21, "costUsd": 0.0002},
-    })
+    }, duration_ms=109)
 
     run.finish("passed")
     out = out_dir / "python-llamaindex-style-demo.json"
@@ -161,39 +62,30 @@ def write_crewai_style(out_dir: Path) -> Path:
         metadata={"language": "python", "framework": "crewai", "example": "python-framework-cookbook"},
     )
 
-    run.add_event(
-        "agent.message",
-        name="planner",
-        output={"role": "planner", "content": "Research policy evidence before answering."},
-        metadata={"framework": "crewai", "agent": "planner"},
-    )
-    run.add_event(
-        "agent.task.start",
-        name="research-refund-policy",
-        input={"task": "Find refund policy evidence."},
-        metadata={"framework": "crewai", "agent": "researcher"},
-    )
-    run.add_tool_call(
+    bridge = AgentLensCrewAIBridge(run, provider="mock-crewai-provider", model="demo-model")
+    bridge.agent_message("planner", "Research policy evidence before answering.")
+    bridge.task_start("research-refund-policy", input={"task": "Find refund policy evidence."}, agent="researcher")
+    bridge.tool_call(
         "research.search",
         input={"query": "refund policy"},
-        metadata={"framework": "crewai", "permission": "read-only", "risk": "low", "agent": "researcher"},
+        agent="researcher",
+        permission="read-only",
+        risk="low",
     )
-    run.add_tool_result(
+    bridge.tool_result(
         "research.search",
         duration_ms=88,
         output={"documents": [{"id": "crew_refund_policy"}]},
-        metadata={"framework": "crewai", "agent": "researcher"},
+        agent="researcher",
     )
-    run.add_event(
-        "agent.task.end",
-        name="research-refund-policy",
+    bridge.task_end(
+        "research-refund-policy",
         duration_ms=132,
         output={"citations": ["crew_refund_policy"]},
-        metadata={"framework": "crewai", "agent": "researcher"},
+        agent="researcher",
     )
 
-    trace_llm_call(
-        run,
+    bridge.llm_call(
         "crew-final-answer",
         {"messages": [{"role": "user", "content": "Can the user refund this order?"}]},
         lambda _input: {
@@ -201,9 +93,7 @@ def write_crewai_style(out_dir: Path) -> Path:
             "citations": ["crew_refund_policy"],
             "usage": {"inputTokens": 10, "outputTokens": 11, "totalTokens": 21, "costUsd": 0.0002},
         },
-        provider="mock-crewai-provider",
-        model="demo-model",
-        metadata={"framework": "crewai", "agent": "reviewer"},
+        agent="reviewer",
     )
 
     run.finish("passed")

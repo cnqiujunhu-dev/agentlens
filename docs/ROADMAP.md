@@ -72,12 +72,13 @@ Started after v0.2.0:
 - Minimal zero-dependency sync/async Python trace writer examples and verified demo.
 - PyPI-ready `agentlens-trace` package skeleton and verified package smoke test.
 - Python project starter scaffold through `agentlens init --python`.
+- Importable zero-dependency Python bridge helpers under `agentlens_trace.adapters`.
 - Python framework cookbook patterns for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.
 
 Candidates:
 
 - Collector/protobuf export hardening for teams that already use Langfuse, Phoenix, OpenLIT, or existing APM.
-- Publish the Python trace writer package and add maintained framework adapters.
+- Publish the Python trace writer package and harden framework bridge helpers against real LangChain, LlamaIndex, and CrewAI payload shapes.
 - Richer dashboards for MCP exception review history.
 
 ## Good First Issues
