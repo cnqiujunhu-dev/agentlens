@@ -31,6 +31,9 @@ test("repository workflow verifies GitHub Action outputs", () => {
   assert.match(workflow, /steps\.agentlens-action\.outputs\.total/);
   assert.match(workflow, /actions\/checkout@v7/);
   assert.match(workflow, /actions\/setup-node@v6/);
+  assert.match(workflow, /demo:autogen/);
+  assert.match(workflow, /demo:crewai/);
+  assert.match(workflow, /multi-agent-basic\.json/);
   assert.doesNotMatch(workflow, /actions\/checkout@v4/);
   assert.doesNotMatch(workflow, /actions\/setup-node@v4/);
 });

@@ -65,6 +65,13 @@ jobs:
           npm run demo:llm
           node ./bin/agentlens.js eval .agentlens/runs/llm-wrapper-demo.json --config evals/llm-basic.json
 
+      - name: Multi-agent demo
+        run: |
+          npm run demo:autogen
+          node ./bin/agentlens.js eval .agentlens/runs/autogen-style-demo.json --config evals/multi-agent-basic.json
+          npm run demo:crewai
+          node ./bin/agentlens.js eval .agentlens/runs/crewai-style-demo.json --config evals/multi-agent-basic.json
+
       - name: JSONL streaming demo
         run: |
           npm run demo:jsonl
