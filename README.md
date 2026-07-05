@@ -6,7 +6,7 @@ Trace, replay, evaluate, and share AI agent runs before they break in production
 [![Node](https://img.shields.io/badge/node-%3E%3D20-339933.svg)](package.json)
 [![Zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](package.json)
 
-AgentLens is a local-first DevTools stack for AI agents, tool calls, RAG flows, and MCP-style integrations. It gives every run a readable trace, a deterministic replay transcript, JSON-based evals, and a static dashboard you can attach to issues or CI logs.
+AgentLens is a local-first DevTools stack for AI agents, multi-agent workflows, tool calls, RAG flows, and MCP-style integrations. It gives every run a readable trace, a deterministic replay transcript, JSON-based evals, and a static dashboard you can attach to issues or CI logs.
 
 ```text
 agent run -> trace -> replay -> eval -> dashboard
@@ -37,6 +37,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Generic LLM wrapper for tracing model calls from any SDK.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - LangGraph-style node adapter for tracing graph-based agent steps.
+- Multi-agent helpers with AutoGen-style and CrewAI-style runnable examples.
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - Trace diff reports for before/after agent regressions.
 - Static diff dashboards for sharing before/after regressions.
@@ -138,6 +139,17 @@ Want to trace LangGraph-style node functions?
 npm run demo:langgraph
 node ./bin/agentlens.js replay .agentlens/runs/langgraph-style-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/langgraph-style-demo.json --config evals/langgraph-basic.json
+```
+
+Want to trace AutoGen-style or CrewAI-style multi-agent workflows?
+
+```bash
+npm run demo:autogen
+node ./bin/agentlens.js replay .agentlens/runs/autogen-style-demo.json
+node ./bin/agentlens.js eval .agentlens/runs/autogen-style-demo.json --config evals/multi-agent-basic.json
+npm run demo:crewai
+node ./bin/agentlens.js replay .agentlens/runs/crewai-style-demo.json
+node ./bin/agentlens.js eval .agentlens/runs/crewai-style-demo.json --config evals/multi-agent-basic.json
 ```
 
 Want to trace an MCP-style tool call?
@@ -302,6 +314,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Run bundles](docs/RUN_BUNDLES.md)
 - [Security scan](docs/SECURITY_SCAN.md)
 - [LangGraph-style adapter](docs/LANGGRAPH_ADAPTER.md)
+- [Multi-agent adapters](docs/MULTI_AGENT_ADAPTERS.md)
 - [Changelog](CHANGELOG.md)
 - [JSON schemas](docs/SCHEMAS.md)
 
@@ -361,6 +374,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Debug tool-using AI agents.
 - Trace model calls without binding to one LLM SDK.
 - Trace LangGraph-style node functions without adding a framework dependency.
+- Trace AutoGen-style and CrewAI-style multi-agent workflows without adding framework dependencies.
 - Compare before/after traces when an agent regresses.
 - Share before/after trace diff dashboards in issues and PRs.
 - Emit JSON reports for CI bots, scripts, and PR comments.
@@ -413,6 +427,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - Init scaffolding for starter evals and GitHub Action examples.
 - Generic LLM call adapter.
 - LangGraph-style node adapter.
+- Multi-agent adapter helpers and AutoGen-style/CrewAI-style examples.
 - Local dashboard server.
 - GitHub Action for agent regression tests.
 - MCP tool inventory and risk scanner.
@@ -423,7 +438,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - Owner and expiry checks for MCP risk exceptions.
 - Launch demo artifact generator.
 - JavaScript SDK wrapper for common LLM calls.
-- LangGraph, AutoGen, and CrewAI adapter examples.
+- Deeper AutoGen and CrewAI integration notes.
 - Richer dashboards for MCP exception review history.
 - VS Code extension.
 - JSONL streaming trace reader and writer.
@@ -436,4 +451,4 @@ It is the missing engineering layer around agent frameworks: trace, replay, eval
 
 ## Status
 
-Early MVP. The current version is useful for local traces, deterministic replay, JSON evals, security scans, share bundles, CI checks, and static dashboard reports. The next milestone is deeper framework adapters and richer governance reports.
+Early MVP. The current version is useful for local traces, deterministic replay, JSON evals, security scans, share bundles, CI checks, static dashboard reports, and zero-dependency multi-agent examples. The next milestone is deeper framework adapters and richer governance reports.

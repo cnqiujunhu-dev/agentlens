@@ -212,6 +212,39 @@ const state = await planner({ messages: [{ role: "user", content: "Can I refund 
 finishRun(run, "passed");
 ```
 
+## Multi-Agent Workflows
+
+```js
+import { addAgentMessage, createMultiAgentRun, finishRun, traceAgentTask } from "agentlens";
+
+const run = createMultiAgentRun({
+  app: "support-agent",
+  name: "refund review",
+  framework: "autogen",
+  workflow: "planner-researcher-reviewer"
+});
+
+addAgentMessage(run, {
+  agent: "planner",
+  content: "Research the refund policy before answering."
+});
+
+const research = await traceAgentTask(
+  run,
+  {
+    agent: "researcher",
+    role: "assistant",
+    name: "lookup-refund-policy",
+    input: { topic: "damaged item refund" }
+  },
+  async () => ({ finding: "Refunds are available within 30 days.", citations: ["policy-refund-30d"] })
+);
+
+finishRun(run, research.citations.length > 0 ? "passed" : "failed");
+```
+
+See [MULTI_AGENT_ADAPTERS.md](MULTI_AGENT_ADAPTERS.md) for AutoGen-style and CrewAI-style examples.
+
 ## Provider-Style LLM Calls
 
 ```js

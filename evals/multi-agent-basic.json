@@ -1,0 +1,25 @@
+{
+  "version": "agentlens.eval.v1",
+  "name": "multi-agent-basic",
+  "assertions": [
+    {
+      "id": "has-agent-events",
+      "type": "required-event-types",
+      "eventTypes": ["agent.message", "agent.task.start", "agent.task.end", "llm.response"]
+    },
+    {
+      "id": "no-errors",
+      "type": "max-errors",
+      "max": 0
+    },
+    {
+      "id": "has-final-answer",
+      "type": "required-final-response"
+    },
+    {
+      "id": "final-answer-has-citation",
+      "type": "required-citations",
+      "min": 1
+    }
+  ]
+}

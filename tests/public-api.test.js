@@ -4,8 +4,10 @@ import {
   addEvent,
   buildRunBundle,
   compareTraces,
+  addAgentMessage,
   createLangGraphRun,
   createMcpRun,
+  createMultiAgentRun,
   createRun,
   doctorWorkspace,
   evaluateTrace,
@@ -26,6 +28,7 @@ import {
   scanMcpTools,
   summarizeTrace,
   traceAnthropicCompatibleMessage,
+  traceAgentTask,
   traceLangGraphNode,
   traceLlmCall,
   traceOpenAiCompatibleChat,
@@ -95,6 +98,19 @@ test("public API exports LangGraph-style helpers", async () => {
   assert.equal(output.planned, true);
   assert.equal(run.events[0].type, "framework.node.start");
   assert.equal(run.events[1].type, "framework.node.end");
+});
+
+test("public API exports multi-agent helpers", async () => {
+  const run = createMultiAgentRun({ app: "api-test", name: "multi-agent api", framework: "autogen" });
+  addAgentMessage(run, { agent: "planner", content: "I will plan the answer." });
+  const output = await traceAgentTask(run, { agent: "reviewer", name: "review-answer", input: { draft: "ok" } }, async (input) => ({
+    approved: input.draft === "ok"
+  }));
+
+  assert.equal(output.approved, true);
+  assert.equal(run.events[0].type, "agent.message");
+  assert.equal(run.events[1].type, "agent.task.start");
+  assert.equal(run.events[2].type, "agent.task.end");
 });
 
 test("public API exports LLM helper", async () => {

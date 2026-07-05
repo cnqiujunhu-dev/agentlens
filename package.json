@@ -21,6 +21,7 @@
     "./server": "./src/server.js",
     "./adapters/langgraph": "./src/adapters/langgraph.js",
     "./adapters/llm": "./src/adapters/llm.js",
+    "./adapters/multi-agent": "./src/adapters/multi-agent.js",
     "./adapters/mcp": "./src/adapters/mcp.js",
     "./adapters/mcp-stdio": "./src/adapters/mcp-stdio.js"
   },
@@ -52,6 +53,8 @@
     "demo:providers": "node ./examples/provider-adapters-run.mjs",
     "demo:jsonl": "node ./examples/jsonl-run.mjs",
     "demo:langgraph": "node ./examples/langgraph-style-run.mjs",
+    "demo:autogen": "node ./examples/autogen-style-run.mjs",
+    "demo:crewai": "node ./examples/crewai-style-run.mjs",
     "launch:demo": "node ./scripts/launch-demo.mjs",
     "release:gif": "npm run launch:demo && node ./scripts/generate-demo-gif.mjs",
     "release:preflight": "node ./scripts/release-preflight.mjs",
@@ -64,6 +67,8 @@
     "eval:llm": "node ./bin/agentlens.js eval .agentlens/runs/llm-wrapper-demo.json --config evals/llm-basic.json",
     "eval:providers": "node ./bin/agentlens.js eval .agentlens/runs/provider-adapters-demo.json --config evals/llm-basic.json",
     "eval:langgraph": "node ./bin/agentlens.js eval .agentlens/runs/langgraph-style-demo.json --config evals/langgraph-basic.json",
+    "eval:autogen": "node ./bin/agentlens.js eval .agentlens/runs/autogen-style-demo.json --config evals/multi-agent-basic.json",
+    "eval:crewai": "node ./bin/agentlens.js eval .agentlens/runs/crewai-style-demo.json --config evals/multi-agent-basic.json",
     "scan:demo": "node ./bin/agentlens.js scan .agentlens/runs/demo.json",
     "redact:demo": "node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json",
     "share:demo": "node ./bin/agentlens.js share .agentlens/runs/demo.json --config evals/default.json --out .agentlens/share/demo",
@@ -78,8 +83,8 @@
     "dashboard": "node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html",
     "bundle:demo": "node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle-demo",
     "test": "node --test",
-    "check": "node --check ./bin/agentlens.js && node --check ./src/index.js && node --check ./src/trace.js && node --check ./src/store.js && node --check ./src/demo.js && node --check ./src/inspect.js && node --check ./src/diff.js && node --check ./src/diff-dashboard.js && node --check ./src/doctor.js && node --check ./src/replay.js && node --check ./src/eval.js && node --check ./src/scan.js && node --check ./src/ci.js && node --check ./src/jsonl.js && node --check ./src/redact.js && node --check ./src/share.js && node --check ./src/schemas.js && node --check ./src/validate.js && node --check ./src/server.js && node --check ./src/dashboard.js && node --check ./src/bundle.js && node --check ./src/adapters/langgraph.js && node --check ./src/adapters/llm.js && node --check ./src/adapters/mcp.js && node --check ./src/adapters/mcp-stdio.js && node --check ./examples/basic-run.mjs && node --check ./examples/failing-run.mjs && node --check ./examples/mcp-tool-run.mjs && node --check ./examples/mcp-stdio-server.mjs && node --check ./examples/mcp-stdio-run.mjs && node --check ./examples/llm-wrapper-run.mjs && node --check ./examples/provider-adapters-run.mjs && node --check ./examples/jsonl-run.mjs && node --check ./examples/langgraph-style-run.mjs && node --check ./scripts/launch-demo.mjs && node --check ./scripts/generate-demo-gif.mjs && node --check ./scripts/release-audit.mjs && node --check ./scripts/release-preflight.mjs",
-    "verify": "npm run check && npm test && npm run demo && npm run doctor && npm run inspect && npm run eval && npm run scan:demo && npm run schema:trace && npm run validate:demo && npm run redact:demo && npm run share:demo && npm run diff:demo && npm run diff:dashboard && npm run ci:demo && npm run demo:mcp && npm run eval:mcp && npm run demo:mcp:stdio && npm run eval:mcp:stdio && npm run demo:llm && npm run eval:llm && npm run demo:providers && npm run eval:providers && npm run demo:langgraph && npm run eval:langgraph && npm run demo:jsonl && npm run launch:demo && npm run dashboard && npm run bundle:demo && npm run release:audit"
+    "check": "node --check ./bin/agentlens.js && node --check ./src/index.js && node --check ./src/trace.js && node --check ./src/store.js && node --check ./src/demo.js && node --check ./src/inspect.js && node --check ./src/diff.js && node --check ./src/diff-dashboard.js && node --check ./src/doctor.js && node --check ./src/replay.js && node --check ./src/eval.js && node --check ./src/scan.js && node --check ./src/ci.js && node --check ./src/jsonl.js && node --check ./src/redact.js && node --check ./src/share.js && node --check ./src/schemas.js && node --check ./src/validate.js && node --check ./src/server.js && node --check ./src/dashboard.js && node --check ./src/bundle.js && node --check ./src/adapters/langgraph.js && node --check ./src/adapters/llm.js && node --check ./src/adapters/multi-agent.js && node --check ./src/adapters/mcp.js && node --check ./src/adapters/mcp-stdio.js && node --check ./examples/basic-run.mjs && node --check ./examples/failing-run.mjs && node --check ./examples/mcp-tool-run.mjs && node --check ./examples/mcp-stdio-server.mjs && node --check ./examples/mcp-stdio-run.mjs && node --check ./examples/llm-wrapper-run.mjs && node --check ./examples/provider-adapters-run.mjs && node --check ./examples/jsonl-run.mjs && node --check ./examples/langgraph-style-run.mjs && node --check ./examples/autogen-style-run.mjs && node --check ./examples/crewai-style-run.mjs && node --check ./scripts/launch-demo.mjs && node --check ./scripts/generate-demo-gif.mjs && node --check ./scripts/release-audit.mjs && node --check ./scripts/release-preflight.mjs",
+    "verify": "npm run check && npm test && npm run demo && npm run doctor && npm run inspect && npm run eval && npm run scan:demo && npm run schema:trace && npm run validate:demo && npm run redact:demo && npm run share:demo && npm run diff:demo && npm run diff:dashboard && npm run ci:demo && npm run demo:mcp && npm run eval:mcp && npm run demo:mcp:stdio && npm run eval:mcp:stdio && npm run demo:llm && npm run eval:llm && npm run demo:providers && npm run eval:providers && npm run demo:langgraph && npm run eval:langgraph && npm run demo:autogen && npm run eval:autogen && npm run demo:crewai && npm run eval:crewai && npm run demo:jsonl && npm run launch:demo && npm run dashboard && npm run bundle:demo && npm run release:audit"
   },
   "keywords": [
     "ai-agent",

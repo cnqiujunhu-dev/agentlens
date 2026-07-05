@@ -16,6 +16,7 @@ const requiredFiles = [
   "docs/API.md",
   "docs/GITHUB_ACTION.md",
   "docs/LANGGRAPH_ADAPTER.md",
+  "docs/MULTI_AGENT_ADAPTERS.md",
   "docs/LAUNCH_COPY.md",
   "docs/LAUNCH_PLAN.md",
   "docs/ROADMAP.md",
@@ -40,6 +41,9 @@ const requiredReadmeSnippets = [
   "JavaScript API",
   "provider-style SDK adapters",
   "LangGraph-style",
+  "AutoGen-style",
+  "CrewAI-style",
+  "multi-agent",
   "Eval Rules",
   "Use Cases",
   "Roadmap",
@@ -100,6 +104,7 @@ const requiredPackageExports = [
   "./server",
   "./adapters/langgraph",
   "./adapters/llm",
+  "./adapters/multi-agent",
   "./adapters/mcp",
   "./adapters/mcp-stdio"
 ];

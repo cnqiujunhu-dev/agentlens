@@ -84,7 +84,7 @@ Do these before asking more strangers to star it:
 The MVP becomes much more credible when it works with one real ecosystem:
 
 1. Harden the LangGraph adapter against common graph/node shapes.
-2. Add AutoGen and CrewAI-style examples.
+2. Expand AutoGen and CrewAI-style examples into deeper cookbook notes.
 3. Add richer dashboards for MCP exception review history.
 
 ## Priority 3: Make The README Convert

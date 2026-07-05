@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Added
+
+- Multi-agent adapter helpers for agent messages and task spans.
+- AutoGen-style and CrewAI-style runnable demos with a shared multi-agent eval pack.
+
 ### Changed
 
 - Updated GitHub Actions references to Node 24-backed major versions: `actions/checkout@v7` and `actions/setup-node@v6`.

@@ -19,4 +19,5 @@ export { createDashboardServer, listen, listTraceFiles } from "./server.js";
 export { addMcpToolManifest, createMcpRun, finishMcpRun, scanMcpTools, traceMcpToolCall } from "./adapters/mcp.js";
 export { MCP_PROTOCOL_VERSION, McpStdioClient, McpStdioTraceSession, traceMcpStdioSession, traceMcpStdioToolCall } from "./adapters/mcp-stdio.js";
 export { createLangGraphRun, traceLangGraphNode, wrapLangGraphNode } from "./adapters/langgraph.js";
+export { addAgentMessage, createMultiAgentRun, traceAgentTask } from "./adapters/multi-agent.js";
 export { traceAnthropicCompatibleMessage, traceLlmCall, traceOpenAiCompatibleChat } from "./adapters/llm.js";
