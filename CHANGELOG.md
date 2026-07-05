@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Updated GitHub Actions references to Node 24-backed major versions: `actions/checkout@v7` and `actions/setup-node@v6`.
+- Updated the composite action default Node.js version to 22.
+
 ## 0.1.0
 
 Initial MVP.

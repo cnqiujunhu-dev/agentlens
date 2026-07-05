@@ -13,7 +13,7 @@ jobs:
   agentlens:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Generate agent traces
         run: npm test
@@ -38,7 +38,7 @@ The action fails the job when any trace fails its eval config, any enabled scan 
 | --- | --- | --- |
 | `runs` | `.agentlens/runs` | Directory containing AgentLens trace JSON files. |
 | `config` | `evals/default.json` | Eval config JSON file. |
-| `node-version` | `20` | Node.js version used to run AgentLens. |
+| `node-version` | `22` | Node.js version used to run AgentLens. |
 | `summary` | `true` | Write a Markdown report to the GitHub Actions step summary. |
 | `scan` | `true` | Run the local AgentLens security scan after evals. |
 | `scan-fail-on` | `high` | Lowest scan severity that fails the action: `low`, `medium`, `high`, `critical`, or `none`. |

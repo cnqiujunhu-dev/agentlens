@@ -167,10 +167,36 @@ function assertDemoGif() {
   if (stats.size > maxBytes) fail("docs/assets/agentlens-demo.gif must stay under 10 MB");
 }
 
+function assertActionVersions() {
+  const deprecatedCheckoutAction = ["actions/checkout", "v4"].join("@");
+  const deprecatedSetupNodeAction = ["actions/setup-node", "v4"].join("@");
+  const checkoutAction = ["actions/checkout", "v7"].join("@");
+  const setupNodeAction = ["actions/setup-node", "v6"].join("@");
+  const workflow = fs.readFileSync(".github/workflows/ci.yml", "utf8");
+  const action = fs.readFileSync("action.yml", "utf8");
+  const store = fs.readFileSync("src/store.js", "utf8");
+  const docs = fs.readFileSync("docs/GITHUB_ACTION.md", "utf8");
+  for (const [name, text] of [
+    [".github/workflows/ci.yml", workflow],
+    ["action.yml", action],
+    ["src/store.js", store],
+    ["docs/GITHUB_ACTION.md", docs]
+  ]) {
+    if (text.includes(deprecatedCheckoutAction)) fail(`${name} must not reference ${deprecatedCheckoutAction}`);
+    if (text.includes(deprecatedSetupNodeAction)) fail(`${name} must not reference ${deprecatedSetupNodeAction}`);
+  }
+  if (!workflow.includes(checkoutAction)) fail(`.github/workflows/ci.yml must use ${checkoutAction}`);
+  if (!docs.includes(checkoutAction)) fail(`docs/GITHUB_ACTION.md must document ${checkoutAction}`);
+  if (!store.includes(checkoutAction)) fail(`src/store.js init example must use ${checkoutAction}`);
+  if (!workflow.includes(setupNodeAction)) fail(`.github/workflows/ci.yml must use ${setupNodeAction}`);
+  if (!action.includes(setupNodeAction)) fail(`action.yml must use ${setupNodeAction}`);
+}
+
 for (const file of requiredFiles) assertFile(file);
 assertReadme();
 assertPackage();
 assertDemoGif();
+assertActionVersions();
 assertPackDryRun();
 
 console.log("AgentLens release audit passed");

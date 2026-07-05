@@ -18,6 +18,8 @@ test("composite GitHub Action exposes CI outputs", () => {
   assert.match(action, /--sarif/);
   assert.match(action, /--json/);
   assert.match(action, /GITHUB_OUTPUT/);
+  assert.match(action, /actions\/setup-node@v6/);
+  assert.doesNotMatch(action, /actions\/setup-node@v4/);
 });
 
 test("repository workflow verifies GitHub Action outputs", () => {
@@ -27,4 +29,8 @@ test("repository workflow verifies GitHub Action outputs", () => {
   assert.match(workflow, /steps\.agentlens-action\.outputs\.status/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.failed/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.total/);
+  assert.match(workflow, /actions\/checkout@v7/);
+  assert.match(workflow, /actions\/setup-node@v6/);
+  assert.doesNotMatch(workflow, /actions\/checkout@v4/);
+  assert.doesNotMatch(workflow, /actions\/setup-node@v4/);
 });
