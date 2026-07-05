@@ -15,6 +15,8 @@
 - Dashboard review workflow guide for PR artifacts, dashboard sections, and filtered view links.
 - Run bundle `manifest.json` output with summary counts and per-trace review metadata.
 - Composite GitHub Action `bundle` and `bundle-sections` inputs for generating static run bundle artifacts.
+- Market analysis and positioning guide comparing AgentLens with Langfuse, LangSmith, Phoenix, Helicone, OpenLLMetry, OpenLIT, and Braintrust.
+- Simplified Chinese README with language switching from the English README.
 
 ## 0.2.0
 

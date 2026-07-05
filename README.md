@@ -6,6 +6,8 @@ Trace, replay, evaluate, and share AI agent runs before they break in production
 [![Node](https://img.shields.io/badge/node-%3E%3D20-339933.svg)](package.json)
 [![Zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](package.json)
 
+Languages: [English](README.md) | [简体中文](README.zh-CN.md)
+
 AgentLens is a local-first DevTools stack for AI agents, multi-agent workflows, tool calls, RAG flows, and MCP-style integrations. It gives every run a readable trace, a deterministic replay transcript, JSON-based evals, and a static dashboard you can attach to issues or CI logs.
 
 ```text
@@ -40,6 +42,12 @@ When an agent fails, teams usually lose time answering the same questions:
 - Can this failure be reproduced in CI?
 
 AgentLens makes those questions inspectable with plain local files. No cloud account is required.
+
+## Market Positioning
+
+AgentLens is not trying to replace Langfuse, LangSmith, Phoenix, Helicone, OpenLIT, OpenLLMetry, or Braintrust. Those projects are strong full-platform or telemetry-stack choices. AgentLens is the lightweight local and CI artifact layer you can adopt before a hosted observability platform: trace a run, replay it, scan it, diff it, gate it in CI, and attach static evidence to a pull request.
+
+See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison and roadmap implications.
 
 ## What You Get
 
@@ -333,6 +341,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Demo recording guide](docs/DEMO_RECORDING.md)
 - [Launch post draft](docs/LAUNCH_POST.md)
 - [Roadmap](docs/ROADMAP.md)
+- [Market analysis](docs/MARKET_ANALYSIS.md)
 - [Agent regression PR example](docs/AGENT_REGRESSION_PR.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
 - [Run bundles](docs/RUN_BUNDLES.md)

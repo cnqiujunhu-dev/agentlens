@@ -64,9 +64,12 @@ Started after v0.2.0:
 - Dashboard review workflow docs for PR artifacts, compact sections, and filtered views.
 - Run bundle `manifest.json` for PR bots, dashboard indexes, and CI artifact automation.
 - GitHub Action `bundle` and `bundle-sections` inputs for uploadable run bundle artifacts.
+- Market analysis and bilingual README positioning for English and Chinese launch audiences.
 
 Candidates:
 
+- OpenTelemetry/OpenInference export for teams that already use Langfuse, Phoenix, OpenLIT, or existing APM.
+- Minimal Python trace writer for Python-heavy agent teams.
 - Richer dashboards for MCP exception review history.
 
 ## Good First Issues

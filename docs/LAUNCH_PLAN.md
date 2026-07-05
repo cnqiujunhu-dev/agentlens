@@ -63,6 +63,8 @@ Built:
 - SARIF export for scan findings.
 - Dashboard Security Scan panel.
 - Public roadmap.
+- Market analysis against Langfuse, LangSmith, Phoenix, Helicone, OpenLLMetry, OpenLIT, and Braintrust.
+- Bilingual README entry points for English and Simplified Chinese audiences.
 
 Public launch status:
 
@@ -97,6 +99,7 @@ The GitHub README should do five jobs fast:
 3. Show a five-minute demo.
 4. Show concrete output.
 5. Show a believable roadmap.
+6. Let Chinese-speaking developers switch to the Chinese README immediately.
 
 See [ROADMAP.md](ROADMAP.md) for the public roadmap.
 

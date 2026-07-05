@@ -4,6 +4,7 @@ import path from "node:path";
 
 const requiredFiles = [
   "README.md",
+  "README.zh-CN.md",
   "CHANGELOG.md",
   "LICENSE",
   "CODE_OF_CONDUCT.md",
@@ -27,6 +28,7 @@ const requiredFiles = [
   "docs/LAUNCH_POST.md",
   "docs/MCP_ADAPTER.md",
   "docs/MCP_RISK_EXCEPTIONS.md",
+  "docs/MARKET_ANALYSIS.md",
   "docs/JSONL_TRACES.md",
   "docs/REDACTION.md",
   "docs/RUN_BUNDLES.md",
@@ -53,6 +55,10 @@ const requiredReadmeSnippets = [
   "Use Cases",
   "Roadmap",
   "ROADMAP.md",
+  "Languages:",
+  "README.zh-CN.md",
+  "Market Positioning",
+  "MARKET_ANALYSIS.md",
   "GitHub Actions",
   "MCP tool inventory",
   "MCP stdio trace sessions",
@@ -113,6 +119,18 @@ const requiredReadmeSnippets = [
   "regression-pr-diff.png"
 ];
 
+const requiredChineseReadmeSnippets = [
+  "语言:",
+  "English",
+  "简体中文",
+  "为什么需要 AgentLens",
+  "市场定位",
+  "快速演示",
+  "GitHub Actions",
+  "MARKET_ANALYSIS.md",
+  "不是另一个 Agent 框架"
+];
+
 const requiredPackageExports = [
   ".",
   "./trace",
@@ -151,6 +169,13 @@ function assertReadme() {
   const readme = fs.readFileSync("README.md", "utf8");
   for (const snippet of requiredReadmeSnippets) {
     if (!readme.includes(snippet)) fail(`README missing required snippet: ${snippet}`);
+  }
+}
+
+function assertChineseReadme() {
+  const readme = fs.readFileSync("README.zh-CN.md", "utf8");
+  for (const snippet of requiredChineseReadmeSnippets) {
+    if (!readme.includes(snippet)) fail(`README.zh-CN.md missing required snippet: ${snippet}`);
   }
 }
 
@@ -199,6 +224,7 @@ function assertPackDryRun() {
 
   for (const file of [
     "README.md",
+    "README.zh-CN.md",
     "LICENSE",
     "CODE_OF_CONDUCT.md",
     "SUPPORT.md",
@@ -251,6 +277,7 @@ function assertActionVersions() {
 
 for (const file of requiredFiles) assertFile(file);
 assertReadme();
+assertChineseReadme();
 assertPackage();
 assertVersionDocs();
 assertPublicActionReferences();
