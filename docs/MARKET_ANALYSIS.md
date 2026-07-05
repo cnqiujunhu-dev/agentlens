@@ -19,6 +19,7 @@ AgentLens is currently weaker than mature platforms in hosted collaboration, pro
 - MCP tool risk scanning and policy checks
 - redacted share bundles for issues and support threads
 - minimal sync/async Python trace writer for Python-heavy agent and RAG projects
+- `agentlens init --python` scaffolding for Python project adoption
 - Python framework cookbook patterns for LangChain-style, LlamaIndex-style, and CrewAI-style projects
 - OTLP JSON export with OpenTelemetry/OpenInference-style attributes
 
@@ -74,7 +75,7 @@ The practical wedge is "agent regression review in GitHub", not "replace Langfus
 
 4. Minimal Python surface.
 
-   Python users now have a zero-dependency sync/async trace writer and framework cookbook patterns, but there is not yet a packaged PyPI SDK or maintained importable adapters for specific framework versions. The AI agent ecosystem has a large Python base, so this still needs deeper investment.
+   Python users now have a zero-dependency sync/async trace writer, `agentlens init --python`, and framework cookbook patterns, but there is not yet a packaged PyPI SDK or maintained importable adapters for specific framework versions. The AI agent ecosystem has a large Python base, so this still needs deeper investment.
 
 5. Collaboration is artifact-based, not product-based.
 

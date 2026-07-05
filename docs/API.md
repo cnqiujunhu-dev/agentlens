@@ -38,6 +38,8 @@ writeTrace(".agentlens/runs/refund.json", run);
 Python projects can write the same trace schema with the zero-dependency example in [PYTHON_TRACE_WRITER.md](PYTHON_TRACE_WRITER.md):
 
 ```bash
+agentlens init --python
+python .agentlens/python/basic_run.py --out .agentlens/runs/python-starter.json
 npm run demo:python
 npm run demo:python:frameworks
 python examples/python-basic-run.py --out .agentlens/runs/python-basic-demo.json

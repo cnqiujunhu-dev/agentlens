@@ -4,6 +4,8 @@ AgentLens' Python trace writer is intentionally plain JSON. This cookbook shows 
 
 The examples are runnable simulations. They do not import LangChain, LlamaIndex, or CrewAI, so the repository stays dependency-light. Copy the patterns into the matching framework boundary in your project.
 
+Start a Python project with `agentlens init --python` if you want the trace writer and a CI-ready starter under `.agentlens/python/`.
+
 ## Quick Demo
 
 ```bash

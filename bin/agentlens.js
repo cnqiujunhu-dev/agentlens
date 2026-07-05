@@ -13,7 +13,7 @@ function usage() {
     "AgentLens - local-first DevTools for AI agent runs",
     "",
     "Usage:",
-    "  agentlens init",
+    "  agentlens init [--python]",
     "  agentlens doctor [--json]",
     "  agentlens demo [--out path]",
     "  agentlens inspect <trace-file> [--json]",
@@ -34,6 +34,7 @@ function usage() {
     "  agentlens serve [trace-file|runs-dir] [--host host] [--port port]",
     "",
     "Examples:",
+    "  node ./bin/agentlens.js init --python",
     "  node ./bin/agentlens.js doctor",
     "  node ./bin/agentlens.js demo --out .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json",
@@ -68,10 +69,11 @@ async function main() {
   }
 
   if (command === "init") {
-    const workspace = initWorkspace(process.cwd(), { scaffold: true });
+    const workspace = initWorkspace(process.cwd(), { scaffold: true, python: flag("--python") });
     console.log(`Initialized AgentLens workspace at ${workspace.root}`);
     console.log(`Runs: ${workspace.runsDir}`);
     console.log(`Reports: ${workspace.reportsDir}`);
+    if (flag("--python")) console.log(`Python starter: ${workspace.pythonDir}`);
     if (workspace.createdFiles.length > 0) {
       console.log("Starter files:");
       for (const file of workspace.createdFiles) console.log(`  ${file}`);

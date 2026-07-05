@@ -4,6 +4,17 @@ AgentLens is a JavaScript package, but the trace format is plain JSON. The Pytho
 
 ## Quick Start
 
+For a Python project that wants starter files in-place:
+
+```bash
+agentlens init --python
+python .agentlens/python/basic_run.py --out .agentlens/runs/python-starter.json
+agentlens eval .agentlens/runs/python-starter.json --config .agentlens/evals/default.json
+agentlens scan .agentlens/runs/python-starter.json
+```
+
+`agentlens init --python` writes `.agentlens/python/agentlens_trace.py`, `.agentlens/python/basic_run.py`, `.agentlens/python/README.md`, and `.agentlens/examples/python-github-action.yml` without overwriting existing files.
+
 Run the Python demo and then validate, evaluate, scan, and export the generated trace:
 
 ```bash

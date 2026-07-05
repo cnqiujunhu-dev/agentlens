@@ -56,6 +56,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - LLM SDK cookbook for wiring existing provider clients into local traces.
 - Zero-dependency sync/async Python trace writer example for Python agent and RAG projects.
+- `agentlens init --python` starter scaffold for Python projects.
 - Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.
 - OpenTelemetry/OpenInference-style OTLP JSON export for existing observability stacks.
 - LangGraph-style node adapter for tracing graph-based agent steps.
@@ -97,6 +98,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 
 ```bash
 node ./bin/agentlens.js init
+node ./bin/agentlens.js init --python
 node ./bin/agentlens.js doctor
 node ./bin/agentlens.js demo --out .agentlens/runs/demo.json
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
@@ -118,7 +120,7 @@ node ./bin/agentlens.js serve .agentlens/runs --port 4317
 npm run demo:regression-pr
 ```
 
-`agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example.
+`agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example. `agentlens init --python` also creates `.agentlens/python/basic_run.py`, `.agentlens/python/agentlens_trace.py`, and `.agentlens/examples/python-github-action.yml`.
 
 Python users can start from `examples/python-basic-run.py` and `examples/python-async-run.py`, or run `npm run demo:python` to write AgentLens-compatible sync/async traces, validate them, evaluate them, scan them, and export OTLP JSON. The helper exposes `trace_llm_call` and `trace_async_llm_call`.
 
@@ -302,6 +304,7 @@ The MVP stores each run as a single JSON file:
 
 ```text
 agentlens init
+agentlens init [--python]
 agentlens doctor [--json]
 agentlens demo [--out path]
 agentlens inspect <trace-file> [--json]
@@ -428,6 +431,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Trace model calls without binding to one LLM SDK.
 - Add AgentLens around existing provider SDK calls with a copyable cookbook.
 - Write AgentLens-compatible sync/async traces from Python agent, RAG, and notebook code.
+- Bootstrap a Python project with `agentlens init --python`, then run `.agentlens/python/basic_run.py` in CI.
 - Add trace boundaries around LangChain-style, LlamaIndex-style, and CrewAI-style Python projects without adding framework dependencies to AgentLens.
 - Export local traces as OTLP JSON with OpenTelemetry/OpenInference-style attributes.
 - Trace LangGraph-style node functions without adding a framework dependency.
@@ -491,6 +495,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - GitHub Actions Markdown summaries.
 - GitHub PR comment Markdown renderer.
 - Init scaffolding for starter evals and GitHub Action examples.
+- Python init scaffolding via `agentlens init --python`.
 - Generic LLM call adapter.
 - Minimal sync/async Python trace writer example.
 - Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
