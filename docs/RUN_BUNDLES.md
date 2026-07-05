@@ -44,14 +44,21 @@ Each valid item includes its source path, dashboard filename, trace id, app, nam
 ## GitHub Actions Artifact
 
 ```yaml
-- name: Build AgentLens run bundle
-  run: node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,timeline
+- name: Run AgentLens evals
+  id: agentlens
+  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  with:
+    runs: .agentlens/runs
+    config: evals/default.json
+    bundle: .agentlens/reports/bundle
+    bundle-sections: summary,timeline
 
 - name: Upload AgentLens run bundle
+  if: always()
   uses: actions/upload-artifact@v4
   with:
     name: agentlens-run-bundle
-    path: .agentlens/reports/bundle
+    path: ${{ steps.agentlens.outputs.bundle }}
 ```
 
 For PR review order, compact dashboard sections, and shareable filtered links, see [Dashboard Review Workflow](DASHBOARD_REVIEW.md).

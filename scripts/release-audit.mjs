@@ -82,6 +82,8 @@ const requiredReadmeSnippets = [
   "PR comment Markdown",
   "--pr-comment-md",
   "pr-comment",
+  "bundle-sections",
+  "bundle-manifest",
   "Upsert PR comment",
   "agentlens-ci-comment",
   "GitHub Action outputs",

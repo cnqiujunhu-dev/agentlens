@@ -63,6 +63,7 @@ Started after v0.2.0:
 - Shareable dashboard filter links for PR and issue review.
 - Dashboard review workflow docs for PR artifacts, compact sections, and filtered views.
 - Run bundle `manifest.json` for PR bots, dashboard indexes, and CI artifact automation.
+- GitHub Action `bundle` and `bundle-sections` inputs for uploadable run bundle artifacts.
 
 Candidates:
 

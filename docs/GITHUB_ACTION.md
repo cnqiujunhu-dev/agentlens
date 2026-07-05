@@ -29,6 +29,7 @@ jobs:
           runs: .agentlens/runs
           config: evals/default.json
           scan-fail-on: high
+          bundle: .agentlens/reports/bundle
 
       - name: Use AgentLens result
         run: echo "AgentLens status: ${{ steps.agentlens.outputs.status }}"
@@ -45,6 +46,8 @@ The action fails the job when any trace fails its eval config, any enabled scan 
 | `node-version` | `22` | Node.js version used to run AgentLens. |
 | `summary` | `true` | Write a Markdown report to the GitHub Actions step summary. |
 | `pr-comment` | empty | Optional path to write Markdown suitable for a GitHub PR comment. |
+| `bundle` | empty | Optional directory to write a static AgentLens run bundle. |
+| `bundle-sections` | `summary,scan,tool-calls,filters,timeline` | Dashboard sections used when `bundle` is set. |
 | `scan` | `true` | Run the local AgentLens security scan after evals. |
 | `scan-fail-on` | `high` | Lowest scan severity that fails the action: `low`, `medium`, `high`, `critical`, or `none`. |
 | `sarif` | empty | Optional path for combined SARIF scan findings. Requires `scan: true`. |
@@ -57,6 +60,8 @@ The action fails the job when any trace fails its eval config, any enabled scan 
 | `total` | Number of trace files evaluated. |
 | `passed` | Number of trace files that passed. |
 | `failed` | Number of trace files that failed. |
+| `bundle` | Directory containing the generated run bundle when `bundle` is set. |
+| `bundle-manifest` | Path to the generated run bundle `manifest.json` when `bundle` is set. |
 
 Use these outputs in later steps:
 
@@ -113,6 +118,30 @@ Use `pr-comment` when you want the action to write a stable Markdown body that a
 ```
 
 The generated body includes `<!-- agentlens-ci-comment -->` so the workflow can update the existing AgentLens comment instead of posting duplicates.
+
+## Run Bundle Artifact
+
+Use `bundle` when you want the action to generate a static review bundle even if evals or scans fail:
+
+```yaml
+- name: Run AgentLens evals
+  id: agentlens
+  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  with:
+    runs: .agentlens/runs
+    config: evals/default.json
+    bundle: .agentlens/reports/bundle
+    bundle-sections: summary,scan,tool-calls,filters,timeline
+
+- name: Upload AgentLens run bundle
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: agentlens-run-bundle
+    path: ${{ steps.agentlens.outputs.bundle }}
+```
+
+The generated bundle includes `index.html`, `manifest.json`, and one dashboard per valid trace. The `bundle-manifest` output points directly to the manifest for later workflow steps.
 
 For a complete PR review handoff with uploaded dashboard bundles, compact sections, and filtered view links, see [Dashboard Review Workflow](DASHBOARD_REVIEW.md).
 

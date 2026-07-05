@@ -20,6 +20,8 @@ test("initWorkspace scaffolds starter files without overwriting", () => {
   const actionExample = fs.readFileSync(path.join(workspace.examplesDir, "github-action.yml"), "utf8");
   assert.match(actionExample, /actions\/checkout@v7/);
   assert.match(actionExample, /cnqiujunhu-dev\/agentlens@v0\.2\.0/);
+  assert.match(actionExample, /bundle: \.agentlens\/reports\/bundle/);
+  assert.match(actionExample, /bundle-sections: summary,scan,tool-calls,filters,timeline/);
   assert.doesNotMatch(actionExample, /actions\/checkout@v4/);
   assert.doesNotMatch(actionExample, /your-org\/agentlens@v0/);
 

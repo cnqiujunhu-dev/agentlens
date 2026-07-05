@@ -45,6 +45,8 @@ jobs:
           config: evals/default.json
           summary: false
           pr-comment: .agentlens/reports/pr-comment.md
+          bundle: .agentlens/reports/action-bundle
+          bundle-sections: summary,scan,tool-calls,timeline
 
       - name: Verify GitHub Action outputs
         shell: bash
@@ -52,7 +54,12 @@ jobs:
           test "${{ steps.agentlens-action.outputs.status }}" = "PASS"
           test "${{ steps.agentlens-action.outputs.failed }}" = "0"
           test "${{ steps.agentlens-action.outputs.total }}" != "0"
+          test "${{ steps.agentlens-action.outputs.bundle }}" = ".agentlens/reports/action-bundle"
+          test "${{ steps.agentlens-action.outputs.bundle-manifest }}" = ".agentlens/reports/action-bundle/manifest.json"
           grep -q "agentlens-ci-comment" .agentlens/reports/pr-comment.md
+          test -f .agentlens/reports/action-bundle/index.html
+          test -f .agentlens/reports/action-bundle/manifest.json
+          grep -q "agentlens.run-bundle.v1" .agentlens/reports/action-bundle/manifest.json
 
       - name: MCP adapter demo
         run: |

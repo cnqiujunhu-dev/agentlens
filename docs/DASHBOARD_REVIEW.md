@@ -71,15 +71,15 @@ For a very short artifact, use `--sections summary,tool-calls,timeline`. For sec
     config: evals/default.json
     scan-fail-on: high
     pr-comment: .agentlens/reports/agentlens-pr-comment.md
-
-- name: Build AgentLens run bundle
-  run: node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,filters,timeline
+    bundle: .agentlens/reports/bundle
+    bundle-sections: summary,scan,tool-calls,filters,timeline
 
 - name: Upload AgentLens run bundle
+  if: always()
   uses: actions/upload-artifact@v4
   with:
     name: agentlens-run-bundle
-    path: .agentlens/reports/bundle
+    path: ${{ steps.agentlens.outputs.bundle }}
 ```
 
 The PR comment should summarize pass/fail status. The uploaded bundle should be the place reviewers inspect full traces, copy filtered dashboard links, and decide whether the agent behavior changed as intended.

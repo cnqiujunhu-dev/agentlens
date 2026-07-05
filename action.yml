@@ -22,6 +22,14 @@ inputs:
     description: Optional path to write Markdown suitable for a GitHub PR comment.
     required: false
     default: ""
+  bundle:
+    description: Optional directory to write a static AgentLens run bundle.
+    required: false
+    default: ""
+  bundle-sections:
+    description: Optional dashboard sections for the generated run bundle.
+    required: false
+    default: summary,scan,tool-calls,filters,timeline
   scan:
     description: Run AgentLens security scan after evals.
     required: false
@@ -48,6 +56,12 @@ outputs:
   failed:
     description: Number of trace files that failed.
     value: ${{ steps.agentlens.outputs.failed }}
+  bundle:
+    description: Directory containing the generated run bundle when the bundle input is set.
+    value: ${{ steps.agentlens.outputs.bundle }}
+  bundle-manifest:
+    description: Path to the generated run bundle manifest when the bundle input is set.
+    value: ${{ steps.agentlens.outputs.bundle-manifest }}
 
 runs:
   using: composite
@@ -89,4 +103,21 @@ runs:
         console.log(`passed=${report.passed}`);
         console.log(`failed=${report.failed}`);
         NODE
+        bundle_dir="${{ inputs.bundle }}"
+        if [[ -n "$bundle_dir" ]]; then
+          bundle_args=(bundle "${{ inputs.runs }}" --out "$bundle_dir")
+          if [[ -n "${{ inputs.bundle-sections }}" ]]; then
+            bundle_args+=(--sections "${{ inputs.bundle-sections }}")
+          fi
+          node "$GITHUB_ACTION_PATH/bin/agentlens.js" "${bundle_args[@]}"
+          {
+            echo "bundle=$bundle_dir"
+            echo "bundle-manifest=$bundle_dir/manifest.json"
+          } >> "$GITHUB_OUTPUT"
+        else
+          {
+            echo "bundle="
+            echo "bundle-manifest="
+          } >> "$GITHUB_OUTPUT"
+        fi
         exit "$exit_code"

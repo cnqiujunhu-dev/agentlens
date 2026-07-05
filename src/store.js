@@ -50,6 +50,8 @@ jobs:
         with:
           runs: .agentlens/runs
           config: .agentlens/evals/default.json
+          bundle: .agentlens/reports/bundle
+          bundle-sections: summary,scan,tool-calls,filters,timeline
 `;
 
 export function ensureDir(dir) {

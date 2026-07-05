@@ -60,6 +60,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - PR comment Markdown output for GitHub review workflows.
 - Upsert PR comment workflow using the stable `agentlens-ci-comment` marker.
 - GitHub Action outputs for downstream workflow steps.
+- GitHub Action run bundle and `bundle-manifest` outputs for uploadable PR review artifacts.
 - Workspace doctor for checking local setup, traces, eval config, and CI wiring.
 - Validation command for trace files and eval configs.
 - Local security scan for secret leaks, prompt injection phrases, and high-risk tool calls.
@@ -113,6 +114,8 @@ Want this in GitHub Actions?
     runs: .agentlens/runs
     config: evals/default.json
     scan-fail-on: high
+    bundle: .agentlens/reports/bundle
+    bundle-sections: summary,scan,tool-calls,filters,timeline
 ```
 
 Need schemas for editor or CI tooling?
@@ -405,6 +408,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Add Markdown summaries to GitHub Actions runs.
 - Generate stable PR comment Markdown for trace regression reviews.
 - Feed GitHub Action status outputs into comments, notifications, or artifacts.
+- Generate run bundle artifacts directly from the GitHub Action.
 - Wrap OpenAI-compatible and Anthropic-compatible SDK calls.
 - Reproduce flaky agent failures.
 - Review RAG evidence and citation behavior.
