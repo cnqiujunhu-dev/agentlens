@@ -42,6 +42,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 - Trace diff reports for before/after agent regressions.
 - Static diff dashboards for sharing before/after regressions.
 - Static run bundles for reviewing a directory of traces as a CI artifact.
+- Runnable agent regression PR demo that emits CI summary, SARIF, diff dashboard, and run bundle artifacts.
 - JSON output for inspect, eval, CI, and diff automation.
 - Markdown CI summaries for GitHub Actions.
 - GitHub Action outputs for downstream workflow steps.
@@ -80,6 +81,7 @@ node ./bin/agentlens.js ci --runs .agentlens/runs --config .agentlens/evals/defa
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
 node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle
 node ./bin/agentlens.js serve .agentlens/runs --port 4317
+npm run demo:regression-pr
 ```
 
 `agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example.
@@ -310,6 +312,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Demo recording guide](docs/DEMO_RECORDING.md)
 - [Launch post draft](docs/LAUNCH_POST.md)
 - [Roadmap](docs/ROADMAP.md)
+- [Agent regression PR example](docs/AGENT_REGRESSION_PR.md)
 - [GitHub Action](docs/GITHUB_ACTION.md)
 - [Run bundles](docs/RUN_BUNDLES.md)
 - [Security scan](docs/SECURITY_SCAN.md)
@@ -377,6 +380,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Trace AutoGen-style and CrewAI-style multi-agent workflows without adding framework dependencies.
 - Compare before/after traces when an agent regresses.
 - Share before/after trace diff dashboards in issues and PRs.
+- Generate PR review artifacts for agent regressions.
 - Emit JSON reports for CI bots, scripts, and PR comments.
 - Add Markdown summaries to GitHub Actions runs.
 - Feed GitHub Action status outputs into comments, notifications, or artifacts.
@@ -422,6 +426,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - Trace diff CLI and API.
 - Static trace diff dashboards.
 - Static run bundle indexes.
+- Runnable agent regression PR artifact generator.
 - JSON report output for automation.
 - GitHub Actions Markdown summaries.
 - Init scaffolding for starter evals and GitHub Action examples.

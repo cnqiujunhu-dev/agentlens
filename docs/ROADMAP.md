@@ -36,13 +36,13 @@ Goal: make AgentLens feel useful with real agent stacks, not just demos.
 Started after v0.1.0:
 
 - Multi-agent adapter helpers with AutoGen-style and CrewAI-style runnable examples.
+- Runnable agent regression PR example that shows eval, scan, dashboard, SARIF, and diff together.
 
 Planned:
 
 - Harden the LangGraph adapter against common node and graph shapes.
 - Expand AutoGen and CrewAI-style examples into deeper cookbook notes.
 - Add a cookbook for wrapping arbitrary LLM SDK calls.
-- Add a runnable "agent regression PR" example that shows eval, scan, dashboard, SARIF, and diff together.
 - Improve dashboard navigation for long traces and repeated tool calls.
 - Add more scan rules with documented false-positive tradeoffs.
 

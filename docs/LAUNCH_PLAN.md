@@ -15,6 +15,7 @@ Built:
 - Replay transcript.
 - Trace diff CLI and API.
 - Static trace diff dashboards.
+- Agent regression PR demo artifacts for before/after review.
 - JSON report output for CLI automation.
 - GitHub Actions Markdown summary output.
 - GitHub Action status/count outputs for downstream workflow steps.

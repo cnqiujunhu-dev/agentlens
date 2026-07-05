@@ -72,6 +72,9 @@ jobs:
           npm run demo:crewai
           node ./bin/agentlens.js eval .agentlens/runs/crewai-style-demo.json --config evals/multi-agent-basic.json
 
+      - name: Regression PR demo
+        run: npm run demo:regression-pr
+
       - name: JSONL streaming demo
         run: |
           npm run demo:jsonl

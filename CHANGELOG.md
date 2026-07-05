@@ -6,6 +6,7 @@
 
 - Multi-agent adapter helpers for agent messages and task spans.
 - AutoGen-style and CrewAI-style runnable demos with a shared multi-agent eval pack.
+- Runnable agent regression PR demo that emits CI summary, SARIF, diff dashboard, and run bundle artifacts.
 
 ### Changed
 
