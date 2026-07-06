@@ -125,6 +125,7 @@ const requiredReadmeSnippets = [
   "OTLP JSON",
   "agentlens otel",
   "agentlens otel-batch",
+  "otel:batch",
   "GitHub Actions",
   "MCP tool inventory",
   "MCP stdio trace sessions",
@@ -222,6 +223,7 @@ const requiredChineseReadmeSnippets = [
   "OTEL_EXPORT.md",
   "OpenTelemetry",
   "agentlens otel-batch",
+  "otel:batch",
   "不是另一个 Agent 框架"
 ];
 
@@ -284,6 +286,8 @@ function assertPackage() {
   if (!packageJson.files?.includes("python")) fail("package.json files must include python package sources");
   if (!packageJson.scripts?.["python:package"]) fail("package.json must expose python:package");
   if (!packageJson.scripts?.["python:publish:check"]) fail("package.json must expose python:publish:check");
+  if (!packageJson.scripts?.["otel:batch"]) fail("package.json must expose otel:batch");
+  if (!packageJson.scripts?.verify?.includes("otel:batch")) fail("package.json verify script must run otel:batch");
   for (const key of requiredPackageExports) {
     if (!packageJson.exports?.[key]) fail(`package.json missing export: ${key}`);
   }
@@ -420,7 +424,7 @@ function assertActionReviewPackSupport() {
 function assertOtelBatchDocs() {
   const otelDocs = fs.readFileSync("docs/OTEL_EXPORT.md", "utf8");
   const apiDocs = fs.readFileSync("docs/API.md", "utf8");
-  for (const snippet of ["agentlens otel-batch", "writeOtelBatch", "agentlens.otel-batch.v1", "manifest.json"]) {
+  for (const snippet of ["agentlens otel-batch", "npm run otel:batch", "writeOtelBatch", "agentlens.otel-batch.v1", "manifest.json"]) {
     if (!otelDocs.includes(snippet)) fail(`docs/OTEL_EXPORT.md missing OTel batch snippet: ${snippet}`);
   }
   for (const snippet of ["agentlens otel-batch", "writeOtelBatch", "agentlens.otel-batch.v1"]) {

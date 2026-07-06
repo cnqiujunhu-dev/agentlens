@@ -26,6 +26,7 @@ Export a whole runs directory and write a machine-readable manifest:
 
 ```bash
 agentlens otel-batch .agentlens/runs --out .agentlens/reports/otel
+npm run otel:batch
 ```
 
 Batch export writes one `.otlp.json` file per valid AgentLens trace plus `manifest.json` with `schemaVersion: "agentlens.otel-batch.v1"`, source trace paths, output filenames, run ids, span counts, and invalid trace errors. Files named `*.otlp.json` and `manifest.json` are skipped as batch inputs so rerunning the command over a reports directory does not reprocess its own outputs.

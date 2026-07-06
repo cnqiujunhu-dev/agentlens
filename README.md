@@ -115,6 +115,7 @@ node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
 node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
 node ./bin/agentlens.js otel-batch .agentlens/runs --out .agentlens/reports/otel
+npm run otel:batch
 npm run demo:python
 npm run demo:python:frameworks
 npm run python:package
@@ -469,6 +470,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Bootstrap a Python project with `agentlens init --python`, then run `.agentlens/python/basic_run.py` in CI.
 - Add trace boundaries around LangChain-style, LlamaIndex-style, and CrewAI-style Python projects without adding framework dependencies to AgentLens.
 - Export local traces as OTLP JSON with OpenTelemetry/OpenInference-style attributes, including batch run-directory manifests.
+- Verify batch OTLP manifest generation with `npm run otel:batch`.
 - Trace LangGraph-style node functions without adding a framework dependency.
 - Trace AutoGen-style and CrewAI-style multi-agent workflows without adding framework dependencies.
 - Compare before/after traces when an agent regresses.

@@ -87,6 +87,7 @@ node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
 node ./bin/agentlens.js otel-batch .agentlens/runs --out .agentlens/reports/otel
+npm run otel:batch
 npm run demo:python
 npm run demo:python:frameworks
 npm run python:package
