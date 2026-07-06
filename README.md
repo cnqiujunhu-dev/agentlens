@@ -18,6 +18,20 @@ agent run -> trace -> replay -> eval -> dashboard
 
 Static screenshot: [dashboard-screenshot.png](docs/assets/dashboard-screenshot.png)
 
+## 30-Second Quickstart
+
+Use the clone path until the npm package is published:
+
+```bash
+git clone https://github.com/cnqiujunhu-dev/agentlens.git
+cd agentlens
+npm install
+node ./bin/agentlens.js quickstart --python
+node ./bin/agentlens.js ci --runs .agentlens/quickstart/runs --config .agentlens/evals/default.json --scan
+```
+
+Open `.agentlens/quickstart/reports/dashboard.html` for the trace dashboard, or attach `.agentlens/quickstart/reports/bundle/index.html` as a static CI artifact.
+
 ## PR Regression Review
 
 AgentLens can turn recorded before/after agent runs into pull request artifacts: a CI summary, SARIF scan findings, a static diff dashboard, and a run bundle reviewers can open without rerunning the model.

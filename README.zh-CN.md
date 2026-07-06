@@ -18,6 +18,20 @@ agent run -> trace -> replay -> eval -> dashboard -> PR artifact
 
 静态截图: [dashboard-screenshot.png](docs/assets/dashboard-screenshot.png)
 
+## 30 秒快速开始
+
+npm package 正式发布前，先使用 clone 本地路径：
+
+```bash
+git clone https://github.com/cnqiujunhu-dev/agentlens.git
+cd agentlens
+npm install
+node ./bin/agentlens.js quickstart --python
+node ./bin/agentlens.js ci --runs .agentlens/quickstart/runs --config .agentlens/evals/default.json --scan
+```
+
+打开 `.agentlens/quickstart/reports/dashboard.html` 可以查看 trace dashboard；也可以把 `.agentlens/quickstart/reports/bundle/index.html` 作为静态 CI artifact 发给 reviewer。
+
 ## 为什么需要 AgentLens
 
 AI Agent 很容易做出演示，但很难稳定上线。一次失败通常会带来这些问题：
