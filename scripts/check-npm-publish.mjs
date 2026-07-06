@@ -19,6 +19,7 @@ const requiredPackageFiles = [
   "docs/assets/dashboard-screenshot.png",
   "docs/assets/regression-pr-diff.png",
   "scripts/check-npm-publish.mjs",
+  "scripts/check-npm-postpublish.mjs",
   "scripts/check-pack-install.mjs",
   "package.json"
 ];
@@ -117,9 +118,11 @@ function assertDocs() {
   assertText("README.zh-CN.md", "npm exec --package agentlens-devtools -- agentlens quickstart --python");
   assertText("docs/API.md", 'from "agentlens-devtools"');
   assertText("docs/NPM_PUBLISHING.md", "npm run npm:publish:check");
+  assertText("docs/NPM_PUBLISHING.md", "npm run npm:postpublish:check");
   assertText("docs/NPM_PUBLISHING.md", "npm publish --dry-run");
   assertText("docs/NPM_PUBLISHING.md", "npm publish --access public");
   assertText("docs/RELEASE_CHECKLIST.md", "npm run npm:publish:check");
+  assertText("docs/RELEASE_CHECKLIST.md", "npm run npm:postpublish:check");
   assertNoText("docs/API.md", 'from "agentlens"');
 }
 

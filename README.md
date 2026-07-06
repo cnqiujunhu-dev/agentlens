@@ -65,6 +65,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - `.github/workflows/python-publish.yml` Trusted Publishing workflow for TestPyPI and PyPI handoff.
 - Tarball install smoke check through `npm run pack:smoke` for packaged CLI and API confidence.
 - npm publish dry-run check through `npm run npm:publish:check` for package metadata, packed files, and registry publish readiness.
+- Post-publish npm smoke check through `npm run npm:postpublish:check` for registry installs and one-command quickstart confidence.
 - `agentlens init --python` starter scaffold for Python projects.
 - Python framework cookbook for `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` trace boundaries.
 - LangChain-like object payload fixture for Python adapter confidence.
@@ -488,6 +489,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Verify the installed Python package path locally with `npm run python:publish:check`.
 - Verify the packed npm tarball installs and runs from a clean temporary project with `npm run pack:smoke`.
 - Verify npm package metadata and publish dry-run output with `npm run npm:publish:check`.
+- Verify the published npm package from a clean temporary project with `npm run npm:postpublish:check`.
 - Follow the Python publishing guide before TestPyPI or PyPI uploads.
 - Configure `.github/workflows/python-publish.yml` as a Trusted Publisher before uploading `agentlens-trace`.
 - Verify LangChain-like object payloads through `examples/python-langchain-fixture-run.py`.
@@ -569,6 +571,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - Trusted Publishing workflow for TestPyPI and PyPI.
 - Packed npm tarball install smoke check for clean-project first-run confidence.
 - npm publish dry-run check for package metadata and packed files.
+- Post-publish npm registry smoke check for the one-command quickstart path.
 - LangChain-like Python fixture for adapter payload confidence.
 - Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
 - OpenTelemetry/OpenInference-style OTLP JSON export with batch manifests.

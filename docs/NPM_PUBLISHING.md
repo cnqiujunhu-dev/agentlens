@@ -53,6 +53,14 @@ npm publish --dry-run
 
 `npm run npm:publish:check` is the strongest local publish gate. It validates package metadata, README/API install snippets, packed file contents from `npm pack --dry-run --json`, and `npm publish --dry-run --json` output. It fails if npm reports package auto-correction, such as bin field cleanup, because that means the published package may differ from the repository manifest.
 
+To validate the post-publish script before the package exists on npm, point it at a local tarball:
+
+```bash
+mkdir -p .agentlens/npm-pack
+npm pack --pack-destination .agentlens/npm-pack
+npm run npm:postpublish:check -- --package-spec .agentlens/npm-pack/agentlens-devtools-0.3.0.tgz
+```
+
 ## Publish
 
 Use a real npm account with publish access to `agentlens-devtools`:
@@ -66,13 +74,22 @@ If two-factor auth is enabled for publishes, follow the npm prompt.
 
 ## Post-Publish Smoke Test
 
-Run these from a temporary directory, not from the repository clone:
+Run the scripted smoke test from the repository root. It creates its own temporary project and installs from the npm registry:
 
 ```bash
 npm view agentlens-devtools version
+npm run npm:postpublish:check
+npm run npm:postpublish:check -- --version 0.3.0
+```
+
+For a manual check from a separate temporary directory:
+
+```bash
 npm exec --yes --package agentlens-devtools@0.3.0 -- agentlens quickstart --python
 node --input-type=module -e "const m = await import('agentlens-devtools'); if (!m.createRun || !m.runQuickstart) throw new Error('missing exports'); console.log('agentlens-devtools ok')"
 ```
+
+`npm run npm:postpublish:check` creates a temporary project, runs `npm exec --package agentlens-devtools@<version> -- agentlens quickstart --python`, installs the same package, validates the generated trace, exports batch OTLP, checks the local `agentlens` bin shim, and imports the public JavaScript API.
 
 Confirm the quickstart output includes:
 

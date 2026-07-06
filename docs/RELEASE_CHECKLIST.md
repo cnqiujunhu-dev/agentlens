@@ -125,10 +125,17 @@ Use the release notes from [LAUNCH_COPY.md](LAUNCH_COPY.md). Keep the wording sc
 
 For JavaScript package publishing, follow [NPM_PUBLISHING.md](NPM_PUBLISHING.md). Publish the npm package as `agentlens-devtools`; keep the CLI binary as `agentlens`. Do not document `npm install agentlens`, because that npm package name is already occupied by an unrelated package.
 
-After the first npm publish, smoke test from a temporary directory:
+After the first npm publish, smoke test from the repository root. The script creates a clean temporary project internally:
 
 ```bash
 npm view agentlens-devtools version
+npm run npm:postpublish:check
+npm run npm:postpublish:check -- --version 0.3.0
+```
+
+For a manual temporary-directory check:
+
+```bash
 npm exec --yes --package agentlens-devtools@0.3.0 -- agentlens quickstart --python
 node --input-type=module -e "const m = await import('agentlens-devtools'); if (!m.createRun || !m.runQuickstart) throw new Error('missing exports')"
 ```

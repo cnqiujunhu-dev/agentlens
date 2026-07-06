@@ -62,6 +62,7 @@ const requiredFiles = [
   "scripts/check-python-publish.mjs",
   "scripts/check-pack-install.mjs",
   "scripts/check-npm-publish.mjs",
+  "scripts/check-npm-postpublish.mjs",
   "scripts/run-python-framework-demo.mjs",
   "scripts/run-python-demo.mjs",
   "scripts/generate-regression-screenshot.mjs",
@@ -116,6 +117,7 @@ const requiredReadmeSnippets = [
   "python:publish:check",
   "pack:smoke",
   "npm:publish:check",
+  "npm:postpublish:check",
   "agentlens init --python",
   ".agentlens/python/basic_run.py",
   "python-github-action.yml",
@@ -231,6 +233,7 @@ const requiredChineseReadmeSnippets = [
   "python:publish:check",
   "pack:smoke",
   "npm:publish:check",
+  "npm:postpublish:check",
   "agentlens quickstart",
   "agentlens review",
   "QUICKSTART_ARTIFACTS.md",
@@ -310,6 +313,7 @@ function assertPackage() {
   if (!packageJson.scripts?.["python:publish:check"]) fail("package.json must expose python:publish:check");
   if (!packageJson.scripts?.["pack:smoke"]) fail("package.json must expose pack:smoke");
   if (!packageJson.scripts?.["npm:publish:check"]) fail("package.json must expose npm:publish:check");
+  if (!packageJson.scripts?.["npm:postpublish:check"]) fail("package.json must expose npm:postpublish:check");
   if (!packageJson.scripts?.["otel:batch"]) fail("package.json must expose otel:batch");
   if (!packageJson.scripts?.verify?.includes("pack:smoke")) fail("package.json verify script must run pack:smoke");
   if (!packageJson.scripts?.verify?.includes("npm:publish:check")) fail("package.json verify script must run npm:publish:check");
@@ -383,6 +387,7 @@ function assertPackDryRun() {
     "scripts/check-python-publish.mjs",
     "scripts/check-pack-install.mjs",
     "scripts/check-npm-publish.mjs",
+    "scripts/check-npm-postpublish.mjs",
     "scripts/run-python-framework-demo.mjs",
     "scripts/run-python-demo.mjs",
     "docs/assets/agentlens-demo.gif",
@@ -469,6 +474,7 @@ function assertNpmPublishingDocs() {
     "npm exec --package agentlens-devtools -- agentlens quickstart --python",
     "npm install -D agentlens-devtools",
     "npm run npm:publish:check",
+    "npm run npm:postpublish:check",
     "npm publish --access public",
     "npm publish --dry-run",
     "npm view agentlens-devtools version",

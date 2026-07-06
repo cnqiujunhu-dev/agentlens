@@ -83,10 +83,11 @@ Shipped for the v0.3.0 release candidate:
 - Packed npm tarball install smoke check for clean-project first-run confidence.
 - Publishable npm package identity as `agentlens-devtools` with `agentlens` CLI command.
 - npm publish dry-run check for package metadata, packed files, and bin-field stability.
+- Post-publish npm registry smoke check for clean-project quickstart verification.
 
 Candidates:
 
-- Publish `agentlens-devtools` to npm and run post-publish smoke checks from a clean temporary project.
+- Publish `agentlens-devtools` to npm and run `npm run npm:postpublish:check` from a clean temporary project.
 - Collector/protobuf export hardening for teams that already use Langfuse, Phoenix, OpenLIT, or existing APM.
 - Publish the Python trace writer package and harden framework bridge helpers against real LangChain, LlamaIndex, and CrewAI payload shapes.
 - Richer dashboards for MCP exception review history.
