@@ -76,6 +76,7 @@ Started after v0.2.0:
 - Python project starter scaffold through `agentlens init --python`.
 - Importable zero-dependency Python bridge helpers under `agentlens_trace.adapters`.
 - Python framework cookbook patterns for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.
+- LangChain-like object payload fixture for Python adapter compatibility checks.
 
 Candidates:
 

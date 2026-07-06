@@ -68,6 +68,7 @@ test("Python framework cookbook demo produces framework-shaped traces", () => {
 
   for (const [file, app, framework] of [
     ["python-langchain-style-demo.json", "python-langchain-style-agent", "langchain"],
+    ["python-langchain-fixture-demo.json", "python-langchain-fixture-agent", "langchain"],
     ["python-llamaindex-style-demo.json", "python-llamaindex-style-agent", "llamaindex"],
     ["python-crewai-style-demo.json", "python-crewai-style-agent", "crewai"]
   ]) {
@@ -83,6 +84,18 @@ test("Python framework cookbook demo produces framework-shaped traces", () => {
     const otel = JSON.parse(fs.readFileSync(path.join(reportsDir, file.replace(/\.json$/u, ".otlp.json")), "utf8"));
     assert.equal(otel.resourceSpans.length, 1);
   }
+
+  const fixture = JSON.parse(fs.readFileSync(path.join(runsDir, "python-langchain-fixture-demo.json"), "utf8"));
+  const fixtureResponse = fixture.events.find((event) => event.type === "llm.response" && event.name === "fixture-final-answer");
+  assert.equal(fixtureResponse.output.content, "Yes. The policy supports a 30-day refund.");
+  assert.equal(fixtureResponse.output.citations.includes("refund-policy.md"), true);
+  assert.equal(fixtureResponse.usage.totalTokens, 30);
+  assert.equal(fixtureResponse.metadata.run_id, "lc_fixture_llm");
+
+  const fixtureRetrieval = fixture.events.find((event) => event.type === "retrieval.result");
+  assert.equal(fixtureRetrieval.output.documents[0].page_content.includes("Refunds are available"), true);
+  assert.equal(fixtureRetrieval.output.documents[0].metadata.doc_id, "lc_refund_policy");
+  assert.equal(fixtureRetrieval.metadata.parent_run_id, "lc_fixture_chain");
 });
 
 test("Python package smoke check produces an AgentLens-compatible trace", () => {

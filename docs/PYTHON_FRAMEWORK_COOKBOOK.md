@@ -18,6 +18,7 @@ PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .
 The demo writes and verifies:
 
 - `.agentlens/runs/python-langchain-style-demo.json`
+- `.agentlens/runs/python-langchain-fixture-demo.json`
 - `.agentlens/runs/python-llamaindex-style-demo.json`
 - `.agentlens/runs/python-crewai-style-demo.json`
 
@@ -53,6 +54,23 @@ bridge.on_llm_end({"content": "Refunds are available within 30 days.", "citation
 ```
 
 Attach the handler where your LangChain version expects callbacks, or keep the same event mapping inside a wrapper around the chain execution.
+
+## LangChain-Like Object Fixture
+
+`examples/python-langchain-fixture-run.py` exercises payload shapes closer to LangChain callback objects without importing LangChain:
+
+- serialized component IDs such as `["langchain", "chat_models", "ChatOpenAI"]`
+- document objects with `page_content` and `metadata`
+- prompt values exposing `to_messages()`
+- message objects with `type` and `content`
+- LLM result objects with `generations` and nested `llm_output.token_usage`
+
+Run it through the framework demo gate:
+
+```bash
+npm run demo:python:frameworks
+node ./bin/agentlens.js replay .agentlens/runs/python-langchain-fixture-demo.json
+```
 
 ## LlamaIndex-Style Event Bridge
 

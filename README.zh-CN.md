@@ -59,6 +59,7 @@ AgentLens 的差异化是：
 - Python publishing guide，覆盖 TestPyPI、PyPI Trusted Publishing、版本和回滚。
 - `agentlens init --python`，为 Python 项目生成 starter trace writer、示例 run 和 GitHub Action 模板。
 - Python framework cookbook，覆盖 `AgentLensLangChainBridge`、`AgentLensLlamaIndexBridge` 和 `AgentLensCrewAIBridge` trace 边界。
+- LangChain-like object payload fixture，用于验证 Python adapter 对真实回调载荷形态的兼容性。
 - OpenTelemetry/OpenInference-style OTLP JSON 导出，便于接入已有 observability stack。
 - LangGraph-style node adapter。
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。

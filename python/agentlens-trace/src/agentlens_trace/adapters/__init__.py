@@ -27,6 +27,25 @@ def _json_safe(value: Any) -> Any:
     return repr(value)
 
 
+def _document_safe(value: Any) -> Any:
+    safe = _json_safe(value)
+    if isinstance(safe, str) and value is not None and not isinstance(value, str):
+        page_content = getattr(value, "page_content", None)
+        metadata = getattr(value, "metadata", None)
+        if page_content is not None or metadata is not None:
+            return {
+                "page_content": _as_text(page_content),
+                "metadata": _json_safe(metadata or {}),
+            }
+    return safe
+
+
+def _documents_safe(value: Any) -> Any:
+    if isinstance(value, (list, tuple, set)):
+        return [_document_safe(item) for item in value]
+    return _document_safe(value)
+
+
 def _key_label(value: Any) -> str:
     raw = getattr(value, "value", None)
     if raw is None:
@@ -90,6 +109,8 @@ def _pop_duration(data: Dict[str, Any]) -> Optional[float]:
 
 def _serialized_name(serialized: Any, fallback: str) -> str:
     value = _first_value(serialized, ("name", "id", "tool", "class_name"), fallback)
+    if isinstance(value, (list, tuple)) and value:
+        value = value[-1]
     return str(value or fallback)
 
 
@@ -142,10 +163,25 @@ def _response_content(response: Any) -> str:
     if isinstance(generations, list) and generations:
         first_group = generations[0]
         if isinstance(first_group, list) and first_group:
-            return _as_text(_first_value(first_group[0], ("text", "content", "message"), first_group[0]))
-        return _as_text(_first_value(first_group, ("text", "content", "message"), first_group))
+            return _generation_content(first_group[0])
+        return _generation_content(first_group)
 
     return _as_text(response)
+
+
+def _generation_content(generation: Any) -> str:
+    text = _first_value(generation, ("text", "content"), None)
+    if text is not None:
+        return _as_text(text)
+
+    message = _lookup(generation, "message", None)
+    if message is not None:
+        content = _first_value(message, ("content", "text"), None)
+        if content is not None:
+            return _as_text(content)
+        return _as_text(message)
+
+    return _as_text(generation)
 
 
 def _response_citations(response: Any) -> Optional[List[str]]:
@@ -236,7 +272,7 @@ class AgentLensLangChainBridge:
         return self.run.add_event(
             "retrieval.result",
             name=name,
-            output={"documents": _json_safe(documents)},
+            output={"documents": _documents_safe(documents)},
             duration_ms=duration_ms,
             metadata=self._metadata(data),
         )

@@ -63,6 +63,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Python publishing guide for TestPyPI, PyPI Trusted Publishing, versioning, and rollback.
 - `agentlens init --python` starter scaffold for Python projects.
 - Python framework cookbook for `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` trace boundaries.
+- LangChain-like object payload fixture for Python adapter confidence.
 - OpenTelemetry/OpenInference-style OTLP JSON export for existing observability stacks.
 - LangGraph-style node adapter for tracing graph-based agent steps.
 - Multi-agent helpers with AutoGen-style and CrewAI-style runnable examples.
@@ -139,7 +140,7 @@ Python users can start from the `agentlens-trace` package skeleton in `python/ag
 
 See [PYTHON_PUBLISHING.md](docs/PYTHON_PUBLISHING.md) for the Python package release path, including TestPyPI rehearsal, PyPI Trusted Publishing, versioning, and rollback.
 
-For framework-shaped Python projects, run `npm run demo:python:frameworks` or see `examples/python-framework-cookbook-run.py` for LangChain-style callbacks, LlamaIndex-style event hooks, and CrewAI-style task boundaries backed by `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge`.
+For framework-shaped Python projects, run `npm run demo:python:frameworks` or see `examples/python-framework-cookbook-run.py` for LangChain-style callbacks, LlamaIndex-style event hooks, and CrewAI-style task boundaries backed by `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge`. The same demo gate also runs `examples/python-langchain-fixture-run.py`, which covers LangChain-like document, prompt, message, generation, and token-usage payloads.
 
 Package-style users can also run `PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json` to generate an adapter demo trace directly from the Python package.
 
@@ -462,6 +463,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Import `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` from `agentlens_trace.adapters`.
 - Verify the installed Python package path locally with `npm run python:publish:check`.
 - Follow the Python publishing guide before TestPyPI or PyPI uploads.
+- Verify LangChain-like object payloads through `examples/python-langchain-fixture-run.py`.
 - Bootstrap a Python project with `agentlens init --python`, then run `.agentlens/python/basic_run.py` in CI.
 - Add trace boundaries around LangChain-style, LlamaIndex-style, and CrewAI-style Python projects without adding framework dependencies to AgentLens.
 - Export local traces as OTLP JSON with OpenTelemetry/OpenInference-style attributes.
@@ -535,6 +537,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - Zero-dependency Python framework bridge helpers under `agentlens_trace.adapters`.
 - Installed-package Python smoke check for release confidence.
 - Python publishing guide for TestPyPI and trusted publishing.
+- LangChain-like Python fixture for adapter payload confidence.
 - Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
 - OpenTelemetry/OpenInference-style OTLP JSON export.
 - LangGraph-style node adapter.

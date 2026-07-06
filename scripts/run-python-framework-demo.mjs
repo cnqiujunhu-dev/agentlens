@@ -8,6 +8,7 @@ const args = process.argv.slice(2);
 
 const traceNames = [
   "python-langchain-style-demo.json",
+  "python-langchain-fixture-demo.json",
   "python-llamaindex-style-demo.json",
   "python-crewai-style-demo.json"
 ];
@@ -61,10 +62,12 @@ const outDir = path.resolve(process.cwd(), option("--out-dir", ".agentlens/runs"
 const otelDir = path.resolve(process.cwd(), option("--otel-dir", ".agentlens/reports"));
 const [pythonCommand, pythonBaseArgs] = findPython();
 const example = path.join(root, "examples", "python-framework-cookbook-run.py");
+const langchainFixture = path.join(root, "examples", "python-langchain-fixture-run.py");
 const bin = path.join(root, "bin", "agentlens.js");
 const evalConfig = path.join(root, "evals", "default.json");
 
 run(pythonCommand, [...pythonBaseArgs, example, "--out-dir", outDir], { stdio: "inherit" });
+run(pythonCommand, [...pythonBaseArgs, langchainFixture, "--out-dir", outDir], { stdio: "inherit" });
 
 for (const name of traceNames) {
   const traceFile = path.join(outDir, name);
