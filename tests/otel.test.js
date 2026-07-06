@@ -5,7 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildOtelTrace, writeOtelTrace } from "../src/otel.js";
+import { buildOtelTrace, writeOtelBatch, writeOtelTrace } from "../src/otel.js";
 import { writeTrace } from "../src/store.js";
 import { addEvent, createRun, finishRun } from "../src/trace.js";
 
@@ -129,6 +129,36 @@ test("writeOtelTrace writes an OTLP JSON file", () => {
   assert.equal(attrValue(otel.resourceSpans[0].resource, "service.name"), "custom-service");
 });
 
+test("writeOtelBatch exports a run directory with a manifest", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-otel-batch-"));
+  const runsDir = path.join(dir, "runs");
+  const nestedDir = path.join(runsDir, "nested");
+  const outDir = path.join(dir, "otel");
+  fs.mkdirSync(nestedDir, { recursive: true });
+
+  writeTrace(path.join(runsDir, "trace-a.json"), makeTrace());
+  const second = makeTrace();
+  second.runId = "run_otel_second";
+  second.app = "otel-test-second";
+  writeTrace(path.join(nestedDir, "trace-b.json"), second);
+
+  const result = writeOtelBatch({ runsDir, outDir, serviceName: "batch-service" });
+
+  assert.equal(result.total, 2);
+  assert.equal(result.exported, 2);
+  assert.equal(result.invalid, 0);
+  assert.equal(result.files.length, 2);
+  assert.equal(fs.existsSync(result.manifest), true);
+
+  const manifest = JSON.parse(fs.readFileSync(result.manifest, "utf8"));
+  assert.equal(manifest.schemaVersion, "agentlens.otel-batch.v1");
+  assert.equal(manifest.summary.spans, 8);
+  assert.equal(manifest.items.some((item) => item.source === "nested/trace-b.json"), true);
+
+  const exported = JSON.parse(fs.readFileSync(result.files[0], "utf8"));
+  assert.equal(attrValue(exported.resourceSpans[0].resource, "service.name"), "batch-service");
+});
+
 test("CLI otel emits JSON or writes to a file", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-otel-cli-"));
   const traceFile = path.join(dir, "trace.json");
@@ -149,4 +179,17 @@ test("CLI otel emits JSON or writes to a file", () => {
   assert.equal(writeResult.status, 0, writeResult.stderr);
   assert.match(writeResult.stdout, /Wrote OTel trace/);
   assert.equal(fs.existsSync(out), true);
+
+  const batchRunsDir = path.join(dir, "batch-runs");
+  const batchDir = path.join(dir, "batch");
+  fs.mkdirSync(batchRunsDir, { recursive: true });
+  writeTrace(path.join(batchRunsDir, "trace.json"), makeTrace());
+
+  const batchResult = spawnSync(process.execPath, [binPath, "otel-batch", batchRunsDir, "--out", batchDir], {
+    cwd: dir,
+    encoding: "utf8"
+  });
+  assert.equal(batchResult.status, 0, batchResult.stderr);
+  assert.match(batchResult.stdout, /Wrote OTel batch/);
+  assert.equal(fs.existsSync(path.join(batchDir, "manifest.json")), true);
 });

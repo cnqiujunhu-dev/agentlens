@@ -1,7 +1,20 @@
 import crypto from "node:crypto";
-import { readTrace, writeJson } from "./store.js";
+import path from "node:path";
+import { discoverTraceFiles } from "./ci.js";
+import { ensureDir, readTrace, writeJson } from "./store.js";
 
 const SCOPE_NAME = "agentlens";
+
+function relativePath(root, file) {
+  return path.relative(root, file).replaceAll(path.sep, "/");
+}
+
+function safeFileStem(value) {
+  return String(value || "trace")
+    .replace(/[^a-zA-Z0-9._-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 120) || "trace";
+}
 
 function hashHex(value, length) {
   const hash = crypto.createHash("sha256").update(String(value)).digest("hex").slice(0, length);
@@ -447,5 +460,86 @@ export function writeOtelTrace({ traceFile, out, serviceName = undefined } = {})
     out,
     traceId: traceIdFor(trace),
     spans: otel.resourceSpans[0].scopeSpans[0].spans.length
+  };
+}
+
+function summarizeBatchItems(items) {
+  return {
+    total: items.length,
+    exported: items.filter((item) => item.valid).length,
+    invalid: items.filter((item) => !item.valid).length,
+    spans: items.reduce((sum, item) => sum + (item.spans ?? 0), 0)
+  };
+}
+
+export function buildOtelBatchManifest({
+  runsDir = ".agentlens/runs",
+  outDir = ".agentlens/reports/otel",
+  generatedAt = new Date().toISOString(),
+  serviceName = undefined,
+  items = []
+} = {}) {
+  return {
+    schemaVersion: "agentlens.otel-batch.v1",
+    generatedAt,
+    runsDir,
+    outDir,
+    serviceName: serviceName ?? null,
+    summary: summarizeBatchItems(items),
+    items
+  };
+}
+
+export function writeOtelBatch({ runsDir = ".agentlens/runs", outDir = ".agentlens/reports/otel", serviceName = undefined } = {}) {
+  const files = discoverTraceFiles(runsDir).filter((file) => {
+    const basename = path.basename(file).toLowerCase();
+    return !basename.endsWith(".otlp.json") && basename !== "manifest.json";
+  });
+  const generatedAt = new Date().toISOString();
+  const items = [];
+  const outputs = [];
+
+  ensureDir(outDir);
+
+  for (const [index, file] of files.entries()) {
+    const source = relativePath(runsDir, file);
+
+    try {
+      const trace = readTrace(file);
+      const output = `${String(index + 1).padStart(3, "0")}-${safeFileStem(trace.runId ?? path.basename(file, ".json"))}.otlp.json`;
+      const outputPath = path.join(outDir, output);
+      const otel = buildOtelTrace(trace, { serviceName });
+      const spans = otel.resourceSpans[0].scopeSpans[0].spans.length;
+      writeJson(outputPath, otel);
+      outputs.push(outputPath);
+      items.push({
+        valid: true,
+        source,
+        output,
+        traceId: traceIdFor(trace),
+        runId: trace.runId,
+        app: trace.app,
+        name: trace.name,
+        status: trace.status,
+        spans
+      });
+    } catch (error) {
+      items.push({
+        valid: false,
+        source,
+        error: error.message
+      });
+    }
+  }
+
+  const manifestData = buildOtelBatchManifest({ runsDir, outDir, generatedAt, serviceName, items });
+  const manifest = path.join(outDir, "manifest.json");
+  writeJson(manifest, manifestData);
+
+  return {
+    outDir,
+    manifest,
+    files: outputs,
+    ...manifestData.summary
   };
 }

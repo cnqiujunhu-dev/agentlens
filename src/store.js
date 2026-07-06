@@ -28,6 +28,7 @@ agentlens inspect .agentlens/runs/demo.json
 agentlens replay .agentlens/runs/demo.json
 agentlens eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
 agentlens ci --runs .agentlens/runs --config .agentlens/evals/default.json
+agentlens otel-batch .agentlens/runs --out .agentlens/reports/otel
 agentlens serve .agentlens/runs
 \`\`\`
 `;

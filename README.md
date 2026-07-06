@@ -64,7 +64,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - `agentlens init --python` starter scaffold for Python projects.
 - Python framework cookbook for `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` trace boundaries.
 - LangChain-like object payload fixture for Python adapter confidence.
-- OpenTelemetry/OpenInference-style OTLP JSON export for existing observability stacks.
+- OpenTelemetry/OpenInference-style OTLP JSON export for single traces and batch run directories.
 - LangGraph-style node adapter for tracing graph-based agent steps.
 - Multi-agent helpers with AutoGen-style and CrewAI-style runnable examples.
 - Deterministic replay that reconstructs the timeline without calling a model again.
@@ -114,6 +114,7 @@ node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
 node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
+node ./bin/agentlens.js otel-batch .agentlens/runs --out .agentlens/reports/otel
 npm run demo:python
 npm run demo:python:frameworks
 npm run python:package
@@ -338,6 +339,7 @@ agentlens eval <trace-file> [--config path] [--json]
 agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]
 agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--pr-comment-md path]
 agentlens otel <trace-file> [--out path] [--service-name name]
+agentlens otel-batch [runs-dir] [--out dir] [--service-name name]
 agentlens schema <trace|eval> [--out path]
 agentlens validate <trace|eval> <file> [--json]
 agentlens materialize <jsonl-file> [--out path]
@@ -466,7 +468,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Verify LangChain-like object payloads through `examples/python-langchain-fixture-run.py`.
 - Bootstrap a Python project with `agentlens init --python`, then run `.agentlens/python/basic_run.py` in CI.
 - Add trace boundaries around LangChain-style, LlamaIndex-style, and CrewAI-style Python projects without adding framework dependencies to AgentLens.
-- Export local traces as OTLP JSON with OpenTelemetry/OpenInference-style attributes.
+- Export local traces as OTLP JSON with OpenTelemetry/OpenInference-style attributes, including batch run-directory manifests.
 - Trace LangGraph-style node functions without adding a framework dependency.
 - Trace AutoGen-style and CrewAI-style multi-agent workflows without adding framework dependencies.
 - Compare before/after traces when an agent regresses.
@@ -539,7 +541,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - Python publishing guide for TestPyPI and trusted publishing.
 - LangChain-like Python fixture for adapter payload confidence.
 - Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
-- OpenTelemetry/OpenInference-style OTLP JSON export.
+- OpenTelemetry/OpenInference-style OTLP JSON export with batch manifests.
 - LangGraph-style node adapter.
 - Multi-agent adapter helpers and AutoGen-style/CrewAI-style examples.
 - Local dashboard server.

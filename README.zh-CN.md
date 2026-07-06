@@ -60,7 +60,7 @@ AgentLens 的差异化是：
 - `agentlens init --python`，为 Python 项目生成 starter trace writer、示例 run 和 GitHub Action 模板。
 - Python framework cookbook，覆盖 `AgentLensLangChainBridge`、`AgentLensLlamaIndexBridge` 和 `AgentLensCrewAIBridge` trace 边界。
 - LangChain-like object payload fixture，用于验证 Python adapter 对真实回调载荷形态的兼容性。
-- OpenTelemetry/OpenInference-style OTLP JSON 导出，便于接入已有 observability stack。
+- OpenTelemetry/OpenInference-style OTLP JSON 单 trace 和批量 runs 目录导出，`agentlens otel-batch` 可生成批量 manifest，便于接入已有 observability stack。
 - LangGraph-style node adapter。
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。
 - Deterministic replay，不重新调用模型也能复盘时间线。
@@ -86,6 +86,7 @@ npm run demo
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
 node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
+node ./bin/agentlens.js otel-batch .agentlens/runs --out .agentlens/reports/otel
 npm run demo:python
 npm run demo:python:frameworks
 npm run python:package

@@ -22,6 +22,7 @@
 - Simplified Chinese README with language switching from the English README.
 - LLM SDK wrapper cookbook for OpenAI-compatible, Anthropic-compatible, custom SDK, error handling, CI, and redaction workflows.
 - OpenTelemetry/OpenInference-style OTLP JSON export via `agentlens otel`, `buildOtelTrace`, and `writeOtelTrace`.
+- Batch OTLP JSON export via `agentlens otel-batch`, `writeOtelBatch`, and `agentlens.otel-batch.v1` manifests.
 - Zero-dependency sync/async Python trace writer examples and `npm run demo:python` verification flow.
 - PyPI-ready `agentlens-trace` package skeleton and `npm run python:package` smoke verification.
 - Local installed-package Python release smoke check through `npm run python:publish:check`.

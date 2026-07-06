@@ -26,6 +26,7 @@ function usage() {
     "  agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]",
     "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--pr-comment-md path] [--scan] [--scan-fail-on severity] [--sarif path]",
     "  agentlens otel <trace-file> [--out path] [--service-name name]",
+    "  agentlens otel-batch [runs-dir] [--out dir] [--service-name name]",
     "  agentlens schema <trace|eval> [--out path]",
     "  agentlens validate <trace|eval> <file> [--json]",
     "  agentlens materialize <jsonl-file> [--out path]",
@@ -46,6 +47,7 @@ function usage() {
     "  node ./bin/agentlens.js validate trace .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js scan .agentlens/runs/demo.json",
     "  node ./bin/agentlens.js otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json",
+    "  node ./bin/agentlens.js otel-batch .agentlens/runs --out .agentlens/reports/otel",
     "  node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json",
     "  node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json --scan",
     "  node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle"
@@ -265,6 +267,21 @@ async function main() {
     } else {
       console.log(JSON.stringify(buildOtelTrace(readTrace(traceFile), { serviceName }), null, 2));
     }
+    return;
+  }
+
+  if (command === "otel-batch") {
+    const { writeOtelBatch } = await import("../src/otel.js");
+    const runsDir = positional(1) ?? ".agentlens/runs";
+    const result = writeOtelBatch({
+      runsDir,
+      outDir: option("--out", ".agentlens/reports/otel"),
+      serviceName: option("--service-name", undefined)
+    });
+    console.log(`Wrote OTel batch: ${result.outDir}`);
+    console.log(`Manifest: ${result.manifest}`);
+    console.log(`Traces: ${result.total}, Exported: ${result.exported}, Invalid: ${result.invalid}, Spans: ${result.spans}`);
+    if (result.invalid > 0) process.exitCode = 1;
     return;
   }
 

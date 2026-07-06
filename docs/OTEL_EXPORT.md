@@ -22,10 +22,18 @@ Override the emitted resource service name:
 agentlens otel .agentlens/runs/demo.json --service-name support-agent --out .agentlens/reports/support-agent.otlp.json
 ```
 
+Export a whole runs directory and write a machine-readable manifest:
+
+```bash
+agentlens otel-batch .agentlens/runs --out .agentlens/reports/otel
+```
+
+Batch export writes one `.otlp.json` file per valid AgentLens trace plus `manifest.json` with `schemaVersion: "agentlens.otel-batch.v1"`, source trace paths, output filenames, run ids, span counts, and invalid trace errors. Files named `*.otlp.json` and `manifest.json` are skipped as batch inputs so rerunning the command over a reports directory does not reprocess its own outputs.
+
 ## JavaScript API
 
 ```js
-import { buildOtelTrace, writeOtelTrace } from "agentlens";
+import { buildOtelTrace, writeOtelBatch, writeOtelTrace } from "agentlens";
 
 const otlp = buildOtelTrace(trace, {
   serviceName: "support-agent"
@@ -37,14 +45,21 @@ const result = writeOtelTrace({
   serviceName: "support-agent"
 });
 
+const batch = writeOtelBatch({
+  runsDir: ".agentlens/runs",
+  outDir: ".agentlens/reports/otel",
+  serviceName: "support-agent"
+});
+
 console.log(otlp.resourceSpans.length);
 console.log(result.traceId, result.spans);
+console.log(batch.manifest, batch.exported);
 ```
 
 You can also import the focused module:
 
 ```js
-import { buildOtelTrace, writeOtelTrace } from "agentlens/otel";
+import { buildOtelTrace, writeOtelBatch, writeOtelTrace } from "agentlens/otel";
 ```
 
 ## Output Shape
@@ -77,7 +92,7 @@ The exporter keeps AgentLens-specific evidence and adds interoperability-oriente
 
 ## Current Limits
 
-- The exporter writes OTLP JSON to stdout or a file. It does not send data to a collector.
+- The exporter writes OTLP JSON to stdout, a single file, or a batch directory with a manifest. It does not send data to a collector.
 - It does not emit OTLP protobuf, gRPC, or HTTP collector requests yet.
 - The output intentionally preserves trace payloads such as prompts, outputs, tool arguments, and retrieval documents. Run `agentlens redact` or `agentlens share` before publishing artifacts publicly.
 - It is a bridge format, not a full production observability backend.

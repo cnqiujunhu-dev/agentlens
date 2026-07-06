@@ -124,6 +124,7 @@ const requiredReadmeSnippets = [
   "OpenInference",
   "OTLP JSON",
   "agentlens otel",
+  "agentlens otel-batch",
   "GitHub Actions",
   "MCP tool inventory",
   "MCP stdio trace sessions",
@@ -220,6 +221,7 @@ const requiredChineseReadmeSnippets = [
   "PYTHON_FRAMEWORK_COOKBOOK.md",
   "OTEL_EXPORT.md",
   "OpenTelemetry",
+  "agentlens otel-batch",
   "不是另一个 Agent 框架"
 ];
 
@@ -415,6 +417,17 @@ function assertActionReviewPackSupport() {
   }
 }
 
+function assertOtelBatchDocs() {
+  const otelDocs = fs.readFileSync("docs/OTEL_EXPORT.md", "utf8");
+  const apiDocs = fs.readFileSync("docs/API.md", "utf8");
+  for (const snippet of ["agentlens otel-batch", "writeOtelBatch", "agentlens.otel-batch.v1", "manifest.json"]) {
+    if (!otelDocs.includes(snippet)) fail(`docs/OTEL_EXPORT.md missing OTel batch snippet: ${snippet}`);
+  }
+  for (const snippet of ["agentlens otel-batch", "writeOtelBatch", "agentlens.otel-batch.v1"]) {
+    if (!apiDocs.includes(snippet)) fail(`docs/API.md missing OTel batch snippet: ${snippet}`);
+  }
+}
+
 for (const file of requiredFiles) assertFile(file);
 assertReadme();
 assertChineseReadme();
@@ -425,6 +438,7 @@ assertDemoGif();
 assertScreenshotAssets();
 assertActionVersions();
 assertActionReviewPackSupport();
+assertOtelBatchDocs();
 assertPackDryRun();
 
 console.log("AgentLens release audit passed");

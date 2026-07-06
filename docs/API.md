@@ -203,7 +203,7 @@ Share bundles include `scan.txt`, generated after redaction.
 ## OpenTelemetry Export
 
 ```js
-import { buildOtelTrace, writeOtelTrace } from "agentlens";
+import { buildOtelTrace, writeOtelBatch, writeOtelTrace } from "agentlens";
 
 const otlp = buildOtelTrace(trace, {
   serviceName: "support-agent"
@@ -215,17 +215,24 @@ const result = writeOtelTrace({
   serviceName: "support-agent"
 });
 
+const batch = writeOtelBatch({
+  runsDir: ".agentlens/runs",
+  outDir: ".agentlens/reports/otel"
+});
+
 console.log(otlp.resourceSpans.length);
 console.log(result.traceId, result.spans);
+console.log(batch.manifest, batch.exported);
 ```
 
 CLI:
 
 ```bash
 agentlens otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json
+agentlens otel-batch .agentlens/runs --out .agentlens/reports/otel
 ```
 
-See [OTEL_EXPORT.md](OTEL_EXPORT.md) for OpenTelemetry/OpenInference attribute coverage and current limits.
+Batch export writes one `.otlp.json` file per valid trace plus `manifest.json` with `schemaVersion: "agentlens.otel-batch.v1"` for CI artifacts and collector handoff scripts. See [OTEL_EXPORT.md](OTEL_EXPORT.md) for OpenTelemetry/OpenInference attribute coverage and current limits.
 
 ## Run Bundles
 

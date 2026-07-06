@@ -69,7 +69,7 @@ Built:
 - Bilingual README entry points for English and Simplified Chinese audiences.
 - Quickstart artifact pack through `agentlens quickstart`.
 - LLM SDK wrapper cookbook for wiring existing provider clients into AgentLens traces.
-- OpenTelemetry/OpenInference-style OTLP JSON export for local trace files.
+- OpenTelemetry/OpenInference-style OTLP JSON export for local trace files and batch run directories.
 - Minimal zero-dependency sync/async Python trace writer demo for Python agent and RAG projects.
 - PyPI-ready `agentlens-trace` package skeleton and smoke verification.
 - Local installed-package smoke check through `npm run python:publish:check`.

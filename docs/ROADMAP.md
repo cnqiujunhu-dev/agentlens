@@ -68,7 +68,7 @@ Started after v0.2.0:
 - Market analysis and bilingual README positioning for English and Chinese launch audiences.
 - Quickstart artifact pack through `agentlens quickstart`.
 - LLM SDK wrapper cookbook for existing provider clients, error handling, CI, and redaction patterns.
-- OpenTelemetry/OpenInference-style OTLP JSON export for local trace files.
+- OpenTelemetry/OpenInference-style OTLP JSON export for local trace files and batch run directories.
 - Minimal zero-dependency sync/async Python trace writer examples and verified demo.
 - PyPI-ready `agentlens-trace` package skeleton and verified package smoke test.
 - Local installed-package smoke check through `npm run python:publish:check`.
@@ -77,6 +77,7 @@ Started after v0.2.0:
 - Importable zero-dependency Python bridge helpers under `agentlens_trace.adapters`.
 - Python framework cookbook patterns for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.
 - LangChain-like object payload fixture for Python adapter compatibility checks.
+- Batch OTLP export manifests for handing run directories to existing observability pipelines.
 
 Candidates:
 
