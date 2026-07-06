@@ -26,10 +26,13 @@ node ./bin/agentlens.js eval .agentlens/runs/python-package-demo.json --config e
 
 The package skeleton lives in `python/agentlens-trace/` with distribution name `agentlens-trace` and import name `agentlens_trace`. Framework bridge helpers live under `agentlens_trace.adapters`.
 
+`npm run python:publish:check` performs a release-oriented local install smoke test. It installs `python/agentlens-trace` into a temporary target directory with `pip install --target`, inspects installed package metadata and `RECORD`, imports the installed package, runs `python -m agentlens_trace`, runs `python -m agentlens_trace.adapters`, and validates/evaluates/scans both generated traces.
+
 Run the Python demo and then validate, evaluate, scan, and export the generated trace:
 
 ```bash
 npm run demo:python
+npm run python:publish:check
 ```
 
 The demo writes:
@@ -169,6 +172,7 @@ This keeps the Python application code simple while reusing AgentLens' evals, sc
 ## Current Limits
 
 - The repository now includes a PyPI-ready package skeleton, but release publication is still a separate step.
+- `npm run python:publish:check` verifies local installability, but it does not upload to PyPI.
 - It focuses on explicit instrumentation. It includes zero-dependency bridge helpers for LangChain-style, LlamaIndex-style, and CrewAI-style boundaries, but it does not auto-instrument framework internals or provider SDKs yet.
 - The helper supports synchronous and `asyncio` model-call wrappers.
 - The generated traces can contain prompts, tool arguments, and retrieved documents. Redact before sharing publicly.

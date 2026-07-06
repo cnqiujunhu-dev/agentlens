@@ -71,6 +71,7 @@ Started after v0.2.0:
 - OpenTelemetry/OpenInference-style OTLP JSON export for local trace files.
 - Minimal zero-dependency sync/async Python trace writer examples and verified demo.
 - PyPI-ready `agentlens-trace` package skeleton and verified package smoke test.
+- Local installed-package smoke check through `npm run python:publish:check`.
 - Python project starter scaffold through `agentlens init --python`.
 - Importable zero-dependency Python bridge helpers under `agentlens_trace.adapters`.
 - Python framework cookbook patterns for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.

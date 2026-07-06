@@ -30,11 +30,20 @@ Local development from the AgentLens repository:
 ```bash
 PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace --out .agentlens/runs/python-package-demo.json
 PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
+npm run python:publish:check
 node ./bin/agentlens.js validate trace .agentlens/runs/python-package-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/python-package-demo.json --config evals/default.json
 ```
 
 Runtime dependencies: none.
+
+Release-oriented local install check from the AgentLens repository:
+
+```bash
+npm run python:publish:check
+```
+
+This installs the package into a temporary target directory and verifies the installed `agentlens_trace` and `agentlens_trace.adapters` entrypoints without uploading to PyPI.
 
 Framework-shaped helpers are available without importing framework packages:
 

@@ -24,6 +24,7 @@
 - OpenTelemetry/OpenInference-style OTLP JSON export via `agentlens otel`, `buildOtelTrace`, and `writeOtelTrace`.
 - Zero-dependency sync/async Python trace writer examples and `npm run demo:python` verification flow.
 - PyPI-ready `agentlens-trace` package skeleton and `npm run python:package` smoke verification.
+- Local installed-package Python release smoke check through `npm run python:publish:check`.
 - Python project starter scaffolding through `agentlens init --python`.
 - Zero-dependency Python bridge helpers under `agentlens_trace.adapters`.
 - Python adapter smoke coverage for object-shaped prompts, enum-like payload keys, usage metadata, and source document citations.

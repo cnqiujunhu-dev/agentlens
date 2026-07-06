@@ -22,6 +22,7 @@ Run these from the repository root:
 npm run verify
 node ./bin/agentlens.js quickstart --python
 npm run python:package
+npm run python:publish:check
 PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
 npm run doctor
 npm run validate:demo
@@ -42,6 +43,7 @@ Expected result:
 - Demo traces, MCP demos, JSONL demos, diff dashboards, launch artifacts, and static dashboards generate.
 - `agentlens quickstart` writes an isolated `.agentlens/quickstart/` artifact pack.
 - `npm run python:package` verifies the `agentlens-trace` package import path, `agentlens_trace.adapters`, and demo trace.
+- `npm run python:publish:check` verifies local installability, installed package metadata, installed package files, and installed package entrypoints.
 - `agentlens doctor` reports no failed checks.
 - `agentlens validate` reports no trace or eval config errors.
 - `agentlens scan` reports no blocking high or critical findings for the demo trace.

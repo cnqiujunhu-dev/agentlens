@@ -61,6 +61,7 @@ PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .
 npm run demo:python
 npm run demo:python:frameworks
 npm run python:package
+npm run python:publish:check
 python examples/python-basic-run.py --out .agentlens/runs/python-basic-demo.json
 python examples/python-async-run.py --out .agentlens/runs/python-async-demo.json
 node ./bin/agentlens.js eval .agentlens/runs/python-basic-demo.json --config evals/default.json

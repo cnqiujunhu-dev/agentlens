@@ -55,6 +55,7 @@ const requiredFiles = [
   "python/agentlens-trace/src/agentlens_trace/adapters/__init__.py",
   "python/agentlens-trace/src/agentlens_trace/adapters/__main__.py",
   "scripts/check-python-package.mjs",
+  "scripts/check-python-publish.mjs",
   "scripts/run-python-framework-demo.mjs",
   "scripts/run-python-demo.mjs",
   "scripts/generate-regression-screenshot.mjs",
@@ -96,6 +97,7 @@ const requiredReadmeSnippets = [
   "AgentLensLlamaIndexBridge",
   "AgentLensCrewAIBridge",
   "python:package",
+  "python:publish:check",
   "agentlens init --python",
   ".agentlens/python/basic_run.py",
   "python-github-action.yml",
@@ -198,6 +200,7 @@ const requiredChineseReadmeSnippets = [
   "AgentLensLlamaIndexBridge",
   "AgentLensCrewAIBridge",
   "python:package",
+  "python:publish:check",
   "agentlens quickstart",
   "agentlens review",
   "QUICKSTART_ARTIFACTS.md",
@@ -267,6 +270,7 @@ function assertPackage() {
   if (!packageJson.bin?.agentlens) fail("package.json must expose agentlens bin");
   if (!packageJson.files?.includes("python")) fail("package.json files must include python package sources");
   if (!packageJson.scripts?.["python:package"]) fail("package.json must expose python:package");
+  if (!packageJson.scripts?.["python:publish:check"]) fail("package.json must expose python:publish:check");
   for (const key of requiredPackageExports) {
     if (!packageJson.exports?.[key]) fail(`package.json missing export: ${key}`);
   }
@@ -331,6 +335,7 @@ function assertPackDryRun() {
     "python/agentlens-trace/src/agentlens_trace/adapters/__init__.py",
     "python/agentlens-trace/src/agentlens_trace/adapters/__main__.py",
     "scripts/check-python-package.mjs",
+    "scripts/check-python-publish.mjs",
     "scripts/run-python-framework-demo.mjs",
     "scripts/run-python-demo.mjs",
     "docs/assets/agentlens-demo.gif",
