@@ -28,7 +28,7 @@ Release status:
 - Default branch: `main`.
 - First release: `v0.1.0`.
 - Latest published release: `v0.3.0`.
-- Current release target: next patch or minor release.
+- Current release target: `v0.3.1` packaging patch.
 - GitHub CI is expected to stay green for `main` and release tags.
 
 ## v0.2.0 Integration Release
@@ -79,6 +79,13 @@ Shipped for the v0.3.0 release candidate:
 - Python framework cookbook patterns for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.
 - LangChain-like object payload fixture for Python adapter compatibility checks.
 - Batch OTLP export manifests for handing run directories to existing observability pipelines.
+
+## v0.3.1 Packaging Patch
+
+Goal: make the published npm and Python package paths trustworthy after the `v0.3.0` team workflow release.
+
+Shipped for the v0.3.1 release candidate:
+
 - Trusted Publishing workflow for TestPyPI/PyPI `agentlens-trace` releases.
 - Packed npm tarball install smoke check for clean-project first-run confidence.
 - Publishable npm package identity as `agentlens-devtools` with `agentlens` CLI command.

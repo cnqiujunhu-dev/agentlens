@@ -111,8 +111,8 @@ Only tag after local validation and the GitHub workflow pass:
 ```bash
 gh auth refresh -s workflow
 git push origin main
-git tag v0.3.0
-git push origin v0.3.0
+git tag v0.3.1
+git push origin v0.3.1
 ```
 
 After tagging and configuring `origin`, run the strict gate:
@@ -130,13 +130,13 @@ After the first npm publish, smoke test from the repository root. The script cre
 ```bash
 npm view agentlens-devtools version
 npm run npm:postpublish:check
-npm run npm:postpublish:check -- --version 0.3.0
+npm run npm:postpublish:check -- --version 0.3.1
 ```
 
 For a manual temporary-directory check:
 
 ```bash
-npm exec --yes --package agentlens-devtools@0.3.0 -- agentlens quickstart --python
+npm exec --yes --package agentlens-devtools@0.3.1 -- agentlens quickstart --python
 node --input-type=module -e "const m = await import('agentlens-devtools'); if (!m.createRun || !m.runQuickstart) throw new Error('missing exports')"
 ```
 
@@ -163,5 +163,5 @@ As of the latest public release:
 - Public GitHub repository: `https://github.com/cnqiujunhu-dev/agentlens`.
 - Default branch: `main`.
 - Latest published release tag: `v0.3.0`.
-- Current release candidate tag: next patch or minor release.
+- Current release candidate tag: `v0.3.1`.
 - Strict release preflight should pass before any new release is published.

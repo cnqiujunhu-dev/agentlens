@@ -273,8 +273,9 @@ const requiredPackageExports = [
   "./adapters/mcp-stdio"
 ];
 
-const releaseVersion = "0.3.0";
-const publicActionRef = `cnqiujunhu-dev/agentlens@v${releaseVersion}`;
+const releaseVersion = "0.3.1";
+const publicActionVersion = "0.3.0";
+const publicActionRef = `cnqiujunhu-dev/agentlens@v${publicActionVersion}`;
 const placeholderActionRef = "your-org/agentlens@v0";
 
 function fail(message) {
@@ -308,7 +309,16 @@ function assertPackage() {
   if (packageJson.repository?.url !== "git+https://github.com/cnqiujunhu-dev/agentlens.git") fail("package.json repository must point to GitHub");
   if (packageJson.bugs?.url !== "https://github.com/cnqiujunhu-dev/agentlens/issues") fail("package.json bugs must point to GitHub issues");
   if (packageJson.homepage !== "https://github.com/cnqiujunhu-dev/agentlens#readme") fail("package.json homepage must point to GitHub README");
-  if (!packageJson.files?.includes("python")) fail("package.json files must include python package sources");
+  for (const file of [
+    "python/agentlens-trace/pyproject.toml",
+    "python/agentlens-trace/README.md",
+    "python/agentlens-trace/src/agentlens_trace/__init__.py",
+    "python/agentlens-trace/src/agentlens_trace/__main__.py",
+    "python/agentlens-trace/src/agentlens_trace/adapters/__init__.py",
+    "python/agentlens-trace/src/agentlens_trace/adapters/__main__.py"
+  ]) {
+    if (!packageJson.files?.includes(file)) fail(`package.json files must include ${file}`);
+  }
   if (!packageJson.scripts?.["python:package"]) fail("package.json must expose python:package");
   if (!packageJson.scripts?.["python:publish:check"]) fail("package.json must expose python:publish:check");
   if (!packageJson.scripts?.["pack:smoke"]) fail("package.json must expose pack:smoke");
@@ -395,6 +405,15 @@ function assertPackDryRun() {
     "docs/assets/regression-pr-diff.png"
   ]) {
     if (!output.includes(file)) fail(`npm pack dry-run missing ${file}`);
+  }
+  for (const forbidden of [
+    "python/agentlens-trace/build/",
+    "python/agentlens-trace/dist/",
+    "python/agentlens-trace/src/agentlens_trace.egg-info/",
+    "__pycache__/",
+    ".pyc"
+  ]) {
+    if (output.includes(forbidden)) fail(`npm pack dry-run must not include generated Python package artifact: ${forbidden}`);
   }
 }
 

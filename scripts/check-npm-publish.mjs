@@ -18,10 +18,23 @@ const requiredPackageFiles = [
   "docs/assets/agentlens-demo.gif",
   "docs/assets/dashboard-screenshot.png",
   "docs/assets/regression-pr-diff.png",
+  "python/agentlens-trace/pyproject.toml",
+  "python/agentlens-trace/README.md",
+  "python/agentlens-trace/src/agentlens_trace/__init__.py",
+  "python/agentlens-trace/src/agentlens_trace/__main__.py",
+  "python/agentlens-trace/src/agentlens_trace/adapters/__init__.py",
+  "python/agentlens-trace/src/agentlens_trace/adapters/__main__.py",
   "scripts/check-npm-publish.mjs",
   "scripts/check-npm-postpublish.mjs",
   "scripts/check-pack-install.mjs",
   "package.json"
+];
+
+const forbiddenPackageFiles = [
+  "python/agentlens-trace/build/",
+  "python/agentlens-trace/dist/",
+  "python/agentlens-trace/src/agentlens_trace.egg-info/",
+  "__pycache__/"
 ];
 
 function npmCommand() {
@@ -107,7 +120,21 @@ function assertPackageJson(packageJson) {
   for (const key of [".", "./quickstart", "./otel", "./adapters/llm", "./adapters/mcp-stdio"]) {
     if (!packageJson.exports?.[key]) fail(`package.json missing export ${key}`);
   }
-  for (const file of ["bin", "src", "docs", "examples", "python", "README.md", "README.zh-CN.md", "LICENSE"]) {
+  for (const file of [
+    "bin",
+    "src",
+    "docs",
+    "examples",
+    "python/agentlens-trace/pyproject.toml",
+    "python/agentlens-trace/README.md",
+    "python/agentlens-trace/src/agentlens_trace/__init__.py",
+    "python/agentlens-trace/src/agentlens_trace/__main__.py",
+    "python/agentlens-trace/src/agentlens_trace/adapters/__init__.py",
+    "python/agentlens-trace/src/agentlens_trace/adapters/__main__.py",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE"
+  ]) {
     if (!packageJson.files?.includes(file)) fail(`package.json files missing ${file}`);
   }
 }
@@ -136,6 +163,13 @@ function assertManifest(manifest, packageJson, label) {
   const files = new Set((pack.files ?? []).map((file) => file.path));
   for (const file of requiredPackageFiles) {
     if (!files.has(file)) fail(`${label} missing packed file: ${file}`);
+  }
+  for (const file of files) {
+    for (const forbidden of forbiddenPackageFiles) {
+      if (file.startsWith(forbidden)) fail(`${label} must not include generated Python package artifact: ${file}`);
+      if (file.includes(forbidden)) fail(`${label} must not include generated Python package artifact: ${file}`);
+    }
+    if (file.endsWith(".pyc")) fail(`${label} must not include generated Python bytecode: ${file}`);
   }
   if (files.has("package-lock.json")) fail(`${label} must not include package-lock.json`);
   if (files.has(".github/workflows/ci.yml")) fail(`${label} must not include CI internals`);

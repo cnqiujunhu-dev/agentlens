@@ -88,7 +88,7 @@ Public launch status:
 
 - Repository is public at `https://github.com/cnqiujunhu-dev/agentlens`.
 - `main` is pushed and configured as the default branch.
-- Latest published tag is `v0.3.0`; follow-up hardening is tracking toward the next patch or minor release.
+- Latest published tag is `v0.3.0`; `v0.3.1` is the current packaging patch release target.
 - GitHub Actions is expected to pass for both `main` and each release tag.
 
 ## Priority 1: Keep The Project Trustworthy
@@ -164,10 +164,9 @@ Avoid hooks that sound like every other agent project:
 
 ## Next Milestone
 
-Target `v0.3.0`:
+Target `v0.3.1`:
 
-- Started: PR comment renderer for CI summaries.
-- Configurable dashboard sections for eval, scan, MCP risk, and diff.
-- Governance docs for reviewed MCP risk exceptions.
-- Started: OpenTelemetry/OpenInference-style OTLP JSON export.
-- Started: Python trace writer path for Python-heavy teams.
+- Publishable npm package identity as `agentlens-devtools` with `agentlens` CLI command.
+- npm publish dry-run check for package metadata, packed files, and bin-field stability.
+- Post-publish npm registry smoke check for clean-project quickstart verification.
+- Python Trusted Publishing workflow safety docs and local installed-package checks.
