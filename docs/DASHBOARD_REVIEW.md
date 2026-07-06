@@ -65,7 +65,7 @@ For a very short artifact, use `--sections summary,tool-calls,timeline`. For sec
 ```yaml
 - name: Run AgentLens evals
   id: agentlens
-  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  uses: cnqiujunhu-dev/agentlens@v0.3.0
   with:
     runs: .agentlens/runs
     config: evals/default.json

@@ -46,7 +46,7 @@ Each valid item includes its source path, dashboard filename, trace id, app, nam
 ```yaml
 - name: Run AgentLens evals
   id: agentlens
-  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  uses: cnqiujunhu-dev/agentlens@v0.3.0
   with:
     runs: .agentlens/runs
     config: evals/default.json

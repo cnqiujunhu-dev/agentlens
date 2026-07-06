@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+No unreleased changes.
+
+## 0.3.0
+
 ### Added
 
 - PR comment Markdown renderer for `agentlens ci` via `--pr-comment-md`.
@@ -34,6 +38,10 @@
 - Package-level Python adapter demo via `python -m agentlens_trace.adapters`.
 - Python framework cookbook and `npm run demo:python:frameworks` verification flow for LangChain-style, LlamaIndex-style, and CrewAI-style trace boundaries.
 - LangChain-like object payload fixture for document, prompt, message, generation, and token-usage adapter checks.
+
+### Changed
+
+- Updated GitHub Action examples and release gates for `cnqiujunhu-dev/agentlens@v0.3.0`.
 
 ## 0.2.0
 

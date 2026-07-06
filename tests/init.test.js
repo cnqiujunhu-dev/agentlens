@@ -6,6 +6,9 @@ import os from "node:os";
 import path from "node:path";
 import { initWorkspace, readJson, readTrace } from "../src/store.js";
 
+const packageJson = JSON.parse(fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+const actionRef = `cnqiujunhu-dev/agentlens@v${packageJson.version}`;
+
 function findPython() {
   const candidates = process.platform === "win32"
     ? [["py", ["-3"]], ["python", []], ["python3", []]]
@@ -34,7 +37,7 @@ test("initWorkspace scaffolds starter files without overwriting", () => {
   assert.equal(evalConfig.version, "agentlens.eval.v1");
   const actionExample = fs.readFileSync(path.join(workspace.examplesDir, "github-action.yml"), "utf8");
   assert.match(actionExample, /actions\/checkout@v7/);
-  assert.match(actionExample, /cnqiujunhu-dev\/agentlens@v0\.2\.0/);
+  assert.match(actionExample, new RegExp(actionRef.replaceAll(".", "\\.")));
   assert.match(actionExample, /bundle: \.agentlens\/reports\/bundle/);
   assert.match(actionExample, /bundle-sections: summary,scan,tool-calls,filters,timeline/);
   assert.doesNotMatch(actionExample, /actions\/checkout@v4/);

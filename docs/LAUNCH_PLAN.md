@@ -83,7 +83,7 @@ Public launch status:
 
 - Repository is public at `https://github.com/cnqiujunhu-dev/agentlens`.
 - `main` is pushed and configured as the default branch.
-- `v0.2.0` is the current integration release target.
+- Latest published tag is `v0.2.0`; `v0.3.0` is the current team-workflow release target.
 - GitHub Actions is expected to pass for both `main` and each release tag.
 
 ## Priority 1: Keep The Project Trustworthy

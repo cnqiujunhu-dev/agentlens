@@ -84,7 +84,7 @@ python -m twine upload --repository testpypi dist/*
 Then test installability in a clean environment:
 
 ```bash
-python -m pip install --index-url https://test.pypi.org/simple/ --no-deps agentlens-trace==0.2.0
+python -m pip install --index-url https://test.pypi.org/simple/ --no-deps agentlens-trace==0.3.0
 python -m agentlens_trace --out .agentlens/runs/python-package-demo.json
 python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
 ```
@@ -97,7 +97,7 @@ Prefer PyPI Trusted Publishing for GitHub Actions releases. It avoids storing lo
 
 Recommended release shape:
 
-1. Cut a GitHub release tag such as `v0.2.0`.
+1. Cut a GitHub release tag such as `v0.3.0`.
 2. GitHub Actions runs a dedicated Python publish workflow.
 3. The workflow builds `python/agentlens-trace/dist/*`.
 4. The workflow checks the distribution metadata.

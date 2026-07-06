@@ -150,7 +150,7 @@ Want this in GitHub Actions?
 
 ```yaml
 - name: Run AgentLens evals
-  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  uses: cnqiujunhu-dev/agentlens@v0.3.0
   with:
     runs: .agentlens/runs
     config: evals/default.json

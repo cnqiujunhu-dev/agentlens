@@ -106,9 +106,10 @@ function run(command, args, options = {}) {
 }
 
 const pyproject = fs.readFileSync(path.join(packageRoot, "pyproject.toml"), "utf8");
+const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
 for (const snippet of [
   'name = "agentlens-trace"',
-  'version = "0.2.0"',
+  `version = "${packageJson.version}"`,
   'requires-python = ">=3.8"'
 ]) {
   if (!pyproject.includes(snippet)) throw new Error(`pyproject.toml missing ${snippet}`);

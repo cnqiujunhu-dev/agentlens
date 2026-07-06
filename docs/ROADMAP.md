@@ -27,7 +27,8 @@ Release status:
 - Public repository: `https://github.com/cnqiujunhu-dev/agentlens`.
 - Default branch: `main`.
 - First release: `v0.1.0`.
-- Latest release target: `v0.2.0`.
+- Latest published release: `v0.2.0`.
+- Current release target: `v0.3.0`.
 - GitHub CI is expected to stay green for `main` and release tags.
 
 ## v0.2.0 Integration Release
@@ -52,7 +53,7 @@ Next:
 
 Goal: make trace review ergonomic for teams using GitHub issues, PRs, and CI.
 
-Started after v0.2.0:
+Shipped for the v0.3.0 release candidate:
 
 - PR comment renderer for CI summaries.
 - Configurable dashboard sections for summary, event types, scan, tool calls, filters, and timeline.

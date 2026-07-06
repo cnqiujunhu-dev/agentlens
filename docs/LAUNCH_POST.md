@@ -49,7 +49,7 @@ The current MVP includes:
 
 The design goal is boring interoperability: no hosted account, no required runtime dependency, and no need to rewrite your agent around a new framework. AgentLens should sit beside the code you already have and give you inspectable artifacts when the run succeeds, fails, or regresses.
 
-The public repository and `v0.2.0` integration release are live. The next priorities are feedback from people building real tool-using agents, RAG workflows, MCP servers, or agent CI checks, followed by deeper framework adapters and team review workflows.
+The public repository has a `v0.3.0` team-workflow release candidate. The next priorities are feedback from people building real tool-using agents, RAG workflows, MCP servers, Python agent projects, or agent CI checks, followed by published Python packages and deeper framework adapters.
 
 Repo: <link>
 ```

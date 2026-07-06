@@ -24,7 +24,7 @@ jobs:
 
       - name: Run AgentLens evals
         id: agentlens
-        uses: cnqiujunhu-dev/agentlens@v0.2.0
+        uses: cnqiujunhu-dev/agentlens@v0.3.0
         with:
           runs: .agentlens/runs
           config: evals/default.json
@@ -86,7 +86,7 @@ By default, the action appends a Markdown report to `GITHUB_STEP_SUMMARY`. Disab
 
 ```yaml
 - name: Run AgentLens evals
-  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  uses: cnqiujunhu-dev/agentlens@v0.3.0
   with:
     runs: .agentlens/runs
     config: evals/default.json
@@ -101,7 +101,7 @@ Use `pr-comment` when you want the action to write a stable Markdown body that a
 ```yaml
 - name: Run AgentLens evals
   id: agentlens
-  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  uses: cnqiujunhu-dev/agentlens@v0.3.0
   with:
     runs: .agentlens/runs
     config: evals/default.json
@@ -135,7 +135,7 @@ Use `bundle` when you want the action to generate a static review bundle even if
 ```yaml
 - name: Run AgentLens evals
   id: agentlens
-  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  uses: cnqiujunhu-dev/agentlens@v0.3.0
   with:
     runs: .agentlens/runs
     config: evals/default.json
@@ -161,7 +161,7 @@ Use `review-baseline`, `review-candidate`, and `review` when a workflow has befo
 ```yaml
 - name: Run AgentLens evals and review
   id: agentlens
-  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  uses: cnqiujunhu-dev/agentlens@v0.3.0
   with:
     runs: .agentlens/runs
     config: evals/default.json
@@ -199,7 +199,7 @@ For all traces in a run directory, let the AgentLens Action write combined SARIF
 ```yaml
 - name: Run AgentLens evals
   id: agentlens
-  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  uses: cnqiujunhu-dev/agentlens@v0.3.0
   with:
     runs: .agentlens/runs
     config: evals/default.json

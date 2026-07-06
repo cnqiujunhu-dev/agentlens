@@ -53,7 +53,7 @@ In a real repository, the shape is:
 ```yaml
 - name: Run AgentLens evals
   id: agentlens
-  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  uses: cnqiujunhu-dev/agentlens@v0.3.0
   with:
     runs: .agentlens/runs
     config: .agentlens/evals/pr-regression.json

@@ -49,7 +49,7 @@ jobs:
         run: npm test
 
       - name: Run AgentLens evals
-        uses: cnqiujunhu-dev/agentlens@v0.2.0
+        uses: cnqiujunhu-dev/agentlens@v0.3.0
         with:
           runs: .agentlens/runs
           config: .agentlens/evals/default.json
@@ -166,7 +166,7 @@ jobs:
         run: python .agentlens/python/basic_run.py --out .agentlens/runs/python-starter.json
 
       - name: Run AgentLens evals
-        uses: cnqiujunhu-dev/agentlens@v0.2.0
+        uses: cnqiujunhu-dev/agentlens@v0.3.0
         with:
           runs: .agentlens/runs
           config: .agentlens/evals/default.json

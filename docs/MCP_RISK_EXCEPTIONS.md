@@ -52,7 +52,7 @@ Run the MCP policy pack in CI:
 
 ```yaml
 - name: Run AgentLens MCP policy
-  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  uses: cnqiujunhu-dev/agentlens@v0.3.0
   with:
     runs: .agentlens/runs
     config: evals/mcp-policy.json
@@ -64,7 +64,7 @@ For pull requests, combine this with PR comment output so reviewers can see whic
 ```yaml
 - name: Run AgentLens MCP policy
   id: agentlens
-  uses: cnqiujunhu-dev/agentlens@v0.2.0
+  uses: cnqiujunhu-dev/agentlens@v0.3.0
   with:
     runs: .agentlens/runs
     config: evals/mcp-policy.json
