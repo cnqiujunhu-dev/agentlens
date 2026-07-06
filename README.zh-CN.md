@@ -57,6 +57,7 @@ AgentLens 的差异化是：
 - `agentlens_trace.adapters` 零依赖 Python adapter helpers。
 - `npm run python:publish:check`，用临时安装目录验证 Python package 发布前可用性。
 - Python publishing guide，覆盖 TestPyPI、PyPI Trusted Publishing、版本和回滚。
+- `.github/workflows/python-publish.yml` Trusted Publishing workflow，用于 TestPyPI / PyPI 发布交接。
 - `agentlens init --python`，为 Python 项目生成 starter trace writer、示例 run 和 GitHub Action 模板。
 - Python framework cookbook，覆盖 `AgentLensLangChainBridge`、`AgentLensLlamaIndexBridge` 和 `AgentLensCrewAIBridge` trace 边界。
 - LangChain-like object payload fixture，用于验证 Python adapter 对真实回调载荷形态的兼容性。

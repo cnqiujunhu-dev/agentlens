@@ -74,6 +74,7 @@ Built:
 - PyPI-ready `agentlens-trace` package skeleton and smoke verification.
 - Local installed-package smoke check through `npm run python:publish:check`.
 - Python publishing guide for TestPyPI, PyPI Trusted Publishing, versioning, and rollback.
+- Trusted Publishing workflow for TestPyPI/PyPI package handoff.
 - Python project starter scaffold through `agentlens init --python`.
 - Zero-dependency Python bridge helpers under `agentlens_trace.adapters`.
 - Python framework cookbook demo for LangChain-style, LlamaIndex-style, and CrewAI-style projects.

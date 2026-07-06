@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-No unreleased changes.
+### Added
+
+- Trusted Publishing workflow for `agentlens-trace` TestPyPI and PyPI releases.
 
 ## 0.3.0
 

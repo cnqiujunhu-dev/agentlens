@@ -11,6 +11,7 @@ The public repo is not launch-ready until all of these are true:
 - `npm pack --dry-run` includes the CLI, source, schemas, docs, README, license, and screenshot assets.
 - `.github/workflows/ci.yml` passes on GitHub.
 - [PYTHON_PUBLISHING.md](PYTHON_PUBLISHING.md) is current before publishing `agentlens-trace`.
+- `.github/workflows/python-publish.yml` is current before configuring PyPI or TestPyPI Trusted Publishers.
 - The README shows the product, the five-minute demo, the GitHub Action, the roadmap, and launch materials.
 - A current demo screenshot or GIF is linked from the README.
 - The GitHub repo has a clear description, topics, license, issues, pull request template, support policy, code of conduct, and security policy.
@@ -45,6 +46,7 @@ Expected result:
 - `agentlens quickstart` writes an isolated `.agentlens/quickstart/` artifact pack.
 - `npm run python:package` verifies the `agentlens-trace` package import path, `agentlens_trace.adapters`, and demo trace.
 - `npm run python:publish:check` verifies local installability, installed package metadata, installed package files, and installed package entrypoints.
+- `.github/workflows/python-publish.yml` builds distributions, runs Python smoke checks, and publishes only through Trusted Publishing.
 - `agentlens doctor` reports no failed checks.
 - `agentlens validate` reports no trace or eval config errors.
 - `agentlens scan` reports no blocking high or critical findings for the demo trace.
@@ -116,6 +118,8 @@ npm run release:preflight
 Use the release notes from [LAUNCH_COPY.md](LAUNCH_COPY.md). Keep the wording scoped to the MVP: local-first tracing, replay, evals, dashboards, CI, MCP policy checks, redaction, JSONL traces, and provider-style adapters.
 
 For Python package publishing, follow [PYTHON_PUBLISHING.md](PYTHON_PUBLISHING.md). Rehearse on TestPyPI before the first real PyPI upload or after package metadata changes. Prefer PyPI Trusted Publishing through GitHub Actions instead of long-lived PyPI API tokens.
+
+Configure PyPI and TestPyPI trusted publishers to match `.github/workflows/python-publish.yml`, the `pypi` and `testpypi` GitHub environments, and the `agentlens-trace` project before running the publish jobs.
 
 ## Public Launch
 

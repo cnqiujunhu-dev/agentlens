@@ -14,6 +14,7 @@ const requiredFiles = [
   "action.yml",
   ".github/PULL_REQUEST_TEMPLATE.md",
   ".github/workflows/ci.yml",
+  ".github/workflows/python-publish.yml",
   "docs/API.md",
   "docs/AGENT_REGRESSION_PR.md",
   "docs/AGENT_REVIEW.md",
@@ -95,6 +96,7 @@ const requiredReadmeSnippets = [
   "Python publishing",
   "TestPyPI",
   "Trusted Publishing",
+  "python-publish.yml",
   "agentlens-trace",
   "agentlens_trace",
   "agentlens_trace.adapters",
@@ -224,6 +226,7 @@ const requiredChineseReadmeSnippets = [
   "OpenTelemetry",
   "agentlens otel-batch",
   "otel:batch",
+  "python-publish.yml",
   "不是另一个 Agent 框架"
 ];
 
@@ -432,6 +435,32 @@ function assertOtelBatchDocs() {
   }
 }
 
+function assertPythonPublishWorkflow() {
+  const workflow = fs.readFileSync(".github/workflows/python-publish.yml", "utf8");
+  const docs = fs.readFileSync("docs/PYTHON_PUBLISHING.md", "utf8");
+  for (const snippet of [
+    "workflow_dispatch:",
+    "release:",
+    "environment: testpypi",
+    "environment: pypi",
+    "id-token: write",
+    "pypa/gh-action-pypi-publish@release/v1",
+    "repository-url: https://test.pypi.org/legacy/",
+    "actions/upload-artifact@v4",
+    "actions/download-artifact@v5",
+    "npm run python:package",
+    "npm run python:publish:check"
+  ]) {
+    if (!workflow.includes(snippet)) fail(`.github/workflows/python-publish.yml missing snippet: ${snippet}`);
+  }
+  for (const forbidden of ["PYPI_TOKEN", "password:", "username: __token__"]) {
+    if (workflow.includes(forbidden)) fail(`.github/workflows/python-publish.yml must not use long-lived token publishing: ${forbidden}`);
+  }
+  for (const snippet of ["python-publish.yml", "workflow_dispatch", "testpypi", "pypi", "pypa/gh-action-pypi-publish@release/v1"]) {
+    if (!docs.includes(snippet)) fail(`docs/PYTHON_PUBLISHING.md missing workflow snippet: ${snippet}`);
+  }
+}
+
 for (const file of requiredFiles) assertFile(file);
 assertReadme();
 assertChineseReadme();
@@ -443,6 +472,7 @@ assertScreenshotAssets();
 assertActionVersions();
 assertActionReviewPackSupport();
 assertOtelBatchDocs();
+assertPythonPublishWorkflow();
 assertPackDryRun();
 
 console.log("AgentLens release audit passed");

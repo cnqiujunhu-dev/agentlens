@@ -61,6 +61,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Zero-dependency Python adapter helpers under `agentlens_trace.adapters`.
 - Local installed-package smoke check through `npm run python:publish:check`.
 - Python publishing guide for TestPyPI, PyPI Trusted Publishing, versioning, and rollback.
+- `.github/workflows/python-publish.yml` Trusted Publishing workflow for TestPyPI and PyPI handoff.
 - `agentlens init --python` starter scaffold for Python projects.
 - Python framework cookbook for `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` trace boundaries.
 - LangChain-like object payload fixture for Python adapter confidence.
@@ -466,6 +467,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Import `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` from `agentlens_trace.adapters`.
 - Verify the installed Python package path locally with `npm run python:publish:check`.
 - Follow the Python publishing guide before TestPyPI or PyPI uploads.
+- Configure `.github/workflows/python-publish.yml` as a Trusted Publisher before uploading `agentlens-trace`.
 - Verify LangChain-like object payloads through `examples/python-langchain-fixture-run.py`.
 - Bootstrap a Python project with `agentlens init --python`, then run `.agentlens/python/basic_run.py` in CI.
 - Add trace boundaries around LangChain-style, LlamaIndex-style, and CrewAI-style Python projects without adding framework dependencies to AgentLens.
@@ -541,6 +543,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - Zero-dependency Python framework bridge helpers under `agentlens_trace.adapters`.
 - Installed-package Python smoke check for release confidence.
 - Python publishing guide for TestPyPI and trusted publishing.
+- Trusted Publishing workflow for TestPyPI and PyPI.
 - LangChain-like Python fixture for adapter payload confidence.
 - Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
 - OpenTelemetry/OpenInference-style OTLP JSON export with batch manifests.

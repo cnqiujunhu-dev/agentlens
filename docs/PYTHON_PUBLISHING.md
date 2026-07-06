@@ -95,51 +95,31 @@ Only upload to PyPI after TestPyPI install and module entrypoint checks pass.
 
 Prefer PyPI Trusted Publishing for GitHub Actions releases. It avoids storing long-lived PyPI API tokens in repository secrets.
 
+The repository includes `.github/workflows/python-publish.yml` for trusted publishing.
+
 Recommended release shape:
 
 1. Cut a GitHub release tag such as `v0.3.0`.
-2. GitHub Actions runs a dedicated Python publish workflow.
+2. GitHub Actions runs `.github/workflows/python-publish.yml`.
 3. The workflow builds `python/agentlens-trace/dist/*`.
 4. The workflow checks the distribution metadata.
 5. The workflow publishes with PyPI Trusted Publishing.
 
-Example workflow sketch:
+The workflow supports two publishing modes:
 
-```yaml
-name: publish-python
+- Manual TestPyPI rehearsal through `workflow_dispatch` with `target: testpypi`, using the `testpypi` GitHub environment and TestPyPI repository URL.
+- Manual PyPI publishing through `workflow_dispatch` with `target: pypi`, or automatic PyPI publishing when a GitHub release is published, using the `pypi` GitHub environment.
 
-on:
-  push:
-    tags:
-      - "v*.*.*"
+Both upload jobs use `pypa/gh-action-pypi-publish@release/v1` with GitHub OIDC and `id-token: write`; no PyPI token secret is required or expected.
 
-permissions:
-  contents: read
-  id-token: write
+Configure trusted publishers before running the publishing jobs:
 
-jobs:
-  publish:
-    runs-on: ubuntu-latest
-    environment: pypi
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-      - run: npm ci
-      - run: npm run python:package
-      - run: npm run python:publish:check
-      - run: python -m pip install --upgrade build twine
-      - run: python -m build
-        working-directory: python/agentlens-trace
-      - run: python -m twine check --strict dist/*
-        working-directory: python/agentlens-trace
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: python/agentlens-trace/dist
-```
-
-Configure the trusted publisher on PyPI to match the repository, workflow filename, and environment name before relying on this workflow.
+- PyPI project: `agentlens-trace`
+- TestPyPI project: `agentlens-trace`
+- Owner: `cnqiujunhu-dev`
+- Repository: `agentlens`
+- Workflow filename: `python-publish.yml`
+- Environment names: `testpypi` for TestPyPI and `pypi` for PyPI
 
 ## Versioning Rules
 
@@ -165,7 +145,7 @@ PyPI package files cannot be replaced in-place. If a bad package is uploaded:
 - `agentlens-trace` is PyPI-ready but not assumed to be published from this repository state.
 - The package has explicit instrumentation helpers, not automatic framework instrumentation.
 - The adapter helpers are framework-shaped and zero-dependency; they are not version-specific LangChain, LlamaIndex, or CrewAI plugins yet.
-- Release automation should be added only after the trusted publisher is configured in PyPI.
+- The publishing workflow will fail at the upload step until the matching PyPI and TestPyPI trusted publishers are configured.
 
 ## Sources Reviewed
 
