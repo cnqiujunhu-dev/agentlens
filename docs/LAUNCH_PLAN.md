@@ -80,6 +80,7 @@ Built:
 - Python framework cookbook demo for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
 - LangChain-like object payload fixture for Python adapter compatibility checks.
 - Packed npm tarball install smoke check for clean-project quickstart validation.
+- Publishable npm package identity as `agentlens-devtools` with `agentlens` CLI command.
 
 Public launch status:
 
@@ -93,9 +94,10 @@ Public launch status:
 Do these before asking more strangers to star it:
 
 1. Run the release checklist before public posting.
-2. Run `npm run release:preflight` before each release.
-3. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
-4. Convert launch feedback into focused issues and docs updates.
+2. Publish or explicitly defer the `agentlens-devtools` npm package before broad public posting.
+3. Run `npm run release:preflight` before each release.
+4. Keep `npm run verify`, `npm run release:audit`, and the GitHub Action smoke test green as adapters are added.
+5. Convert launch feedback into focused issues and docs updates.
 
 ## Priority 2: Make The Product Real
 

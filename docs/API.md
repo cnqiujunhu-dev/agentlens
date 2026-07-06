@@ -2,6 +2,12 @@
 
 AgentLens can be used as a CLI or imported as a JavaScript library.
 
+Install the JavaScript package as `agentlens-devtools`. The CLI binary remains `agentlens`:
+
+```bash
+npm install -D agentlens-devtools
+```
+
 ## Quickstart
 
 ```bash
@@ -10,7 +16,7 @@ agentlens quickstart --python
 ```
 
 ```js
-import { formatQuickstartReport, runQuickstart } from "agentlens";
+import { formatQuickstartReport, runQuickstart } from "agentlens-devtools";
 
 const result = runQuickstart({ python: true });
 console.log(formatQuickstartReport(result));
@@ -21,7 +27,7 @@ Quickstart writes an isolated artifact pack under `.agentlens/quickstart/`, incl
 ## Core Trace
 
 ```js
-import { addEvent, createRun, finishRun, writeTrace } from "agentlens";
+import { addEvent, createRun, finishRun, writeTrace } from "agentlens-devtools";
 
 const run = createRun({
   app: "support-agent",
@@ -81,7 +87,7 @@ bridge.on_retriever_start({"name": "policy-retriever"}, "refund policy")
 ## Eval
 
 ```js
-import { evaluateTrace, formatEvalReport, readTrace } from "agentlens";
+import { evaluateTrace, formatEvalReport, readTrace } from "agentlens-devtools";
 
 const trace = readTrace(".agentlens/runs/refund.json");
 const report = evaluateTrace(trace, {
@@ -95,7 +101,7 @@ console.log(formatEvalReport(report));
 ## Security Scan
 
 ```js
-import { formatScanReport, formatScanSarif, readTrace, scanTrace } from "agentlens";
+import { formatScanReport, formatScanSarif, readTrace, scanTrace } from "agentlens-devtools";
 
 const trace = readTrace(".agentlens/runs/refund.json");
 const report = scanTrace(trace, { failOnSeverity: "high" });
@@ -107,7 +113,7 @@ console.log(JSON.stringify(formatScanSarif(report, { traceFile: ".agentlens/runs
 ## Trace Diff
 
 ```js
-import { compareTraces, formatTraceDiff, readTrace, renderDiffDashboard } from "agentlens";
+import { compareTraces, formatTraceDiff, readTrace, renderDiffDashboard } from "agentlens-devtools";
 
 const baseline = readTrace(".agentlens/runs/baseline.json");
 const candidate = readTrace(".agentlens/runs/candidate.json");
@@ -120,7 +126,7 @@ const html = renderDiffDashboard(diff);
 ## Review Packs
 
 ```js
-import { formatReviewReport, writeReviewBundle } from "agentlens";
+import { formatReviewReport, writeReviewBundle } from "agentlens-devtools";
 
 const review = writeReviewBundle({
   baselineFile: ".agentlens/runs/baseline.json",
@@ -164,7 +170,7 @@ agentlens ci --runs .agentlens/runs --config evals/default.json --scan --pr-comm
 ## Workspace Doctor
 
 ```js
-import { doctorWorkspace, formatDoctorReport } from "agentlens";
+import { doctorWorkspace, formatDoctorReport } from "agentlens-devtools";
 
 const report = doctorWorkspace(process.cwd());
 console.log(formatDoctorReport(report));
@@ -180,7 +186,7 @@ agentlens doctor --json
 ## Share Bundles
 
 ```js
-import { writeShareBundle } from "agentlens";
+import { writeShareBundle } from "agentlens-devtools";
 
 const bundle = writeShareBundle({
   traceFile: ".agentlens/runs/demo.json",
@@ -203,7 +209,7 @@ Share bundles include `scan.txt`, generated after redaction.
 ## OpenTelemetry Export
 
 ```js
-import { buildOtelTrace, writeOtelBatch, writeOtelTrace } from "agentlens";
+import { buildOtelTrace, writeOtelBatch, writeOtelTrace } from "agentlens-devtools";
 
 const otlp = buildOtelTrace(trace, {
   serviceName: "support-agent"
@@ -237,7 +243,7 @@ Batch export writes one `.otlp.json` file per valid trace plus `manifest.json` w
 ## Run Bundles
 
 ```js
-import { writeRunBundle } from "agentlens";
+import { writeRunBundle } from "agentlens-devtools";
 
 const result = writeRunBundle({
   runsDir: ".agentlens/runs",
@@ -254,7 +260,7 @@ Run bundles also write `manifest.json` with `schemaVersion: "agentlens.run-bundl
 ## Validation
 
 ```js
-import { formatValidationReport, validateArtifact, validateEvalConfig } from "agentlens";
+import { formatValidationReport, validateArtifact, validateEvalConfig } from "agentlens-devtools";
 
 const traceReport = validateArtifact("trace", ".agentlens/runs/demo.json");
 const evalReport = validateEvalConfig({
@@ -277,7 +283,7 @@ agentlens validate eval evals/default.json --json
 ## Generic LLM Calls
 
 ```js
-import { createRun, finishRun, traceLlmCall } from "agentlens";
+import { createRun, finishRun, traceLlmCall } from "agentlens-devtools";
 
 const run = createRun({
   app: "support-agent",
@@ -307,7 +313,7 @@ See [LLM_SDK_COOKBOOK.md](LLM_SDK_COOKBOOK.md) for OpenAI-compatible, Anthropic-
 ## LangGraph-Style Nodes
 
 ```js
-import { createLangGraphRun, finishRun, wrapLangGraphNode } from "agentlens";
+import { createLangGraphRun, finishRun, wrapLangGraphNode } from "agentlens-devtools";
 
 const run = createLangGraphRun({
   app: "support-agent",
@@ -327,7 +333,7 @@ finishRun(run, "passed");
 ## Multi-Agent Workflows
 
 ```js
-import { addAgentMessage, createMultiAgentRun, finishRun, traceAgentTask } from "agentlens";
+import { addAgentMessage, createMultiAgentRun, finishRun, traceAgentTask } from "agentlens-devtools";
 
 const run = createMultiAgentRun({
   app: "support-agent",
@@ -360,7 +366,7 @@ See [MULTI_AGENT_ADAPTERS.md](MULTI_AGENT_ADAPTERS.md) for AutoGen-style and Cre
 ## Provider-Style LLM Calls
 
 ```js
-import { createRun, finishRun, traceOpenAiCompatibleChat } from "agentlens";
+import { createRun, finishRun, traceOpenAiCompatibleChat } from "agentlens-devtools";
 
 const run = createRun({
   app: "support-agent",
@@ -383,7 +389,7 @@ For message-style SDKs, use `traceAnthropicCompatibleMessage(run, { client, para
 ## JSONL Streaming
 
 ```js
-import { JsonlTraceWriter, readJsonlTrace } from "agentlens";
+import { JsonlTraceWriter, readJsonlTrace } from "agentlens-devtools";
 
 const writer = new JsonlTraceWriter(".agentlens/runs/live.jsonl", {
   app: "live-agent",
@@ -400,7 +406,7 @@ const trace = readJsonlTrace(".agentlens/runs/live.jsonl");
 ## Redaction
 
 ```js
-import { readTrace, redactTrace, writeTrace } from "agentlens";
+import { readTrace, redactTrace, writeTrace } from "agentlens-devtools";
 
 const trace = readTrace(".agentlens/runs/demo.json");
 const redacted = redactTrace(trace, {
@@ -413,7 +419,7 @@ writeTrace(".agentlens/runs/demo.redacted.json", redacted);
 ## Schemas
 
 ```js
-import { listSchemas, readSchema, schemaPath } from "agentlens";
+import { listSchemas, readSchema, schemaPath } from "agentlens-devtools";
 
 console.log(listSchemas());
 console.log(schemaPath("trace"));
@@ -423,7 +429,7 @@ console.log(readSchema("eval"));
 ## Dashboard Server
 
 ```js
-import { createDashboardServer, listen } from "agentlens";
+import { createDashboardServer, listen } from "agentlens-devtools";
 
 const server = createDashboardServer(".agentlens/runs");
 const address = await listen(server, {
@@ -449,7 +455,7 @@ Dashboard HTML includes timeline filters for event type, status, text search, an
 ## MCP-Style Tool Calls
 
 ```js
-import { createMcpRun, finishMcpRun, traceMcpToolCall } from "agentlens";
+import { createMcpRun, finishMcpRun, traceMcpToolCall } from "agentlens-devtools";
 
 const run = createMcpRun({
   app: "mcp-agent",
@@ -474,7 +480,7 @@ finishMcpRun(run, "passed");
 ## MCP Stdio Transport
 
 ```js
-import { createMcpRun, finishMcpRun, traceMcpStdioToolCall } from "agentlens";
+import { createMcpRun, finishMcpRun, traceMcpStdioToolCall } from "agentlens-devtools";
 
 const run = createMcpRun({
   app: "mcp-agent",
@@ -497,7 +503,7 @@ finishMcpRun(run, "passed");
 For multiple calls against the same server process:
 
 ```js
-import { McpStdioTraceSession, createMcpRun, finishMcpRun } from "agentlens";
+import { McpStdioTraceSession, createMcpRun, finishMcpRun } from "agentlens-devtools";
 
 const run = createMcpRun({
   app: "mcp-agent",

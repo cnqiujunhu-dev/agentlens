@@ -27,8 +27,8 @@ Release status:
 - Public repository: `https://github.com/cnqiujunhu-dev/agentlens`.
 - Default branch: `main`.
 - First release: `v0.1.0`.
-- Latest published release: `v0.2.0`.
-- Current release target: `v0.3.0`.
+- Latest published release: `v0.3.0`.
+- Current release target: next patch or minor release.
 - GitHub CI is expected to stay green for `main` and release tags.
 
 ## v0.2.0 Integration Release
@@ -81,9 +81,11 @@ Shipped for the v0.3.0 release candidate:
 - Batch OTLP export manifests for handing run directories to existing observability pipelines.
 - Trusted Publishing workflow for TestPyPI/PyPI `agentlens-trace` releases.
 - Packed npm tarball install smoke check for clean-project first-run confidence.
+- Publishable npm package identity as `agentlens-devtools` with `agentlens` CLI command.
 
 Candidates:
 
+- Publish `agentlens-devtools` to npm and run post-publish smoke checks from a clean temporary project.
 - Collector/protobuf export hardening for teams that already use Langfuse, Phoenix, OpenLIT, or existing APM.
 - Publish the Python trace writer package and harden framework bridge helpers against real LangChain, LlamaIndex, and CrewAI payload shapes.
 - Richer dashboards for MCP exception review history.

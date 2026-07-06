@@ -34,7 +34,7 @@ Batch export writes one `.otlp.json` file per valid AgentLens trace plus `manife
 ## JavaScript API
 
 ```js
-import { buildOtelTrace, writeOtelBatch, writeOtelTrace } from "agentlens";
+import { buildOtelTrace, writeOtelBatch, writeOtelTrace } from "agentlens-devtools";
 
 const otlp = buildOtelTrace(trace, {
   serviceName: "support-agent"

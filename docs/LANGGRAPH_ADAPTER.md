@@ -15,7 +15,7 @@ Graph-based agents are hard to debug when state moves through planner, router, t
 ## Example
 
 ```js
-import { createLangGraphRun, finishRun, wrapLangGraphNode } from "agentlens";
+import { createLangGraphRun, finishRun, wrapLangGraphNode } from "agentlens-devtools";
 
 const run = createLangGraphRun({
   app: "support-agent",

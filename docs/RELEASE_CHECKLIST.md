@@ -9,7 +9,9 @@ The public repo is not launch-ready until all of these are true:
 - `npm run verify` passes locally.
 - `npm run release:audit` passes locally.
 - `npm pack --dry-run` includes the CLI, source, schemas, docs, README, license, and screenshot assets.
+- `package.json` uses `agentlens-devtools` as the npm package name while exposing the `agentlens` CLI binary.
 - `.github/workflows/ci.yml` passes on GitHub.
+- [NPM_PUBLISHING.md](NPM_PUBLISHING.md) is current before publishing the JavaScript package.
 - [PYTHON_PUBLISHING.md](PYTHON_PUBLISHING.md) is current before publishing `agentlens-trace`.
 - `.github/workflows/python-publish.yml` is current before configuring PyPI or TestPyPI Trusted Publishers.
 - The README shows the product, the five-minute demo, the GitHub Action, the roadmap, and launch materials.
@@ -47,7 +49,7 @@ Expected result:
 - `agentlens quickstart` writes an isolated `.agentlens/quickstart/` artifact pack.
 - `npm run python:package` verifies the `agentlens-trace` package import path, `agentlens_trace.adapters`, and demo trace.
 - `npm run python:publish:check` verifies local installability, installed package metadata, installed package files, and installed package entrypoints.
-- `npm run pack:smoke` verifies the packed npm tarball installs into a clean temporary project, runs `agentlens quickstart --python`, validates the generated trace, exports batch OTLP, and imports the public API.
+- `npm run pack:smoke` verifies the packed npm tarball installs into a clean temporary project, runs `agentlens quickstart --python`, validates the generated trace, exports batch OTLP, and imports the public API from `agentlens-devtools`.
 - `.github/workflows/python-publish.yml` builds distributions, runs Python smoke checks, and publishes only through Trusted Publishing.
 - `agentlens doctor` reports no failed checks.
 - `agentlens validate` reports no trace or eval config errors.
@@ -119,6 +121,16 @@ npm run release:preflight
 
 Use the release notes from [LAUNCH_COPY.md](LAUNCH_COPY.md). Keep the wording scoped to the MVP: local-first tracing, replay, evals, dashboards, CI, MCP policy checks, redaction, JSONL traces, and provider-style adapters.
 
+For JavaScript package publishing, follow [NPM_PUBLISHING.md](NPM_PUBLISHING.md). Publish the npm package as `agentlens-devtools`; keep the CLI binary as `agentlens`. Do not document `npm install agentlens`, because that npm package name is already occupied by an unrelated package.
+
+After the first npm publish, smoke test from a temporary directory:
+
+```bash
+npm view agentlens-devtools version
+npm exec --yes --package agentlens-devtools@0.3.0 -- agentlens quickstart --python
+node --input-type=module -e "const m = await import('agentlens-devtools'); if (!m.createRun || !m.runQuickstart) throw new Error('missing exports')"
+```
+
 For Python package publishing, follow [PYTHON_PUBLISHING.md](PYTHON_PUBLISHING.md). Rehearse on TestPyPI before the first real PyPI upload or after package metadata changes. Prefer PyPI Trusted Publishing through GitHub Actions instead of long-lived PyPI API tokens.
 
 Configure PyPI and TestPyPI trusted publishers to match `.github/workflows/python-publish.yml`, the `pypi` and `testpypi` GitHub environments, and the `agentlens-trace` project before running the publish jobs.
@@ -141,6 +153,6 @@ As of the latest public release:
 
 - Public GitHub repository: `https://github.com/cnqiujunhu-dev/agentlens`.
 - Default branch: `main`.
-- Latest published release tag: `v0.2.0`.
-- Current release candidate tag: `v0.3.0`.
+- Latest published release tag: `v0.3.0`.
+- Current release candidate tag: next patch or minor release.
 - Strict release preflight should pass before any new release is published.

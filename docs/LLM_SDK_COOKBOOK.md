@@ -24,7 +24,7 @@ If the SDK call throws, AgentLens records an error `llm.response` plus an `error
 Use `traceLlmCall` when you want full control over the SDK call:
 
 ```js
-import { createRun, finishRun, traceLlmCall, writeTrace } from "agentlens";
+import { createRun, finishRun, traceLlmCall, writeTrace } from "agentlens-devtools";
 
 const run = createRun({
   app: "support-agent",
@@ -70,7 +70,7 @@ try {
 Use `traceOpenAiCompatibleChat` when your client exposes `chat.completions.create`:
 
 ```js
-import { createRun, finishRun, traceOpenAiCompatibleChat, writeTrace } from "agentlens";
+import { createRun, finishRun, traceOpenAiCompatibleChat, writeTrace } from "agentlens-devtools";
 
 const run = createRun({
   app: "support-agent",
@@ -108,7 +108,7 @@ This helper normalizes common usage keys such as `prompt_tokens`, `completion_to
 Use `traceAnthropicCompatibleMessage` when your client exposes `messages.create`:
 
 ```js
-import { createRun, finishRun, traceAnthropicCompatibleMessage, writeTrace } from "agentlens";
+import { createRun, finishRun, traceAnthropicCompatibleMessage, writeTrace } from "agentlens-devtools";
 
 const run = createRun({
   app: "support-agent",

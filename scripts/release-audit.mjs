@@ -25,6 +25,7 @@ const requiredFiles = [
   "docs/LLM_SDK_COOKBOOK.md",
   "docs/PYTHON_TRACE_WRITER.md",
   "docs/PYTHON_PUBLISHING.md",
+  "docs/NPM_PUBLISHING.md",
   "docs/PYTHON_FRAMEWORK_COOKBOOK.md",
   "docs/OTEL_EXPORT.md",
   "docs/MULTI_AGENT_ADAPTERS.md",
@@ -71,6 +72,10 @@ const requiredFiles = [
 const requiredReadmeSnippets = [
   "Quick Demo",
   "JavaScript API",
+  "agentlens-devtools",
+  "npm exec --package agentlens-devtools",
+  "npm install -D agentlens-devtools",
+  "NPM_PUBLISHING.md",
   "provider-style SDK adapters",
   "LangGraph-style",
   "AutoGen-style",
@@ -95,6 +100,7 @@ const requiredReadmeSnippets = [
   "PYTHON_TRACE_WRITER.md",
   "PYTHON_PUBLISHING.md",
   "Python publishing",
+  "npm publishing",
   "TestPyPI",
   "Trusted Publishing",
   "python-publish.yml",
@@ -201,6 +207,9 @@ const requiredChineseReadmeSnippets = [
   "市场定位",
   "快速演示",
   "GitHub Actions",
+  "agentlens-devtools",
+  "npm exec --package agentlens-devtools",
+  "NPM_PUBLISHING.md",
   "MARKET_ANALYSIS.md",
   "LLM SDK cookbook",
   "Python trace writer",
@@ -286,6 +295,7 @@ function assertChineseReadme() {
 
 function assertPackage() {
   const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
+  if (packageJson.name !== "agentlens-devtools") fail("package.json name must be agentlens-devtools");
   if (packageJson.version !== releaseVersion) fail(`package.json version must be ${releaseVersion}`);
   if (packageJson.license !== "Apache-2.0") fail("package.json license must be Apache-2.0");
   if (!packageJson.bin?.agentlens) fail("package.json must expose agentlens bin");
@@ -441,6 +451,24 @@ function assertOtelBatchDocs() {
   }
 }
 
+function assertNpmPublishingDocs() {
+  const docs = fs.readFileSync("docs/NPM_PUBLISHING.md", "utf8");
+  const apiDocs = fs.readFileSync("docs/API.md", "utf8");
+  const readme = fs.readFileSync("README.md", "utf8");
+  for (const snippet of [
+    "agentlens-devtools",
+    "npm exec --package agentlens-devtools -- agentlens quickstart --python",
+    "npm install -D agentlens-devtools",
+    "npm publish --access public",
+    "npm view agentlens-devtools version",
+    "npm install agentlens"
+  ]) {
+    if (!docs.includes(snippet)) fail(`docs/NPM_PUBLISHING.md missing npm publishing snippet: ${snippet}`);
+  }
+  if (!apiDocs.includes('from "agentlens-devtools"')) fail('docs/API.md must import from "agentlens-devtools"');
+  if (!readme.includes("Do not use `npm install agentlens`")) fail("README.md must warn about the unrelated agentlens npm package");
+}
+
 function assertPythonPublishWorkflow() {
   const workflow = fs.readFileSync(".github/workflows/python-publish.yml", "utf8");
   const docs = fs.readFileSync("docs/PYTHON_PUBLISHING.md", "utf8");
@@ -478,6 +506,7 @@ assertScreenshotAssets();
 assertActionVersions();
 assertActionReviewPackSupport();
 assertOtelBatchDocs();
+assertNpmPublishingDocs();
 assertPythonPublishWorkflow();
 assertPackDryRun();
 

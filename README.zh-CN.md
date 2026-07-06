@@ -49,6 +49,7 @@ AgentLens 的差异化是：
 
 - 统一 trace schema，记录 prompt、response、tool call、retrieval、error、usage 和 metadata。
 - `agentlens quickstart` 一条命令生成本地 artifact pack：trace、eval、scan、dashboard、PR comment、OTLP、run bundle 和 share bundle。
+- 可发布的 npm package 名称为 `agentlens-devtools`，CLI 命令仍然是 `agentlens`。
 - 通用 LLM wrapper，可包住任意 SDK 调用。
 - OpenAI-compatible 和 Anthropic-compatible provider adapter。
 - LLM SDK cookbook，帮助把现有 provider client 接入本地 trace、CI 和 redaction workflow。
@@ -77,6 +78,18 @@ AgentLens 的差异化是：
 - GitHub Action 可为 baseline/candidate trace 输出 review pack。
 - Redacted share bundle，便于公开 issue、PR 或支持线程。
 - MCP stdio JSON-RPC demo、MCP tool inventory、MCP risk scanner 和 policy exception workflow。
+
+## 安装
+
+npm package 发布后，安装包名使用 `agentlens-devtools`，CLI 命令使用 `agentlens`：
+
+```bash
+npm exec --package agentlens-devtools -- agentlens quickstart --python
+npm install -D agentlens-devtools
+npx agentlens doctor
+```
+
+不要使用 `npm install agentlens`：这个 npm 名称已经被无关 package 占用。npm package 正式发布前，请使用下面的 clone 本地演示路径。
 
 ## 快速演示
 
@@ -204,6 +217,7 @@ agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
 - [Python publishing](docs/PYTHON_PUBLISHING.md)
+- [npm publishing](docs/NPM_PUBLISHING.md)
 - [Python framework cookbook](docs/PYTHON_FRAMEWORK_COOKBOOK.md)
 - [OpenTelemetry export](docs/OTEL_EXPORT.md)
 - [路线图](docs/ROADMAP.md)

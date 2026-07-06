@@ -30,7 +30,7 @@ Keys are matched case-insensitively and as substrings, so `x-api-key` and `custo
 ## API
 
 ```js
-import { readTrace, redactTrace, writeTrace } from "agentlens";
+import { readTrace, redactTrace, writeTrace } from "agentlens-devtools";
 
 const trace = readTrace(".agentlens/runs/demo.json");
 const redacted = redactTrace(trace, {

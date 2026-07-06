@@ -56,7 +56,7 @@ finishMcpRun(run, "passed");
 Use `scanMcpTools` when you have a `tools/list` response or a local list of MCP-style tool definitions:
 
 ```js
-import { addMcpToolManifest, scanMcpTools } from "agentlens";
+import { addMcpToolManifest, scanMcpTools } from "agentlens-devtools";
 
 const tools = [
   {
@@ -102,7 +102,7 @@ The stdio adapter starts `examples/mcp-stdio-server.mjs` as a child process and 
 Use `McpStdioTraceSession` when an agent needs to call more than one tool on the same MCP stdio server. The session initializes the server once, records an `mcp.tools` inventory event, traces each `tool.call` and `tool.result`, and stores basic diagnostics such as command, PID, stderr tail, exit code, and pending request count on result metadata.
 
 ```js
-import { McpStdioTraceSession, createMcpRun, finishMcpRun } from "agentlens";
+import { McpStdioTraceSession, createMcpRun, finishMcpRun } from "agentlens-devtools";
 
 const run = createMcpRun({
   app: "support-agent",

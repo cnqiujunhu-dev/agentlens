@@ -32,7 +32,7 @@ node ./bin/agentlens.js schema trace --out /tmp/agentlens.trace.schema.json
 ## API
 
 ```js
-import { listSchemas, readSchema, schemaPath } from "agentlens";
+import { listSchemas, readSchema, schemaPath } from "agentlens-devtools";
 
 console.log(listSchemas());
 console.log(schemaPath("trace"));

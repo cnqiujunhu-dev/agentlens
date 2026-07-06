@@ -53,6 +53,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 
 - Trace model for LLM prompts, responses, tool calls, retrieval, errors, usage, and metadata.
 - `agentlens quickstart` artifact pack for a one-command local demo with trace, eval, scan, dashboard, PR comment, OTLP, run bundle, and share bundle outputs.
+- Publishable npm package name `agentlens-devtools` with CLI command `agentlens`.
 - Generic LLM wrapper for tracing model calls from any SDK.
 - OpenAI-compatible and Anthropic-compatible provider adapter helpers.
 - LLM SDK cookbook for wiring existing provider clients into local traces.
@@ -104,9 +105,22 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Composite GitHub Action for failing PRs on agent eval regressions and scan findings.
 - Zero runtime dependencies in the MVP.
 
+## Install
+
+After the npm package is published, use `agentlens-devtools` as the package name and `agentlens` as the CLI command:
+
+```bash
+npm exec --package agentlens-devtools -- agentlens quickstart --python
+npm install -D agentlens-devtools
+npx agentlens doctor
+```
+
+Do not use `npm install agentlens`: that npm name is already occupied by an unrelated package. Until the npm package is published, use the clone-based Quick Demo below.
+
 ## Quick Demo
 
 ```bash
+npm install
 node ./bin/agentlens.js quickstart --python
 node ./bin/agentlens.js init
 node ./bin/agentlens.js init --python
@@ -357,7 +371,7 @@ agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 ## JavaScript API
 
 ```js
-import { addEvent, createRun, evaluateTrace, finishRun, scanTrace, writeTrace } from "agentlens";
+import { addEvent, createRun, evaluateTrace, finishRun, scanTrace, writeTrace } from "agentlens-devtools";
 
 const run = createRun({ app: "support-agent", name: "refund question" });
 addEvent(run, { type: "llm.prompt", name: "planner" });
@@ -393,6 +407,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
 - [Python publishing](docs/PYTHON_PUBLISHING.md)
+- [npm publishing](docs/NPM_PUBLISHING.md)
 - [Python framework cookbook](docs/PYTHON_FRAMEWORK_COOKBOOK.md)
 - [OpenTelemetry export](docs/OTEL_EXPORT.md)
 - [Agent regression PR example](docs/AGENT_REGRESSION_PR.md)
@@ -463,6 +478,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Trace model calls without binding to one LLM SDK.
 - Add AgentLens around existing provider SDK calls with a copyable cookbook.
 - Generate a clean quickstart artifact pack with `agentlens quickstart` before wiring your own traces.
+- Install the JavaScript CLI/API as `agentlens-devtools` while keeping `agentlens` as the command name.
 - Generate a PR-ready before/after review pack with `agentlens review`.
 - Write AgentLens-compatible sync/async traces from Python agent, RAG, and notebook code.
 - Import `agentlens_trace` from the zero-dependency Python package skeleton.
@@ -538,6 +554,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - GitHub PR comment Markdown renderer.
 - Init scaffolding for starter evals and GitHub Action examples.
 - Quickstart artifact pack via `agentlens quickstart`.
+- Publishable npm package identity as `agentlens-devtools` with `agentlens` CLI command.
 - Agent review artifact pack via `agentlens review`.
 - Python init scaffolding via `agentlens init --python`.
 - Generic LLM call adapter.

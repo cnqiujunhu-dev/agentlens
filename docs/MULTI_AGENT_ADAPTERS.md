@@ -16,7 +16,7 @@ Multi-agent systems often fail between agents: a planner gives weak instructions
 ## API
 
 ```js
-import { addAgentMessage, createMultiAgentRun, finishRun, traceAgentTask } from "agentlens";
+import { addAgentMessage, createMultiAgentRun, finishRun, traceAgentTask } from "agentlens-devtools";
 
 const run = createMultiAgentRun({
   app: "support-agent",

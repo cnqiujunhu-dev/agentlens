@@ -66,7 +66,7 @@ For PR review order, compact dashboard sections, and shareable filtered links, s
 ## API
 
 ```js
-import { writeRunBundle } from "agentlens";
+import { writeRunBundle } from "agentlens-devtools";
 
 const result = writeRunBundle({
   runsDir: ".agentlens/runs",

@@ -71,11 +71,21 @@ run(npm, [...npmBaseArgs, "install", "--no-audit", "--no-fund", tarball], { cwd:
 
 const installedRoot = path.join(projectDir, "node_modules", packageJson.name);
 const bin = path.join(installedRoot, "bin", "agentlens.js");
+const binShim = path.join(
+  projectDir,
+  "node_modules",
+  ".bin",
+  process.platform === "win32" ? "agentlens.cmd" : "agentlens"
+);
 assertExists(bin);
+assertExists(binShim);
 assertText(path.join(installedRoot, "README.md"), "agentlens quickstart");
+assertText(path.join(installedRoot, "README.md"), "agentlens-devtools");
 assertText(path.join(installedRoot, "README.zh-CN.md"), "快速演示");
+assertText(path.join(installedRoot, "README.zh-CN.md"), "agentlens-devtools");
 
 run(process.execPath, [bin, "quickstart", "--python"], { cwd: projectDir, stdio: "inherit" });
+run(npm, [...npmBaseArgs, "exec", "--", "agentlens", "doctor"], { cwd: projectDir, stdio: "inherit" });
 
 const quickstartDir = path.join(projectDir, ".agentlens", "quickstart");
 const traceFile = path.join(quickstartDir, "runs", "demo.json");
@@ -97,7 +107,7 @@ assertExists(path.join(quickstartDir, "reports", "otel", "manifest.json"));
 run(process.execPath, [
   "--input-type=module",
   "-e",
-  "const m = await import('agentlens'); if (!m.createRun || !m.runQuickstart || !m.writeOtelBatch) throw new Error('missing public exports');"
+  `const m = await import(${JSON.stringify(packageJson.name)}); if (!m.createRun || !m.runQuickstart || !m.writeOtelBatch) throw new Error('missing public exports');`
 ], { cwd: projectDir });
 
 console.log(`Pack install smoke passed: ${tarball}`);

@@ -31,7 +31,7 @@ Default behavior:
 ## API
 
 ```js
-import { formatScanReport, formatScanSarif, readTrace, scanTrace } from "agentlens";
+import { formatScanReport, formatScanSarif, readTrace, scanTrace } from "agentlens-devtools";
 
 const trace = readTrace(".agentlens/runs/demo.json");
 const report = scanTrace(trace, { failOnSeverity: "medium" });

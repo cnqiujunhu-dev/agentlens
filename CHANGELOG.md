@@ -6,6 +6,11 @@
 
 - Trusted Publishing workflow for `agentlens-trace` TestPyPI and PyPI releases.
 - Packed npm tarball install smoke check through `npm run pack:smoke`.
+- npm publishing guide for the JavaScript CLI/API package.
+
+### Changed
+
+- Renamed the npm distribution to `agentlens-devtools`; the CLI command remains `agentlens`, avoiding the unrelated occupied `agentlens` npm package name.
 
 ## 0.3.0
 
