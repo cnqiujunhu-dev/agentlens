@@ -81,6 +81,7 @@ Built:
 - LangChain-like object payload fixture for Python adapter compatibility checks.
 - Packed npm tarball install smoke check for clean-project quickstart validation.
 - Publishable npm package identity as `agentlens-devtools` with `agentlens` CLI command.
+- npm publish dry-run check for package metadata, packed files, and bin-field stability.
 
 Public launch status:
 

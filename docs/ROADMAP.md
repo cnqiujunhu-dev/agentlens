@@ -82,6 +82,7 @@ Shipped for the v0.3.0 release candidate:
 - Trusted Publishing workflow for TestPyPI/PyPI `agentlens-trace` releases.
 - Packed npm tarball install smoke check for clean-project first-run confidence.
 - Publishable npm package identity as `agentlens-devtools` with `agentlens` CLI command.
+- npm publish dry-run check for package metadata, packed files, and bin-field stability.
 
 Candidates:
 

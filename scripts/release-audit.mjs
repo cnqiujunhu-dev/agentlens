@@ -61,6 +61,7 @@ const requiredFiles = [
   "scripts/check-python-package.mjs",
   "scripts/check-python-publish.mjs",
   "scripts/check-pack-install.mjs",
+  "scripts/check-npm-publish.mjs",
   "scripts/run-python-framework-demo.mjs",
   "scripts/run-python-demo.mjs",
   "scripts/generate-regression-screenshot.mjs",
@@ -114,6 +115,7 @@ const requiredReadmeSnippets = [
   "python:package",
   "python:publish:check",
   "pack:smoke",
+  "npm:publish:check",
   "agentlens init --python",
   ".agentlens/python/basic_run.py",
   "python-github-action.yml",
@@ -228,6 +230,7 @@ const requiredChineseReadmeSnippets = [
   "python:package",
   "python:publish:check",
   "pack:smoke",
+  "npm:publish:check",
   "agentlens quickstart",
   "agentlens review",
   "QUICKSTART_ARTIFACTS.md",
@@ -298,13 +301,18 @@ function assertPackage() {
   if (packageJson.name !== "agentlens-devtools") fail("package.json name must be agentlens-devtools");
   if (packageJson.version !== releaseVersion) fail(`package.json version must be ${releaseVersion}`);
   if (packageJson.license !== "Apache-2.0") fail("package.json license must be Apache-2.0");
-  if (!packageJson.bin?.agentlens) fail("package.json must expose agentlens bin");
+  if (packageJson.bin?.agentlens !== "bin/agentlens.js") fail("package.json must expose agentlens bin as bin/agentlens.js");
+  if (packageJson.repository?.url !== "git+https://github.com/cnqiujunhu-dev/agentlens.git") fail("package.json repository must point to GitHub");
+  if (packageJson.bugs?.url !== "https://github.com/cnqiujunhu-dev/agentlens/issues") fail("package.json bugs must point to GitHub issues");
+  if (packageJson.homepage !== "https://github.com/cnqiujunhu-dev/agentlens#readme") fail("package.json homepage must point to GitHub README");
   if (!packageJson.files?.includes("python")) fail("package.json files must include python package sources");
   if (!packageJson.scripts?.["python:package"]) fail("package.json must expose python:package");
   if (!packageJson.scripts?.["python:publish:check"]) fail("package.json must expose python:publish:check");
   if (!packageJson.scripts?.["pack:smoke"]) fail("package.json must expose pack:smoke");
+  if (!packageJson.scripts?.["npm:publish:check"]) fail("package.json must expose npm:publish:check");
   if (!packageJson.scripts?.["otel:batch"]) fail("package.json must expose otel:batch");
   if (!packageJson.scripts?.verify?.includes("pack:smoke")) fail("package.json verify script must run pack:smoke");
+  if (!packageJson.scripts?.verify?.includes("npm:publish:check")) fail("package.json verify script must run npm:publish:check");
   if (!packageJson.scripts?.verify?.includes("otel:batch")) fail("package.json verify script must run otel:batch");
   for (const key of requiredPackageExports) {
     if (!packageJson.exports?.[key]) fail(`package.json missing export: ${key}`);
@@ -374,6 +382,7 @@ function assertPackDryRun() {
     "scripts/check-python-package.mjs",
     "scripts/check-python-publish.mjs",
     "scripts/check-pack-install.mjs",
+    "scripts/check-npm-publish.mjs",
     "scripts/run-python-framework-demo.mjs",
     "scripts/run-python-demo.mjs",
     "docs/assets/agentlens-demo.gif",
@@ -459,7 +468,9 @@ function assertNpmPublishingDocs() {
     "agentlens-devtools",
     "npm exec --package agentlens-devtools -- agentlens quickstart --python",
     "npm install -D agentlens-devtools",
+    "npm run npm:publish:check",
     "npm publish --access public",
+    "npm publish --dry-run",
     "npm view agentlens-devtools version",
     "npm install agentlens"
   ]) {

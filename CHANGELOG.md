@@ -7,6 +7,7 @@
 - Trusted Publishing workflow for `agentlens-trace` TestPyPI and PyPI releases.
 - Packed npm tarball install smoke check through `npm run pack:smoke`.
 - npm publishing guide for the JavaScript CLI/API package.
+- npm publish dry-run check through `npm run npm:publish:check`.
 
 ### Changed
 

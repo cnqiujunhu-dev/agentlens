@@ -44,11 +44,14 @@ Run these from the repository root before publishing:
 npm run verify
 npm run release:audit
 npm run pack:smoke
+npm run npm:publish:check
 npm pack --dry-run
 npm publish --dry-run
 ```
 
 `npm run pack:smoke` is the strongest local install gate. It packs the current repository, installs the tarball into a clean temporary project, runs `agentlens quickstart --python`, validates the generated trace, exports batch OTLP, and imports the public JavaScript API from `agentlens-devtools`.
+
+`npm run npm:publish:check` is the strongest local publish gate. It validates package metadata, README/API install snippets, packed file contents from `npm pack --dry-run --json`, and `npm publish --dry-run --json` output. It fails if npm reports package auto-correction, such as bin field cleanup, because that means the published package may differ from the repository manifest.
 
 ## Publish
 
