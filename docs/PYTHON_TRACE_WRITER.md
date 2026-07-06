@@ -28,6 +28,8 @@ The package skeleton lives in `python/agentlens-trace/` with distribution name `
 
 `npm run python:publish:check` performs a release-oriented local install smoke test. It installs `python/agentlens-trace` into a temporary target directory with `pip install --target`, inspects installed package metadata and `RECORD`, imports the installed package, runs `python -m agentlens_trace`, runs `python -m agentlens_trace.adapters`, and validates/evaluates/scans both generated traces.
 
+See [PYTHON_PUBLISHING.md](PYTHON_PUBLISHING.md) before TestPyPI or PyPI publication.
+
 Run the Python demo and then validate, evaluate, scan, and export the generated trace:
 
 ```bash

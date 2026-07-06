@@ -56,6 +56,7 @@ AgentLens 的差异化是：
 - PyPI-ready `agentlens-trace` package skeleton，import 名称为 `agentlens_trace`。
 - `agentlens_trace.adapters` 零依赖 Python adapter helpers。
 - `npm run python:publish:check`，用临时安装目录验证 Python package 发布前可用性。
+- Python publishing guide，覆盖 TestPyPI、PyPI Trusted Publishing、版本和回滚。
 - `agentlens init --python`，为 Python 项目生成 starter trace writer、示例 run 和 GitHub Action 模板。
 - Python framework cookbook，覆盖 `AgentLensLangChainBridge`、`AgentLensLlamaIndexBridge` 和 `AgentLensCrewAIBridge` trace 边界。
 - OpenTelemetry/OpenInference-style OTLP JSON 导出，便于接入已有 observability stack。
@@ -196,6 +197,7 @@ agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 - [Agent review packs](docs/AGENT_REVIEW.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
+- [Python publishing](docs/PYTHON_PUBLISHING.md)
 - [Python framework cookbook](docs/PYTHON_FRAMEWORK_COOKBOOK.md)
 - [OpenTelemetry export](docs/OTEL_EXPORT.md)
 - [路线图](docs/ROADMAP.md)

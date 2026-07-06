@@ -10,6 +10,7 @@ The public repo is not launch-ready until all of these are true:
 - `npm run release:audit` passes locally.
 - `npm pack --dry-run` includes the CLI, source, schemas, docs, README, license, and screenshot assets.
 - `.github/workflows/ci.yml` passes on GitHub.
+- [PYTHON_PUBLISHING.md](PYTHON_PUBLISHING.md) is current before publishing `agentlens-trace`.
 - The README shows the product, the five-minute demo, the GitHub Action, the roadmap, and launch materials.
 - A current demo screenshot or GIF is linked from the README.
 - The GitHub repo has a clear description, topics, license, issues, pull request template, support policy, code of conduct, and security policy.
@@ -113,6 +114,8 @@ npm run release:preflight
 ```
 
 Use the release notes from [LAUNCH_COPY.md](LAUNCH_COPY.md). Keep the wording scoped to the MVP: local-first tracing, replay, evals, dashboards, CI, MCP policy checks, redaction, JSONL traces, and provider-style adapters.
+
+For Python package publishing, follow [PYTHON_PUBLISHING.md](PYTHON_PUBLISHING.md). Rehearse on TestPyPI before the first real PyPI upload or after package metadata changes. Prefer PyPI Trusted Publishing through GitHub Actions instead of long-lived PyPI API tokens.
 
 ## Public Launch
 

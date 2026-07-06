@@ -60,6 +60,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - PyPI-ready `agentlens-trace` package skeleton with import name `agentlens_trace`.
 - Zero-dependency Python adapter helpers under `agentlens_trace.adapters`.
 - Local installed-package smoke check through `npm run python:publish:check`.
+- Python publishing guide for TestPyPI, PyPI Trusted Publishing, versioning, and rollback.
 - `agentlens init --python` starter scaffold for Python projects.
 - Python framework cookbook for `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` trace boundaries.
 - OpenTelemetry/OpenInference-style OTLP JSON export for existing observability stacks.
@@ -135,6 +136,8 @@ npm run demo:regression-pr
 `agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example. `agentlens init --python` also creates `.agentlens/python/basic_run.py`, `.agentlens/python/agentlens_trace.py`, and `.agentlens/examples/python-github-action.yml`.
 
 Python users can start from the `agentlens-trace` package skeleton in `python/agentlens-trace/`, from `examples/python-basic-run.py` and `examples/python-async-run.py`, or run `npm run demo:python` to write AgentLens-compatible sync/async traces, validate them, evaluate them, scan them, and export OTLP JSON. The package exposes `AgentLensRun`, `trace_llm_call`, `trace_async_llm_call`, and framework helpers through `agentlens_trace.adapters`. `npm run python:publish:check` installs the package into a temporary target directory and verifies the installed package entrypoints before a release.
+
+See [PYTHON_PUBLISHING.md](docs/PYTHON_PUBLISHING.md) for the Python package release path, including TestPyPI rehearsal, PyPI Trusted Publishing, versioning, and rollback.
 
 For framework-shaped Python projects, run `npm run demo:python:frameworks` or see `examples/python-framework-cookbook-run.py` for LangChain-style callbacks, LlamaIndex-style event hooks, and CrewAI-style task boundaries backed by `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge`.
 
@@ -382,6 +385,7 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Agent review packs](docs/AGENT_REVIEW.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
+- [Python publishing](docs/PYTHON_PUBLISHING.md)
 - [Python framework cookbook](docs/PYTHON_FRAMEWORK_COOKBOOK.md)
 - [OpenTelemetry export](docs/OTEL_EXPORT.md)
 - [Agent regression PR example](docs/AGENT_REGRESSION_PR.md)
@@ -457,6 +461,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Import `agentlens_trace` from the zero-dependency Python package skeleton.
 - Import `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` from `agentlens_trace.adapters`.
 - Verify the installed Python package path locally with `npm run python:publish:check`.
+- Follow the Python publishing guide before TestPyPI or PyPI uploads.
 - Bootstrap a Python project with `agentlens init --python`, then run `.agentlens/python/basic_run.py` in CI.
 - Add trace boundaries around LangChain-style, LlamaIndex-style, and CrewAI-style Python projects without adding framework dependencies to AgentLens.
 - Export local traces as OTLP JSON with OpenTelemetry/OpenInference-style attributes.
@@ -529,6 +534,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - PyPI-ready `agentlens-trace` package skeleton.
 - Zero-dependency Python framework bridge helpers under `agentlens_trace.adapters`.
 - Installed-package Python smoke check for release confidence.
+- Python publishing guide for TestPyPI and trusted publishing.
 - Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
 - OpenTelemetry/OpenInference-style OTLP JSON export.
 - LangGraph-style node adapter.
