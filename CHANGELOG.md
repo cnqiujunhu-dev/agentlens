@@ -5,6 +5,7 @@
 ### Added
 
 - Trusted Publishing workflow for `agentlens-trace` TestPyPI and PyPI releases.
+- Packed npm tarball install smoke check through `npm run pack:smoke`.
 
 ## 0.3.0
 

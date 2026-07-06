@@ -59,6 +59,7 @@ const requiredFiles = [
   "python/agentlens-trace/src/agentlens_trace/adapters/__main__.py",
   "scripts/check-python-package.mjs",
   "scripts/check-python-publish.mjs",
+  "scripts/check-pack-install.mjs",
   "scripts/run-python-framework-demo.mjs",
   "scripts/run-python-demo.mjs",
   "scripts/generate-regression-screenshot.mjs",
@@ -106,6 +107,7 @@ const requiredReadmeSnippets = [
   "AgentLensCrewAIBridge",
   "python:package",
   "python:publish:check",
+  "pack:smoke",
   "agentlens init --python",
   ".agentlens/python/basic_run.py",
   "python-github-action.yml",
@@ -216,6 +218,7 @@ const requiredChineseReadmeSnippets = [
   "LangChain-like object payload fixture",
   "python:package",
   "python:publish:check",
+  "pack:smoke",
   "agentlens quickstart",
   "agentlens review",
   "QUICKSTART_ARTIFACTS.md",
@@ -289,7 +292,9 @@ function assertPackage() {
   if (!packageJson.files?.includes("python")) fail("package.json files must include python package sources");
   if (!packageJson.scripts?.["python:package"]) fail("package.json must expose python:package");
   if (!packageJson.scripts?.["python:publish:check"]) fail("package.json must expose python:publish:check");
+  if (!packageJson.scripts?.["pack:smoke"]) fail("package.json must expose pack:smoke");
   if (!packageJson.scripts?.["otel:batch"]) fail("package.json must expose otel:batch");
+  if (!packageJson.scripts?.verify?.includes("pack:smoke")) fail("package.json verify script must run pack:smoke");
   if (!packageJson.scripts?.verify?.includes("otel:batch")) fail("package.json verify script must run otel:batch");
   for (const key of requiredPackageExports) {
     if (!packageJson.exports?.[key]) fail(`package.json missing export: ${key}`);
@@ -358,6 +363,7 @@ function assertPackDryRun() {
     "python/agentlens-trace/src/agentlens_trace/adapters/__main__.py",
     "scripts/check-python-package.mjs",
     "scripts/check-python-publish.mjs",
+    "scripts/check-pack-install.mjs",
     "scripts/run-python-framework-demo.mjs",
     "scripts/run-python-demo.mjs",
     "docs/assets/agentlens-demo.gif",

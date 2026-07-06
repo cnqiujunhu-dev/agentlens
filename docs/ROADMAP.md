@@ -80,6 +80,7 @@ Shipped for the v0.3.0 release candidate:
 - LangChain-like object payload fixture for Python adapter compatibility checks.
 - Batch OTLP export manifests for handing run directories to existing observability pipelines.
 - Trusted Publishing workflow for TestPyPI/PyPI `agentlens-trace` releases.
+- Packed npm tarball install smoke check for clean-project first-run confidence.
 
 Candidates:
 

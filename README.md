@@ -62,6 +62,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Local installed-package smoke check through `npm run python:publish:check`.
 - Python publishing guide for TestPyPI, PyPI Trusted Publishing, versioning, and rollback.
 - `.github/workflows/python-publish.yml` Trusted Publishing workflow for TestPyPI and PyPI handoff.
+- Tarball install smoke check through `npm run pack:smoke` for packaged CLI and API confidence.
 - `agentlens init --python` starter scaffold for Python projects.
 - Python framework cookbook for `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` trace boundaries.
 - LangChain-like object payload fixture for Python adapter confidence.
@@ -121,6 +122,7 @@ npm run demo:python
 npm run demo:python:frameworks
 npm run python:package
 npm run python:publish:check
+npm run pack:smoke
 PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
 node ./bin/agentlens.js share .agentlens/runs/demo.json --config .agentlens/evals/default.json --out .agentlens/share/demo --sections summary,timeline
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
@@ -466,6 +468,7 @@ The default threshold fails on `high` and `critical` findings. Medium findings, 
 - Import `agentlens_trace` from the zero-dependency Python package skeleton.
 - Import `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` from `agentlens_trace.adapters`.
 - Verify the installed Python package path locally with `npm run python:publish:check`.
+- Verify the packed npm tarball installs and runs from a clean temporary project with `npm run pack:smoke`.
 - Follow the Python publishing guide before TestPyPI or PyPI uploads.
 - Configure `.github/workflows/python-publish.yml` as a Trusted Publisher before uploading `agentlens-trace`.
 - Verify LangChain-like object payloads through `examples/python-langchain-fixture-run.py`.
@@ -544,6 +547,7 @@ See [ROADMAP.md](docs/ROADMAP.md) for release status, integration milestones, go
 - Installed-package Python smoke check for release confidence.
 - Python publishing guide for TestPyPI and trusted publishing.
 - Trusted Publishing workflow for TestPyPI and PyPI.
+- Packed npm tarball install smoke check for clean-project first-run confidence.
 - LangChain-like Python fixture for adapter payload confidence.
 - Python framework cookbook for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
 - OpenTelemetry/OpenInference-style OTLP JSON export with batch manifests.

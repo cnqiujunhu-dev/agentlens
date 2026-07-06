@@ -25,6 +25,7 @@ npm run verify
 node ./bin/agentlens.js quickstart --python
 npm run python:package
 npm run python:publish:check
+npm run pack:smoke
 PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .agentlens/runs/python-adapters-demo.json
 npm run doctor
 npm run validate:demo
@@ -46,6 +47,7 @@ Expected result:
 - `agentlens quickstart` writes an isolated `.agentlens/quickstart/` artifact pack.
 - `npm run python:package` verifies the `agentlens-trace` package import path, `agentlens_trace.adapters`, and demo trace.
 - `npm run python:publish:check` verifies local installability, installed package metadata, installed package files, and installed package entrypoints.
+- `npm run pack:smoke` verifies the packed npm tarball installs into a clean temporary project, runs `agentlens quickstart --python`, validates the generated trace, exports batch OTLP, and imports the public API.
 - `.github/workflows/python-publish.yml` builds distributions, runs Python smoke checks, and publishes only through Trusted Publishing.
 - `agentlens doctor` reports no failed checks.
 - `agentlens validate` reports no trace or eval config errors.

@@ -79,12 +79,13 @@ Built:
 - Zero-dependency Python bridge helpers under `agentlens_trace.adapters`.
 - Python framework cookbook demo for LangChain-style, LlamaIndex-style, and CrewAI-style projects.
 - LangChain-like object payload fixture for Python adapter compatibility checks.
+- Packed npm tarball install smoke check for clean-project quickstart validation.
 
 Public launch status:
 
 - Repository is public at `https://github.com/cnqiujunhu-dev/agentlens`.
 - `main` is pushed and configured as the default branch.
-- Latest published tag is `v0.2.0`; `v0.3.0` is the current team-workflow release target.
+- Latest published tag is `v0.3.0`; follow-up hardening is tracking toward the next patch or minor release.
 - GitHub Actions is expected to pass for both `main` and each release tag.
 
 ## Priority 1: Keep The Project Trustworthy
