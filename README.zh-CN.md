@@ -57,6 +57,8 @@ AgentLens 的差异化是：
 - **Agent 优先**：内置工具调用分组、timeline filter、trace diff、MCP risk、MCP policy、reviewed exception、owner/expiry check。
 - **低运维成本**：MVP 零运行时依赖，不需要 Postgres、ClickHouse、Redis、对象存储或长期运行的 dashboard 服务。
 
+核心切入点不是追踪所有生产请求，而是把一次失败或变化的 Agent run 变成 PR、issue、support thread、incident note 都能查看的静态证据。
+
 详细竞品分析见 [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md)。
 
 ## 你能得到什么

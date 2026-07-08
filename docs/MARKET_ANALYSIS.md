@@ -1,6 +1,6 @@
 # Market Analysis
 
-Last reviewed: 2026-07-05
+Last reviewed: 2026-07-08
 
 AgentLens competes in the crowded AI observability and evaluation market, but it should not try to become another hosted all-in-one platform. The strongest position is narrower and sharper: local-first agent debugging artifacts for developers who want trace, replay, eval, scan, diff, and PR review without standing up a backend.
 
@@ -40,6 +40,40 @@ The practical wedge is "agent regression review in GitHub", not "replace Langfus
 | OpenLLMetry | OpenTelemetry-based open-source instrumentation for LLM apps. | Non-intrusive instrumentation, exports to existing observability stacks, broad collector compatibility. | It is primarily instrumentation; AgentLens can provide developer-facing replay, eval, scan, dashboard, and PR artifacts on top of trace files. |
 | OpenLIT | OpenTelemetry-native AI engineering platform with tracing, evals, prompt hub, experiments, dashboards, and deployment management. | Strong OTel-native story, broad platform scope, dashboards and eval workflow. | AgentLens can stay dependency-light and artifact-oriented instead of becoming a full deployment/monitoring platform. |
 | Braintrust | AI observability and eval platform for measuring, comparing, improving, and deploying AI products. | Strong eval workflow, prompt iteration, production data feedback loop, enterprise collaboration. | AgentLens can focus on open local CI, static review artifacts, and governance checks before a team buys into a hosted workflow. |
+
+## Strategic Scorecard
+
+The market already has strong answers for hosted observability, prompt lifecycle management, eval datasets, human review queues, and production dashboards. AgentLens should win by making the missing developer artifact workflow excellent.
+
+| Buyer Need | Incumbent Pattern | AgentLens Move | Why This Can Win |
+| --- | --- | --- | --- |
+| Debug one bad agent run before merge | Hosted trace UI or framework-specific trace page | Plain JSON trace, deterministic replay, static dashboard, and `agentlens review` pack | Works in local development and PR review without account setup, data export, or rerunning the model. |
+| Prove a regression to reviewers | Dashboard link plus screenshots | Baseline/candidate diff, CI summary, SARIF, PR comment Markdown, run bundle, and manifest | Reviewers can inspect the evidence as a CI artifact even if they never log into an observability product. |
+| Share a failure safely | Support ticket or hosted project invite | Redacted share bundle with trace, dashboard, eval report, and scan report | Fits GitHub issues, Slack threads, customer support handoffs, and incident notes. |
+| Govern tool-using agents | Generic traces, custom tags, or platform policy | MCP tool inventory, risk classification, owner/expiry exceptions, eval gates | Tool governance is visible in the same workflow as trace review instead of living in a separate checklist. |
+| Adopt without platform commitment | Cloud account, API key, gateway, collector, or self-host stack | Clone repo, run quickstart, write local files, export OTLP JSON later | Reduces first-run friction and lets AgentLens complement Langfuse, Phoenix, OpenLIT, or existing APM later. |
+| Cover JS and Python teams | SDK-specific instrumentation | JavaScript CLI/API, zero-dependency Python writer, framework-shaped cookbook, package publish checks | Meets teams where agent prototypes actually live: mixed TypeScript services, Python notebooks, CI scripts, and framework experiments. |
+
+## Langfuse As A Reference, Not A Target
+
+Langfuse is a useful reference because it shows the mature platform shape: tracing, prompt management, evaluation, metrics, sessions, user tracking, OpenTelemetry ingestion, integrations, self-hosting, and collaborative workflows. Copying that full surface would make AgentLens weaker, not stronger.
+
+What to borrow:
+
+- Clear lifecycle language: trace, evaluate, iterate, monitor.
+- OpenTelemetry compatibility as an integration bridge.
+- Strong examples for common frameworks and provider SDKs.
+- A docs structure that helps users pick a starting path quickly.
+
+What not to copy yet:
+
+- Prompt registry and prompt deployment labels.
+- Hosted metrics dashboards and retention management.
+- Annotation queues, RBAC, org administration, billing, and enterprise controls.
+- Gateway or model-routing features.
+- A self-hosted platform architecture that requires persistent services before the local workflow is compelling.
+
+The strongest Langfuse-compatible positioning is: **AgentLens creates local review evidence before a trace is worth sending to a platform.** A team can use AgentLens for pre-merge regression review, attach the artifacts to a PR, and later export into Langfuse/Phoenix/OpenLIT-style telemetry flows when production monitoring is needed.
 
 ## Where AgentLens Is Strong Today
 
@@ -94,6 +128,30 @@ Do not compete head-on with Langfuse, LangSmith, Phoenix, or Braintrust on "comp
 - **MCP and tool governance**: make tool risk, server identity, permissions, reviewed exceptions, owners, and expiry dates visible in the same trace review flow.
 - **No-account debugging**: let a developer clone the repo, run `agentlens quickstart`, generate a trace, and inspect local review artifacts in minutes.
 - **Complement, not replace**: export AgentLens traces as OTLP JSON now, then add richer collector/protobuf paths so AgentLens can be used before or beside Langfuse/Phoenix/OpenLIT.
+
+## Broader Utility Thesis
+
+AgentLens should be useful even when a team later adopts a larger observability platform. That is the path to broader adoption:
+
+- **For solo developers**: a local artifact pack that explains what the agent did without a hosted service.
+- **For open-source maintainers**: reproducible failure bundles attached to issues and pull requests.
+- **For platform teams**: a CI gate that standardizes trace quality, redaction, evals, and scan outputs across projects.
+- **For security reviewers**: MCP/tool risk evidence with owner and expiry metadata, not just raw model logs.
+- **For support and incident teams**: redacted static bundles that can move through existing ticketing and chat workflows.
+- **For observability teams**: an upstream developer artifact source that can later emit OpenTelemetry/OpenInference-compatible data.
+
+This is broader than "LLM observability" because it crosses development, CI, review, security governance, support, and incident response.
+
+## Open-Source Growth Implications
+
+To become a large GitHub project, AgentLens should keep favoring visible, cloneable, demo-friendly workflows over invisible backend depth:
+
+1. Keep the first screen runnable in under a minute.
+2. Make every important feature produce a file a user can open, commit, upload, or attach.
+3. Prefer framework cookbooks and thin adapters over a heavy runtime dependency tree.
+4. Show real PR review artifacts, not only screenshots.
+5. Maintain Chinese and English entry points so the project can spread in both GitHub and Chinese developer communities.
+6. Be explicit that AgentLens complements hosted tools instead of attacking them; this makes adoption safer for teams that already use Langfuse, Phoenix, OpenLIT, LangSmith, Helicone, or Braintrust.
 
 ## Recommended Product Positioning
 

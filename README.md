@@ -59,7 +59,7 @@ AgentLens makes those questions inspectable with plain local files. No cloud acc
 
 ## Market Positioning
 
-AgentLens is not trying to replace Langfuse, LangSmith, Phoenix, Helicone, OpenLIT, OpenLLMetry, or Braintrust. Those projects are strong full-platform or telemetry-stack choices. AgentLens is the lightweight local and CI artifact layer you can adopt before a hosted observability platform: trace a run, replay it, scan it, diff it, gate it in CI, and attach static evidence to a pull request.
+AgentLens is not trying to replace Langfuse, LangSmith, Phoenix, Helicone, OpenLIT, OpenLLMetry, or Braintrust. Those projects are strong full-platform or telemetry-stack choices. AgentLens is the lightweight local and CI artifact layer you can adopt before a hosted observability platform: trace a run, replay it, scan it, diff it, gate it in CI, and attach static evidence to a pull request. The wedge is not tracking every production request; it is making one failed or changed agent run reviewable in a PR, issue, support thread, or incident note.
 
 See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison and roadmap implications.
 
