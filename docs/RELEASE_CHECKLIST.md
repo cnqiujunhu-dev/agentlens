@@ -69,6 +69,7 @@ Generate launch artifacts:
 
 ```bash
 npm run launch:demo
+npm run release:dashboard-screenshot
 npm run release:gif
 npm run diff:dashboard
 ```
@@ -76,11 +77,13 @@ npm run diff:dashboard
 Open these files before recording:
 
 - `.agentlens/launch/support-agent.html`
+- `.agentlens/launch/support-agent-workflow.html`
 - `.agentlens/launch/mcp-policy.html`
 - `.agentlens/launch/mcp-stdio.html`
 - `.agentlens/launch/langgraph-style.html`
 - `.agentlens/launch/unsafe-agent.html`
 - `.agentlens/reports/diff-demo.html`
+- `docs/assets/dashboard-screenshot.png`
 - `docs/assets/agentlens-demo.gif`
 
 Follow [DEMO_RECORDING.md](DEMO_RECORDING.md) for the shot list and export checks.

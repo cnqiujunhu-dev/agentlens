@@ -9,9 +9,10 @@ const viewport = "1280,720";
 const frameDelay = 180;
 const frameFiles = [
   [".agentlens/launch/support-agent.html", "01.png"],
-  [".agentlens/launch/mcp-policy.html", "02.png"],
-  [".agentlens/launch/langgraph-style.html", "03.png"],
-  [".agentlens/launch/unsafe-agent.html", "04.png"]
+  [".agentlens/launch/support-agent-workflow.html", "02.png"],
+  [".agentlens/launch/mcp-policy.html", "03.png"],
+  [".agentlens/launch/langgraph-style.html", "04.png"],
+  [".agentlens/launch/unsafe-agent.html", "05.png"]
 ];
 
 function fail(message) {
@@ -64,7 +65,8 @@ function findFfmpeg() {
 }
 
 function screenshot(browser, htmlFile, outFile) {
-  const absoluteHtml = path.resolve(htmlFile);
+  const [htmlPath, hash = ""] = htmlFile.split("#");
+  const absoluteHtml = path.resolve(htmlPath);
   if (!fs.existsSync(absoluteHtml)) fail(`Missing launch artifact: ${htmlFile}. Run npm run launch:demo first.`);
 
   const profileDir = path.join(framesDir, `${path.basename(outFile, ".png")}-profile`);
@@ -85,7 +87,7 @@ function screenshot(browser, htmlFile, outFile) {
       "--run-all-compositor-stages-before-draw",
       "--virtual-time-budget=1000",
       `--screenshot=${outFile}`,
-      pathToFileURL(absoluteHtml).href
+      `${pathToFileURL(absoluteHtml).href}${hash ? `#${hash}` : ""}`
     ],
     {
       encoding: "utf8",

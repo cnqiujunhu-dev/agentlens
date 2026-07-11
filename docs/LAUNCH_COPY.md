@@ -132,6 +132,7 @@ This release is designed for early feedback from developers wiring AgentLens int
 ```bash
 npm run verify
 npm run launch:demo
+npm run release:dashboard-screenshot
 npm run release:gif
 npm run diff:dashboard
 npm run release:preflight:local
@@ -141,6 +142,7 @@ Open:
 
 ```text
 .agentlens/launch/support-agent.html
+.agentlens/launch/support-agent-workflow.html
 .agentlens/launch/mcp-policy.html
 .agentlens/launch/langgraph-style.html
 .agentlens/launch/unsafe-agent.html

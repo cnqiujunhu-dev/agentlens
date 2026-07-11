@@ -63,6 +63,7 @@ const requiredFiles = [
   "scripts/check-pack-install.mjs",
   "scripts/check-npm-publish.mjs",
   "scripts/check-npm-postpublish.mjs",
+  "scripts/generate-dashboard-screenshot.mjs",
   "scripts/run-python-framework-demo.mjs",
   "scripts/run-python-demo.mjs",
   "scripts/generate-regression-screenshot.mjs",
@@ -424,9 +425,11 @@ function assertDemoGif() {
 }
 
 function assertScreenshotAssets() {
-  const stats = fs.statSync("docs/assets/regression-pr-diff.png");
   const maxBytes = 1024 * 1024;
-  if (stats.size > maxBytes) fail("docs/assets/regression-pr-diff.png must stay under 1 MB");
+  for (const file of ["docs/assets/dashboard-screenshot.png", "docs/assets/regression-pr-diff.png"]) {
+    const stats = fs.statSync(file);
+    if (stats.size > maxBytes) fail(`${file} must stay under 1 MB`);
+  }
 }
 
 function assertActionVersions() {

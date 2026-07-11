@@ -30,7 +30,10 @@ test("runQuickstart writes an isolated artifact pack", () => {
   assert.equal(result.status.eval, true);
   assert.equal(result.status.scan, true);
   assert.equal(result.status.ci, true);
-  assert.equal(readTrace(result.files.trace).app, "agentlens-demo");
+  const trace = readTrace(result.files.trace);
+  assert.equal(trace.app, "agentlens-demo");
+  assert.equal(trace.events.some((event) => event.type === "chain.start"), true);
+  assert.equal(trace.events.some((event) => event.type === "agent.task.start"), true);
 
   for (const file of [
     result.files.trace,
@@ -51,6 +54,7 @@ test("runQuickstart writes an isolated artifact pack", () => {
 
   assert.match(fs.readFileSync(result.files.prComment, "utf8"), /agentlens-ci-comment/);
   assert.match(fs.readFileSync(result.files.ciSummary, "utf8"), /Status:\*\* PASS/);
+  assert.match(fs.readFileSync(result.files.dashboard, "utf8"), /2 chains \/ 2 tasks \/ 0 errors/);
   assert.match(formatQuickstartReport(result, { root: dir }), /agentlens serve \.agentlens\/quickstart\/runs/);
 });
 

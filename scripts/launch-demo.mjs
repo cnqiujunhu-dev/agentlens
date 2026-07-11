@@ -25,6 +25,7 @@ function writeEvalReport(filePath, trace, configPath) {
 const supportTrace = createDemoRun();
 writeTrace(`${launchDir}/support-agent.json`, supportTrace);
 writeText(`${launchDir}/support-agent.html`, renderDashboard(supportTrace));
+writeText(`${launchDir}/support-agent-workflow.html`, renderDashboard(supportTrace, { sections: ["workflow", "timeline"] }));
 writeEvalReport(`${launchDir}/support-agent.eval.txt`, supportTrace, "evals/default.json");
 
 const mcpTrace = createMcpRun({
@@ -181,6 +182,7 @@ writeEvalReport(`${launchDir}/streaming-agent.eval.txt`, jsonlTrace, "evals/defa
 
 console.log(`Launch demo artifacts written to ${launchDir}`);
 console.log(`- ${launchDir}/support-agent.html`);
+console.log(`- ${launchDir}/support-agent-workflow.html`);
 console.log(`- ${launchDir}/mcp-policy.html`);
 console.log(`- ${launchDir}/mcp-stdio.html`);
 console.log(`- ${launchDir}/langgraph-style.html`);

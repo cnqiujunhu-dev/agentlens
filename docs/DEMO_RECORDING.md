@@ -24,6 +24,7 @@ Run:
 ```bash
 npm run verify
 npm run launch:demo
+npm run release:dashboard-screenshot
 npm run release:gif
 npm run bundle:demo
 npm run diff:dashboard
@@ -33,6 +34,7 @@ Open:
 
 ```text
 .agentlens/launch/support-agent.html
+.agentlens/launch/support-agent-workflow.html
 .agentlens/launch/mcp-policy.html
 .agentlens/launch/langgraph-style.html
 .agentlens/launch/unsafe-agent.html
@@ -91,15 +93,16 @@ Quality checklist:
 - The first 3 seconds show the product name and dashboard.
 - The final frame shows a useful result, not a blank terminal.
 
-## Scripted GIF
+## Scripted README Assets
 
-The committed README GIF can be regenerated with:
+The committed README screenshot and GIF can be regenerated with:
 
 ```bash
+npm run release:dashboard-screenshot
 npm run release:gif
 ```
 
-The script screenshots launch dashboard artifacts and writes `docs/assets/agentlens-demo.gif`.
+The screenshot script captures `.agentlens/launch/support-agent.html` and writes `docs/assets/dashboard-screenshot.png`. The GIF script screenshots launch dashboard artifacts and writes `docs/assets/agentlens-demo.gif`.
 
 ## After Manual Recording
 

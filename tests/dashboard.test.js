@@ -216,6 +216,7 @@ test("renderDashboard includes workflow review for chain, task, and error events
   const html = renderDashboard(trace);
 
   assert.match(html, /Workflow Review/);
+  assert.match(html, /id="agentlens-workflow-review"/);
   assert.match(html, /2 chains \/ 2 tasks \/ 2 errors/);
   assert.match(html, /RunnableSequence/);
   assert.match(html, /draft-answer/);

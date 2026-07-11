@@ -25,6 +25,19 @@ export function createDemoRun() {
   });
 
   addEvent(run, {
+    ts: isoAt(base, 45),
+    type: "chain.start",
+    name: "support-refund-flow",
+    input: {
+      question: "My item arrived damaged. Can I get a refund?"
+    },
+    metadata: {
+      framework: "manual-demo",
+      workflow: "support-refund-flow"
+    }
+  });
+
+  addEvent(run, {
     ts: isoAt(base, 90),
     type: "llm.prompt",
     name: "planner",
@@ -58,6 +71,21 @@ export function createDemoRun() {
           input: { query: "damaged item refund policy" }
         }
       ]
+    }
+  });
+
+  addEvent(run, {
+    ts: isoAt(base, 800),
+    type: "agent.task.start",
+    name: "lookup-refund-policy",
+    input: {
+      query: "damaged item refund policy"
+    },
+    metadata: {
+      framework: "manual-demo",
+      workflow: "support-refund-flow",
+      agent: "policy_researcher",
+      role: "researcher"
     }
   });
 
@@ -118,6 +146,22 @@ export function createDemoRun() {
   });
 
   addEvent(run, {
+    ts: isoAt(base, 1120),
+    type: "agent.task.end",
+    name: "lookup-refund-policy",
+    output: {
+      sourceIds: ["refund-policy-30d", "damaged-item-policy"],
+      resultCount: 2
+    },
+    metadata: {
+      framework: "manual-demo",
+      workflow: "support-refund-flow",
+      agent: "policy_researcher",
+      role: "researcher"
+    }
+  });
+
+  addEvent(run, {
     ts: isoAt(base, 1210),
     type: "llm.prompt",
     name: "final-answer",
@@ -146,6 +190,20 @@ export function createDemoRun() {
     output: {
       content: "Yes. If the item arrived damaged, you can request a refund within 30 days with proof of purchase. Support may ask for a photo of the damage before approving the refund or replacement.",
       citations: ["refund-policy-30d", "damaged-item-policy"]
+    }
+  });
+
+  addEvent(run, {
+    ts: isoAt(base, 1820),
+    type: "chain.end",
+    name: "support-refund-flow",
+    output: {
+      finalEvent: "final-answer",
+      citations: ["refund-policy-30d", "damaged-item-policy"]
+    },
+    metadata: {
+      framework: "manual-demo",
+      workflow: "support-refund-flow"
     }
   });
 

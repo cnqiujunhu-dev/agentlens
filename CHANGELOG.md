@@ -8,9 +8,12 @@
 - CrewAI-like agent, task, tool, and task output object fixture coverage for `agentlens_trace.adapters`.
 - LangChain-style chain boundary and callback error fixture coverage for `agentlens_trace.adapters`.
 - Static dashboard Workflow Review section for chain boundaries, agent tasks, and error markers.
+- Reproducible dashboard screenshot generation for README assets.
+- Focused launch dashboard artifact for showcasing Workflow Review in README GIFs.
 
 ### Changed
 
+- Demo traces now include chain and agent task boundary events so the default dashboard shows non-empty Workflow Review content.
 - README, Chinese README, launch copy, launch post, and demo recording guide now lead with artifact review outcomes and current Workflow Review dashboard capabilities.
 - Python framework bridge helpers now normalize LlamaIndex-style query bundles, `NodeWithScore`-style source nodes, node metadata, source citations, and usage metadata into readable AgentLens trace fields.
 - CrewAI-style bridge helpers now normalize agent roles, task descriptions, expected outputs, tool objects, and task output objects into readable AgentLens task and tool events.

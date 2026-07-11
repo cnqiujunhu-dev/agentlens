@@ -305,7 +305,7 @@ function renderWorkflowEvent(item) {
 function renderWorkflowSection(trace) {
   const { items, counts } = summarizeWorkflowEvents(trace);
   return `
-    <section class="section workflow-section">
+    <section id="agentlens-workflow-review" class="section workflow-section">
       <div class="section-title">
         <h2>Workflow Review</h2>
         <span class="section-badge">${counts.chains} chains / ${counts.tasks} tasks / ${counts.errors} errors</span>
