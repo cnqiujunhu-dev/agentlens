@@ -22,6 +22,7 @@ It writes a complete PR review bundle to `.agentlens/regression-pr/`:
   eval.json
   reports/
     ci-summary.md
+    pr-comment.md
     ci-report.txt
     agentlens-ci.sarif
     diff.html
@@ -42,6 +43,7 @@ The baseline trace passes. The candidate trace intentionally regresses:
 That produces:
 
 - a failing CI summary
+- a stable PR comment body with workflow diff deltas
 - SARIF scan findings for GitHub code scanning
 - a static diff dashboard showing status, cost, error, workflow, event, and tool deltas
 - a static run bundle with one dashboard per trace

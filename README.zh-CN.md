@@ -102,7 +102,7 @@ AgentLens 的差异化是：
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。
 - Deterministic replay，不重新调用模型也能复盘时间线。
 - before/after trace diff 和静态 diff dashboard，包含 workflow delta。
-- `agentlens review`，把 baseline/candidate trace 生成 PR-ready review pack。
+- `agentlens review`，把 baseline/candidate trace 生成 PR-ready review pack，并在 PR Markdown 里展示 workflow diff。
 - JSON eval rules，用于 required events、forbidden tools、workflow gate、cost、latency、citation、MCP policy。
 - 本地 security scan，检查 secret-shaped value、prompt injection phrase、高风险工具调用。
 - SARIF 输出，可接入 GitHub code scanning。
@@ -173,6 +173,7 @@ node ./bin/agentlens.js review .agentlens/runs/demo.json .agentlens/runs/failing
 
 ```text
 .agentlens/regression-pr/reports/ci-summary.md
+.agentlens/regression-pr/reports/pr-comment.md
 .agentlens/regression-pr/reports/agentlens-ci.sarif
 .agentlens/regression-pr/reports/diff.html
 .agentlens/regression-pr/reports/bundle/index.html

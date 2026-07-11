@@ -158,7 +158,7 @@ agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --
 agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json --fail-on-failure
 ```
 
-Review packs include copied traces, eval policy, CI summary, PR comment Markdown, SARIF, diff report, diff dashboard, and a static run bundle. See [AGENT_REVIEW.md](AGENT_REVIEW.md).
+Review packs include copied traces, eval policy, CI summary, PR comment Markdown, SARIF, diff report, diff dashboard, and a static run bundle. The CI summary and PR comment Markdown include workflow diff rows when a baseline/candidate diff is available. See [AGENT_REVIEW.md](AGENT_REVIEW.md).
 
 ## CLI JSON Output
 

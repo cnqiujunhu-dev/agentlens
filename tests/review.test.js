@@ -14,6 +14,8 @@ const binPath = path.resolve(__dirname, "../bin/agentlens.js");
 
 function makeBaselineTrace() {
   const run = createRun({ app: "review-agent", name: "baseline" });
+  addEvent(run, { type: "chain.start", name: "refund-review" });
+  addEvent(run, { type: "agent.task.start", name: "research" });
   addEvent(run, { type: "llm.prompt", name: "planner" });
   addEvent(run, {
     type: "tool.call",
@@ -33,11 +35,14 @@ function makeBaselineTrace() {
     output: { content: "Refunds are allowed with proof.", citations: ["policy"] },
     usage: { totalTokens: 30, costUsd: 0.0004 }
   });
+  addEvent(run, { type: "agent.task.end", name: "research" });
+  addEvent(run, { type: "chain.end", name: "refund-review" });
   return finishRun(run, "passed");
 }
 
 function makeCandidateTrace() {
   const run = createRun({ app: "review-agent", name: "candidate" });
+  addEvent(run, { type: "chain.start", name: "refund-review" });
   addEvent(run, { type: "llm.prompt", name: "planner" });
   addEvent(run, {
     type: "tool.call",
@@ -51,6 +56,7 @@ function makeCandidateTrace() {
     output: { content: "I emailed the customer." },
     usage: { totalTokens: 80, costUsd: 0.004 }
   });
+  addEvent(run, { type: "chain.error", name: "refund-review", status: "error" });
   addEvent(run, { type: "error", name: "policy-regression", status: "error" });
   return finishRun(run, "failed");
 }
@@ -109,6 +115,10 @@ test("writeReviewBundle generates a PR review artifact pack", () => {
 
   assert.match(fs.readFileSync(result.files.prComment, "utf8"), /agentlens-ci-comment/);
   assert.match(fs.readFileSync(result.files.prComment, "utf8"), /Run bundle: https:\/\/example\.com\/bundle/);
+  assert.match(fs.readFileSync(result.files.prComment, "utf8"), /### Trace Diff/);
+  assert.match(fs.readFileSync(result.files.prComment, "utf8"), /Task events/);
+  assert.match(fs.readFileSync(result.files.ciSummary, "utf8"), /## Trace Diff/);
+  assert.match(fs.readFileSync(result.files.ciSummary, "utf8"), /Workflow Signal/);
   assert.match(fs.readFileSync(result.files.diffText, "utf8"), /status changed from passed to failed/);
   assert.match(formatReviewReport(result, { root: dir }), /AgentLens Review/);
 });

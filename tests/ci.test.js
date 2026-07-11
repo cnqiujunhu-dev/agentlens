@@ -77,6 +77,30 @@ test("runCi can fail traces on scan findings", () => {
   assert.match(formatCiPrComment(summary, { artifactUrl: "https://example.com/bundle", sarifUrl: "https://example.com/sarif" }), /Run bundle: https:\/\/example\.com\/bundle/);
 });
 
+test("CI markdown formatters can include trace diff workflow summaries", () => {
+  const summary = {
+    runsDir: ".agentlens/runs",
+    scan: { enabled: false, failOnSeverity: "high" },
+    total: 1,
+    passed: 1,
+    failed: 0,
+    results: [{ file: ".agentlens/runs/demo.json", traceId: "run_demo", name: "demo", passed: true, report: { results: [] } }]
+  };
+  const diff = {
+    regressions: ["task events decreased by 2"],
+    workflow: [
+      { name: "Chain events", baseline: 2, candidate: 2, delta: 0 },
+      { name: "Task events", baseline: 2, candidate: 0, delta: -2 },
+      { name: "Workflow errors", baseline: 0, candidate: 1, delta: 1 }
+    ]
+  };
+
+  assert.match(formatCiMarkdown(summary, { diff }), /## Trace Diff/);
+  assert.match(formatCiMarkdown(summary, { diff }), /Task events/);
+  assert.match(formatCiPrComment(summary, { diff }), /### Trace Diff/);
+  assert.match(formatCiPrComment(summary, { diff }), /\+1/);
+});
+
 test("runCi scan fail-on none reports findings without failing traces", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-ci-scan-none-"));
   writeTrace(path.join(dir, "secret.json"), makeSecretTrace());

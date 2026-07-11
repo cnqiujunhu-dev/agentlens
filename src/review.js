@@ -115,12 +115,13 @@ export function writeReviewBundle({
     readme: path.join(outDir, "README.md")
   };
 
-  writeText(files.ciSummary, `${formatCiMarkdown(ciReport)}\n`);
+  writeText(files.ciSummary, `${formatCiMarkdown(ciReport, { diff })}\n`);
   writeText(
     files.prComment,
     `${formatCiPrComment(ciReport, {
       artifactUrl,
-      sarifUrl
+      sarifUrl,
+      diff
     })}\n`
   );
   writeText(files.ciReport, `${formatCiReport(ciReport)}\n`);

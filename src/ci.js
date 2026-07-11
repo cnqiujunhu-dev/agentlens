@@ -120,6 +120,36 @@ function escapeMarkdownCell(value) {
     .replaceAll("\n", " ");
 }
 
+function formatSignedDelta(value) {
+  if (value === null || value === undefined) return "unknown";
+  if (value === 0) return "0";
+  return `${value > 0 ? "+" : ""}${value}`;
+}
+
+function appendDiffSummary(lines, diff, { heading = "## Trace Diff" } = {}) {
+  if (!diff) return;
+
+  const regressions = diff.regressions ?? [];
+  lines.push("", heading, "");
+  lines.push(`**Diff regressions:** ${regressions.length}`);
+
+  if (regressions.length > 0) {
+    for (const regression of regressions) lines.push(`- ${escapeMarkdownCell(regression)}`);
+  } else {
+    lines.push("- none detected");
+  }
+
+  if ((diff.workflow ?? []).length > 0) {
+    lines.push("", "| Workflow Signal | Baseline | Candidate | Delta |");
+    lines.push("| --- | ---: | ---: | ---: |");
+    for (const row of diff.workflow) {
+      lines.push(
+        `| ${escapeMarkdownCell(row.name)} | ${escapeMarkdownCell(row.baseline)} | ${escapeMarkdownCell(row.candidate)} | ${escapeMarkdownCell(formatSignedDelta(row.delta))} |`
+      );
+    }
+  }
+}
+
 function failedAssertions(result) {
   if (result.error) return [result.error];
   const evalFailures = (result.report?.results ?? [])
@@ -131,7 +161,7 @@ function failedAssertions(result) {
   return [...evalFailures, ...scanFailures];
 }
 
-export function formatCiMarkdown(summary) {
+export function formatCiMarkdown(summary, { diff = undefined } = {}) {
   const status = summary.failed === 0 && summary.total > 0 ? "PASS" : "FAIL";
   const lines = [
     "## AgentLens CI",
@@ -156,6 +186,8 @@ export function formatCiMarkdown(summary) {
     lines.push(`| \`${escapeMarkdownCell(result.file)}\` | ${result.passed ? "PASS" : "FAIL"} | ${failures.length > 0 ? escapeMarkdownCell(failures.join("; ")) : "none"} |`);
   }
 
+  appendDiffSummary(lines, diff);
+
   return lines.join("\n");
 }
 
@@ -167,7 +199,7 @@ function statusIcon(summary) {
   return summary.failed === 0 && summary.total > 0 ? "PASS" : "FAIL";
 }
 
-export function formatCiPrComment(summary, { title = "AgentLens CI", artifactUrl = undefined, sarifUrl = undefined } = {}) {
+export function formatCiPrComment(summary, { title = "AgentLens CI", artifactUrl = undefined, sarifUrl = undefined, diff = undefined } = {}) {
   const status = statusIcon(summary);
   const failed = failedResults(summary);
   const lines = [
@@ -204,6 +236,8 @@ export function formatCiPrComment(summary, { title = "AgentLens CI", artifactUrl
       lines.push(`| \`${escapeMarkdownCell(result.file)}\` | ${escapeMarkdownCell(failures.join("; ") || "unknown failure")} |`);
     }
   }
+
+  appendDiffSummary(lines, diff, { heading: "### Trace Diff" });
 
   lines.push("");
   lines.push("<details>");

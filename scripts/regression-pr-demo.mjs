@@ -1,6 +1,6 @@
 import path from "node:path";
 import { writeRunBundle } from "../src/bundle.js";
-import { formatCiMarkdown, formatCiReport, formatCiSarif, runCi } from "../src/ci.js";
+import { formatCiMarkdown, formatCiPrComment, formatCiReport, formatCiSarif, runCi } from "../src/ci.js";
 import { compareTraces, formatTraceDiff } from "../src/diff.js";
 import { renderDiffDashboard } from "../src/diff-dashboard.js";
 import { ensureDir, writeJson, writeText, writeTrace } from "../src/store.js";
@@ -58,6 +58,16 @@ function makeBaselineTrace() {
   });
 
   addEvent(run, {
+    type: "chain.start",
+    name: "refund-review",
+    metadata: { workflow: "refund-review", phase: "baseline" }
+  });
+  addEvent(run, {
+    type: "agent.task.start",
+    name: "research-refund-policy",
+    metadata: { workflow: "refund-review", agent: "researcher" }
+  });
+  addEvent(run, {
     type: "llm.prompt",
     name: "planner",
     input: { messages: [{ role: "user", content: "Can I refund a damaged item?" }] },
@@ -89,6 +99,16 @@ function makeBaselineTrace() {
     },
     usage: { inputTokens: 120, outputTokens: 36, costUsd: 0.0011 }
   });
+  addEvent(run, {
+    type: "agent.task.end",
+    name: "research-refund-policy",
+    metadata: { workflow: "refund-review", agent: "researcher" }
+  });
+  addEvent(run, {
+    type: "chain.end",
+    name: "refund-review",
+    metadata: { workflow: "refund-review", phase: "baseline" }
+  });
 
   finishRun(run, "passed");
   return run;
@@ -101,6 +121,11 @@ function makeCandidateTrace() {
     metadata: { scenario: "agent-regression-pr", variant: "candidate" }
   });
 
+  addEvent(run, {
+    type: "chain.start",
+    name: "refund-review",
+    metadata: { workflow: "refund-review", phase: "candidate" }
+  });
   addEvent(run, {
     type: "llm.prompt",
     name: "planner",
@@ -147,6 +172,13 @@ function makeCandidateTrace() {
     usage: { inputTokens: 220, outputTokens: 58, costUsd: 0.0036 }
   });
   addEvent(run, {
+    type: "chain.error",
+    name: "refund-review",
+    status: "error",
+    output: { message: "Candidate skipped the research task boundary and made an outbound action." },
+    metadata: { workflow: "refund-review", phase: "candidate" }
+  });
+  addEvent(run, {
     type: "error",
     name: "policy-regression",
     status: "error",
@@ -174,6 +206,7 @@ This folder is a local stand-in for the artifacts you would attach to a pull req
 - \`runs/candidate.json\`: failing trace after the change.
 - \`eval.json\`: PR-specific eval rules.
 - \`reports/ci-summary.md\`: Markdown summary suitable for \`GITHUB_STEP_SUMMARY\`.
+- \`reports/pr-comment.md\`: stable PR comment body with workflow diff summary.
 - \`reports/ci-report.txt\`: plain text CI report.
 - \`reports/agentlens-ci.sarif\`: SARIF scan results for GitHub code scanning.
 - \`reports/diff.html\`: static before/after trace diff dashboard.
@@ -206,7 +239,8 @@ const summary = runCi({
 });
 const diff = compareTraces(baseline, candidate);
 
-writeText(path.join(reportsDir, "ci-summary.md"), formatCiMarkdown(summary));
+writeText(path.join(reportsDir, "ci-summary.md"), formatCiMarkdown(summary, { diff }));
+writeText(path.join(reportsDir, "pr-comment.md"), formatCiPrComment(summary, { diff }));
 writeText(path.join(reportsDir, "ci-report.txt"), formatCiReport(summary));
 writeJson(path.join(reportsDir, "agentlens-ci.sarif"), formatCiSarif(summary));
 writeText(path.join(reportsDir, "diff.txt"), formatTraceDiff(diff));
@@ -218,6 +252,7 @@ console.log("AgentLens regression PR demo written to .agentlens/regression-pr");
 console.log(`- ${baselinePath}`);
 console.log(`- ${candidatePath}`);
 console.log(`- ${path.join(reportsDir, "ci-summary.md")}`);
+console.log(`- ${path.join(reportsDir, "pr-comment.md")}`);
 console.log(`- ${path.join(reportsDir, "agentlens-ci.sarif")}`);
 console.log(`- ${path.join(reportsDir, "diff.html")}`);
 console.log(`- ${bundle.index}`);
