@@ -96,6 +96,21 @@ test("Python framework cookbook demo produces framework-shaped traces", () => {
   assert.equal(fixtureRetrieval.output.documents[0].page_content.includes("Refunds are available"), true);
   assert.equal(fixtureRetrieval.output.documents[0].metadata.doc_id, "lc_refund_policy");
   assert.equal(fixtureRetrieval.metadata.parent_run_id, "lc_fixture_chain");
+
+  const llamaindex = JSON.parse(fs.readFileSync(path.join(runsDir, "python-llamaindex-style-demo.json"), "utf8"));
+  const llamaindexQuery = llamaindex.events.find((event) => event.type === "retrieval.query");
+  assert.equal(llamaindexQuery.input.query, "return policy evidence");
+
+  const llamaindexRetrieval = llamaindex.events.find((event) => event.type === "retrieval.result");
+  assert.equal(llamaindexRetrieval.output.documents[0].id, "li_refund_policy_node");
+  assert.equal(llamaindexRetrieval.output.documents[0].text.includes("Refund policy evidence"), true);
+  assert.equal(llamaindexRetrieval.output.documents[0].metadata.source, "llamaindex-refund-policy.md");
+  assert.equal(llamaindexRetrieval.output.documents[0].score, 0.91);
+
+  const llamaindexResponse = llamaindex.events.find((event) => event.type === "llm.response");
+  assert.equal(llamaindexResponse.output.content, "The retrieved policy says refunds are allowed within 30 days.");
+  assert.equal(llamaindexResponse.output.citations.includes("llamaindex-refund-policy.md"), true);
+  assert.equal(llamaindexResponse.usage.totalTokens, 24);
 });
 
 test("Python package smoke check produces an AgentLens-compatible trace", () => {

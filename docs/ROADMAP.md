@@ -91,6 +91,7 @@ Shipped for the v0.3.1 release candidate:
 - Publishable npm package identity as `agentlens-devtools` with `agentlens` CLI command.
 - npm publish dry-run check for package metadata, packed files, and bin-field stability.
 - Post-publish npm registry smoke check for clean-project quickstart verification.
+- LlamaIndex-style QueryBundle and source node normalization for Python framework bridge helpers.
 
 Candidates:
 

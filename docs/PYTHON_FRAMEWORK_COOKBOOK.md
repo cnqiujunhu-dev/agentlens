@@ -4,7 +4,7 @@ AgentLens' Python trace writer is intentionally plain JSON. This cookbook shows 
 
 The examples are runnable simulations. They do not import LangChain, LlamaIndex, or CrewAI, so the repository stays dependency-light. The `agentlens-trace` package now includes importable zero-dependency bridge helpers under `agentlens_trace.adapters`; copy those helpers or wire them into the matching framework boundary in your project.
 
-The helpers normalize common framework-shaped payloads: plain dicts, enum-like event names and payload keys, message objects with `role`/`type` and `content`, response objects with usage metadata, and source document metadata used for citations.
+The helpers normalize common framework-shaped payloads: plain dicts, enum-like event names and payload keys, message objects with `role`/`type` and `content`, LangChain-like document objects, LlamaIndex-like query bundles and source nodes, response objects with usage metadata, and source document metadata used for citations.
 
 Start a Python project with `agentlens init --python` if you want the trace writer and a CI-ready starter under `.agentlens/python/`. For package-style local development, use `PYTHONPATH=python/agentlens-trace/src` and import `agentlens_trace`.
 
@@ -88,6 +88,13 @@ bridge.event_end("RETRIEVE", {"nodes": [{"id": "node_refund_policy", "score": 0.
 bridge.event_start("LLM", {"prompt": "Use retrieved policy evidence to answer the refund question."})
 bridge.event_end("LLM", {"content": "Refunds are available within 30 days.", "citations": ["node_refund_policy"]})
 ```
+
+The runnable demo also exercises object-shaped payloads similar to `QueryBundle`, `NodeWithScore`, and response objects with `source_nodes`. The bridge normalizes those into readable `retrieval.query`, `retrieval.result`, and `llm.response` fields:
+
+- query bundle objects become the plain query string.
+- source node objects keep node id, text, score, and metadata.
+- response `source_nodes` become citations.
+- usage metadata is copied to the AgentLens `usage` field.
 
 If your query engine does not expose enough callback payload, wrap `retrieve(...)`, `query(...)`, or `aquery(...)` directly and record the same events.
 

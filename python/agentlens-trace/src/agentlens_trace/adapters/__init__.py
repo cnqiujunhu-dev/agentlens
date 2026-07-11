@@ -40,10 +40,103 @@ def _document_safe(value: Any) -> Any:
     return safe
 
 
+def _call_without_args(value: Any, method_name: str) -> Any:
+    method = getattr(value, method_name, None)
+    if not callable(method):
+        return None
+    try:
+        return method()
+    except TypeError:
+        return None
+    except Exception:
+        return None
+
+
+def _query_safe(value: Any) -> Any:
+    query = _first_value(value, ("query", "query_str", "text", "content"), None)
+    if query is not None:
+        return _json_safe(query)
+    return _json_safe(value)
+
+
+def _node_text(value: Any) -> Optional[str]:
+    content = _first_value(value, ("page_content", "text", "content"), None)
+    if content is not None:
+        return _as_text(content)
+
+    for method_name in ("get_content", "get_text"):
+        content = _call_without_args(value, method_name)
+        if content is not None:
+            return _as_text(content)
+    return None
+
+
+def _citation_label(value: Any) -> Optional[str]:
+    node = _lookup(value, "node", None)
+    if node is not None:
+        nested = _citation_label(node)
+        if nested is not None:
+            return nested
+
+    metadata = _lookup(value, "metadata", None)
+    citation = _first_value(metadata, ("source", "id", "doc_id", "node_id", "file_name"), None)
+    if citation is not None:
+        return _as_text(citation)
+
+    citation = _first_value(value, ("source", "id", "id_", "node_id", "doc_id", "name"), None)
+    if citation is not None:
+        return _as_text(citation)
+    return None
+
+
+def _source_document_safe(value: Any) -> Any:
+    node = _lookup(value, "node", None)
+    if node is None and getattr(value, "page_content", None) is not None:
+        return _document_safe(value)
+
+    target = node if node is not None else value
+    node_id = _first_value(target, ("id", "id_", "node_id", "doc_id"), None)
+    metadata = _first_value(target, ("metadata", "extra_info"), None)
+    score = _first_value(value, ("score", "similarity", "similarity_score"), None)
+    text = _node_text(target)
+
+    if node is not None or node_id is not None or metadata is not None or score is not None or text is not None:
+        document: Dict[str, Any] = {}
+        if node_id is not None:
+            document["id"] = _as_text(node_id)
+        if text is not None:
+            document["text"] = text
+        if score is not None:
+            document["score"] = _json_safe(score)
+        if metadata is not None:
+            document["metadata"] = _json_safe(metadata)
+        return document
+
+    return _document_safe(value)
+
+
 def _documents_safe(value: Any) -> Any:
     if isinstance(value, (list, tuple, set)):
-        return [_document_safe(item) for item in value]
-    return _document_safe(value)
+        return [_source_document_safe(item) for item in value]
+    return _source_document_safe(value)
+
+
+def _citations_from_sources(value: Any) -> Optional[List[str]]:
+    if value is None:
+        return None
+    if isinstance(value, str):
+        return [value]
+    try:
+        citations: List[str] = []
+        for item in value:
+            citation = _citation_label(item)
+            if citation is None:
+                citation = _as_text(item)
+            citations.append(citation)
+        return citations
+    except TypeError:
+        citation = _citation_label(value)
+        return [_as_text(citation if citation is not None else value)]
 
 
 def _key_label(value: Any) -> str:
@@ -185,21 +278,8 @@ def _generation_content(generation: Any) -> str:
 
 
 def _response_citations(response: Any) -> Optional[List[str]]:
-    value = _first_value(response, ("citations", "sources", "source_documents"), None)
-    if value is None:
-        return None
-    if isinstance(value, str):
-        return [value]
-    try:
-        citations = []
-        for item in value:
-            citation = _first_value(item, ("id", "source", "name"), None)
-            if citation is None:
-                citation = _first_value(_lookup(item, "metadata", None), ("id", "source", "doc_id"), item)
-            citations.append(_as_text(citation))
-        return citations
-    except TypeError:
-        return [_as_text(value)]
+    value = _first_value(response, ("citations", "sources", "source_documents", "source_nodes", "nodes"), None)
+    return _citations_from_sources(value)
 
 
 def _response_usage(response: Any) -> Optional[Dict[str, Any]]:
@@ -389,13 +469,13 @@ class AgentLensLlamaIndexBridge:
             query = _payload_value(payload, ("query", "query_str", "str_or_query_bundle"), "")
             self.run.add_tool_call(
                 tool_name,
-                input={"query": _json_safe(query)},
+                input={"query": _query_safe(query)},
                 metadata=self._metadata(data),
             )
             return self.run.add_event(
                 "retrieval.query",
                 name=name,
-                input={"query": _json_safe(query)},
+                input={"query": _query_safe(query)},
                 metadata=self._metadata(data),
             )
 
@@ -422,14 +502,14 @@ class AgentLensLlamaIndexBridge:
             documents = _payload_value(payload, ("nodes", "documents", "source_nodes"), [])
             self.run.add_tool_result(
                 tool_name,
-                output={"documents": _json_safe(documents)},
+                output={"documents": _documents_safe(documents)},
                 duration_ms=duration_ms,
                 metadata=self._metadata(data),
             )
             return self.run.add_event(
                 "retrieval.result",
                 name=name,
-                output={"documents": _json_safe(documents)},
+                output={"documents": _documents_safe(documents)},
                 duration_ms=duration_ms,
                 metadata=self._metadata(data),
             )

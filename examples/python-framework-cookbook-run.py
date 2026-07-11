@@ -7,6 +7,39 @@ from agentlens_trace import AgentLensRun, init_workspace
 from agentlens_trace.adapters import AgentLensCrewAIBridge, AgentLensLangChainBridge, AgentLensLlamaIndexBridge
 
 
+class FakeLlamaIndexQueryBundle:
+    def __init__(self, query_str):
+        self.query_str = query_str
+
+
+class FakeLlamaIndexNode:
+    def __init__(self, node_id, text, metadata):
+        self.node_id = node_id
+        self.metadata = metadata
+        self._text = text
+
+    def get_content(self):
+        return self._text
+
+
+class FakeLlamaIndexNodeWithScore:
+    def __init__(self, node, score):
+        self.node = node
+        self.score = score
+
+
+class FakeLlamaIndexResponse:
+    def __init__(self, response, source_nodes):
+        self.response = response
+        self.source_nodes = source_nodes
+        self.usage_metadata = {
+            "inputTokens": 13,
+            "outputTokens": 11,
+            "totalTokens": 24,
+            "costUsd": 0.0002,
+        }
+
+
 def write_langchain_style(out_dir: Path) -> Path:
     run = AgentLensRun(
         app="python-langchain-style-agent",
@@ -40,14 +73,29 @@ def write_llamaindex_style(out_dir: Path) -> Path:
     )
 
     bridge = AgentLensLlamaIndexBridge(run, provider="mock-llamaindex-provider", model="demo-model")
-    bridge.event_start("RETRIEVE", {"query": "return policy evidence"}, permission="read-only", risk="low")
-    bridge.event_end("RETRIEVE", {"nodes": [{"id": "node_refund_policy", "score": 0.91}]}, duration_ms=46)
+    query = FakeLlamaIndexQueryBundle("return policy evidence")
+    source_nodes = [
+        FakeLlamaIndexNodeWithScore(
+            FakeLlamaIndexNode(
+                "li_refund_policy_node",
+                "Refund policy evidence says refunds are available within 30 days.",
+                {"source": "llamaindex-refund-policy.md", "doc_id": "li_refund_policy", "category": "policy"},
+            ),
+            0.91,
+        )
+    ]
+
+    bridge.event_start("RETRIEVE", {"str_or_query_bundle": query}, permission="read-only", risk="low")
+    bridge.event_end("RETRIEVE", {"source_nodes": source_nodes}, duration_ms=46)
     bridge.event_start("LLM", {"prompt": "Use retrieved policy evidence to answer the refund question."})
-    bridge.event_end("LLM", {
-        "content": "The retrieved policy says refunds are allowed within 30 days.",
-        "citations": ["node_refund_policy"],
-        "usage": {"inputTokens": 11, "outputTokens": 10, "totalTokens": 21, "costUsd": 0.0002},
-    }, duration_ms=109)
+    bridge.event_end(
+        "LLM",
+        FakeLlamaIndexResponse(
+            "The retrieved policy says refunds are allowed within 30 days.",
+            source_nodes,
+        ),
+        duration_ms=109,
+    )
 
     run.finish("passed")
     out = out_dir / "python-llamaindex-style-demo.json"
