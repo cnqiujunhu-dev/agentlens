@@ -49,11 +49,11 @@ jobs:
           summary: false
           pr-comment: .agentlens/reports/pr-comment.md
           bundle: .agentlens/reports/action-bundle
-          bundle-sections: summary,scan,tool-calls,timeline
+          bundle-sections: summary,scan,tool-calls,workflow,timeline
           review-baseline: .agentlens/regression-pr/runs/baseline.json
           review-candidate: .agentlens/regression-pr/runs/candidate.json
           review: .agentlens/reports/action-review
-          review-sections: summary,scan,tool-calls,timeline
+          review-sections: summary,scan,tool-calls,workflow,timeline
 
       - name: Verify GitHub Action outputs
         shell: bash

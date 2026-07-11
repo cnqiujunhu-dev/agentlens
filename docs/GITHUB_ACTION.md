@@ -47,11 +47,11 @@ The action fails the job when any trace fails its eval config, any enabled scan 
 | `summary` | `true` | Write a Markdown report to the GitHub Actions step summary. |
 | `pr-comment` | empty | Optional path to write Markdown suitable for a GitHub PR comment. |
 | `bundle` | empty | Optional directory to write a static AgentLens run bundle. |
-| `bundle-sections` | `summary,scan,tool-calls,filters,timeline` | Dashboard sections used when `bundle` is set. |
+| `bundle-sections` | `summary,scan,tool-calls,workflow,filters,timeline` | Dashboard sections used when `bundle` is set. |
 | `review-baseline` | empty | Optional baseline trace file for a before/after review pack. |
 | `review-candidate` | empty | Optional candidate trace file for a before/after review pack. |
 | `review` | empty | Optional directory to write a review pack. Must be used with `review-baseline` and `review-candidate`. |
-| `review-sections` | `summary,scan,tool-calls,filters,timeline` | Dashboard sections used for the review pack run bundle. |
+| `review-sections` | `summary,scan,tool-calls,workflow,filters,timeline` | Dashboard sections used for the review pack run bundle. |
 | `review-fail-on-failure` | `false` | Fail the action when the generated review pack reports failing eval or scan gates. |
 | `scan` | `true` | Run the local AgentLens security scan after evals. |
 | `scan-fail-on` | `high` | Lowest scan severity that fails the action: `low`, `medium`, `high`, `critical`, or `none`. |
@@ -140,7 +140,7 @@ Use `bundle` when you want the action to generate a static review bundle even if
     runs: .agentlens/runs
     config: evals/default.json
     bundle: .agentlens/reports/bundle
-    bundle-sections: summary,scan,tool-calls,filters,timeline
+    bundle-sections: summary,scan,tool-calls,workflow,filters,timeline
 
 - name: Upload AgentLens run bundle
   if: always()
@@ -168,7 +168,7 @@ Use `review-baseline`, `review-candidate`, and `review` when a workflow has befo
     review-baseline: .agentlens/baseline/refund.json
     review-candidate: .agentlens/candidate/refund.json
     review: .agentlens/reports/review
-    review-sections: summary,scan,tool-calls,timeline
+    review-sections: summary,scan,tool-calls,workflow,timeline
 
 - name: Upload AgentLens review pack
   if: always()

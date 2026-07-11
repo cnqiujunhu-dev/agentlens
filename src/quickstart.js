@@ -9,7 +9,7 @@ import { formatScanReport, scanTrace } from "./scan.js";
 import { writeShareBundle } from "./share.js";
 import { ensureDir, initWorkspace, readTrace, writeText, writeTrace } from "./store.js";
 
-const DEFAULT_SECTIONS = "summary,scan,tool-calls,filters,timeline";
+const DEFAULT_SECTIONS = "summary,scan,tool-calls,workflow,filters,timeline";
 
 function toDisplayPath(filePath, root) {
   return path.relative(root, filePath).replaceAll(path.sep, "/") || ".";

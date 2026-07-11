@@ -54,7 +54,7 @@ jobs:
           runs: .agentlens/runs
           config: .agentlens/evals/default.json
           bundle: .agentlens/reports/bundle
-          bundle-sections: summary,scan,tool-calls,filters,timeline
+          bundle-sections: summary,scan,tool-calls,workflow,filters,timeline
 `;
 
 const PYTHON_INIT_README = `# AgentLens Python Starter
@@ -173,7 +173,7 @@ jobs:
           scan: true
           pr-comment: .agentlens/reports/agentlens-pr-comment.md
           bundle: .agentlens/reports/bundle
-          bundle-sections: summary,scan,tool-calls,filters,timeline
+          bundle-sections: summary,scan,tool-calls,workflow,filters,timeline
 `;
 
 export function ensureDir(dir) {

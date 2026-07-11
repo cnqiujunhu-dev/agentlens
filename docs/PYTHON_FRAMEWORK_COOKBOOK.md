@@ -142,7 +142,7 @@ After any Python framework test writes traces:
 
 ```bash
 node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json --scan --pr-comment-md .agentlens/reports/pr-comment.md
-node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,filters,timeline
+node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,workflow,filters,timeline
 ```
 
 That keeps framework-specific code in Python while reusing AgentLens' existing evals, scan rules, dashboards, run bundles, GitHub Action, and OTLP JSON export.

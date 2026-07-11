@@ -166,7 +166,7 @@ After a Python test suite writes one or more trace files, use the existing Agent
 
 ```bash
 node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json --scan --pr-comment-md .agentlens/reports/pr-comment.md
-node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,filters,timeline
+node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,workflow,filters,timeline
 ```
 
 This keeps the Python application code simple while reusing AgentLens' evals, scan rules, SARIF, dashboards, run bundles, and GitHub Action integration.

@@ -38,7 +38,7 @@ test("initWorkspace scaffolds starter files without overwriting", () => {
   assert.match(actionExample, /actions\/checkout@v7/);
   assert.match(actionExample, new RegExp(latestStableActionRef.replaceAll(".", "\\.")));
   assert.match(actionExample, /bundle: \.agentlens\/reports\/bundle/);
-  assert.match(actionExample, /bundle-sections: summary,scan,tool-calls,filters,timeline/);
+  assert.match(actionExample, /bundle-sections: summary,scan,tool-calls,workflow,filters,timeline/);
   assert.doesNotMatch(actionExample, /actions\/checkout@v4/);
   assert.doesNotMatch(actionExample, /your-org\/agentlens@v0/);
 

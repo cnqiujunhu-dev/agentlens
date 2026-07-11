@@ -115,6 +115,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Static HTML dashboard with timeline filters and security scan findings for issues, PRs, and incident notes.
 - Configurable dashboard sections for compact PR comments, support bundles, and focused trace reviews.
 - Tool call groups that summarize repeated tool calls with risk, latency, first/last links, and one-click timeline filters.
+- Workflow Review dashboard section for chain boundaries, agent tasks, and paired error markers.
 - Local dashboard server with JSON APIs and file-change refresh.
 - Timeline filters for event type, status, search text, MCP risk, and shareable filtered view links.
 - Timeline jumps for errors, high-risk tool calls, final responses, and last events.
@@ -190,7 +191,7 @@ Want this in GitHub Actions?
     config: evals/default.json
     scan-fail-on: high
     bundle: .agentlens/reports/bundle
-    bundle-sections: summary,scan,tool-calls,filters,timeline
+    bundle-sections: summary,scan,tool-calls,workflow,filters,timeline
 ```
 
 Need schemas for editor or CI tooling?
@@ -379,9 +380,9 @@ agentlens schema <trace|eval> [--out path]
 agentlens validate <trace|eval> <file> [--json]
 agentlens materialize <jsonl-file> [--out path]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
-agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,tool-calls,filters,timeline]
-agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,tool-calls,filters,timeline]
-agentlens bundle [runs-dir] [--out dir] [--sections summary,event-types,scan,tool-calls,filters,timeline]
+agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,tool-calls,workflow,filters,timeline]
+agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,tool-calls,workflow,filters,timeline]
+agentlens bundle [runs-dir] [--out dir] [--sections summary,event-types,scan,tool-calls,workflow,filters,timeline]
 agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 ```
 

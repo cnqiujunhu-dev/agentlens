@@ -173,14 +173,14 @@ After writing traces, use the same local artifact in CI:
 ```bash
 agentlens eval .agentlens/runs/refund-answer.json --config evals/default.json
 agentlens scan .agentlens/runs/refund-answer.json
-agentlens dashboard .agentlens/runs/refund-answer.json --out .agentlens/reports/refund-answer.html --sections summary,scan,tool-calls,filters,timeline
+agentlens dashboard .agentlens/runs/refund-answer.json --out .agentlens/reports/refund-answer.html --sections summary,scan,tool-calls,workflow,filters,timeline
 ```
 
 For a directory of traces:
 
 ```bash
 agentlens ci --runs .agentlens/runs --config evals/default.json --scan --pr-comment-md .agentlens/reports/agentlens-pr-comment.md
-agentlens bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,filters,timeline
+agentlens bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,workflow,filters,timeline
 ```
 
 ## GitHub Actions Pattern
@@ -194,7 +194,7 @@ agentlens bundle .agentlens/runs --out .agentlens/reports/bundle --sections summ
     scan-fail-on: high
     pr-comment: .agentlens/reports/agentlens-pr-comment.md
     bundle: .agentlens/reports/bundle
-    bundle-sections: summary,scan,tool-calls,filters,timeline
+    bundle-sections: summary,scan,tool-calls,workflow,filters,timeline
 ```
 
 This gives reviewers:

@@ -6,7 +6,7 @@ import { renderDiffDashboard } from "./diff-dashboard.js";
 import { loadEvalConfig } from "./eval.js";
 import { ensureDir, readTrace, writeJson, writeText, writeTrace } from "./store.js";
 
-const DEFAULT_SECTIONS = "summary,scan,tool-calls,filters,timeline";
+const DEFAULT_SECTIONS = "summary,scan,tool-calls,workflow,filters,timeline";
 
 function toDisplayPath(filePath, root) {
   return path.relative(root, filePath).replaceAll(path.sep, "/") || ".";

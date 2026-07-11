@@ -18,6 +18,7 @@ test("composite GitHub Action exposes CI outputs", () => {
   assert.match(action, /review-candidate:/);
   assert.match(action, /review:/);
   assert.match(action, /review-sections:/);
+  assert.match(action, /default: summary,scan,tool-calls,workflow,filters,timeline/);
   assert.match(action, /review-fail-on-failure:/);
   assert.match(action, /scan:/);
   assert.match(action, /scan-fail-on:/);
@@ -64,6 +65,8 @@ test("repository workflow verifies GitHub Action outputs", () => {
   assert.match(workflow, /demo:regression-pr/);
   assert.match(workflow, /review-baseline:/);
   assert.match(workflow, /review-candidate:/);
+  assert.match(workflow, /bundle-sections: summary,scan,tool-calls,workflow,timeline/);
+  assert.match(workflow, /review-sections: summary,scan,tool-calls,workflow,timeline/);
   assert.match(workflow, /multi-agent-basic\.json/);
   assert.doesNotMatch(workflow, /actions\/checkout@v4/);
   assert.doesNotMatch(workflow, /actions\/setup-node@v4/);

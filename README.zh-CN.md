@@ -90,7 +90,7 @@ AgentLens 的差异化是：
 - JSON eval rules，用于 required events、forbidden tools、cost、latency、citation、MCP policy。
 - 本地 security scan，检查 secret-shaped value、prompt injection phrase、高风险工具调用。
 - SARIF 输出，可接入 GitHub code scanning。
-- 静态 dashboard，支持 timeline filter、timeline jump、tool call group、security scan panel。
+- 静态 dashboard，支持 timeline filter、timeline jump、tool call group、workflow review、security scan panel。
 - 静态 run bundle，包含 `index.html`、每条 trace 的 dashboard 和 `manifest.json`。
 - GitHub Action，可输出 status、count、PR comment、run bundle、bundle manifest。
 - GitHub Action 可为 baseline/candidate trace 输出 review pack。
@@ -131,7 +131,7 @@ PYTHONPATH=python/agentlens-trace/src python -m agentlens_trace.adapters --out .
 node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json
 node ./bin/agentlens.js scan .agentlens/runs/demo.json
 node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
-node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,filters,timeline
+node ./bin/agentlens.js bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,workflow,filters,timeline
 ```
 
 `agentlens quickstart` 会把完整演示输出到 `.agentlens/quickstart/`，不会混入你自己的 `.agentlens/runs`。详见 [QUICKSTART_ARTIFACTS.md](docs/QUICKSTART_ARTIFACTS.md)。
@@ -173,7 +173,7 @@ node ./bin/agentlens.js review .agentlens/runs/demo.json .agentlens/runs/failing
     scan-fail-on: high
     pr-comment: .agentlens/reports/agentlens-pr-comment.md
     bundle: .agentlens/reports/bundle
-    bundle-sections: summary,scan,tool-calls,filters,timeline
+    bundle-sections: summary,scan,tool-calls,workflow,filters,timeline
 ```
 
 这一步可以：
@@ -221,9 +221,9 @@ agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [
 agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--pr-comment-md path]
 agentlens otel <trace-file> [--out path] [--service-name name]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
-agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,tool-calls,filters,timeline]
-agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,tool-calls,filters,timeline]
-agentlens bundle [runs-dir] [--out dir] [--sections summary,event-types,scan,tool-calls,filters,timeline]
+agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,tool-calls,workflow,filters,timeline]
+agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,tool-calls,workflow,filters,timeline]
+agentlens bundle [runs-dir] [--out dir] [--sections summary,event-types,scan,tool-calls,workflow,filters,timeline]
 agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 ```
 

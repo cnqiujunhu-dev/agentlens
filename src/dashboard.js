@@ -1,7 +1,7 @@
 import { summarizeTrace } from "./inspect.js";
 import { scanTrace } from "./scan.js";
 
-export const DEFAULT_DASHBOARD_SECTIONS = ["summary", "event-types", "scan", "tool-calls", "filters", "timeline"];
+export const DEFAULT_DASHBOARD_SECTIONS = ["summary", "event-types", "scan", "tool-calls", "workflow", "filters", "timeline"];
 
 export function normalizeDashboardSections(sections = DEFAULT_DASHBOARD_SECTIONS) {
   const values =
@@ -235,6 +235,86 @@ function renderToolCallsSection(trace) {
         groups.length > 0
           ? `<div class="tool-call-groups">${groups.map((group) => renderToolCallGroup(group)).join("")}</div>`
           : `<p class="empty-state">No tool calls recorded.</p>`
+      }
+    </section>
+  `;
+}
+
+function workflowKind(event) {
+  const type = String(event.type ?? "");
+  if (type.startsWith("agent.task.")) return "task";
+  if (type.startsWith("chain.")) return "chain";
+  if (isWorkflowError(event)) return "error";
+  return null;
+}
+
+function isWorkflowError(event) {
+  const type = String(event.type ?? "");
+  return type === "error" || event.status === "error" || type.endsWith(".error");
+}
+
+function workflowLabel(item) {
+  if (item.kind === "error") return "Error";
+  if (item.kind === "task") return "Task";
+  if (item.kind === "chain") return "Chain";
+  return "Event";
+}
+
+function workflowDetail(event) {
+  const agent = event.metadata?.agent;
+  const framework = event.metadata?.framework;
+  const workflow = event.metadata?.workflow;
+  const error = event.output?.message ?? event.output?.error ?? event.error ?? event.message;
+  return [agent && `agent: ${agent}`, framework && `framework: ${framework}`, workflow && `workflow: ${workflow}`, error && `error: ${error}`]
+    .filter(Boolean)
+    .join(" / ");
+}
+
+function summarizeWorkflowEvents(trace) {
+  const items = trace.events
+    .map((event, index) => ({ event, index, kind: workflowKind(event) }))
+    .filter((item) => item.kind);
+  const counts = {
+    chains: items.filter((item) => String(item.event.type ?? "").startsWith("chain.")).length,
+    tasks: items.filter((item) => String(item.event.type ?? "").startsWith("agent.task.")).length,
+    errors: items.filter((item) => isWorkflowError(item.event)).length
+  };
+  return { items, counts };
+}
+
+function renderWorkflowEvent(item) {
+  const { event, index, kind } = item;
+  const status = event.status ?? "ok";
+  const detail = workflowDetail(event);
+  return `
+    <article class="workflow-event workflow-${escapeHtml(kind)} status-${escapeHtml(status)}">
+      <div>
+        <span class="workflow-kind">${escapeHtml(workflowLabel(item))}</span>
+        <h3>${escapeHtml(eventTitle(event) || event.type)}</h3>
+        ${detail ? `<p>${escapeHtml(detail)}</p>` : ""}
+      </div>
+      <div class="workflow-meta">
+        <span>${escapeHtml(status)}</span>
+        ${typeof event.durationMs === "number" ? `<span>${escapeHtml(formatMs(event.durationMs))}</span>` : ""}
+        <a href="#${eventAnchor(index)}">#${index + 1}</a>
+      </div>
+    </article>
+  `;
+}
+
+function renderWorkflowSection(trace) {
+  const { items, counts } = summarizeWorkflowEvents(trace);
+  return `
+    <section class="section workflow-section">
+      <div class="section-title">
+        <h2>Workflow Review</h2>
+        <span class="section-badge">${counts.chains} chains / ${counts.tasks} tasks / ${counts.errors} errors</span>
+      </div>
+      <p class="section-note">Chain, agent task, and error events with direct links back to the timeline.</p>
+      ${
+        items.length > 0
+          ? `<div class="workflow-events">${items.map((item) => renderWorkflowEvent(item)).join("")}</div>`
+          : `<p class="empty-state">No chain, task, or error events recorded.</p>`
       }
     </section>
   `;
@@ -989,6 +1069,67 @@ export function renderDashboard(trace, options = {}) {
     .tool-call-group.risk-high, .tool-call-group.risk-critical {
       border-color: #fecaca;
     }
+    .workflow-events {
+      display: grid;
+      gap: 10px;
+    }
+    .workflow-event {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: #f9fafb;
+    }
+    .workflow-event.status-error {
+      border-color: #fecaca;
+      background: #fff7f7;
+    }
+    .workflow-event h3 {
+      margin: 4px 0 0;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+    .workflow-event p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+    .workflow-kind {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .workflow-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .workflow-meta span, .workflow-meta a {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 8px;
+      color: var(--muted);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .workflow-meta a {
+      color: var(--accent);
+    }
+    .workflow-meta a:hover {
+      border-color: #5eead4;
+      background: #f0fdfa;
+    }
     .event[hidden] {
       display: none;
     }
@@ -1025,6 +1166,8 @@ export function renderDashboard(trace, options = {}) {
       .filter-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .timeline-jumps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .tool-call-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .workflow-event { grid-template-columns: 1fr; }
+      .workflow-meta { justify-content: flex-start; }
       .event-header { flex-direction: column; }
       .event-meta { justify-content: flex-start; }
       .scan-finding dl { grid-template-columns: 1fr; }
@@ -1061,6 +1204,7 @@ export function renderDashboard(trace, options = {}) {
     }
     ${hasSection(sections, "scan") ? renderScanSection(scanReport) : ""}
     ${hasSection(sections, "tool-calls") ? renderToolCallsSection(trace) : ""}
+    ${hasSection(sections, "workflow") ? renderWorkflowSection(trace) : ""}
     ${hasSection(sections, "filters") ? renderFilters(trace) : ""}
     ${
       hasSection(sections, "timeline")

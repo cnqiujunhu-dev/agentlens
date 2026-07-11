@@ -7,12 +7,14 @@
 - LlamaIndex-like QueryBundle and source node fixture coverage for `agentlens_trace.adapters`.
 - CrewAI-like agent, task, tool, and task output object fixture coverage for `agentlens_trace.adapters`.
 - LangChain-style chain boundary and callback error fixture coverage for `agentlens_trace.adapters`.
+- Static dashboard Workflow Review section for chain boundaries, agent tasks, and error markers.
 
 ### Changed
 
 - Python framework bridge helpers now normalize LlamaIndex-style query bundles, `NodeWithScore`-style source nodes, node metadata, source citations, and usage metadata into readable AgentLens trace fields.
 - CrewAI-style bridge helpers now normalize agent roles, task descriptions, expected outputs, tool objects, and task output objects into readable AgentLens task and tool events.
 - LangChain-style bridge helpers now record chain start/end boundaries plus retriever, tool, chain, and LLM error callback events with paired AgentLens `error` markers.
+- Default quickstart, review, and GitHub Action dashboard bundles now include the `workflow` section.
 
 ## 0.3.1
 

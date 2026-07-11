@@ -56,7 +56,7 @@ Goal: make trace review ergonomic for teams using GitHub issues, PRs, and CI.
 Shipped for the v0.3.0 release candidate:
 
 - PR comment renderer for CI summaries.
-- Configurable dashboard sections for summary, event types, scan, tool calls, filters, and timeline.
+- Configurable dashboard sections for summary, event types, scan, tool calls, workflow review, filters, and timeline.
 - Governance docs for reviewed MCP risk exceptions.
 - Timeline jump links for errors, high-risk calls, final responses, and last events.
 - Tool call groups for repeated-call review by risk, latency, server, permission, and one-click timeline filtering.

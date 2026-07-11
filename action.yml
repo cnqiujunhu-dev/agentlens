@@ -29,7 +29,7 @@ inputs:
   bundle-sections:
     description: Optional dashboard sections for the generated run bundle.
     required: false
-    default: summary,scan,tool-calls,filters,timeline
+    default: summary,scan,tool-calls,workflow,filters,timeline
   review-baseline:
     description: Optional baseline trace file for a before/after AgentLens review pack.
     required: false
@@ -45,7 +45,7 @@ inputs:
   review-sections:
     description: Optional dashboard sections for the generated review pack run bundle.
     required: false
-    default: summary,scan,tool-calls,filters,timeline
+    default: summary,scan,tool-calls,workflow,filters,timeline
   review-fail-on-failure:
     description: Fail the action when the generated review pack reports failing eval or scan gates.
     required: false

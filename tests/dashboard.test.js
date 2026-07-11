@@ -172,6 +172,59 @@ test("renderDashboard groups repeated tool calls", () => {
   assert.match(html, /type\.value = "tool\.call"/);
 });
 
+test("renderDashboard includes workflow review for chain, task, and error events", () => {
+  const trace = createRun({
+    app: "dashboard-test",
+    name: "workflow review"
+  });
+  addEvent(trace, {
+    type: "chain.start",
+    name: "RunnableSequence",
+    input: { question: "Can I refund a damaged item?" },
+    metadata: { framework: "langchain" }
+  });
+  addEvent(trace, {
+    type: "chain.end",
+    name: "RunnableSequence",
+    durationMs: 42,
+    output: { answer: "use policy lookup" },
+    metadata: { framework: "langchain" }
+  });
+  addEvent(trace, {
+    type: "agent.task.start",
+    name: "draft-answer",
+    input: { citation: "policy-refund-30d" },
+    metadata: { framework: "crewai", agent: "support_writer", workflow: "refund-review" }
+  });
+  addEvent(trace, {
+    type: "agent.task.end",
+    name: "draft-answer",
+    status: "error",
+    durationMs: 21,
+    output: { message: "missing required citation", type: "AssertionError" },
+    metadata: { framework: "crewai", agent: "support_writer", workflow: "refund-review" }
+  });
+  addEvent(trace, {
+    type: "error",
+    name: "crewai.support_writer.draft-answer",
+    status: "error",
+    output: { message: "missing required citation", type: "AssertionError" },
+    metadata: { framework: "crewai", agent: "support_writer" }
+  });
+  finishRun(trace, "failed");
+
+  const html = renderDashboard(trace);
+
+  assert.match(html, /Workflow Review/);
+  assert.match(html, /2 chains \/ 2 tasks \/ 2 errors/);
+  assert.match(html, /RunnableSequence/);
+  assert.match(html, /draft-answer/);
+  assert.match(html, /agent: support_writer/);
+  assert.match(html, /error: missing required citation/);
+  assert.match(html, /href="#agentlens-event-4"/);
+  assert.match(html, /href="#agentlens-event-5"/);
+});
+
 test("renderDashboard can render selected sections only", () => {
   const trace = createRun({
     app: "dashboard-test",
@@ -189,9 +242,10 @@ test("renderDashboard can render selected sections only", () => {
   assert.doesNotMatch(html, /agentlens-dashboard-filters/);
   assert.doesNotMatch(html, /Event Types/);
   assert.doesNotMatch(html, /Tool Calls/);
+  assert.doesNotMatch(html, /Workflow Review/);
 });
 
 test("normalizeDashboardSections validates section names", () => {
-  assert.deepEqual(normalizeDashboardSections("summary,scan,timeline"), ["summary", "scan", "timeline"]);
+  assert.deepEqual(normalizeDashboardSections("summary,workflow,scan,timeline"), ["summary", "workflow", "scan", "timeline"]);
   assert.throws(() => normalizeDashboardSections("summary,unknown"), /Unknown dashboard section/);
 });

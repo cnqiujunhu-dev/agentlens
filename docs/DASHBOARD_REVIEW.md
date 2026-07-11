@@ -13,7 +13,7 @@ agentlens dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
 For a pull request or CI run with multiple traces:
 
 ```bash
-agentlens bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,filters,timeline
+agentlens bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,workflow,filters,timeline
 ```
 
 Upload `.agentlens/reports/bundle` as a CI artifact so reviewers can open `index.html`, inspect `manifest.json` from automation, and then drill into individual dashboards.
@@ -25,9 +25,10 @@ Use this order when reviewing an agent regression:
 1. Start with `Summary` to confirm status, event count, cost, errors, and scan state.
 2. Check `Security Scan` for leaked secrets, prompt-injection phrases, and high-risk tool calls.
 3. Use `Tool Calls` to find repeated or risky tools. Each group shows count, errors, risk, latency, server, permission, and first/last timeline links.
-4. Use `Timeline Filters` to narrow by event type, status, search text, or MCP risk.
-5. Use `Timeline Jumps` for first error, first high-risk call, first tool call, final response, and last event.
-6. Copy the filtered view link and paste it into a PR comment when another reviewer needs to inspect the same slice.
+4. Use `Workflow Review` to inspect chain boundaries, agent task starts/ends, and paired error markers before opening the full timeline.
+5. Use `Timeline Filters` to narrow by event type, status, search text, or MCP risk.
+6. Use `Timeline Jumps` for first error, first high-risk call, first tool call, final response, and last event.
+7. Copy the filtered view link and paste it into a PR comment when another reviewer needs to inspect the same slice.
 
 ## Share Filtered Views
 
@@ -46,7 +47,7 @@ Use `--sections` when a dashboard will be attached to a PR comment or support ti
 ```bash
 agentlens dashboard .agentlens/runs/demo.json \
   --out .agentlens/reports/review.html \
-  --sections summary,scan,tool-calls,filters,timeline
+  --sections summary,scan,tool-calls,workflow,filters,timeline
 ```
 
 Available sections:
@@ -55,10 +56,11 @@ Available sections:
 - `event-types`
 - `scan`
 - `tool-calls`
+- `workflow`
 - `filters`
 - `timeline`
 
-For a very short artifact, use `--sections summary,tool-calls,timeline`. For security review, keep `scan` and `filters` enabled.
+For a very short artifact, use `--sections summary,tool-calls,workflow,timeline`. For security review, keep `scan` and `filters` enabled.
 
 ## GitHub Actions Pattern
 
@@ -72,7 +74,7 @@ For a very short artifact, use `--sections summary,tool-calls,timeline`. For sec
     scan-fail-on: high
     pr-comment: .agentlens/reports/agentlens-pr-comment.md
     bundle: .agentlens/reports/bundle
-    bundle-sections: summary,scan,tool-calls,filters,timeline
+    bundle-sections: summary,scan,tool-calls,workflow,filters,timeline
 
 - name: Upload AgentLens run bundle
   if: always()
@@ -89,7 +91,7 @@ The PR comment should summarize pass/fail status. The uploaded bundle should be 
 Before attaching dashboards to public issues or external support threads, prefer `agentlens share` so the trace is redacted first:
 
 ```bash
-agentlens share .agentlens/runs/demo.json --config evals/default.json --out .agentlens/share/demo --sections summary,scan,tool-calls,filters,timeline
+agentlens share .agentlens/runs/demo.json --config evals/default.json --out .agentlens/share/demo --sections summary,scan,tool-calls,workflow,filters,timeline
 ```
 
 Always review public artifacts manually. The local scan is a useful guardrail, not a complete security review.
