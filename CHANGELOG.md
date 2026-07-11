@@ -11,6 +11,7 @@
 
 ### Changed
 
+- README, Chinese README, launch copy, launch post, and demo recording guide now lead with artifact review outcomes and current Workflow Review dashboard capabilities.
 - Python framework bridge helpers now normalize LlamaIndex-style query bundles, `NodeWithScore`-style source nodes, node metadata, source citations, and usage metadata into readable AgentLens trace fields.
 - CrewAI-style bridge helpers now normalize agent roles, task descriptions, expected outputs, tool objects, and task output objects into readable AgentLens task and tool events.
 - LangChain-style bridge helpers now record chain start/end boundaries plus retriever, tool, chain, and LLM error callback events with paired AgentLens `error` markers.

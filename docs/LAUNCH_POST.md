@@ -11,7 +11,7 @@ Use this as the first long-form launch post for GitHub, Hacker News, or a techni
 ## Short Version
 
 ```text
-AgentLens is local-first DevTools for AI agents. It records model calls, tool calls, retrieval events, errors, usage, and metadata into plain trace files, then lets you replay runs, run JSON evals, redact sensitive fields, generate static dashboards, and fail CI.
+AgentLens is local-first DevTools for AI agents. It records model calls, tool calls, retrieval events, chain/task boundaries, errors, usage, and metadata into plain trace files, then lets you replay runs, run JSON evals, redact sensitive fields, generate static dashboards, build PR review artifacts, and fail CI.
 
 It is not another agent framework. It is meant to sit around agent frameworks and make agent behavior debuggable.
 ```
@@ -32,24 +32,25 @@ When a run fails, the useful questions are usually basic:
 
 I built AgentLens to make those questions answerable from local files.
 
-AgentLens records an agent run as a readable trace: LLM prompts, LLM responses, tool calls, tool results, retrieval events, errors, usage, and metadata. From that trace you can replay the timeline without calling the model again, run JSON eval rules, redact sensitive fields before sharing, generate static HTML dashboards, or fail a pull request with a GitHub Action.
+AgentLens records an agent run as a readable trace: LLM prompts, LLM responses, tool calls, tool results, retrieval events, chain/task boundaries, errors, usage, and metadata. From that trace you can replay the timeline without calling the model again, run JSON eval rules, redact sensitive fields before sharing, generate static HTML dashboards, build a before/after PR review pack, or fail a pull request with a GitHub Action.
 
 The current MVP includes:
 
 - Trace v1 JSON schema.
-- CLI commands for demo, inspect, replay, eval, CI, redact, dashboard, and diff.
-- Static HTML dashboards and before/after diff dashboards.
+- CLI commands for quickstart, demo, inspect, replay, eval, CI, redact, dashboard, review, bundle, and diff.
+- Static HTML dashboards with Security Scan, Tool Calls, Workflow Review, filters, and before/after diff dashboards.
 - JSON output for automation.
 - Markdown summaries for GitHub Actions.
+- Stable PR comment Markdown and run bundle artifacts.
 - JSONL streaming traces for long-running agents.
 - Generic LLM wrappers and OpenAI-compatible / Anthropic-compatible adapter helpers.
-- Zero-dependency Python trace writer plus framework-shaped bridge helpers.
+- Zero-dependency Python trace writer plus LangChain-style, LlamaIndex-style, and CrewAI-style bridge helpers.
 - MCP-style tool tracing, MCP stdio transport demo, tool inventory capture, and policy checks.
 - Local release audit and GitHub Action smoke tests.
 
 The design goal is boring interoperability: no hosted account, no required runtime dependency, and no need to rewrite your agent around a new framework. AgentLens should sit beside the code you already have and give you inspectable artifacts when the run succeeds, fails, or regresses.
 
-The public repository has a `v0.3.0` team-workflow release candidate. The next priorities are feedback from people building real tool-using agents, RAG workflows, MCP servers, Python agent projects, or agent CI checks, followed by published Python packages and deeper framework adapters.
+The public repository has a `v0.3.1` packaging patch candidate after the `v0.3.0` team-workflow release. The next priorities are feedback from people building real tool-using agents, RAG workflows, MCP servers, Python agent projects, or agent CI checks, followed by published package flows and deeper framework adapters.
 
 Repo: <link>
 ```

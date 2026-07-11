@@ -8,15 +8,27 @@ Trace, replay, evaluate, and share AI agent runs before they break in production
 
 Languages: [English](README.md) | [简体中文](README.zh-CN.md)
 
-AgentLens is a local-first DevTools stack for AI agents, multi-agent workflows, tool calls, RAG flows, and MCP-style integrations. It gives every run a readable trace, a deterministic replay transcript, JSON-based evals, and a static dashboard you can attach to issues or CI logs.
+AgentLens is a local-first DevTools stack for AI agents, multi-agent workflows, tool calls, RAG flows, and MCP-style integrations. It turns one recorded run into reviewable evidence: a readable trace, deterministic replay, JSON evals, security scan, static dashboard, PR comment, SARIF, and CI artifact bundle.
 
 ```text
-agent run -> trace -> replay -> eval -> dashboard
+agent run -> trace -> replay -> eval + scan -> dashboard -> PR artifact
 ```
 
 ![AgentLens demo](docs/assets/agentlens-demo.gif)
 
 Static screenshot: [dashboard-screenshot.png](docs/assets/dashboard-screenshot.png)
+
+## What You Get From One Run
+
+| Artifact | What it answers |
+| --- | --- |
+| Trace JSON | What did the model see, which tools ran, what did retrieval return, and where did errors happen? |
+| Replay transcript | Can a teammate understand the timeline without rerunning the model? |
+| Eval and scan gates | Did the run violate citation, latency, cost, safety, secret, or tool-risk rules? |
+| Static dashboard | Can reviewers inspect tool groups, workflow boundaries, security findings, and timeline filters in a browser? |
+| PR review pack | Can before/after traces become a CI summary, PR comment, SARIF, diff dashboard, and downloadable run bundle? |
+
+No hosted account, database, collector, or long-running dashboard service is required for the core workflow.
 
 ## 30-Second Quickstart
 
@@ -32,9 +44,11 @@ node ./bin/agentlens.js ci --runs .agentlens/quickstart/runs --config .agentlens
 
 Open `.agentlens/quickstart/reports/dashboard.html` for the trace dashboard, or attach `.agentlens/quickstart/reports/bundle/index.html` as a static CI artifact.
 
+The quickstart writes a complete artifact pack under `.agentlens/quickstart/`, so you can inspect the product without wiring your own agent first.
+
 ## PR Regression Review
 
-AgentLens can turn recorded before/after agent runs into pull request artifacts: a CI summary, SARIF scan findings, a static diff dashboard, and a run bundle reviewers can open without rerunning the model.
+AgentLens can turn recorded before/after agent runs into pull request artifacts: a CI summary, stable PR comment body, SARIF scan findings, a static diff dashboard, and a run bundle reviewers can open without rerunning the model.
 
 ```bash
 npm run demo:regression-pr
@@ -56,6 +70,8 @@ When an agent fails, teams usually lose time answering the same questions:
 - Can this failure be reproduced in CI?
 
 AgentLens makes those questions inspectable with plain local files. No cloud account is required.
+
+Use it first when you need to debug one failed agent run, review a risky tool call, prove a RAG answer cited the right source, or stop an agent regression from merging.
 
 ## Market Positioning
 

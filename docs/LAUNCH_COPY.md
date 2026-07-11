@@ -4,17 +4,18 @@ Use this when publishing the first public GitHub version.
 
 ## One-Line Positioning
 
-AgentLens is local-first DevTools for AI agents: trace, replay, eval, scan, redact, and share every model and tool call before production.
+AgentLens is local-first DevTools for AI agents: turn model, tool, retrieval, and workflow runs into replayable traces, eval gates, static dashboards, and PR artifacts.
 
 ## Short Taglines
 
 - Chrome DevTools for AI agent runs.
 - Replay failed agent runs without calling the model again.
-- CI checks and scan gates for tool-using agents.
+- CI checks, scan gates, and PR artifacts for tool-using agents.
 - Secret and prompt-injection scans for agent traces.
 - SARIF output for agent trace findings.
 - Batch SARIF for CI run directories.
-- Static trace reports for GitHub issues.
+- Static trace dashboards for GitHub issues and pull requests.
+- Workflow review for chains, agent tasks, and paired error markers.
 - MCP policy checks for agent tool calls.
 
 ## Hacker News
@@ -32,29 +33,21 @@ Hi HN,
 
 I built AgentLens, a local-first DevTools stack for AI agent runs.
 
-The core idea is simple: every agent run should be inspectable after the fact. AgentLens records LLM prompts/responses, tool calls, retrieval events, errors, usage, and metadata into a plain trace file. From that trace you can replay the timeline, run JSON eval rules, scan for leaked secrets and prompt-injection phrases, redact secrets, generate a static dashboard, or fail CI.
+The core idea is simple: every agent run should be inspectable after the fact. AgentLens records LLM prompts/responses, tool calls, retrieval events, chain/task boundaries, errors, usage, and metadata into a plain trace file. From that trace you can replay the timeline, run JSON eval rules, scan for leaked secrets and prompt-injection phrases, redact secrets, generate a static dashboard, build a PR review pack, or fail CI.
 
-Current MVP:
-- trace JSON schema
-- deterministic replay
-- JSON eval rules
-- generic LLM call wrapper
-- LLM-specific eval pack
-- batch CI command
-- local security scan
-- GitHub Action scan gate
-- SARIF export for scan findings
-- combined CI SARIF export
-- static HTML dashboard
-- dashboard Security Scan panel
-- static run bundle artifacts
-- local dashboard server
-- JSONL streaming traces
-- MCP-style tool-call adapter
-- stdio JSON-RPC MCP transport demo
-- MCP policy checks
-- trace redaction before sharing
-- redacted share bundles with scan reports
+What ships today:
+- trace JSON schema and deterministic replay
+- JSON eval rules and CI gates
+- local security scan with SARIF output
+- static dashboards with Security Scan, Tool Calls, Workflow Review, filters, and timeline jumps
+- run bundles and before/after review packs for PRs
+- stable PR comment Markdown for GitHub workflows
+- generic LLM wrappers plus OpenAI-compatible and Anthropic-compatible adapter helpers
+- LangGraph-style, AutoGen-style, CrewAI-style, MCP-style, and MCP stdio demos
+- zero-dependency Python trace writer and `agentlens_trace.adapters` bridge helpers
+- OpenTelemetry/OpenInference-style OTLP JSON export
+- JSONL streaming traces and materialization
+- redacted share bundles for issues and support threads
 
 It is intentionally not another agent framework. It is meant to sit around frameworks and make agent behavior debuggable.
 
@@ -74,7 +67,7 @@ Agents are easy to demo and hard to debug. When a run fails, you need to know:
 - whether it violated policy
 
 AgentLens records every run as a plain trace:
-LLM prompts, responses, tool calls, retrieval events, errors, usage, and metadata.
+LLM prompts, responses, tool calls, retrieval events, chain/task boundaries, errors, usage, and metadata.
 
 From one trace you can:
 - replay the timeline
@@ -84,7 +77,7 @@ From one trace you can:
 - upload scan findings as SARIF
 - redact secrets
 - generate a static dashboard
-- attach the report to a GitHub issue
+- attach a dashboard, run bundle, or PR review pack to GitHub
 
 The MVP also includes MCP-style tool tracing and policy rules:
 - allowed MCP servers
@@ -123,7 +116,7 @@ Highlights:
 - Replay model/tool/retrieval timelines deterministically.
 - Run JSON eval rules and scan gates locally or in CI.
 - Scan traces for leaked secrets, prompt injection phrases, and risky tool calls.
-- Generate static HTML dashboards.
+- Generate static HTML dashboards with Security Scan, Tool Calls, Workflow Review, filters, and timeline jumps.
 - Generate static run bundle artifacts for trace directories.
 - Generate pull request review artifacts with CI summaries, SARIF, diff dashboards, and run bundles.
 - Export single traces or whole run directories as OpenTelemetry/OpenInference-style OTLP JSON.
