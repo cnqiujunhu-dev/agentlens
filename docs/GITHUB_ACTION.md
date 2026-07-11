@@ -71,6 +71,13 @@ The action fails the job when any trace fails its eval config, any enabled scan 
 | `review-pr-comment` | Path to the generated review PR comment Markdown. |
 | `review-bundle` | Directory containing the generated review run bundle. |
 | `review-bundle-manifest` | Path to the generated review run bundle `manifest.json`. |
+| `review-workflow-chains` | Candidate chain event count from the review diff. |
+| `review-workflow-tasks` | Candidate task event count from the review diff. |
+| `review-workflow-errors` | Candidate workflow error marker count from the review diff. |
+| `review-workflow-chain-delta` | Candidate minus baseline chain event delta from the review diff. |
+| `review-workflow-task-delta` | Candidate minus baseline task event delta from the review diff. |
+| `review-workflow-error-delta` | Candidate minus baseline workflow error marker delta from the review diff. |
+| `review-workflow-regressions` | Count of workflow regressions detected from chain, task, and workflow error deltas. |
 
 Use these outputs in later steps:
 
@@ -179,6 +186,16 @@ Use `review-baseline`, `review-candidate`, and `review` when a workflow has befo
 ```
 
 The review pack includes copied traces, `eval.json`, `reports/pr-comment.md`, `reports/diff.html`, `reports/agentlens-ci.sarif`, and `reports/bundle/index.html`. The generated PR comment and step summary include a trace diff section with workflow chain, task, and error deltas so reviewers can see workflow regressions before opening the HTML dashboard. Add `review-fail-on-failure: true` when the before/after review should fail the job if the candidate violates eval or scan gates.
+
+Workflow outputs are available for downstream automation:
+
+```yaml
+- name: Route workflow regression
+  if: steps.agentlens.outputs.review-workflow-regressions != '0'
+  run: |
+    echo "Task delta: ${{ steps.agentlens.outputs.review-workflow-task-delta }}"
+    echo "Workflow errors: ${{ steps.agentlens.outputs.review-workflow-errors }}"
+```
 
 ## SARIF Upload
 

@@ -116,7 +116,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Upsert PR comment workflow using the stable `agentlens-ci-comment` marker.
 - GitHub Action outputs for downstream workflow steps.
 - GitHub Action run bundle and `bundle-manifest` outputs for uploadable PR review artifacts.
-- GitHub Action review pack outputs for baseline/candidate traces.
+- GitHub Action review pack outputs for baseline/candidate traces, including workflow regression counts and deltas.
 - Workspace doctor for checking local setup, traces, eval config, and CI wiring.
 - Validation command for trace files and eval configs.
 - Local security scan for secret leaks, prompt injection phrases, and high-risk tool calls.

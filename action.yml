@@ -94,6 +94,27 @@ outputs:
   review-bundle-manifest:
     description: Path to the generated review run bundle manifest when review inputs are set.
     value: ${{ steps.agentlens.outputs.review-bundle-manifest }}
+  review-workflow-chains:
+    description: Candidate chain event count from the review diff when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review-workflow-chains }}
+  review-workflow-tasks:
+    description: Candidate task event count from the review diff when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review-workflow-tasks }}
+  review-workflow-errors:
+    description: Candidate workflow error marker count from the review diff when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review-workflow-errors }}
+  review-workflow-chain-delta:
+    description: Candidate minus baseline chain event delta from the review diff when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review-workflow-chain-delta }}
+  review-workflow-task-delta:
+    description: Candidate minus baseline task event delta from the review diff when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review-workflow-task-delta }}
+  review-workflow-error-delta:
+    description: Candidate minus baseline workflow error marker delta from the review diff when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review-workflow-error-delta }}
+  review-workflow-regressions:
+    description: Count of workflow regressions detected from chain, task, and workflow error deltas when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review-workflow-regressions }}
 
 runs:
   using: composite
@@ -185,6 +206,41 @@ runs:
               echo "review-bundle=$review_dir/reports/bundle"
               echo "review-bundle-manifest=$review_dir/reports/bundle/manifest.json"
             } >> "$GITHUB_OUTPUT"
+            review_diff_json="$(mktemp)"
+            set +e
+            node "$GITHUB_ACTION_PATH/bin/agentlens.js" diff "$review_baseline" "$review_candidate" --json > "$review_diff_json"
+            review_diff_exit_code=$?
+            set -e
+            if [[ "$review_diff_exit_code" -ne 0 ]]; then
+              exit_code="$review_diff_exit_code"
+              {
+                echo "review-workflow-chains="
+                echo "review-workflow-tasks="
+                echo "review-workflow-errors="
+                echo "review-workflow-chain-delta="
+                echo "review-workflow-task-delta="
+                echo "review-workflow-error-delta="
+                echo "review-workflow-regressions="
+              } >> "$GITHUB_OUTPUT"
+            else
+              node - "$review_diff_json" <<'NODE' >> "$GITHUB_OUTPUT"
+        const fs = require("node:fs");
+        const diff = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
+        const rows = Object.fromEntries((diff.workflow ?? []).map((row) => [row.name, row]));
+        const chains = rows["Chain events"] ?? {};
+        const tasks = rows["Task events"] ?? {};
+        const errors = rows["Workflow errors"] ?? {};
+        const value = (item, key) => item[key] ?? "";
+        const workflowRegressions = Number((chains.delta ?? 0) < 0) + Number((tasks.delta ?? 0) < 0) + Number((errors.delta ?? 0) > 0);
+        console.log(`review-workflow-chains=${value(chains, "candidate")}`);
+        console.log(`review-workflow-tasks=${value(tasks, "candidate")}`);
+        console.log(`review-workflow-errors=${value(errors, "candidate")}`);
+        console.log(`review-workflow-chain-delta=${value(chains, "delta")}`);
+        console.log(`review-workflow-task-delta=${value(tasks, "delta")}`);
+        console.log(`review-workflow-error-delta=${value(errors, "delta")}`);
+        console.log(`review-workflow-regressions=${workflowRegressions}`);
+        NODE
+            fi
           fi
         else
           {
@@ -192,6 +248,13 @@ runs:
             echo "review-pr-comment="
             echo "review-bundle="
             echo "review-bundle-manifest="
+            echo "review-workflow-chains="
+            echo "review-workflow-tasks="
+            echo "review-workflow-errors="
+            echo "review-workflow-chain-delta="
+            echo "review-workflow-task-delta="
+            echo "review-workflow-error-delta="
+            echo "review-workflow-regressions="
           } >> "$GITHUB_OUTPUT"
         fi
         exit "$exit_code"

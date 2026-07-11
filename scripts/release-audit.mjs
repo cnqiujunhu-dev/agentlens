@@ -466,12 +466,13 @@ function assertActionReviewPackSupport() {
     "review-candidate",
     "review-fail-on-failure",
     "review-pr-comment",
-    "review-bundle-manifest"
+    "review-bundle-manifest",
+    "review-workflow-regressions"
   ]) {
     if (!action.includes(snippet)) fail(`action.yml missing review pack snippet: ${snippet}`);
     if (!docs.includes(snippet)) fail(`docs/GITHUB_ACTION.md missing review pack snippet: ${snippet}`);
   }
-  for (const snippet of ["action-review", "review-baseline", "review-candidate", "review-pr-comment"]) {
+  for (const snippet of ["action-review", "review-baseline", "review-candidate", "review-pr-comment", "review-workflow-regressions"]) {
     if (!workflow.includes(snippet)) fail(`.github/workflows/ci.yml missing review pack snippet: ${snippet}`);
   }
 }

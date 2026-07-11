@@ -67,6 +67,13 @@ jobs:
           test "${{ steps.agentlens-action.outputs.review-pr-comment }}" = ".agentlens/reports/action-review/reports/pr-comment.md"
           test "${{ steps.agentlens-action.outputs.review-bundle }}" = ".agentlens/reports/action-review/reports/bundle"
           test "${{ steps.agentlens-action.outputs.review-bundle-manifest }}" = ".agentlens/reports/action-review/reports/bundle/manifest.json"
+          test "${{ steps.agentlens-action.outputs.review-workflow-chains }}" = "2"
+          test "${{ steps.agentlens-action.outputs.review-workflow-tasks }}" = "0"
+          test "${{ steps.agentlens-action.outputs.review-workflow-errors }}" = "2"
+          test "${{ steps.agentlens-action.outputs.review-workflow-chain-delta }}" = "0"
+          test "${{ steps.agentlens-action.outputs.review-workflow-task-delta }}" = "-2"
+          test "${{ steps.agentlens-action.outputs.review-workflow-error-delta }}" = "2"
+          test "${{ steps.agentlens-action.outputs.review-workflow-regressions }}" = "2"
           grep -q "agentlens-ci-comment" .agentlens/reports/pr-comment.md
           test -f .agentlens/reports/action-bundle/index.html
           test -f .agentlens/reports/action-bundle/manifest.json
