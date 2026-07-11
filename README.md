@@ -105,18 +105,18 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - Trace diff reports for before/after agent regressions, including workflow deltas.
 - Static diff dashboards for sharing before/after regressions with workflow delta cards.
-- `agentlens review` for turning baseline/candidate traces into a PR-ready review pack with workflow diff summaries in PR Markdown.
+- `agentlens review` for turning baseline/candidate traces into a PR-ready review pack with workflow diff summaries and a machine-readable `review.json` manifest.
 - Static run bundles for reviewing a directory of traces as a CI artifact, including workflow counts in the index.
 - Machine-readable `manifest.json` output for run bundle automation, including workflow counts for PR bots.
 - Dashboard review workflow for PR artifacts, compact sections, and filtered view links.
 - Runnable agent regression PR demo that emits CI summary, SARIF, diff dashboard, and run bundle artifacts.
-- JSON output for inspect, eval, CI, and diff automation.
+- JSON output for inspect, eval, CI, review, and diff automation.
 - Markdown CI summaries for GitHub Actions.
 - PR comment Markdown output for GitHub review workflows.
 - Upsert PR comment workflow using the stable `agentlens-ci-comment` marker.
 - GitHub Action outputs for downstream workflow steps.
 - GitHub Action run bundle and `bundle-manifest` outputs for uploadable PR review artifacts.
-- GitHub Action review pack outputs for baseline/candidate traces, including workflow regression counts and deltas.
+- GitHub Action review pack outputs for baseline/candidate traces, including the review manifest path, workflow regression counts, and deltas.
 - Workspace doctor for checking local setup, traces, eval config, and CI wiring.
 - Validation command for trace files and eval configs.
 - Local security scan for secret leaks, prompt injection phrases, and high-risk tool calls.
@@ -233,7 +233,7 @@ npm run diff:dashboard
 node ./bin/agentlens.js review .agentlens/runs/demo.json .agentlens/runs/failing-demo.json --config evals/default.json --out .agentlens/review
 ```
 
-`agentlens review` writes a PR-ready artifact pack with copied traces, eval policy, CI summary, PR comment Markdown, SARIF, diff dashboard, and run bundle. See [AGENT_REVIEW.md](docs/AGENT_REVIEW.md).
+`agentlens review` writes a PR-ready artifact pack with copied traces, eval policy, `review.json`, CI summary, PR comment Markdown, SARIF, diff dashboard, and run bundle. Use `--json` to print the same manifest for bots and workflow steps. See [AGENT_REVIEW.md](docs/AGENT_REVIEW.md).
 
 Want to wrap a generic LLM call?
 
@@ -385,7 +385,7 @@ agentlens doctor [--json]
 agentlens demo [--out path]
 agentlens inspect <trace-file> [--json]
 agentlens replay <trace-file>
-agentlens review <baseline-trace> <candidate-trace> [--config path] [--out dir] [--no-scan] [--fail-on-failure]
+agentlens review <baseline-trace> <candidate-trace> [--config path] [--out dir] [--json] [--no-scan] [--fail-on-failure]
 agentlens diff <baseline-trace> <candidate-trace> [--json]
 agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]
 agentlens eval <trace-file> [--config path] [--json]

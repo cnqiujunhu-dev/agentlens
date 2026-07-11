@@ -94,6 +94,9 @@ outputs:
   review-bundle-manifest:
     description: Path to the generated review run bundle manifest when review inputs are set.
     value: ${{ steps.agentlens.outputs.review-bundle-manifest }}
+  review-manifest:
+    description: Path to the generated review pack manifest when review inputs are set.
+    value: ${{ steps.agentlens.outputs.review-manifest }}
   review-workflow-chains:
     description: Candidate chain event count from the review diff when review inputs are set.
     value: ${{ steps.agentlens.outputs.review-workflow-chains }}
@@ -205,6 +208,7 @@ runs:
               echo "review-pr-comment=$review_dir/reports/pr-comment.md"
               echo "review-bundle=$review_dir/reports/bundle"
               echo "review-bundle-manifest=$review_dir/reports/bundle/manifest.json"
+              echo "review-manifest=$review_dir/review.json"
             } >> "$GITHUB_OUTPUT"
             review_diff_json="$(mktemp)"
             set +e
@@ -248,6 +252,7 @@ runs:
             echo "review-pr-comment="
             echo "review-bundle="
             echo "review-bundle-manifest="
+            echo "review-manifest="
             echo "review-workflow-chains="
             echo "review-workflow-tasks="
             echo "review-workflow-errors="

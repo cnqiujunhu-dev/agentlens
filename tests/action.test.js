@@ -32,6 +32,7 @@ test("composite GitHub Action exposes CI outputs", () => {
   assert.match(action, /review_args=\(review/);
   assert.match(action, /review-pr-comment/);
   assert.match(action, /review-bundle-manifest/);
+  assert.match(action, /review-manifest/);
   assert.match(action, /review-workflow-chains/);
   assert.match(action, /review-workflow-task-delta/);
   assert.match(action, /review-workflow-regressions/);
@@ -56,6 +57,7 @@ test("repository workflow verifies GitHub Action outputs", () => {
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-pr-comment/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-bundle/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-bundle-manifest/);
+  assert.match(workflow, /steps\.agentlens-action\.outputs\.review-manifest/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-workflow-chains/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-workflow-task-delta/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-workflow-regressions/);

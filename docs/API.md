@@ -149,16 +149,18 @@ const review = writeReviewBundle({
 });
 
 console.log(formatReviewReport(review));
+console.log(review.manifest.summary.diff.workflow.deltas);
 ```
 
 CLI:
 
 ```bash
 agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json --out .agentlens/review
+agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json --out .agentlens/review --json
 agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json --fail-on-failure
 ```
 
-Review packs include copied traces, eval policy, CI summary, PR comment Markdown, SARIF, diff report, diff dashboard, and a static run bundle. The CI summary and PR comment Markdown include workflow diff rows when a baseline/candidate diff is available. See [AGENT_REVIEW.md](AGENT_REVIEW.md).
+Review packs include copied traces, eval policy, `review.json`, CI summary, PR comment Markdown, SARIF, diff report, diff dashboard, and a static run bundle. The CI summary and PR comment Markdown include workflow diff rows when a baseline/candidate diff is available. The `review.json` manifest is the stable machine-readable entry point for automation. See [AGENT_REVIEW.md](AGENT_REVIEW.md).
 
 ## CLI JSON Output
 
@@ -168,6 +170,7 @@ agentlens eval .agentlens/runs/demo.json --config evals/default.json --json
 agentlens scan .agentlens/runs/demo.json --json --sarif .agentlens/reports/agentlens-scan.sarif
 agentlens ci --runs .agentlens/runs --config evals/default.json --scan --json --sarif .agentlens/reports/agentlens-ci.sarif
 agentlens bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,timeline
+agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json --json
 agentlens diff .agentlens/runs/baseline.json .agentlens/runs/candidate.json --json
 agentlens diff-dashboard .agentlens/runs/baseline.json .agentlens/runs/candidate.json --out .agentlens/reports/diff.html
 agentlens otel .agentlens/runs/demo.json --out .agentlens/reports/demo.otlp.json

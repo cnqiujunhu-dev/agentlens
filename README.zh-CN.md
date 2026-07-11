@@ -102,14 +102,14 @@ AgentLens 的差异化是：
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。
 - Deterministic replay，不重新调用模型也能复盘时间线。
 - before/after trace diff 和静态 diff dashboard，包含 workflow delta。
-- `agentlens review`，把 baseline/candidate trace 生成 PR-ready review pack，并在 PR Markdown 里展示 workflow diff。
+- `agentlens review`，把 baseline/candidate trace 生成 PR-ready review pack，并输出 workflow diff 摘要和机器可读的 `review.json`。
 - JSON eval rules，用于 required events、forbidden tools、workflow gate、cost、latency、citation、MCP policy。
 - 本地 security scan，检查 secret-shaped value、prompt injection phrase、高风险工具调用。
 - SARIF 输出，可接入 GitHub code scanning。
 - 静态 dashboard，支持 timeline filter、timeline jump、tool call group、workflow review、security scan panel。
 - 静态 run bundle，包含 `index.html`、每条 trace 的 dashboard、workflow count 和 `manifest.json`。
 - GitHub Action，可输出 status、count、PR comment、run bundle、bundle manifest。
-- GitHub Action 可为 baseline/candidate trace 输出 review pack、workflow regression count 和 delta。
+- GitHub Action 可为 baseline/candidate trace 输出 review pack、review manifest 路径、workflow regression count 和 delta。
 - Redacted share bundle，便于公开 issue、PR 或支持线程。
 - MCP stdio JSON-RPC demo、MCP tool inventory、MCP risk scanner 和 policy exception workflow。
 
@@ -167,16 +167,17 @@ npm run diff:demo
 node ./bin/agentlens.js review .agentlens/runs/demo.json .agentlens/runs/failing-demo.json --config evals/default.json --out .agentlens/review
 ```
 
-`agentlens review` 会生成真实 PR 可用的 review pack，包括 CI summary、PR comment、SARIF、diff dashboard 和 run bundle。详见 [AGENT_REVIEW.md](docs/AGENT_REVIEW.md)。
+`agentlens review` 会生成真实 PR 可用的 review pack，包括 `review.json`、CI summary、PR comment、SARIF、diff dashboard 和 run bundle。加 `--json` 可以把同一份 manifest 打印给 bot 或 workflow step。详见 [AGENT_REVIEW.md](docs/AGENT_REVIEW.md)。
 
 输出位置：
 
 ```text
-.agentlens/regression-pr/reports/ci-summary.md
-.agentlens/regression-pr/reports/pr-comment.md
-.agentlens/regression-pr/reports/agentlens-ci.sarif
-.agentlens/regression-pr/reports/diff.html
-.agentlens/regression-pr/reports/bundle/index.html
+.agentlens/review/review.json
+.agentlens/review/reports/ci-summary.md
+.agentlens/review/reports/pr-comment.md
+.agentlens/review/reports/agentlens-ci.sarif
+.agentlens/review/reports/diff.html
+.agentlens/review/reports/bundle/index.html
 ```
 
 ## GitHub Actions
@@ -230,7 +231,7 @@ agentlens doctor [--json]
 agentlens demo [--out path]
 agentlens inspect <trace-file> [--json]
 agentlens replay <trace-file>
-agentlens review <baseline-trace> <candidate-trace> [--config path] [--out dir] [--no-scan] [--fail-on-failure]
+agentlens review <baseline-trace> <candidate-trace> [--config path] [--out dir] [--json] [--no-scan] [--fail-on-failure]
 agentlens diff <baseline-trace> <candidate-trace> [--json]
 agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]
 agentlens eval <trace-file> [--config path] [--json]

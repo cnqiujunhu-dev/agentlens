@@ -67,6 +67,7 @@ jobs:
           test "${{ steps.agentlens-action.outputs.review-pr-comment }}" = ".agentlens/reports/action-review/reports/pr-comment.md"
           test "${{ steps.agentlens-action.outputs.review-bundle }}" = ".agentlens/reports/action-review/reports/bundle"
           test "${{ steps.agentlens-action.outputs.review-bundle-manifest }}" = ".agentlens/reports/action-review/reports/bundle/manifest.json"
+          test "${{ steps.agentlens-action.outputs.review-manifest }}" = ".agentlens/reports/action-review/review.json"
           test "${{ steps.agentlens-action.outputs.review-workflow-chains }}" = "2"
           test "${{ steps.agentlens-action.outputs.review-workflow-tasks }}" = "0"
           test "${{ steps.agentlens-action.outputs.review-workflow-errors }}" = "2"
@@ -82,6 +83,8 @@ jobs:
           test -f .agentlens/reports/action-review/reports/diff.html
           test -f .agentlens/reports/action-review/reports/bundle/index.html
           test -f .agentlens/reports/action-review/reports/bundle/manifest.json
+          test -f .agentlens/reports/action-review/review.json
+          grep -q "agentlens.review.v1" .agentlens/reports/action-review/review.json
 
       - name: MCP adapter demo
         run: |

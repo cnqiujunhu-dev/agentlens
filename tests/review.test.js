@@ -108,10 +108,20 @@ test("writeReviewBundle generates a PR review artifact pack", () => {
     result.files.sarif,
     result.files.bundleIndex,
     result.files.bundleManifest,
+    result.files.manifest,
     result.files.readme
   ]) {
     assert.equal(fs.existsSync(file), true, file);
   }
+
+  const manifest = JSON.parse(fs.readFileSync(result.files.manifest, "utf8"));
+  assert.equal(result.manifest.schemaVersion, "agentlens.review.v1");
+  assert.deepEqual(manifest, result.manifest);
+  assert.equal(manifest.status.passed, false);
+  assert.equal(manifest.summary.ci.failed, 1);
+  assert.equal(manifest.summary.diff.workflow.deltas.tasks, -2);
+  assert.equal(manifest.summary.diff.workflow.regressions, 2);
+  assert.equal(manifest.files.prComment, result.files.prComment);
 
   assert.match(fs.readFileSync(result.files.prComment, "utf8"), /agentlens-ci-comment/);
   assert.match(fs.readFileSync(result.files.prComment, "utf8"), /Run bundle: https:\/\/example\.com\/bundle/);
@@ -121,6 +131,7 @@ test("writeReviewBundle generates a PR review artifact pack", () => {
   assert.match(fs.readFileSync(result.files.ciSummary, "utf8"), /Workflow Signal/);
   assert.match(fs.readFileSync(result.files.diffText, "utf8"), /status changed from passed to failed/);
   assert.match(formatReviewReport(result, { root: dir }), /AgentLens Review/);
+  assert.match(formatReviewReport(result, { root: dir }), /Review manifest/);
 });
 
 test("CLI review writes artifacts and can fail a CI gate", () => {
@@ -148,4 +159,34 @@ test("CLI review writes artifacts and can fail a CI gate", () => {
   assert.equal(fs.existsSync(path.join(outDir, "reports", "diff.html")), true);
   assert.equal(fs.existsSync(path.join(outDir, "reports", "pr-comment.md")), true);
   assert.equal(fs.existsSync(path.join(outDir, "reports", "bundle", "index.html")), true);
+  assert.equal(fs.existsSync(path.join(outDir, "review.json")), true);
+});
+
+test("CLI review can emit JSON manifest", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-review-cli-json-"));
+  const { baselineFile, candidateFile, configPath } = writeReviewInputs(dir);
+  const outDir = path.join(dir, "review");
+  const result = spawnSync(process.execPath, [
+    binPath,
+    "review",
+    baselineFile,
+    candidateFile,
+    "--config",
+    configPath,
+    "--out",
+    outDir,
+    "--json"
+  ], {
+    cwd: dir,
+    encoding: "utf8"
+  });
+
+  assert.equal(result.status, 0, result.stderr);
+  const manifest = JSON.parse(result.stdout);
+  assert.equal(manifest.schemaVersion, "agentlens.review.v1");
+  assert.equal(manifest.status.passed, false);
+  assert.equal(manifest.summary.diff.workflow.deltas.tasks, -2);
+  assert.equal(manifest.summary.diff.workflow.regressions, 2);
+  assert.equal(fs.existsSync(manifest.files.manifest), true);
+  assert.deepEqual(manifest, JSON.parse(fs.readFileSync(manifest.files.manifest, "utf8")));
 });

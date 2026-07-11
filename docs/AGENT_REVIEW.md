@@ -15,6 +15,7 @@ Generated files:
 - `.agentlens/review/runs/baseline.json`: copied baseline trace.
 - `.agentlens/review/runs/candidate.json`: copied candidate trace.
 - `.agentlens/review/eval.json`: copied eval policy used for the review.
+- `.agentlens/review/review.json`: machine-readable review manifest with status, generated file paths, CI counts, workflow deltas, and bundle links.
 - `.agentlens/review/reports/ci-summary.md`: GitHub Actions step summary body with trace diff workflow regressions.
 - `.agentlens/review/reports/pr-comment.md`: stable PR comment body with the `agentlens-ci-comment` marker and workflow diff summary.
 - `.agentlens/review/reports/ci-report.txt`: plain text CI report.
@@ -35,6 +36,7 @@ agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json \
 Useful options:
 
 - `--no-scan`: skip security scan and SARIF generation.
+- `--json`: print the same machine-readable manifest that is written to `review.json`.
 - `--scan-fail-on medium`: lower the scan failure threshold.
 - `--sections summary,scan,timeline`: reduce dashboard sections for compact artifacts.
 - `--artifact-url <url>`: add an uploaded bundle link to `pr-comment.md`.

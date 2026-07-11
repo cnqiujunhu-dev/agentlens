@@ -19,7 +19,7 @@ function usage() {
     "  agentlens demo [--out path]",
     "  agentlens inspect <trace-file> [--json]",
     "  agentlens replay <trace-file>",
-    "  agentlens review <baseline-trace> <candidate-trace> [--config path] [--out dir] [--no-scan] [--scan-fail-on severity] [--sections summary,event-types,scan,tool-calls,filters,timeline] [--fail-on-failure]",
+    "  agentlens review <baseline-trace> <candidate-trace> [--config path] [--out dir] [--json] [--no-scan] [--scan-fail-on severity] [--sections summary,event-types,scan,tool-calls,filters,timeline] [--fail-on-failure]",
     "  agentlens diff <baseline-trace> <candidate-trace> [--json]",
     "  agentlens diff-dashboard <baseline-trace> <candidate-trace> [--out path]",
     "  agentlens eval <trace-file> [--config path] [--json]",
@@ -152,7 +152,7 @@ async function main() {
       artifactUrl: option("--artifact-url", undefined),
       sarifUrl: option("--sarif-url", undefined)
     });
-    console.log(formatReviewReport(result, { root: process.cwd() }));
+    console.log(flag("--json") ? JSON.stringify(result.manifest, null, 2) : formatReviewReport(result, { root: process.cwd() }));
     if (flag("--fail-on-failure") && !result.status.passed) process.exitCode = 1;
     return;
   }

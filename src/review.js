@@ -7,6 +7,7 @@ import { loadEvalConfig } from "./eval.js";
 import { ensureDir, readTrace, writeJson, writeText, writeTrace } from "./store.js";
 
 const DEFAULT_SECTIONS = "summary,scan,tool-calls,workflow,filters,timeline";
+const REVIEW_MANIFEST_SCHEMA = "agentlens.review.v1";
 
 function toDisplayPath(filePath, root) {
   return path.relative(root, filePath).replaceAll(path.sep, "/") || ".";
@@ -26,6 +27,7 @@ function formatReviewReadme(result, { root = process.cwd() } = {}) {
     "- `runs/baseline.json`: copied baseline trace.",
     "- `runs/candidate.json`: copied candidate trace.",
     "- `eval.json`: copied eval policy used for this review.",
+    "- `review.json`: machine-readable review manifest for automation.",
     "- `reports/ci-summary.md`: Markdown summary suitable for `GITHUB_STEP_SUMMARY`.",
     "- `reports/pr-comment.md`: stable PR comment body with the `agentlens-ci-comment` marker.",
     "- `reports/ci-report.txt`: plain text CI report.",
@@ -55,6 +57,74 @@ function formatReviewReadme(result, { root = process.cwd() } = {}) {
   );
 
   return `${lines.join("\n")}\n`;
+}
+
+function countWorkflowRegressions(workflowDeltas = {}) {
+  return (
+    Number((workflowDeltas.chains ?? 0) < 0) +
+    Number((workflowDeltas.tasks ?? 0) < 0) +
+    Number((workflowDeltas.errors ?? 0) > 0)
+  );
+}
+
+function summarizeCiResults(results = []) {
+  return results.map((result) => ({
+    file: result.file,
+    traceId: result.traceId,
+    name: result.name,
+    passed: result.passed,
+    error: result.error ?? null,
+    eval: result.report
+      ? {
+          total: result.report.results.length,
+          passed: result.report.results.filter((item) => item.passed).length,
+          failed: result.report.results.filter((item) => !item.passed).length
+        }
+      : null,
+    scan: result.scanReport
+      ? {
+          passed: result.scanReport.passed,
+          findings: result.scanReport.summary.findings,
+          failOnSeverity: result.scanReport.failOnSeverity
+        }
+      : null
+  }));
+}
+
+function buildReviewManifest(result) {
+  const workflowDeltas = result.diff.deltas.workflow ?? {};
+  return {
+    schemaVersion: REVIEW_MANIFEST_SCHEMA,
+    status: { ...result.status },
+    inputs: { ...result.inputs },
+    files: { ...result.files },
+    summary: {
+      ci: {
+        total: result.ciReport.total,
+        passed: result.ciReport.passed,
+        failed: result.ciReport.failed,
+        scan: result.ciReport.scan,
+        results: summarizeCiResults(result.ciReport.results)
+      },
+      diff: {
+        regressions: result.diff.regressions,
+        workflow: {
+          baseline: { ...result.diff.baseline.workflow },
+          candidate: { ...result.diff.candidate.workflow },
+          deltas: { ...workflowDeltas },
+          rows: result.diff.workflow.map((row) => ({ ...row })),
+          regressions: countWorkflowRegressions(workflowDeltas)
+        }
+      },
+      bundle: {
+        total: result.bundle.total,
+        valid: result.bundle.valid,
+        invalid: result.bundle.invalid,
+        index: result.bundle.index,
+        manifest: result.bundle.manifest
+      }
+    }
+  };
 }
 
 export function writeReviewBundle({
@@ -112,6 +182,7 @@ export function writeReviewBundle({
     sarif: scan ? path.join(reportsDir, "agentlens-ci.sarif") : null,
     bundleIndex: bundle.index,
     bundleManifest: bundle.manifest,
+    manifest: path.join(outDir, "review.json"),
     readme: path.join(outDir, "README.md")
   };
 
@@ -142,9 +213,12 @@ export function writeReviewBundle({
     files,
     ciReport,
     diff,
-    bundle
+    bundle,
+    manifest: null
   };
 
+  result.manifest = buildReviewManifest(result);
+  writeJson(files.manifest, result.manifest);
   writeText(files.readme, formatReviewReadme(result));
 
   return result;
@@ -165,6 +239,7 @@ export function formatReviewReport(result, { root = process.cwd() } = {}) {
     `- Diff report: ${toDisplayPath(result.files.diffText, root)}`,
     `- Diff dashboard: ${toDisplayPath(result.files.diffDashboard, root)}`,
     `- Run bundle: ${toDisplayPath(result.files.bundleIndex, root)}`,
+    `- Review manifest: ${toDisplayPath(result.files.manifest, root)}`,
     `- README: ${toDisplayPath(result.files.readme, root)}`
   ];
 
