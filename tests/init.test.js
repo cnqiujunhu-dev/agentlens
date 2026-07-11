@@ -36,9 +36,16 @@ test("initWorkspace scaffolds starter files without overwriting", () => {
   assert.equal(evalConfig.version, "agentlens.eval.v1");
   const actionExample = fs.readFileSync(path.join(workspace.examplesDir, "github-action.yml"), "utf8");
   assert.match(actionExample, /actions\/checkout@v7/);
+  assert.match(actionExample, /issues: write/);
+  assert.match(actionExample, /pull-requests: read/);
   assert.match(actionExample, new RegExp(latestStableActionRef.replaceAll(".", "\\.")));
+  assert.match(actionExample, /pr-comment: \.agentlens\/reports\/agentlens-pr-comment\.md/);
   assert.match(actionExample, /bundle: \.agentlens\/reports\/bundle/);
   assert.match(actionExample, /bundle-sections: summary,scan,tool-calls,workflow,filters,timeline/);
+  assert.match(actionExample, /actions\/upload-artifact@v4/);
+  assert.match(actionExample, /agentlens-run-bundle/);
+  assert.match(actionExample, /Upsert AgentLens PR comment/);
+  assert.match(actionExample, /agentlens-ci-comment/);
   assert.doesNotMatch(actionExample, /actions\/checkout@v4/);
   assert.doesNotMatch(actionExample, /your-org\/agentlens@v0/);
 
@@ -69,6 +76,12 @@ test("initWorkspace can scaffold a runnable Python starter", () => {
   assert.equal(fs.existsSync(path.join(workspace.pythonDir, "README.md")), true);
   assert.equal(fs.existsSync(pythonAction), true);
   assert.equal(workspace.createdFiles.length, 7);
+  const pythonActionExample = fs.readFileSync(pythonAction, "utf8");
+  assert.match(pythonActionExample, /actions\/setup-python@v6/);
+  assert.match(pythonActionExample, /pr-comment: \.agentlens\/reports\/agentlens-pr-comment\.md/);
+  assert.match(pythonActionExample, /actions\/upload-artifact@v4/);
+  assert.match(pythonActionExample, /Upsert AgentLens PR comment/);
+  assert.match(pythonActionExample, /agentlens-ci-comment/);
 
   const [command, args] = python;
   const result = spawnSync(command, [...args, starterFile, "--out", traceFile], {

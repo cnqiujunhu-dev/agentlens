@@ -20,11 +20,12 @@ Generated files:
 - `.agentlens/quickstart/reports/trace.otlp.json`: OpenTelemetry/OpenInference-style OTLP JSON export.
 - `.agentlens/quickstart/reports/bundle/index.html`: static run bundle for review artifacts.
 - `.agentlens/quickstart/share/demo/summary.md`: redacted share bundle summary for issues or support threads.
+- `.agentlens/examples/github-action.yml`: copyable GitHub Action template with run bundle upload and marker-based PR comment upsert.
 
 With `--python`, quickstart also writes the Python starter from `agentlens init --python`:
 
 - `.agentlens/python/agentlens_trace.py`
 - `.agentlens/python/basic_run.py`
-- `.agentlens/examples/python-github-action.yml`
+- `.agentlens/examples/python-github-action.yml`: Python trace generation plus the same run bundle upload and PR comment upsert pattern.
 
 The quickstart pack is intentionally separate from `.agentlens/runs`. That makes it safe to run in a repository that already contains passing or failing traces while still demonstrating the same CI, dashboard, bundle, share, scan, and OTLP paths used by real projects.

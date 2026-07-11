@@ -40,6 +40,11 @@ on:
   pull_request:
   push:
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
 jobs:
   agentlens:
     runs-on: ubuntu-latest
@@ -50,12 +55,39 @@ jobs:
         run: npm test
 
       - name: Run AgentLens evals
+        id: agentlens
         uses: cnqiujunhu-dev/agentlens@v0.3.0
         with:
           runs: .agentlens/runs
           config: .agentlens/evals/default.json
+          pr-comment: .agentlens/reports/agentlens-pr-comment.md
           bundle: .agentlens/reports/bundle
           bundle-sections: summary,scan,tool-calls,workflow,filters,timeline
+
+      - name: Upload AgentLens run bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentlens-run-bundle
+          path: \${{ steps.agentlens.outputs.bundle }}
+
+      - name: Upsert AgentLens PR comment
+        if: always() && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: \${{ github.token }}
+          REPO: \${{ github.repository }}
+          PR_NUMBER: \${{ github.event.pull_request.number }}
+        run: |
+          marker='<!-- agentlens-ci-comment -->'
+          body_file='.agentlens/reports/agentlens-pr-comment.md'
+          body="$(cat "$body_file")"
+          comment_id="$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" --jq '.[] | select(.body | contains("<!-- agentlens-ci-comment -->")) | .id' | head -n 1)"
+
+          if [[ -n "$comment_id" ]]; then
+            gh api --method PATCH "repos/$REPO/issues/comments/$comment_id" -f body="$body"
+          else
+            gh api --method POST "repos/$REPO/issues/$PR_NUMBER/comments" -f body="$body"
+          fi
 `;
 
 const PYTHON_INIT_README = `# AgentLens Python Starter
@@ -153,6 +185,11 @@ on:
   pull_request:
   push:
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
 jobs:
   agentlens:
     runs-on: ubuntu-latest
@@ -167,6 +204,7 @@ jobs:
         run: python .agentlens/python/basic_run.py --out .agentlens/runs/python-starter.json
 
       - name: Run AgentLens evals
+        id: agentlens
         uses: cnqiujunhu-dev/agentlens@v0.3.0
         with:
           runs: .agentlens/runs
@@ -175,6 +213,31 @@ jobs:
           pr-comment: .agentlens/reports/agentlens-pr-comment.md
           bundle: .agentlens/reports/bundle
           bundle-sections: summary,scan,tool-calls,workflow,filters,timeline
+
+      - name: Upload AgentLens run bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentlens-run-bundle
+          path: \${{ steps.agentlens.outputs.bundle }}
+
+      - name: Upsert AgentLens PR comment
+        if: always() && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: \${{ github.token }}
+          REPO: \${{ github.repository }}
+          PR_NUMBER: \${{ github.event.pull_request.number }}
+        run: |
+          marker='<!-- agentlens-ci-comment -->'
+          body_file='.agentlens/reports/agentlens-pr-comment.md'
+          body="$(cat "$body_file")"
+          comment_id="$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" --jq '.[] | select(.body | contains("<!-- agentlens-ci-comment -->")) | .id' | head -n 1)"
+
+          if [[ -n "$comment_id" ]]; then
+            gh api --method PATCH "repos/$REPO/issues/comments/$comment_id" -f body="$body"
+          else
+            gh api --method POST "repos/$REPO/issues/$PR_NUMBER/comments" -f body="$body"
+          fi
 `;
 
 export function ensureDir(dir) {

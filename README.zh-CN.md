@@ -94,7 +94,7 @@ AgentLens 的差异化是：
 - `npm run pack:smoke`，在临时干净项目中验证 npm tarball 安装后的 CLI 和 API 可用性。
 - `npm run npm:publish:check`，验证 npm package metadata、打包文件和 publish dry-run 输出。
 - `npm run npm:postpublish:check`，发布后从干净临时项目验证 registry 安装和一条命令 quickstart。
-- `agentlens init --python`，为 Python 项目生成 starter trace writer、示例 run 和 GitHub Action 模板。
+- `agentlens init --python`，为 Python 项目生成 starter trace writer、示例 run，以及带 run bundle 上传和 PR comment upsert 的 GitHub Action 模板。
 - Python framework cookbook，覆盖 `AgentLensLangChainBridge`、`AgentLensLlamaIndexBridge` 和 `AgentLensCrewAIBridge` trace 边界。
 - LangChain-like object payload fixture，用于验证 Python adapter 对真实回调载荷形态的兼容性。
 - OpenTelemetry/OpenInference-style OTLP JSON 单 trace 和批量 runs 目录导出，`agentlens otel-batch` 可生成批量 manifest，便于接入已有 observability stack。

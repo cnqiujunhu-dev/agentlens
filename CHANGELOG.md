@@ -17,6 +17,7 @@
 - GitHub Action review workflow outputs for chain, task, workflow error, delta, and workflow regression counts.
 - Review pack `review.json` manifests, `agentlens review --json`, and a GitHub Action `review-manifest` output for PR automation.
 - Review manifest JSON Schema, `agentlens schema review`, and `agentlens validate review` for downstream PR bot contracts.
+- `agentlens init` GitHub Action examples now include run bundle uploads and marker-based PR comment upsert steps.
 
 ### Changed
 

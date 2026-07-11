@@ -187,7 +187,7 @@ npm run demo:regression-pr
 
 `agentlens quickstart` writes an isolated artifact pack under `.agentlens/quickstart/`, including a passing demo trace, eval report, scan report, dashboard, OTLP JSON, PR comment Markdown, run bundle, and redacted share bundle. See [QUICKSTART_ARTIFACTS.md](docs/QUICKSTART_ARTIFACTS.md).
 
-`agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example. `agentlens init --python` also creates `.agentlens/python/basic_run.py`, `.agentlens/python/agentlens_trace.py`, and `.agentlens/examples/python-github-action.yml`.
+`agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example with run bundle upload and marker-based PR comment upsert. `agentlens init --python` also creates `.agentlens/python/basic_run.py`, `.agentlens/python/agentlens_trace.py`, and `.agentlens/examples/python-github-action.yml`.
 
 Python users can start from the `agentlens-trace` package skeleton in `python/agentlens-trace/`, from `examples/python-basic-run.py` and `examples/python-async-run.py`, or run `npm run demo:python` to write AgentLens-compatible sync/async traces, validate them, evaluate them, scan them, and export OTLP JSON. The package exposes `AgentLensRun`, `trace_llm_call`, `trace_async_llm_call`, and framework helpers through `agentlens_trace.adapters`. `npm run python:publish:check` installs the package into a temporary target directory and verifies the installed package entrypoints before a release.
 
