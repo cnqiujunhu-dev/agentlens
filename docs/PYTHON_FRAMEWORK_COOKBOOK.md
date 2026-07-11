@@ -36,7 +36,7 @@ Use framework-native callbacks when they already expose the details you need. Us
 
 ## LangChain-Style Callback Bridge
 
-LangChain's callback surface includes LLM, retriever, tool, chain, and agent events. In AgentLens, the useful minimum is to record retriever input/output, tool input/output, and the final model call.
+LangChain's callback surface includes LLM, retriever, tool, chain, and agent events. In AgentLens, the useful minimum is to record the chain boundary, retriever input/output, tool input/output, and the final model call.
 
 ```python
 from agentlens_trace import AgentLensRun
@@ -45,15 +45,17 @@ from agentlens_trace.adapters import AgentLensLangChainBridge
 run = AgentLensRun(app="support-agent", name="langchain-refund-answer")
 bridge = AgentLensLangChainBridge(run, provider="openai-compatible", model="gpt-example")
 
+bridge.on_chain_start({"name": "refund-chain"}, {"question": "Can I refund this order?"})
 bridge.on_retriever_start({"name": "policy-retriever"}, "refund policy")
 bridge.on_retriever_end([{"id": "refund-policy", "score": 0.94}], duration_ms=54)
 bridge.on_tool_start({"name": "policy.lookup"}, "refund policy", permission="read-only", risk="low")
 bridge.on_tool_end({"policy": "Refunds are available within 30 days."}, duration_ms=73)
 bridge.on_llm_start({"model": "gpt-example"}, ["Can I refund this order?"])
 bridge.on_llm_end({"content": "Refunds are available within 30 days.", "citations": ["refund-policy"]})
+bridge.on_chain_end({"answer": "Refunds are available within 30 days.", "citations": ["refund-policy"]})
 ```
 
-Attach the handler where your LangChain version expects callbacks, or keep the same event mapping inside a wrapper around the chain execution.
+Attach the handler where your LangChain version expects callbacks, or keep the same event mapping inside a wrapper around the chain execution. Error callbacks are also available: `on_retriever_error`, `on_tool_error`, `on_chain_error`, and `on_llm_error`. They record the failing event with `status: "error"` and add a paired AgentLens `error` marker so evals, dashboards, and review bundles can find the failure.
 
 ## LangChain-Like Object Fixture
 
@@ -64,6 +66,8 @@ Attach the handler where your LangChain version expects callbacks, or keep the s
 - prompt values exposing `to_messages()`
 - message objects with `type` and `content`
 - LLM result objects with `generations` and nested `llm_output.token_usage`
+- chain start/end callback boundaries
+- tool and chain error callback payloads in the test suite
 
 Run it through the framework demo gate:
 

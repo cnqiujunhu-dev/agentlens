@@ -74,6 +74,11 @@ def write_fixture(out_dir: Path) -> Path:
         )
     ]
 
+    bridge.on_chain_start(
+        {"id": ["langchain", "chains", "RunnableSequence"]},
+        {"question": "Can this order be refunded?"},
+        run_id="lc_fixture_chain",
+    )
     bridge.on_retriever_start(
         {"id": ["langchain", "retrievers", "VectorStoreRetriever"]},
         "refund eligibility",
@@ -112,6 +117,11 @@ def write_fixture(out_dir: Path) -> Path:
         duration_ms=126,
         run_id="lc_fixture_llm",
         parent_run_id="lc_fixture_chain",
+    )
+    bridge.on_chain_end(
+        {"answer": "Yes. The policy supports a 30-day refund.", "citations": ["refund-policy.md"]},
+        duration_ms=214,
+        run_id="lc_fixture_chain",
     )
 
     run.finish("passed")

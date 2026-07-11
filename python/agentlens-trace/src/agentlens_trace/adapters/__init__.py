@@ -200,6 +200,11 @@ def _pop_duration(data: Dict[str, Any]) -> Optional[float]:
     return value
 
 
+def _error_output(error: Exception) -> Dict[str, Any]:
+    message = str(error)
+    return {"error": message, "message": message, "type": error.__class__.__name__}
+
+
 def _serialized_name(serialized: Any, fallback: str) -> str:
     value = _first_value(serialized, ("name", "id", "tool", "class_name"), fallback)
     if isinstance(value, (list, tuple)) and value:
@@ -386,6 +391,7 @@ class AgentLensLangChainBridge:
         model: Optional[str] = None,
         retriever_name: str = "retriever",
         tool_name: str = "tool",
+        chain_name: str = "chain",
         llm_name: str = "final-answer",
         metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
@@ -394,16 +400,65 @@ class AgentLensLangChainBridge:
         self.model = model
         self.retriever_name = retriever_name
         self.tool_name = tool_name
+        self.chain_name = chain_name
         self.llm_name = llm_name
         self.metadata = metadata or {}
         self._active_retriever_name = retriever_name
         self._active_tool_name = tool_name
+        self._active_chain_name = chain_name
         self._active_llm_name = llm_name
         self._active_provider = provider
         self._active_model = model
 
     def _metadata(self, extra: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         return _metadata("langchain", self.metadata, extra)
+
+    def _record_error_marker(self, name: str, error: Exception, metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        return self.run.add_event(
+            "error",
+            name=name,
+            status="error",
+            output=_error_output(error),
+            metadata=self._metadata(metadata),
+        )
+
+    def on_chain_start(self, serialized: Any, inputs: Any, **kwargs: Any) -> Dict[str, Any]:
+        data = dict(kwargs)
+        name = str(data.pop("name", _serialized_name(serialized, self.chain_name)))
+        self._active_chain_name = name
+        return self.run.add_event(
+            "chain.start",
+            name=name,
+            input=_json_safe(inputs),
+            metadata=self._metadata(data),
+        )
+
+    def on_chain_end(self, outputs: Any, **kwargs: Any) -> Dict[str, Any]:
+        data = dict(kwargs)
+        duration_ms = _pop_duration(data)
+        name = str(data.pop("name", self._active_chain_name))
+        return self.run.add_event(
+            "chain.end",
+            name=name,
+            output=_json_safe(outputs),
+            duration_ms=duration_ms,
+            metadata=self._metadata(data),
+        )
+
+    def on_chain_error(self, error: Exception, **kwargs: Any) -> Dict[str, Any]:
+        data = dict(kwargs)
+        duration_ms = _pop_duration(data)
+        name = str(data.pop("name", self._active_chain_name))
+        event = self.run.add_event(
+            "chain.end",
+            name=name,
+            status="error",
+            output=_error_output(error),
+            duration_ms=duration_ms,
+            metadata=self._metadata(data),
+        )
+        self._record_error_marker(name, error, data)
+        return event
 
     def on_retriever_start(self, serialized: Any, query: Any, **kwargs: Any) -> Dict[str, Any]:
         data = dict(kwargs)
@@ -428,6 +483,21 @@ class AgentLensLangChainBridge:
             metadata=self._metadata(data),
         )
 
+    def on_retriever_error(self, error: Exception, **kwargs: Any) -> Dict[str, Any]:
+        data = dict(kwargs)
+        duration_ms = _pop_duration(data)
+        name = str(data.pop("name", self._active_retriever_name))
+        event = self.run.add_event(
+            "retrieval.result",
+            name=name,
+            status="error",
+            output=_error_output(error),
+            duration_ms=duration_ms,
+            metadata=self._metadata(data),
+        )
+        self._record_error_marker(name, error, data)
+        return event
+
     def on_tool_start(self, serialized: Any, input_str: Any, **kwargs: Any) -> Dict[str, Any]:
         data = dict(kwargs)
         name = str(data.pop("name", _serialized_name(serialized, self.tool_name)))
@@ -437,6 +507,21 @@ class AgentLensLangChainBridge:
             input={"input": _json_safe(input_str)},
             metadata=self._metadata(data),
         )
+
+    def on_tool_error(self, error: Exception, **kwargs: Any) -> Dict[str, Any]:
+        data = dict(kwargs)
+        duration_ms = _pop_duration(data)
+        name = str(data.pop("name", self._active_tool_name))
+        event = self.run.add_event(
+            "tool.result",
+            name=name,
+            status="error",
+            output=_error_output(error),
+            duration_ms=duration_ms,
+            metadata=self._metadata(data),
+        )
+        self._record_error_marker(name, error, data)
+        return event
 
     def on_tool_end(self, output: Any, **kwargs: Any) -> Dict[str, Any]:
         data = dict(kwargs)
@@ -491,19 +576,13 @@ class AgentLensLangChainBridge:
             "llm.response",
             name=name,
             status="error",
-            output={"error": str(error), "type": error.__class__.__name__},
+            output=_error_output(error),
             duration_ms=duration_ms,
             provider=data.pop("provider", self._active_provider),
             model=data.pop("model", self._active_model),
             metadata=self._metadata(data),
         )
-        self.run.add_event(
-            "error",
-            name=name,
-            status="error",
-            output={"message": str(error), "type": error.__class__.__name__},
-            metadata=self._metadata(),
-        )
+        self._record_error_marker(name, error)
         return event
 
 

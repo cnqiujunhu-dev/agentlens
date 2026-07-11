@@ -10,6 +10,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const runnerPath = path.resolve(__dirname, "../scripts/run-python-demo.mjs");
 const frameworkRunnerPath = path.resolve(__dirname, "../scripts/run-python-framework-demo.mjs");
 const packageCheckPath = path.resolve(__dirname, "../scripts/check-python-package.mjs");
+const pythonPackagePath = path.resolve(__dirname, "../python/agentlens-trace/src");
+
+function findPython() {
+  const candidates = process.platform === "win32"
+    ? [["py", ["-3"]], ["python", []], ["python3", []]]
+    : [["python3", []], ["python", []]];
+
+  for (const [command, baseArgs] of candidates) {
+    const result = spawnSync(command, [...baseArgs, "-c", "import sys; sys.exit(0 if sys.version_info >= (3, 8) else 1)"], {
+      encoding: "utf8"
+    });
+    if (result.status === 0) return [command, baseArgs];
+  }
+  throw new Error("Python 3.8+ is required for Python trace writer tests");
+}
 
 test("Python trace writer demo produces AgentLens-compatible artifacts", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-python-demo-"));
@@ -86,6 +101,15 @@ test("Python framework cookbook demo produces framework-shaped traces", () => {
   }
 
   const fixture = JSON.parse(fs.readFileSync(path.join(runsDir, "python-langchain-fixture-demo.json"), "utf8"));
+  const fixtureChainStart = fixture.events.find((event) => event.type === "chain.start");
+  assert.equal(fixtureChainStart.name, "RunnableSequence");
+  assert.equal(fixtureChainStart.input.question, "Can this order be refunded?");
+  assert.equal(fixtureChainStart.metadata.run_id, "lc_fixture_chain");
+
+  const fixtureChainEnd = fixture.events.find((event) => event.type === "chain.end");
+  assert.equal(fixtureChainEnd.output.citations.includes("refund-policy.md"), true);
+  assert.equal(fixtureChainEnd.durationMs, 214);
+
   const fixtureResponse = fixture.events.find((event) => event.type === "llm.response" && event.name === "fixture-final-answer");
   assert.equal(fixtureResponse.output.content, "Yes. The policy supports a 30-day refund.");
   assert.equal(fixtureResponse.output.citations.includes("refund-policy.md"), true);
@@ -132,6 +156,56 @@ test("Python framework cookbook demo produces framework-shaped traces", () => {
   const crewTaskEnd = crewai.events.find((event) => event.type === "agent.task.end");
   assert.equal(crewTaskEnd.output.citations.includes("crew_refund_policy"), true);
   assert.equal(crewTaskEnd.metadata.agent, "researcher");
+});
+
+test("Python LangChain bridge records chain and tool errors", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-python-langchain-errors-"));
+  const traceFile = path.join(dir, "langchain-error-demo.json");
+  const [pythonCommand, pythonBaseArgs] = findPython();
+  const script = `
+from agentlens_trace import AgentLensRun
+from agentlens_trace.adapters import AgentLensLangChainBridge
+
+run = AgentLensRun(app="python-langchain-error-agent", name="LangChain callback error fixture")
+bridge = AgentLensLangChainBridge(run, provider="fixture-provider", model="fixture-model")
+bridge.on_chain_start({"id": ["langchain", "chains", "RunnableSequence"]}, {"question": "refund?"}, run_id="lc_error_chain")
+bridge.on_tool_start({"id": ["langchain", "tools", "policy.lookup"]}, {"query": "refund"}, run_id="lc_error_tool")
+bridge.on_tool_error(RuntimeError("policy lookup timed out"), duration_ms=12, run_id="lc_error_tool")
+bridge.on_chain_error(ValueError("chain failed after tool timeout"), duration_ms=20, run_id="lc_error_chain")
+run.finish("failed")
+run.write(${JSON.stringify(traceFile)})
+`;
+
+  const result = spawnSync(pythonCommand, [...pythonBaseArgs, "-c", script], {
+    cwd: dir,
+    encoding: "utf8",
+    env: {
+      ...process.env,
+      PYTHONPATH: pythonPackagePath
+    }
+  });
+
+  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+  const trace = JSON.parse(fs.readFileSync(traceFile, "utf8"));
+  assert.equal(trace.status, "failed");
+
+  const toolError = trace.events.find((event) => event.type === "tool.result");
+  assert.equal(toolError.status, "error");
+  assert.equal(toolError.name, "policy.lookup");
+  assert.equal(toolError.output.type, "RuntimeError");
+  assert.equal(toolError.output.message, "policy lookup timed out");
+  assert.equal(toolError.metadata.run_id, "lc_error_tool");
+
+  const chainError = trace.events.find((event) => event.type === "chain.end");
+  assert.equal(chainError.status, "error");
+  assert.equal(chainError.name, "RunnableSequence");
+  assert.equal(chainError.output.type, "ValueError");
+  assert.equal(chainError.durationMs, 20);
+
+  const errorMarkers = trace.events.filter((event) => event.type === "error");
+  assert.equal(errorMarkers.length, 2);
+  assert.equal(errorMarkers.some((event) => event.output.message === "policy lookup timed out"), true);
+  assert.equal(errorMarkers.some((event) => event.output.message === "chain failed after tool timeout"), true);
 });
 
 test("Python package smoke check produces an AgentLens-compatible trace", () => {

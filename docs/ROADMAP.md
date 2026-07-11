@@ -93,6 +93,7 @@ Shipped for the v0.3.1 release candidate:
 - Post-publish npm registry smoke check for clean-project quickstart verification.
 - LlamaIndex-style QueryBundle and source node normalization for Python framework bridge helpers.
 - CrewAI-style agent, task, tool, and task output object normalization for Python framework bridge helpers.
+- LangChain-style chain boundary and callback error coverage for Python framework bridge helpers.
 
 Candidates:
 
