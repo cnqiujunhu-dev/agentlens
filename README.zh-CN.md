@@ -107,7 +107,7 @@ AgentLens 的差异化是：
 - 本地 security scan，检查 secret-shaped value、prompt injection phrase、高风险工具调用。
 - SARIF 输出，可接入 GitHub code scanning。
 - 静态 dashboard，支持 timeline filter、timeline jump、tool call group、workflow review、security scan panel。
-- 静态 run bundle，包含 `index.html`、每条 trace 的 dashboard 和 `manifest.json`。
+- 静态 run bundle，包含 `index.html`、每条 trace 的 dashboard、workflow count 和 `manifest.json`。
 - GitHub Action，可输出 status、count、PR comment、run bundle、bundle manifest。
 - GitHub Action 可为 baseline/candidate trace 输出 review pack。
 - Redacted share bundle，便于公开 issue、PR 或支持线程。

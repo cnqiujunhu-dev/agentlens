@@ -1,16 +1,25 @@
 export function summarizeTrace(trace) {
   const byType = new Map();
   const tools = [];
+  const workflow = {
+    chains: 0,
+    tasks: 0,
+    errors: 0
+  };
   let errors = 0;
   let totalCostUsd = 0;
   let totalLlmTokens = 0;
   let totalKnownDurationMs = 0;
 
   for (const event of trace.events) {
-    byType.set(event.type, (byType.get(event.type) ?? 0) + 1);
+    const type = String(event.type ?? "");
+    byType.set(type, (byType.get(type) ?? 0) + 1);
 
-    if (event.type === "error" || event.status === "error") errors += 1;
-    if (event.type === "tool.call") tools.push(event.name ?? "unnamed-tool");
+    if (type === "error" || event.status === "error") errors += 1;
+    if (type.startsWith("chain.")) workflow.chains += 1;
+    if (type.startsWith("agent.task.")) workflow.tasks += 1;
+    if (type === "error" || event.status === "error" || type.endsWith(".error")) workflow.errors += 1;
+    if (type === "tool.call") tools.push(event.name ?? "unnamed-tool");
     if (typeof event.durationMs === "number") totalKnownDurationMs += event.durationMs;
     if (typeof event.usage?.costUsd === "number") totalCostUsd += event.usage.costUsd;
     if (typeof event.usage?.inputTokens === "number") totalLlmTokens += event.usage.inputTokens;
@@ -33,6 +42,7 @@ export function summarizeTrace(trace) {
     eventCount: trace.events.length,
     byType: Object.fromEntries([...byType.entries()].sort(([a], [b]) => a.localeCompare(b))),
     tools,
+    workflow,
     errors,
     totalCostUsd,
     totalLlmTokens,
@@ -41,6 +51,7 @@ export function summarizeTrace(trace) {
 }
 
 export function formatSummary(summary) {
+  const workflow = summary.workflow ?? { chains: 0, tasks: 0, errors: 0 };
   const lines = [
     `Run: ${summary.runId}`,
     `App: ${summary.app}`,
@@ -52,6 +63,7 @@ export function formatSummary(summary) {
     `LLM tokens: ${summary.totalLlmTokens}`,
     `Estimated cost: $${summary.totalCostUsd.toFixed(4)}`,
     `Errors: ${summary.errors}`,
+    `Workflow: ${workflow.chains} chain events, ${workflow.tasks} task events, ${workflow.errors} workflow errors`,
     "",
     "Events by type:"
   ];

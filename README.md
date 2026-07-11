@@ -106,8 +106,8 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Trace diff reports for before/after agent regressions.
 - Static diff dashboards for sharing before/after regressions.
 - `agentlens review` for turning baseline/candidate traces into a PR-ready review pack.
-- Static run bundles for reviewing a directory of traces as a CI artifact.
-- Machine-readable `manifest.json` output for run bundle automation.
+- Static run bundles for reviewing a directory of traces as a CI artifact, including workflow counts in the index.
+- Machine-readable `manifest.json` output for run bundle automation, including workflow counts for PR bots.
 - Dashboard review workflow for PR artifacts, compact sections, and filtered view links.
 - Runnable agent regression PR demo that emits CI summary, SARIF, diff dashboard, and run bundle artifacts.
 - JSON output for inspect, eval, CI, and diff automation.

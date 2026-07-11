@@ -16,7 +16,7 @@ For a pull request or CI run with multiple traces:
 agentlens bundle .agentlens/runs --out .agentlens/reports/bundle --sections summary,scan,tool-calls,workflow,filters,timeline
 ```
 
-Upload `.agentlens/reports/bundle` as a CI artifact so reviewers can open `index.html`, inspect `manifest.json` from automation, and then drill into individual dashboards.
+Upload `.agentlens/reports/bundle` as a CI artifact so reviewers can open `index.html`, inspect workflow counts in `manifest.json` from automation, and then drill into individual dashboards.
 
 ## Review Order
 

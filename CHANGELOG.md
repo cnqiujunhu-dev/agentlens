@@ -10,6 +10,7 @@
 - Static dashboard Workflow Review section for chain boundaries, agent tasks, and error markers.
 - Reproducible dashboard screenshot generation for README assets.
 - Focused launch dashboard artifact for showcasing Workflow Review in README GIFs.
+- Run bundle index and `manifest.json` workflow counts for chain, task, and workflow error review.
 
 ### Changed
 

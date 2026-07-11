@@ -25,16 +25,33 @@ function relativePath(root, file) {
   return path.relative(root, file).replaceAll(path.sep, "/");
 }
 
+function normalizeWorkflow(workflow = {}) {
+  return {
+    chains: workflow.chains ?? 0,
+    tasks: workflow.tasks ?? 0,
+    errors: workflow.errors ?? 0
+  };
+}
+
 function summarizeBundleItems(items) {
   const valid = items.filter((item) => item.valid).length;
   const failed = items.filter((item) => item.valid && item.status === "failed").length;
   const scanFindings = items.reduce((sum, item) => sum + (item.scanFindings ?? 0), 0);
+  const workflow = items.reduce(
+    (sum, item) => ({
+      chains: sum.chains + (item.workflow?.chains ?? 0),
+      tasks: sum.tasks + (item.workflow?.tasks ?? 0),
+      errors: sum.errors + (item.workflow?.errors ?? 0)
+    }),
+    { chains: 0, tasks: 0, errors: 0 }
+  );
   return {
     total: items.length,
     valid,
     invalid: items.length - valid,
     failed,
-    scanFindings
+    scanFindings,
+    workflow
   };
 }
 
@@ -44,7 +61,8 @@ function renderBundleCards(items) {
     ["Traces", summary.total],
     ["Valid", summary.valid],
     ["Failed", summary.failed],
-    ["Scan findings", summary.scanFindings]
+    ["Scan findings", summary.scanFindings],
+    ["Workflow", `${summary.workflow.chains} chains / ${summary.workflow.tasks} tasks`]
   ];
 
   return cards
@@ -54,7 +72,7 @@ function renderBundleCards(items) {
 
 function renderBundleRows(items) {
   if (items.length === 0) {
-    return `<tr><td colspan="6">No trace JSON files found.</td></tr>`;
+    return `<tr><td colspan="7">No trace JSON files found.</td></tr>`;
   }
 
   return items
@@ -63,12 +81,16 @@ function renderBundleRows(items) {
       const title = item.valid ? `${item.name} (${item.app})` : item.source;
       const link = item.dashboard ? `<a href="${escapeHtml(item.dashboard)}">${escapeHtml(title)}</a>` : escapeHtml(title);
       const scan = item.valid ? `${item.scanStatus} (${item.scanFindings} findings)` : "n/a";
+      const workflow = item.valid
+        ? `${item.workflow?.chains ?? 0} chains / ${item.workflow?.tasks ?? 0} tasks / ${item.workflow?.errors ?? 0} errors`
+        : "n/a";
       const details = item.valid ? escapeHtml(item.traceId) : escapeHtml(item.error);
       return `
         <tr class="status-${escapeHtml(status)}">
           <td>${link}</td>
           <td><span>${escapeHtml(status)}</span></td>
           <td>${escapeHtml(item.events ?? "n/a")}</td>
+          <td>${escapeHtml(workflow)}</td>
           <td>${escapeHtml(scan)}</td>
           <td><code>${escapeHtml(item.source)}</code></td>
           <td><code>${details}</code></td>
@@ -131,6 +153,7 @@ export function renderRunBundleIndex({ runsDir, generatedAt = new Date().toISOSt
             <th>Trace</th>
             <th>Status</th>
             <th>Events</th>
+            <th>Workflow</th>
             <th>Scan</th>
             <th>Source</th>
             <th>Details</th>
@@ -170,6 +193,7 @@ export function buildRunBundleManifest({ runsDir = ".agentlens/runs", generatedA
         status: item.status,
         events: item.events,
         errors: item.errors,
+        workflow: normalizeWorkflow(item.workflow),
         scanStatus: item.scanStatus,
         scanFindings: item.scanFindings
       };
@@ -200,6 +224,7 @@ export function buildRunBundle({ runsDir = ".agentlens/runs", outDir = ".agentle
         status: trace.status,
         events: summary.eventCount,
         errors: summary.errors,
+        workflow: summary.workflow,
         scanStatus: scanReport.passed ? "PASS" : "FAIL",
         scanFindings: scanReport.summary.findings
       });

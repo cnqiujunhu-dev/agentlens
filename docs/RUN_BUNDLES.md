@@ -19,7 +19,7 @@ Output:
 .agentlens/reports/bundle/002-run_....html
 ```
 
-The index shows trace status, event counts, scan status, source file path, links to individual dashboards, and invalid trace files with validation errors. The manifest exposes the same bundle inventory as JSON for PR bots, artifact indexes, and other automation.
+The index shows trace status, event counts, workflow counts, scan status, source file path, links to individual dashboards, and invalid trace files with validation errors. The manifest exposes the same bundle inventory as JSON for PR bots, artifact indexes, and other automation.
 
 ## Manifest
 
@@ -33,13 +33,37 @@ Every bundle includes `manifest.json` with a stable schema marker:
     "valid": 1,
     "invalid": 1,
     "failed": 0,
-    "scanFindings": 0
+    "scanFindings": 0,
+    "workflow": {
+      "chains": 2,
+      "tasks": 2,
+      "errors": 0
+    }
   },
-  "items": []
+  "items": [
+    {
+      "valid": true,
+      "source": "demo.json",
+      "dashboard": "001-run_demo.html",
+      "traceId": "run_demo",
+      "app": "agentlens-demo",
+      "name": "support-agent refund policy question",
+      "status": "passed",
+      "events": 13,
+      "errors": 0,
+      "workflow": {
+        "chains": 2,
+        "tasks": 2,
+        "errors": 0
+      },
+      "scanStatus": "PASS",
+      "scanFindings": 0
+    }
+  ]
 }
 ```
 
-Each valid item includes its source path, dashboard filename, trace id, app, name, status, event count, error count, scan status, and scan finding count. Invalid trace files include their source path and validation error.
+Each valid item includes its source path, dashboard filename, trace id, app, name, status, event count, error count, workflow counts, scan status, and scan finding count. Invalid trace files include their source path and validation error.
 
 ## GitHub Actions Artifact
 
@@ -82,6 +106,6 @@ console.log(result.manifest);
 
 - The bundle is static HTML with no external assets.
 - Each valid trace gets an AgentLens dashboard. Use `--sections summary,timeline` for compact PR artifacts, or omit `--sections` for the full report.
-- `manifest.json` mirrors the index inventory for automation that should not parse HTML.
+- `manifest.json` mirrors the index inventory, including workflow counts, for automation that should not parse HTML.
 - Invalid trace JSON files are listed in the index instead of aborting the whole bundle.
 - Scan findings are generated from the local trace content at bundle time.

@@ -206,6 +206,8 @@ agentlens share .agentlens/runs/demo.json --config evals/default.json --out .age
 
 Share bundles include `scan.txt`, generated after redaction.
 
+Run bundle `manifest.json` includes aggregate and per-trace workflow counts under `workflow`, with `chains`, `tasks`, and `errors` fields. Use these counts when a PR bot needs to flag traces with agent task failures or missing chain/task boundaries without parsing dashboard HTML.
+
 ## OpenTelemetry Export
 
 ```js

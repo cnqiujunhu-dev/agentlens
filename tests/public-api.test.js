@@ -25,6 +25,7 @@ import {
   formatCiSarif,
   formatScanReport,
   formatScanSarif,
+  formatSummary,
   JsonlTraceWriter,
   McpStdioTraceSession,
   normalizeDashboardSections,
@@ -65,6 +66,8 @@ test("public API exports core trace and eval helpers", () => {
   const ciSarif = formatCiSarif({ results: [{ file: "trace.json", scanReport: scan }] });
 
   assert.equal(summary.eventCount, 2);
+  assert.deepEqual(summary.workflow, { chains: 0, tasks: 0, errors: 0 });
+  assert.match(formatSummary(summary), /Workflow: 0 chain events, 0 task events, 0 workflow errors/);
   assert.equal(report.passed, true);
   assert.equal(scan.passed, true);
   assert.equal(validateEvalConfig({ version: "agentlens.eval.v1", name: "api", assertions: [] }).valid, true);

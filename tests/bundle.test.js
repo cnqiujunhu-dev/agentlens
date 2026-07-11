@@ -19,6 +19,16 @@ function makeTrace(name = "bundle trace") {
   return finishRun(run, "passed");
 }
 
+function makeWorkflowTrace(name = "workflow trace") {
+  const run = createRun({ app: "bundle-agent", name });
+  addEvent(run, { type: "chain.start", name: "support-flow" });
+  addEvent(run, { type: "agent.task.start", name: "lookup-policy" });
+  addEvent(run, { type: "agent.task.end", name: "lookup-policy" });
+  addEvent(run, { type: "chain.end", name: "support-flow" });
+  addEvent(run, { type: "llm.response", name: "final", output: { content: "ok", citations: ["doc"] } });
+  return finishRun(run, "passed");
+}
+
 test("renderRunBundleIndex escapes user-controlled values", () => {
   const html = renderRunBundleIndex({
     runsDir: "<script>alert(1)</script>",
@@ -90,6 +100,20 @@ test("buildRunBundle includes scan finding counts", () => {
   assert.match(bundle.indexHtml, /1 findings/);
 });
 
+test("buildRunBundle includes workflow counts in index and manifest", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-bundle-workflow-"));
+  fs.mkdirSync(path.join(dir, "runs"));
+  writeTrace(path.join(dir, "runs", "trace.json"), makeWorkflowTrace("workflow"));
+
+  const bundle = buildRunBundle({ runsDir: path.join(dir, "runs"), outDir: path.join(dir, "bundle") });
+
+  assert.deepEqual(bundle.items[0].workflow, { chains: 2, tasks: 2, errors: 0 });
+  assert.deepEqual(bundle.manifest.summary.workflow, { chains: 2, tasks: 2, errors: 0 });
+  assert.deepEqual(bundle.manifest.items[0].workflow, { chains: 2, tasks: 2, errors: 0 });
+  assert.match(bundle.indexHtml, /Workflow/);
+  assert.match(bundle.indexHtml, /2 chains \/ 2 tasks \/ 0 errors/);
+});
+
 test("buildRunBundleManifest summarizes valid and invalid traces", () => {
   const manifest = buildRunBundleManifest({
     runsDir: "runs",
@@ -105,6 +129,7 @@ test("buildRunBundleManifest summarizes valid and invalid traces", () => {
         status: "passed",
         events: 2,
         errors: 0,
+        workflow: { chains: 2, tasks: 2, errors: 0 },
         scanStatus: "PASS",
         scanFindings: 0
       },
@@ -118,7 +143,14 @@ test("buildRunBundleManifest summarizes valid and invalid traces", () => {
 
   assert.equal(manifest.schemaVersion, "agentlens.run-bundle.v1");
   assert.equal(manifest.generatedAt, "2026-01-01T00:00:00.000Z");
-  assert.deepEqual(manifest.summary, { total: 2, valid: 1, invalid: 1, failed: 0, scanFindings: 0 });
+  assert.deepEqual(manifest.summary, {
+    total: 2,
+    valid: 1,
+    invalid: 1,
+    failed: 0,
+    scanFindings: 0,
+    workflow: { chains: 2, tasks: 2, errors: 0 }
+  });
   assert.deepEqual(manifest.items[1], { valid: false, source: "invalid.json", error: "Invalid trace" });
 });
 
