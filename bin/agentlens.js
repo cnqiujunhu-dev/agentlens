@@ -27,8 +27,8 @@ function usage() {
     "  agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--pr-comment-md path] [--scan] [--scan-fail-on severity] [--sarif path]",
     "  agentlens otel <trace-file> [--out path] [--service-name name]",
     "  agentlens otel-batch [runs-dir] [--out dir] [--service-name name]",
-    "  agentlens schema <trace|eval> [--out path]",
-    "  agentlens validate <trace|eval> <file> [--json]",
+    "  agentlens schema <trace|eval|review> [--out path]",
+    "  agentlens validate <trace|eval|review> <file> [--json]",
     "  agentlens materialize <jsonl-file> [--out path]",
     "  agentlens redact <trace-file> [--out path] [--keys key1,key2]",
     "  agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,tool-calls,filters,timeline]",
@@ -240,7 +240,7 @@ async function main() {
 
   if (command === "schema") {
     const kind = positional(1);
-    if (!kind) throw new Error("Missing schema kind. Usage: agentlens schema <trace|eval> [--out path]");
+    if (!kind) throw new Error("Missing schema kind. Usage: agentlens schema <trace|eval|review> [--out path]");
     const { readSchema } = await import("../src/schemas.js");
     const text = `${JSON.stringify(readSchema(kind), null, 2)}\n`;
     const out = option("--out", undefined);
@@ -288,7 +288,7 @@ async function main() {
   if (command === "validate") {
     const kind = positional(1);
     const file = positional(2);
-    if (!kind || !file) throw new Error("Missing validation target. Usage: agentlens validate <trace|eval> <file> [--json]");
+    if (!kind || !file) throw new Error("Missing validation target. Usage: agentlens validate <trace|eval|review> <file> [--json]");
     const { formatValidationReport, validateArtifact } = await import("../src/validate.js");
     const report = validateArtifact(kind, file);
     console.log(flag("--json") ? JSON.stringify(report, null, 2) : formatValidationReport(report));

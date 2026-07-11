@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentlens.dev/schemas/agentlens.review.v1.schema.json",
+  "title": "AgentLens Review Manifest v1",
+  "type": "object",
+  "required": ["schemaVersion", "status", "inputs", "files", "summary"],
+  "properties": {
+    "schemaVersion": {
+      "const": "agentlens.review.v1"
+    },
+    "status": {
+      "type": "object",
+      "required": ["passed", "ci", "diffRegressions"],
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "ci": {
+          "type": "boolean"
+        },
+        "diffRegressions": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "inputs": {
+      "type": "object",
+      "required": ["baselineFile", "candidateFile", "configPath"],
+      "properties": {
+        "baselineFile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidateFile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configPath": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "files": {
+      "type": "object",
+      "required": [
+        "baseline",
+        "candidate",
+        "evalConfig",
+        "ciSummary",
+        "prComment",
+        "ciReport",
+        "diffText",
+        "diffDashboard",
+        "bundleIndex",
+        "bundleManifest",
+        "manifest",
+        "readme"
+      ],
+      "properties": {
+        "baseline": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evalConfig": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ciSummary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prComment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ciReport": {
+          "type": "string",
+          "minLength": 1
+        },
+        "diffText": {
+          "type": "string",
+          "minLength": 1
+        },
+        "diffDashboard": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sarif": {
+          "type": ["string", "null"]
+        },
+        "bundleIndex": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bundleManifest": {
+          "type": "string",
+          "minLength": 1
+        },
+        "manifest": {
+          "type": "string",
+          "minLength": 1
+        },
+        "readme": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "summary": {
+      "type": "object",
+      "required": ["ci", "diff", "bundle"],
+      "properties": {
+        "ci": {
+          "type": "object",
+          "required": ["total", "passed", "failed", "scan", "results"],
+          "properties": {
+            "total": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "passed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "failed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "scan": {
+              "type": "object",
+              "required": ["enabled", "failOnSeverity"],
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "failOnSeverity": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "results": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ciResult"
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "diff": {
+          "type": "object",
+          "required": ["regressions", "workflow"],
+          "properties": {
+            "regressions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "workflow": {
+              "type": "object",
+              "required": ["baseline", "candidate", "deltas", "rows", "regressions"],
+              "properties": {
+                "baseline": {
+                  "$ref": "#/$defs/workflowCounts"
+                },
+                "candidate": {
+                  "$ref": "#/$defs/workflowCounts"
+                },
+                "deltas": {
+                  "$ref": "#/$defs/workflowCounts"
+                },
+                "rows": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/workflowRow"
+                  }
+                },
+                "regressions": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "bundle": {
+          "type": "object",
+          "required": ["total", "valid", "invalid", "index", "manifest"],
+          "properties": {
+            "total": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "valid": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "invalid": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "index": {
+              "type": "string",
+              "minLength": 1
+            },
+            "manifest": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "ciResult": {
+      "type": "object",
+      "required": ["file", "traceId", "name", "passed", "error", "eval", "scan"],
+      "properties": {
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "traceId": {
+          "type": ["string", "null"]
+        },
+        "name": {
+          "type": ["string", "null"]
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": ["string", "null"]
+        },
+        "eval": {
+          "type": ["object", "null"],
+          "required": ["total", "passed", "failed"],
+          "properties": {
+            "total": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "passed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "failed": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": true
+        },
+        "scan": {
+          "type": ["object", "null"],
+          "required": ["passed", "findings", "failOnSeverity"],
+          "properties": {
+            "passed": {
+              "type": "boolean"
+            },
+            "findings": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "failOnSeverity": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "workflowCounts": {
+      "type": "object",
+      "required": ["chains", "tasks", "errors"],
+      "properties": {
+        "chains": {
+          "type": "integer"
+        },
+        "tasks": {
+          "type": "integer"
+        },
+        "errors": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": true
+    },
+    "workflowRow": {
+      "type": "object",
+      "required": ["name", "baseline", "candidate", "delta"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline": {
+          "type": "integer"
+        },
+        "candidate": {
+          "type": "integer"
+        },
+        "delta": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

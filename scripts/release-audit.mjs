@@ -69,7 +69,8 @@ const requiredFiles = [
   "scripts/generate-regression-screenshot.mjs",
   "scripts/release-preflight.mjs",
   "schemas/agentlens.trace.v1.schema.json",
-  "schemas/agentlens.eval.v1.schema.json"
+  "schemas/agentlens.eval.v1.schema.json",
+  "schemas/agentlens.review.v1.schema.json"
 ];
 
 const requiredReadmeSnippets = [

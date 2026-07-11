@@ -278,9 +278,10 @@ Run bundles also write `manifest.json` with `schemaVersion: "agentlens.run-bundl
 ## Validation
 
 ```js
-import { formatValidationReport, validateArtifact, validateEvalConfig } from "agentlens-devtools";
+import { formatValidationReport, validateArtifact, validateEvalConfig, validateReviewManifest } from "agentlens-devtools";
 
 const traceReport = validateArtifact("trace", ".agentlens/runs/demo.json");
+const reviewReport = validateArtifact("review", ".agentlens/review/review.json");
 const evalReport = validateEvalConfig({
   version: "agentlens.eval.v1",
   name: "local",
@@ -288,7 +289,9 @@ const evalReport = validateEvalConfig({
 });
 
 console.log(formatValidationReport(traceReport));
+console.log(formatValidationReport(reviewReport));
 console.log(evalReport.valid);
+console.log(validateReviewManifest({ schemaVersion: "wrong" }).valid);
 ```
 
 CLI:
@@ -296,6 +299,7 @@ CLI:
 ```bash
 agentlens validate trace .agentlens/runs/demo.json
 agentlens validate eval evals/default.json --json
+agentlens validate review .agentlens/review/review.json --json
 ```
 
 ## Generic LLM Calls

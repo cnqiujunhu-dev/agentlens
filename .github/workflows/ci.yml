@@ -32,6 +32,7 @@ jobs:
           node ./bin/agentlens.js eval .agentlens/runs/demo.json --config evals/default.json
           node ./bin/agentlens.js schema trace
           node ./bin/agentlens.js schema eval
+          node ./bin/agentlens.js schema review
           node ./bin/agentlens.js redact .agentlens/runs/demo.json --out .agentlens/runs/demo.redacted.json
           node ./bin/agentlens.js ci --runs .agentlens/runs --config evals/default.json
           node ./bin/agentlens.js dashboard .agentlens/runs/demo.json --out .agentlens/reports/demo.html
@@ -85,6 +86,7 @@ jobs:
           test -f .agentlens/reports/action-review/reports/bundle/manifest.json
           test -f .agentlens/reports/action-review/review.json
           grep -q "agentlens.review.v1" .agentlens/reports/action-review/review.json
+          node ./bin/agentlens.js validate review .agentlens/reports/action-review/review.json
 
       - name: MCP adapter demo
         run: |

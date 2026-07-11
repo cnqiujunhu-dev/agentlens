@@ -3,7 +3,8 @@ import { fileURLToPath } from "node:url";
 
 const SCHEMAS = {
   trace: "../schemas/agentlens.trace.v1.schema.json",
-  eval: "../schemas/agentlens.eval.v1.schema.json"
+  eval: "../schemas/agentlens.eval.v1.schema.json",
+  review: "../schemas/agentlens.review.v1.schema.json"
 };
 
 export function listSchemas() {

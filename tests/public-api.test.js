@@ -46,6 +46,7 @@ import {
   traceMcpToolCall,
   traceMcpStdioSession,
   validateEvalConfig,
+  validateReviewManifest,
   writeReviewBundle
 } from "../src/index.js";
 
@@ -71,6 +72,7 @@ test("public API exports core trace and eval helpers", () => {
   assert.equal(report.passed, true);
   assert.equal(scan.passed, true);
   assert.equal(validateEvalConfig({ version: "agentlens.eval.v1", name: "api", assertions: [] }).valid, true);
+  assert.equal(validateReviewManifest({ schemaVersion: "wrong" }).valid, false);
   assert.equal(diff.deltas.eventCount, 0);
   assert.match(bundle.summaryMarkdown, /AgentLens Share Bundle/);
   assert.match(formatTraceDiff(diff), /AgentLens Trace Diff/);

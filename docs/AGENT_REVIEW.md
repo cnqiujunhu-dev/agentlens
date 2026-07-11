@@ -45,3 +45,10 @@ Useful options:
 This is the production version of the regression PR demo. The demo still exists for screenshots and launch material, while `agentlens review` is meant for real before/after traces from application tests, eval datasets, or CI jobs.
 
 The composite GitHub Action can generate the same pack with `review-baseline`, `review-candidate`, and `review` inputs. See [GITHUB_ACTION.md](GITHUB_ACTION.md#review-pack-artifact).
+
+Validate the machine-readable review contract in CI or local scripts:
+
+```bash
+agentlens validate review .agentlens/review/review.json
+agentlens schema review
+```

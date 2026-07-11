@@ -61,6 +61,8 @@ test("repository workflow verifies GitHub Action outputs", () => {
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-workflow-chains/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-workflow-task-delta/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-workflow-regressions/);
+  assert.match(workflow, /schema review/);
+  assert.match(workflow, /validate review/);
   assert.match(workflow, /pr-comment\.md/);
   assert.match(workflow, /agentlens-ci-comment/);
   assert.match(workflow, /action-bundle/);

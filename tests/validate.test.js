@@ -5,7 +5,8 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { formatValidationReport, validateArtifact, validateEvalConfig } from "../src/validate.js";
+import { formatValidationReport, validateArtifact, validateEvalConfig, validateReviewManifest } from "../src/validate.js";
+import { writeReviewBundle } from "../src/review.js";
 import { writeJson, writeTrace } from "../src/store.js";
 import { addEvent, createRun, finishRun } from "../src/trace.js";
 
@@ -77,6 +78,45 @@ test("validateEvalConfig rejects unknown assertion shapes", () => {
 
   assert.equal(report.valid, false);
   assert.deepEqual(report.errors, ["assertions[0].type is unknown: not-real", "assertions[0].tools must be an array"]);
+});
+
+test("validateArtifact validates review manifests", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-validate-review-"));
+  const baselineFile = path.join(dir, "baseline.json");
+  const candidateFile = path.join(dir, "candidate.json");
+  const configFile = path.join(dir, "eval.json");
+  const badReviewFile = path.join(dir, "bad-review.json");
+
+  writeTrace(baselineFile, makeTrace());
+  writeTrace(candidateFile, makeTrace());
+  writeJson(configFile, {
+    version: "agentlens.eval.v1",
+    name: "review-validation",
+    assertions: [{ id: "has-answer", type: "required-final-response" }]
+  });
+
+  const review = writeReviewBundle({
+    baselineFile,
+    candidateFile,
+    configPath: configFile,
+    outDir: path.join(dir, "review"),
+    scan: false
+  });
+  const valid = validateArtifact("review", review.files.manifest);
+  assert.equal(valid.valid, true);
+  assert.equal(validateReviewManifest(review.manifest).valid, true);
+
+  writeJson(badReviewFile, { schemaVersion: "wrong" });
+  const invalid = validateArtifact("review", badReviewFile);
+  assert.equal(invalid.valid, false);
+  assert.match(formatValidationReport(invalid), /schemaVersion must be agentlens\.review\.v1/);
+
+  const cli = spawnSync(process.execPath, [binPath, "validate", "review", review.files.manifest, "--json"], {
+    cwd: dir,
+    encoding: "utf8"
+  });
+  assert.equal(cli.status, 0, cli.stderr);
+  assert.equal(JSON.parse(cli.stdout).valid, true);
 });
 
 test("CLI validate emits JSON and exits nonzero for invalid files", () => {

@@ -16,6 +16,7 @@
 - Review pack CI summaries and PR comments now include trace diff workflow regression summaries.
 - GitHub Action review workflow outputs for chain, task, workflow error, delta, and workflow regression counts.
 - Review pack `review.json` manifests, `agentlens review --json`, and a GitHub Action `review-manifest` output for PR automation.
+- Review manifest JSON Schema, `agentlens schema review`, and `agentlens validate review` for downstream PR bot contracts.
 
 ### Changed
 

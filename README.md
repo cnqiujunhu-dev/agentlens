@@ -215,6 +215,7 @@ Need schemas for editor or CI tooling?
 ```bash
 node ./bin/agentlens.js schema trace
 node ./bin/agentlens.js schema eval
+node ./bin/agentlens.js schema review
 ```
 
 Want to see eval failures?
@@ -231,6 +232,7 @@ npm run demo
 npm run diff:demo
 npm run diff:dashboard
 node ./bin/agentlens.js review .agentlens/runs/demo.json .agentlens/runs/failing-demo.json --config evals/default.json --out .agentlens/review
+node ./bin/agentlens.js validate review .agentlens/review/review.json
 ```
 
 `agentlens review` writes a PR-ready artifact pack with copied traces, eval policy, `review.json`, CI summary, PR comment Markdown, SARIF, diff dashboard, and run bundle. Use `--json` to print the same manifest for bots and workflow steps. See [AGENT_REVIEW.md](docs/AGENT_REVIEW.md).
@@ -393,8 +395,8 @@ agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [
 agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--pr-comment-md path]
 agentlens otel <trace-file> [--out path] [--service-name name]
 agentlens otel-batch [runs-dir] [--out dir] [--service-name name]
-agentlens schema <trace|eval> [--out path]
-agentlens validate <trace|eval> <file> [--json]
+agentlens schema <trace|eval|review> [--out path]
+agentlens validate <trace|eval|review> <file> [--json]
 agentlens materialize <jsonl-file> [--out path]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
 agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,tool-calls,workflow,filters,timeline]

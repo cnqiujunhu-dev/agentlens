@@ -14,7 +14,7 @@ export { buildOtelBatchManifest, buildOtelTrace, writeOtelBatch, writeOtelTrace 
 export { DEFAULT_REDACT_KEYS, parseRedactKeys, redactTrace } from "./redact.js";
 export { buildShareBundle, writeShareBundle } from "./share.js";
 export { listSchemas, readSchema, schemaPath } from "./schemas.js";
-export { formatValidationReport, validateArtifact, validateEvalConfig } from "./validate.js";
+export { formatValidationReport, validateArtifact, validateEvalConfig, validateReviewManifest } from "./validate.js";
 export { DEFAULT_DASHBOARD_SECTIONS, normalizeDashboardSections, renderDashboard } from "./dashboard.js";
 export { buildRunBundle, buildRunBundleManifest, renderRunBundleIndex, writeRunBundle } from "./bundle.js";
 export { formatQuickstartReport, runQuickstart } from "./quickstart.js";

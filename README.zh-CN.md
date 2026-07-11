@@ -165,6 +165,7 @@ npm run demo:regression-pr
 npm run demo
 npm run diff:demo
 node ./bin/agentlens.js review .agentlens/runs/demo.json .agentlens/runs/failing-demo.json --config evals/default.json --out .agentlens/review
+node ./bin/agentlens.js validate review .agentlens/review/review.json
 ```
 
 `agentlens review` 会生成真实 PR 可用的 review pack，包括 `review.json`、CI summary、PR comment、SARIF、diff dashboard 和 run bundle。加 `--json` 可以把同一份 manifest 打印给 bot 或 workflow step。详见 [AGENT_REVIEW.md](docs/AGENT_REVIEW.md)。
@@ -238,6 +239,8 @@ agentlens eval <trace-file> [--config path] [--json]
 agentlens scan <trace-file> [--json] [--fail-on low|medium|high|critical|none] [--sarif path]
 agentlens ci [--runs dir] [--config path] [--json] [--summary-md path] [--pr-comment-md path]
 agentlens otel <trace-file> [--out path] [--service-name name]
+agentlens schema <trace|eval|review> [--out path]
+agentlens validate <trace|eval|review> <file> [--json]
 agentlens redact <trace-file> [--out path] [--keys key1,key2]
 agentlens share <trace-file> [--config path] [--out dir] [--keys key1,key2] [--sections summary,event-types,scan,tool-calls,workflow,filters,timeline]
 agentlens dashboard <trace-file> [--out path] [--sections summary,event-types,scan,tool-calls,workflow,filters,timeline]

@@ -186,7 +186,7 @@ Use `review-baseline`, `review-candidate`, and `review` when a workflow has befo
     path: ${{ steps.agentlens.outputs.review }}
 ```
 
-The review pack includes copied traces, `eval.json`, `review.json`, `reports/pr-comment.md`, `reports/diff.html`, `reports/agentlens-ci.sarif`, and `reports/bundle/index.html`. The `review-manifest` output points directly to the machine-readable manifest for later workflow steps. The generated PR comment and step summary include a trace diff section with workflow chain, task, and error deltas so reviewers can see workflow regressions before opening the HTML dashboard. Add `review-fail-on-failure: true` when the before/after review should fail the job if the candidate violates eval or scan gates.
+The review pack includes copied traces, `eval.json`, `review.json`, `reports/pr-comment.md`, `reports/diff.html`, `reports/agentlens-ci.sarif`, and `reports/bundle/index.html`. The `review-manifest` output points directly to the machine-readable manifest for later workflow steps, and it can be checked with `agentlens validate review`. The generated PR comment and step summary include a trace diff section with workflow chain, task, and error deltas so reviewers can see workflow regressions before opening the HTML dashboard. Add `review-fail-on-failure: true` when the before/after review should fail the job if the candidate violates eval or scan gates.
 
 Workflow outputs are available for downstream automation:
 
