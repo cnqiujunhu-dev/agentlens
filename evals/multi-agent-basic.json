@@ -13,6 +13,16 @@
       "max": 0
     },
     {
+      "id": "has-agent-task-boundaries",
+      "type": "min-workflow-tasks",
+      "min": 2
+    },
+    {
+      "id": "no-workflow-errors",
+      "type": "max-workflow-errors",
+      "max": 0
+    },
+    {
       "id": "has-final-answer",
       "type": "required-final-response"
     },

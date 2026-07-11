@@ -60,6 +60,8 @@ The adapter records:
 
 The trace remains plain AgentLens JSON and can be replayed, validated, redacted, bundled, and viewed in the dashboard.
 
+`evals/langgraph-basic.json` keeps explicit `required-event-types` checks for node start/end events and also uses `max-workflow-errors` to fail on workflow error markers.
+
 ## Notes
 
 Use this adapter around LangGraph node functions or similar graph-node functions. For model calls inside a node, combine it with `traceLlmCall` or provider-style LLM adapters. For MCP/tool calls inside a node, combine it with `traceMcpToolCall` or `McpStdioTraceSession`.

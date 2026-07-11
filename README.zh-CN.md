@@ -24,7 +24,7 @@ agent run -> trace -> replay -> eval -> dashboard -> PR artifact
 | --- | --- |
 | Trace JSON | 模型看到了什么、调用了哪些工具、检索返回什么、错误发生在哪里？ |
 | Replay transcript | 队友不重新调用模型，也能不能看懂完整时间线？ |
-| Eval 和 scan gate | 是否违反 citation、latency、cost、安全、secret 或 tool-risk 规则？ |
+| Eval 和 scan gate | 是否违反 citation、latency、cost、workflow、安全、secret 或 tool-risk 规则？ |
 | 静态 dashboard | Reviewer 能否在浏览器里查看 tool group、workflow boundary、security finding 和 timeline filter？ |
 | PR review pack | before/after trace 能否生成 CI summary、PR comment、SARIF、diff dashboard 和可下载 run bundle？ |
 
@@ -103,7 +103,7 @@ AgentLens 的差异化是：
 - Deterministic replay，不重新调用模型也能复盘时间线。
 - before/after trace diff 和静态 diff dashboard。
 - `agentlens review`，把 baseline/candidate trace 生成 PR-ready review pack。
-- JSON eval rules，用于 required events、forbidden tools、cost、latency、citation、MCP policy。
+- JSON eval rules，用于 required events、forbidden tools、workflow gate、cost、latency、citation、MCP policy。
 - 本地 security scan，检查 secret-shaped value、prompt injection phrase、高风险工具调用。
 - SARIF 输出，可接入 GitHub code scanning。
 - 静态 dashboard，支持 timeline filter、timeline jump、tool call group、workflow review、security scan panel。

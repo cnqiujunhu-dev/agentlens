@@ -98,6 +98,17 @@ const report = evaluateTrace(trace, {
 console.log(formatEvalReport(report));
 ```
 
+Workflow eval rules can gate recorded chain and agent task boundaries without parsing dashboard HTML:
+
+```json
+{
+  "assertions": [
+    { "id": "has-agent-task-boundaries", "type": "min-workflow-tasks", "min": 2 },
+    { "id": "no-workflow-errors", "type": "max-workflow-errors", "max": 0 }
+  ]
+}
+```
+
 ## Security Scan
 
 ```js

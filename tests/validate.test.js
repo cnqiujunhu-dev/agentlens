@@ -54,6 +54,20 @@ test("validateEvalConfig accepts MCP risk exception policies", () => {
   assert.equal(report.valid, true);
 });
 
+test("validateEvalConfig accepts workflow policies", () => {
+  const report = validateEvalConfig({
+    version: "agentlens.eval.v1",
+    name: "workflow-policy",
+    assertions: [
+      { id: "has-chain", type: "min-workflow-chains", min: 2 },
+      { id: "has-task", type: "min-workflow-tasks", min: 2 },
+      { id: "no-workflow-errors", type: "max-workflow-errors", max: 0 }
+    ]
+  });
+
+  assert.equal(report.valid, true);
+});
+
 test("validateEvalConfig rejects unknown assertion shapes", () => {
   const report = validateEvalConfig({
     version: "agentlens.eval.v1",

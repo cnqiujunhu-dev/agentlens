@@ -76,6 +76,8 @@ The helpers record:
 
 The examples also write a final `llm.response` so existing citation and final-answer eval rules work without special multi-agent logic.
 
+`evals/multi-agent-basic.json` also gates workflow shape with `min-workflow-tasks` and `max-workflow-errors`, so CI fails when task boundary events are missing or a workflow error marker appears.
+
 ## Notes
 
 Use `addAgentMessage` for visible conversation turns and `traceAgentTask` for work units such as research, planning, review, tool execution, or writing. Inside a task, you can still call `addEvent`, `traceLlmCall`, `traceMcpToolCall`, or any other AgentLens helper to capture model, tool, retrieval, and MCP activity.

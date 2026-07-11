@@ -8,6 +8,7 @@ const DEFAULT_INIT_EVAL = {
   assertions: [
     { id: "has-core-events", type: "required-event-types", eventTypes: ["llm.prompt", "llm.response"] },
     { id: "no-errors", type: "max-errors", max: 0 },
+    { id: "no-workflow-errors", type: "max-workflow-errors", max: 0 },
     { id: "no-dangerous-tools", type: "forbidden-tools", tools: ["rm", "delete_database", "git.reset.hard"] },
     { id: "tool-latency-budget", type: "max-tool-duration-ms", max: 3000 },
     { id: "has-final-answer", type: "required-final-response" }

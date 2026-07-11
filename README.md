@@ -24,7 +24,7 @@ Static screenshot: [dashboard-screenshot.png](docs/assets/dashboard-screenshot.p
 | --- | --- |
 | Trace JSON | What did the model see, which tools ran, what did retrieval return, and where did errors happen? |
 | Replay transcript | Can a teammate understand the timeline without rerunning the model? |
-| Eval and scan gates | Did the run violate citation, latency, cost, safety, secret, or tool-risk rules? |
+| Eval and scan gates | Did the run violate citation, latency, cost, workflow, safety, secret, or tool-risk rules? |
 | Static dashboard | Can reviewers inspect tool groups, workflow boundaries, security findings, and timeline filters in a browser? |
 | PR review pack | Can before/after traces become a CI summary, PR comment, SARIF, diff dashboard, and downloadable run bundle? |
 
@@ -123,7 +123,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - SARIF output for uploading agent trace scan findings to GitHub code scanning.
 - Batch SARIF output from CI scan gates for run directories.
 - Redacted share bundle generation for GitHub issues, PRs, and support threads.
-- JSON eval rules for required events, forbidden tools, error budgets, cost budgets, latency budgets, and citation checks.
+- JSON eval rules for required events, forbidden tools, error budgets, workflow gates, cost budgets, latency budgets, and citation checks.
 - MCP policy rules for server allowlists, required tool metadata, and forbidden tool permissions.
 - MCP tool inventory and risk scanning.
 - Zero-dependency stdio JSON-RPC MCP transport demo.
@@ -325,6 +325,7 @@ Status: PASS
 
 [PASS] has-core-events: All required event types are present
 [PASS] no-errors: Found 0 errors
+[PASS] no-workflow-errors: Found 0 workflow errors
 [PASS] no-dangerous-tools: No forbidden tools were called
 [PASS] tool-latency-budget: All tool results are within 3000ms
 [PASS] cost-budget: Cost $0.0021 within budget
@@ -481,6 +482,16 @@ Rules live in JSON so they can be reviewed, versioned, and run in CI.
       "id": "final-answer-has-citation",
       "type": "required-citations",
       "min": 1
+    },
+    {
+      "id": "no-workflow-errors",
+      "type": "max-workflow-errors",
+      "max": 0
+    },
+    {
+      "id": "has-agent-task-boundaries",
+      "type": "min-workflow-tasks",
+      "min": 2
     }
   ]
 }

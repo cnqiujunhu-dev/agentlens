@@ -67,6 +67,43 @@ test("evaluateTrace fails over budget cost", () => {
   assert.match(report.results[0].message, /exceeded/);
 });
 
+test("evaluateTrace enforces workflow counts", () => {
+  const trace = baseTrace();
+  addEvent(trace, { type: "chain.start", name: "refund-review" });
+  addEvent(trace, { type: "chain.end", name: "refund-review" });
+  addEvent(trace, { type: "agent.task.start", name: "research", metadata: { agent: "researcher" } });
+  addEvent(trace, { type: "agent.task.end", name: "research", metadata: { agent: "researcher" } });
+
+  const report = evaluateTrace(trace, {
+    name: "workflow-policy",
+    assertions: [
+      { id: "has-chain", type: "min-workflow-chains", min: 2 },
+      { id: "has-task", type: "min-workflow-tasks", min: 2 },
+      { id: "no-workflow-errors", type: "max-workflow-errors", max: 0 }
+    ]
+  });
+
+  assert.equal(report.passed, true);
+  assert.deepEqual(report.results[0].details.workflow, { chains: 2, tasks: 2, errors: 0 });
+});
+
+test("evaluateTrace fails workflow count regressions", () => {
+  const trace = baseTrace();
+  addEvent(trace, { type: "chain.error", name: "refund-review", status: "error" });
+
+  const report = evaluateTrace(trace, {
+    name: "workflow-policy",
+    assertions: [
+      { id: "has-task", type: "min-workflow-tasks", min: 1 },
+      { id: "no-workflow-errors", type: "max-workflow-errors", max: 0 }
+    ]
+  });
+
+  assert.equal(report.passed, false);
+  assert.match(report.results[0].message, /0 task events/);
+  assert.match(report.results[1].message, /1 workflow errors/);
+});
+
 test("evaluateTrace enforces MCP server allowlists", () => {
   const trace = baseTrace();
   addEvent(trace, {

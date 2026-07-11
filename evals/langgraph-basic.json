@@ -11,6 +11,11 @@
       "id": "no-errors",
       "type": "max-errors",
       "max": 0
+    },
+    {
+      "id": "no-workflow-errors",
+      "type": "max-workflow-errors",
+      "max": 0
     }
   ]
 }

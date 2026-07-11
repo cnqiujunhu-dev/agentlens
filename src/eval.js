@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { summarizeTrace } from "./inspect.js";
 import { readJson } from "./store.js";
 
 export const DEFAULT_EVAL_CONFIG = {
@@ -6,7 +7,8 @@ export const DEFAULT_EVAL_CONFIG = {
   name: "default",
   assertions: [
     { id: "has-core-events", type: "required-event-types", eventTypes: ["llm.prompt", "llm.response"] },
-    { id: "no-errors", type: "max-errors", max: 0 }
+    { id: "no-errors", type: "max-errors", max: 0 },
+    { id: "no-workflow-errors", type: "max-workflow-errors", max: 0 }
   ]
 };
 
@@ -88,6 +90,33 @@ function runAssertion(trace, assertion) {
     const errors = countErrors(trace);
     if (errors > assertion.max) return fail(assertion, `Found ${errors} errors, max is ${assertion.max}`, { errors });
     return pass(assertion, `Found ${errors} errors`);
+  }
+
+  if (assertion.type === "min-workflow-chains") {
+    const workflow = summarizeTrace(trace).workflow;
+    const min = assertion.min ?? 1;
+    if (workflow.chains < min) {
+      return fail(assertion, `Found ${workflow.chains} chain events, min is ${min}`, { workflow });
+    }
+    return pass(assertion, `Found ${workflow.chains} chain events`, { workflow });
+  }
+
+  if (assertion.type === "min-workflow-tasks") {
+    const workflow = summarizeTrace(trace).workflow;
+    const min = assertion.min ?? 1;
+    if (workflow.tasks < min) {
+      return fail(assertion, `Found ${workflow.tasks} task events, min is ${min}`, { workflow });
+    }
+    return pass(assertion, `Found ${workflow.tasks} task events`, { workflow });
+  }
+
+  if (assertion.type === "max-workflow-errors") {
+    const workflow = summarizeTrace(trace).workflow;
+    const max = assertion.max ?? 0;
+    if (workflow.errors > max) {
+      return fail(assertion, `Found ${workflow.errors} workflow errors, max is ${max}`, { workflow });
+    }
+    return pass(assertion, `Found ${workflow.errors} workflow errors`, { workflow });
   }
 
   if (assertion.type === "forbidden-tools") {

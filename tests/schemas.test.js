@@ -11,6 +11,8 @@ test("schema helper exposes trace and eval schemas", () => {
   assert.equal(traceSchema.properties.schemaVersion.const, "agentlens.trace.v1");
   assert.equal(evalSchema.properties.version.const, "agentlens.eval.v1");
   assert.equal(evalSchema.$defs.assertion.properties.type.enum.includes("forbidden-mcp-tool-risks"), true);
+  assert.equal(evalSchema.$defs.assertion.properties.type.enum.includes("max-workflow-errors"), true);
+  assert.equal(evalSchema.$defs.assertion.properties.type.enum.includes("min-workflow-tasks"), true);
   assert.ok(evalSchema.$defs.assertion.properties.exceptions);
   assert.ok(evalSchema.$defs.riskException);
   assert.ok(schemaPath("trace").endsWith("agentlens.trace.v1.schema.json"));

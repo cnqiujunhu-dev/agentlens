@@ -13,6 +13,11 @@
       "max": 0
     },
     {
+      "id": "no-workflow-errors",
+      "type": "max-workflow-errors",
+      "max": 0
+    },
+    {
       "id": "no-dangerous-tools",
       "type": "forbidden-tools",
       "tools": ["rm", "delete_database", "git.reset.hard", "shell.exec.destructive"]
