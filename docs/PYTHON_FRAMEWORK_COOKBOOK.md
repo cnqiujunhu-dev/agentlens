@@ -4,7 +4,7 @@ AgentLens' Python trace writer is intentionally plain JSON. This cookbook shows 
 
 The examples are runnable simulations. They do not import LangChain, LlamaIndex, or CrewAI, so the repository stays dependency-light. The `agentlens-trace` package now includes importable zero-dependency bridge helpers under `agentlens_trace.adapters`; copy those helpers or wire them into the matching framework boundary in your project.
 
-The helpers normalize common framework-shaped payloads: plain dicts, enum-like event names and payload keys, message objects with `role`/`type` and `content`, LangChain-like document objects, LlamaIndex-like query bundles and source nodes, response objects with usage metadata, and source document metadata used for citations.
+The helpers normalize common framework-shaped payloads: plain dicts, enum-like event names and payload keys, message objects with `role`/`type` and `content`, LangChain-like document objects, LlamaIndex-like query bundles and source nodes, CrewAI-like agent/task/tool/output objects, response objects with usage metadata, and source document metadata used for citations.
 
 Start a Python project with `agentlens init --python` if you want the trace writer and a CI-ready starter under `.agentlens/python/`. For package-style local development, use `PYTHONPATH=python/agentlens-trace/src` and import `agentlens_trace`.
 
@@ -122,6 +122,13 @@ bridge.llm_call(
     agent="reviewer",
 )
 ```
+
+The runnable demo also exercises CrewAI-like object payloads:
+
+- agent objects with `role` become stable `metadata.agent` values.
+- task objects with `description`, `expected_output`, `agent`, and `tools` become readable `agent.task.start` input.
+- tool objects with `name` become stable `tool.call` and `tool.result` names.
+- task output objects with `raw`, `json_dict`, and `citations` remain inspectable in task and tool outputs.
 
 For `kickoff_async` or native async flows, use `trace_async_llm_call` and record task/tool events around the awaited work.
 

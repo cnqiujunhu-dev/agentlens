@@ -111,6 +111,27 @@ test("Python framework cookbook demo produces framework-shaped traces", () => {
   assert.equal(llamaindexResponse.output.content, "The retrieved policy says refunds are allowed within 30 days.");
   assert.equal(llamaindexResponse.output.citations.includes("llamaindex-refund-policy.md"), true);
   assert.equal(llamaindexResponse.usage.totalTokens, 24);
+
+  const crewai = JSON.parse(fs.readFileSync(path.join(runsDir, "python-crewai-style-demo.json"), "utf8"));
+  const crewMessage = crewai.events.find((event) => event.type === "agent.message");
+  assert.equal(crewMessage.name, "researcher");
+  assert.equal(crewMessage.output.role, "researcher");
+  assert.equal(crewMessage.output.content, "Research policy evidence before answering.");
+
+  const crewTaskStart = crewai.events.find((event) => event.type === "agent.task.start");
+  assert.equal(crewTaskStart.name, "Find refund policy evidence.");
+  assert.equal(crewTaskStart.input.expectedOutput, "Return source citations for refund eligibility.");
+  assert.equal(crewTaskStart.input.tools[0], "research.search");
+  assert.equal(crewTaskStart.metadata.agent, "researcher");
+
+  const crewToolResult = crewai.events.find((event) => event.type === "tool.result");
+  assert.equal(crewToolResult.name, "research.search");
+  assert.equal(crewToolResult.output.raw, "Found refund policy evidence.");
+  assert.equal(crewToolResult.output.json.citations.includes("crew_refund_policy"), true);
+
+  const crewTaskEnd = crewai.events.find((event) => event.type === "agent.task.end");
+  assert.equal(crewTaskEnd.output.citations.includes("crew_refund_policy"), true);
+  assert.equal(crewTaskEnd.metadata.agent, "researcher");
 });
 
 test("Python package smoke check produces an AgentLens-compatible trace", () => {

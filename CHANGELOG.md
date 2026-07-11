@@ -5,10 +5,12 @@
 ### Added
 
 - LlamaIndex-like QueryBundle and source node fixture coverage for `agentlens_trace.adapters`.
+- CrewAI-like agent, task, tool, and task output object fixture coverage for `agentlens_trace.adapters`.
 
 ### Changed
 
 - Python framework bridge helpers now normalize LlamaIndex-style query bundles, `NodeWithScore`-style source nodes, node metadata, source citations, and usage metadata into readable AgentLens trace fields.
+- CrewAI-style bridge helpers now normalize agent roles, task descriptions, expected outputs, tool objects, and task output objects into readable AgentLens task and tool events.
 
 ## 0.3.1
 

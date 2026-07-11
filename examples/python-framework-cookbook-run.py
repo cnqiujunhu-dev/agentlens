@@ -40,6 +40,38 @@ class FakeLlamaIndexResponse:
         }
 
 
+class FakeCrewAIAgent:
+    def __init__(self, role, goal):
+        self.role = role
+        self.goal = goal
+
+
+class FakeCrewAITool:
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
+
+class FakeCrewAITask:
+    def __init__(self, description, expected_output, agent, tools):
+        self.description = description
+        self.expected_output = expected_output
+        self.agent = agent
+        self.tools = tools
+
+
+class FakeCrewAIMessage:
+    def __init__(self, content):
+        self.content = content
+
+
+class FakeCrewAIOutput:
+    def __init__(self, raw, json_dict):
+        self.raw = raw
+        self.json_dict = json_dict
+        self.citations = json_dict.get("citations", [])
+
+
 def write_langchain_style(out_dir: Path) -> Path:
     run = AgentLensRun(
         app="python-langchain-style-agent",
@@ -111,26 +143,39 @@ def write_crewai_style(out_dir: Path) -> Path:
     )
 
     bridge = AgentLensCrewAIBridge(run, provider="mock-crewai-provider", model="demo-model")
-    bridge.agent_message("planner", "Research policy evidence before answering.")
-    bridge.task_start("research-refund-policy", input={"task": "Find refund policy evidence."}, agent="researcher")
+    researcher = FakeCrewAIAgent("researcher", "Find policy evidence before the writer answers.")
+    reviewer = FakeCrewAIAgent("reviewer", "Write the final customer-facing answer.")
+    search_tool = FakeCrewAITool("research.search", "Search policy documents.")
+    task = FakeCrewAITask(
+        "Find refund policy evidence.",
+        "Return source citations for refund eligibility.",
+        researcher,
+        [search_tool],
+    )
+    task_output = FakeCrewAIOutput(
+        "Found refund policy evidence.",
+        {"documents": [{"id": "crew_refund_policy"}], "citations": ["crew_refund_policy"]},
+    )
+
+    bridge.agent_message(researcher, FakeCrewAIMessage("Research policy evidence before answering."))
+    bridge.task_start(task)
     bridge.tool_call(
-        "research.search",
+        search_tool,
         input={"query": "refund policy"},
-        agent="researcher",
+        agent=researcher,
         permission="read-only",
         risk="low",
     )
     bridge.tool_result(
-        "research.search",
+        search_tool,
         duration_ms=88,
-        output={"documents": [{"id": "crew_refund_policy"}]},
-        agent="researcher",
+        output=task_output,
+        agent=researcher,
     )
     bridge.task_end(
-        "research-refund-policy",
+        task,
         duration_ms=132,
-        output={"citations": ["crew_refund_policy"]},
-        agent="researcher",
+        output=task_output,
     )
 
     bridge.llm_call(
@@ -141,7 +186,7 @@ def write_crewai_style(out_dir: Path) -> Path:
             "citations": ["crew_refund_policy"],
             "usage": {"inputTokens": 10, "outputTokens": 11, "totalTokens": 21, "costUsd": 0.0002},
         },
-        agent="reviewer",
+        agent=reviewer,
     )
 
     run.finish("passed")

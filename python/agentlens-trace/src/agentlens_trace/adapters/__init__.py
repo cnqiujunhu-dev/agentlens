@@ -305,6 +305,77 @@ def _event_type(value: Any) -> str:
     return str(raw).split(".")[-1].upper()
 
 
+def _agent_label(agent: Any, fallback: Optional[str] = None) -> Optional[str]:
+    if agent is None:
+        return fallback
+    if isinstance(agent, str):
+        return agent
+    value = _first_value(agent, ("role", "name", "id", "key"), fallback)
+    return _as_text(value) if value is not None else fallback
+
+
+def _task_label(task: Any, fallback: str = "task") -> str:
+    if isinstance(task, str):
+        return task
+    value = _first_value(task, ("name", "id", "task_id", "description"), fallback)
+    text = _as_text(value)
+    return text[:80] if len(text) > 80 else text
+
+
+def _task_input_safe(task: Any, input_value: Optional[Any] = None) -> Any:
+    if input_value is not None:
+        return _json_safe(input_value)
+    if task is None or isinstance(task, str):
+        return input_value
+
+    data: Dict[str, Any] = {}
+    for source_key, target_key in [
+        ("description", "description"),
+        ("expected_output", "expectedOutput"),
+        ("context", "context"),
+        ("tools", "tools"),
+        ("inputs", "inputs"),
+        ("input", "input"),
+    ]:
+        value = _lookup(task, source_key, None)
+        if value is not None:
+            if source_key == "tools":
+                data[target_key] = [_tool_label(tool) for tool in value] if isinstance(value, (list, tuple, set)) else [_tool_label(value)]
+            else:
+                data[target_key] = _json_safe(value)
+    return data or _json_safe(task)
+
+
+def _task_output_safe(output: Any) -> Any:
+    if output is None:
+        return None
+    if isinstance(output, (str, int, float, bool, dict, list, tuple, set)):
+        return _json_safe(output)
+
+    data: Dict[str, Any] = {}
+    for source_key, target_key in [
+        ("raw", "raw"),
+        ("output", "output"),
+        ("summary", "summary"),
+        ("json_dict", "json"),
+        ("pydantic", "pydantic"),
+        ("tasks_output", "tasksOutput"),
+        ("citations", "citations"),
+    ]:
+        value = _lookup(output, source_key, None)
+        if value is not None:
+            data[target_key] = _json_safe(value)
+    return data or _json_safe(output)
+
+
+def _tool_label(tool: Any, fallback: str = "tool") -> str:
+    if isinstance(tool, str):
+        return tool
+    value = _first_value(tool, ("name", "tool_name", "id", "description"), fallback)
+    text = _as_text(value)
+    return text[:80] if len(text) > 80 else text
+
+
 class AgentLensLangChainBridge:
     """Small callback-shaped bridge for LangChain-style retriever, tool, and LLM events."""
 
@@ -552,72 +623,79 @@ class AgentLensCrewAIBridge:
         self.model = model
         self.metadata = metadata or {}
 
-    def _metadata(self, agent: Optional[str] = None, extra: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def _metadata(self, agent: Optional[Any] = None, extra: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         defaults = dict(self.metadata)
-        if agent is not None:
-            defaults["agent"] = agent
+        agent_label = _agent_label(agent)
+        if agent_label is not None:
+            defaults["agent"] = agent_label
         return _metadata("crewai", defaults, extra)
 
-    def agent_message(self, agent: str, content: Any, **kwargs: Any) -> Dict[str, Any]:
+    def agent_message(self, agent: Any, content: Any, **kwargs: Any) -> Dict[str, Any]:
         data = dict(kwargs)
-        name = str(data.pop("name", agent))
+        agent_label = _agent_label(agent, "agent")
+        name = str(data.pop("name", agent_label))
         return self.run.add_event(
             "agent.message",
             name=name,
-            output={"role": agent, "content": _as_text(content)},
+            output={
+                "role": agent_label,
+                "content": _as_text(_first_value(content, ("content", "message", "text"), content)),
+            },
             metadata=self._metadata(agent, data),
         )
 
-    def task_start(self, name: str, input: Optional[Any] = None, agent: Optional[str] = None, **kwargs: Any) -> Dict[str, Any]:
+    def task_start(self, name: Any, input: Optional[Any] = None, agent: Optional[Any] = None, **kwargs: Any) -> Dict[str, Any]:
         data = dict(kwargs)
+        task_agent = agent if agent is not None else _lookup(name, "agent", None)
         return self.run.add_event(
             "agent.task.start",
-            name=name,
-            input=_json_safe(input),
-            metadata=self._metadata(agent, data),
+            name=_task_label(name),
+            input=_task_input_safe(name, input),
+            metadata=self._metadata(task_agent, data),
         )
 
     def task_end(
         self,
-        name: str,
+        name: Any,
         output: Optional[Any] = None,
         duration_ms: Optional[float] = None,
-        agent: Optional[str] = None,
+        agent: Optional[Any] = None,
         **kwargs: Any,
     ) -> Dict[str, Any]:
         data = dict(kwargs)
         if duration_ms is None:
             duration_ms = _pop_duration(data)
+        task_agent = agent if agent is not None else _lookup(name, "agent", None)
         return self.run.add_event(
             "agent.task.end",
-            name=name,
-            output=_json_safe(output),
+            name=_task_label(name),
+            output=_task_output_safe(output),
             duration_ms=duration_ms,
-            metadata=self._metadata(agent, data),
+            metadata=self._metadata(task_agent, data),
         )
 
-    def tool_call(self, name: str, input: Optional[Any] = None, agent: Optional[str] = None, **kwargs: Any) -> Dict[str, Any]:
+    def tool_call(self, name: Any, input: Optional[Any] = None, agent: Optional[Any] = None, **kwargs: Any) -> Dict[str, Any]:
         data = dict(kwargs)
         return self.run.add_tool_call(
-            name,
+            _tool_label(name),
             input=_json_safe(input),
             metadata=self._metadata(agent, data),
         )
 
     def tool_result(
         self,
-        name: str,
+        name: Any,
         output: Optional[Any] = None,
         duration_ms: Optional[float] = None,
-        agent: Optional[str] = None,
+        agent: Optional[Any] = None,
         **kwargs: Any,
     ) -> Dict[str, Any]:
         data = dict(kwargs)
         if duration_ms is None:
             duration_ms = _pop_duration(data)
         return self.run.add_tool_result(
-            name,
-            output=_json_safe(output),
+            _tool_label(name),
+            output=_task_output_safe(output),
             duration_ms=duration_ms,
             metadata=self._metadata(agent, data),
         )

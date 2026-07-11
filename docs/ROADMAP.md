@@ -92,6 +92,7 @@ Shipped for the v0.3.1 release candidate:
 - npm publish dry-run check for package metadata, packed files, and bin-field stability.
 - Post-publish npm registry smoke check for clean-project quickstart verification.
 - LlamaIndex-style QueryBundle and source node normalization for Python framework bridge helpers.
+- CrewAI-style agent, task, tool, and task output object normalization for Python framework bridge helpers.
 
 Candidates:
 
