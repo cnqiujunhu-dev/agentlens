@@ -134,6 +134,8 @@ console.log(formatTraceDiff(diff));
 const html = renderDiffDashboard(diff);
 ```
 
+Diff results include `workflow` rows and `deltas.workflow` counts for chain events, task events, and workflow error markers. Static diff dashboards render the same workflow deltas as metric cards and a review table.
+
 ## Review Packs
 
 ```js

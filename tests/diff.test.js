@@ -27,7 +27,13 @@ function run(name, status = "passed") {
 
 test("compareTraces reports event, cost, and tool deltas", () => {
   const baseline = run("baseline");
+  addEvent(baseline, { type: "chain.start", name: "refund-review" });
+  addEvent(baseline, { type: "chain.end", name: "refund-review" });
+  addEvent(baseline, { type: "agent.task.start", name: "research" });
+  addEvent(baseline, { type: "agent.task.end", name: "research" });
   const candidate = run("candidate", "failed");
+  addEvent(candidate, { type: "chain.start", name: "refund-review" });
+  addEvent(candidate, { type: "chain.error", name: "refund-review" });
   addEvent(candidate, {
     type: "tool.call",
     name: "database.delete",
@@ -41,11 +47,14 @@ test("compareTraces reports event, cost, and tool deltas", () => {
 
   const diff = compareTraces(baseline, candidate);
 
-  assert.equal(diff.deltas.eventCount, 2);
+  assert.equal(diff.deltas.eventCount, 0);
   assert.equal(diff.deltas.errors, 1);
+  assert.deepEqual(diff.deltas.workflow, { chains: 0, tasks: -2, errors: 2 });
+  assert.equal(diff.workflow.find((item) => item.name === "Task events").delta, -2);
   assert.equal(diff.eventTypes.find((item) => item.name === "tool.call").delta, 1);
   assert.equal(diff.tools.find((item) => item.name === "database.delete").candidate, 1);
   assert.ok(diff.regressions.some((item) => item.includes("status changed")));
+  assert.ok(diff.regressions.some((item) => item.includes("task events decreased")));
 });
 
 test("formatTraceDiff renders a readable report", () => {
@@ -55,6 +64,8 @@ test("formatTraceDiff renders a readable report", () => {
   const text = formatTraceDiff(compareTraces(baseline, candidate));
 
   assert.match(text, /AgentLens Trace Diff/);
+  assert.match(text, /Workflow:/);
+  assert.match(text, /Workflow errors:/);
   assert.match(text, /Event Types:/);
   assert.match(text, /-\$0\.0050/);
   assert.match(text, /Regressions:/);

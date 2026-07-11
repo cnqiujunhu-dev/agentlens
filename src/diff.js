@@ -18,6 +18,20 @@ function diffCounts(left = {}, right = {}) {
   }));
 }
 
+function workflowRows(baselineWorkflow = {}, candidateWorkflow = {}) {
+  const rows = [
+    ["Chain events", "chains"],
+    ["Task events", "tasks"],
+    ["Workflow errors", "errors"]
+  ];
+  return rows.map(([name, key]) => ({
+    name,
+    baseline: baselineWorkflow[key] ?? 0,
+    candidate: candidateWorkflow[key] ?? 0,
+    delta: (candidateWorkflow[key] ?? 0) - (baselineWorkflow[key] ?? 0)
+  }));
+}
+
 function delta(candidate, baseline) {
   if (candidate === null || baseline === null) return null;
   return candidate - baseline;
@@ -32,11 +46,21 @@ function statusRank(status) {
 
 function regressionSummary(baseline, candidate) {
   const regressions = [];
+  const workflow = workflowRows(baseline.workflow, candidate.workflow);
+  const workflowErrorDelta = workflow.find((item) => item.name === "Workflow errors")?.delta ?? 0;
+  const errorDelta = candidate.errors - baseline.errors;
+
   if (statusRank(candidate.status) > statusRank(baseline.status)) {
     regressions.push(`status changed from ${baseline.status} to ${candidate.status}`);
   }
   if (candidate.errors > baseline.errors) {
     regressions.push(`errors increased by ${candidate.errors - baseline.errors}`);
+  }
+  if (workflowErrorDelta > Math.max(errorDelta, 0)) {
+    regressions.push(`workflow error markers increased by ${workflowErrorDelta - Math.max(errorDelta, 0)}`);
+  }
+  for (const row of workflow.filter((item) => item.name !== "Workflow errors" && item.delta < 0)) {
+    regressions.push(`${row.name.toLowerCase()} decreased by ${Math.abs(row.delta)}`);
   }
   if (candidate.totalCostUsd > baseline.totalCostUsd) {
     regressions.push(`cost increased by $${(candidate.totalCostUsd - baseline.totalCostUsd).toFixed(4)}`);
@@ -59,8 +83,14 @@ export function compareTraces(baselineTrace, candidateTrace) {
       totalCostUsd: candidate.totalCostUsd - baseline.totalCostUsd,
       totalLlmTokens: candidate.totalLlmTokens - baseline.totalLlmTokens,
       totalKnownDurationMs: candidate.totalKnownDurationMs - baseline.totalKnownDurationMs,
-      wallTimeMs: delta(candidate.wallTimeMs, baseline.wallTimeMs)
+      wallTimeMs: delta(candidate.wallTimeMs, baseline.wallTimeMs),
+      workflow: {
+        chains: candidate.workflow.chains - baseline.workflow.chains,
+        tasks: candidate.workflow.tasks - baseline.workflow.tasks,
+        errors: candidate.workflow.errors - baseline.workflow.errors
+      }
     },
+    workflow: workflowRows(baseline.workflow, candidate.workflow),
     eventTypes: diffCounts(baseline.byType, candidate.byType),
     tools: diffCounts(baselineTools, candidateTools),
     regressions: regressionSummary(baseline, candidate)
@@ -107,6 +137,8 @@ export function formatTraceDiff(diff) {
     ""
   ];
 
+  lines.push(...formatTable("Workflow:", diff.workflow));
+  lines.push("");
   lines.push(...formatTable("Event Types:", diff.eventTypes));
   lines.push("");
   lines.push(...formatTable("Tools:", diff.tools));

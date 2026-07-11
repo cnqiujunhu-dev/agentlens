@@ -43,7 +43,7 @@ That produces:
 
 - a failing CI summary
 - SARIF scan findings for GitHub code scanning
-- a static diff dashboard showing status, cost, error, event, and tool deltas
+- a static diff dashboard showing status, cost, error, workflow, event, and tool deltas
 - a static run bundle with one dashboard per trace
 
 ## GitHub Actions Shape

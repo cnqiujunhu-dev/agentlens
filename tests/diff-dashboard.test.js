@@ -13,13 +13,19 @@ function makeTrace(name, status = "passed") {
 
 test("renderDiffDashboard renders static diff HTML", () => {
   const baseline = makeTrace("<baseline>");
+  addEvent(baseline, { type: "agent.task.start", name: "research" });
+  addEvent(baseline, { type: "agent.task.end", name: "research" });
   const candidate = makeTrace("candidate", "failed");
+  addEvent(candidate, { type: "chain.error", name: "refund-review" });
   addEvent(candidate, { type: "error", name: "failure", status: "error" });
 
   const html = renderDiffDashboard(compareTraces(baseline, candidate));
 
   assert.match(html, /AgentLens Trace Diff/);
   assert.match(html, /Regressions/);
+  assert.match(html, /Workflow/);
+  assert.match(html, /Workflow tasks/);
+  assert.match(html, /Task events/);
   assert.match(html, /Event Types/);
   assert.match(html, /Tools/);
   assert.equal(html.includes("<baseline>"), false);

@@ -134,10 +134,20 @@ export function renderDiffDashboard(diff) {
       ${renderMetric("Cost", diff.baseline.totalCostUsd, diff.candidate.totalCostUsd, diff.deltas.totalCostUsd, usd)}
       ${renderMetric("Known duration", diff.baseline.totalKnownDurationMs, diff.candidate.totalKnownDurationMs, diff.deltas.totalKnownDurationMs, ms)}
       ${renderMetric("Wall time", diff.baseline.wallTimeMs, diff.candidate.wallTimeMs, diff.deltas.wallTimeMs, ms)}
+      ${renderMetric("Workflow chains", diff.baseline.workflow?.chains ?? 0, diff.candidate.workflow?.chains ?? 0, diff.deltas.workflow?.chains ?? 0, number)}
+      ${renderMetric("Workflow tasks", diff.baseline.workflow?.tasks ?? 0, diff.candidate.workflow?.tasks ?? 0, diff.deltas.workflow?.tasks ?? 0, number)}
+      ${renderMetric("Workflow errors", diff.baseline.workflow?.errors ?? 0, diff.candidate.workflow?.errors ?? 0, diff.deltas.workflow?.errors ?? 0, number)}
     </section>
     <section class="panel section regressions">
       <h2>Regressions</h2>
       ${renderRegressions(diff.regressions)}
+    </section>
+    <section class="panel section">
+      <h2>Workflow</h2>
+      <table>
+        <thead><tr><th>Signal</th><th>Baseline</th><th>Candidate</th><th>Delta</th></tr></thead>
+        <tbody>${renderRows(diff.workflow ?? [])}</tbody>
+      </table>
     </section>
     <section class="panel section">
       <h2>Event Types</h2>

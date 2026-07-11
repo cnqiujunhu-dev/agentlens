@@ -101,7 +101,7 @@ AgentLens 的差异化是：
 - LangGraph-style node adapter。
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。
 - Deterministic replay，不重新调用模型也能复盘时间线。
-- before/after trace diff 和静态 diff dashboard。
+- before/after trace diff 和静态 diff dashboard，包含 workflow delta。
 - `agentlens review`，把 baseline/candidate trace 生成 PR-ready review pack。
 - JSON eval rules，用于 required events、forbidden tools、workflow gate、cost、latency、citation、MCP policy。
 - 本地 security scan，检查 secret-shaped value、prompt injection phrase、高风险工具调用。

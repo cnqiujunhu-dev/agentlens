@@ -12,6 +12,7 @@
 - Focused launch dashboard artifact for showcasing Workflow Review in README GIFs.
 - Run bundle index and `manifest.json` workflow counts for chain, task, and workflow error review.
 - Workflow eval assertions for minimum chain/task boundaries and maximum workflow error markers.
+- Trace diff and static diff dashboard workflow deltas for chain, task, and workflow error regressions.
 
 ### Changed
 
