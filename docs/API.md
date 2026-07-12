@@ -161,7 +161,7 @@ agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --
 agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json --fail-on-failure
 ```
 
-Review packs include copied traces, eval policy, `review.json`, CI summary, PR comment Markdown, SARIF, diff report, diff dashboard, and a static run bundle. The CI summary and PR comment Markdown include workflow diff rows when a baseline/candidate diff is available. The `review.json` manifest is the stable machine-readable entry point for automation. See [AGENT_REVIEW.md](AGENT_REVIEW.md).
+Review packs include copied traces, eval policy, `review.json`, CI summary, PR comment Markdown, SARIF, diff report, diff dashboard, and a static run bundle. The CI summary and PR comment Markdown include workflow diff rows when a baseline/candidate diff is available. The `review.json` manifest is the stable machine-readable entry point for automation and records generation time, review options, and uploaded artifact/SARIF links for PR bots. See [AGENT_REVIEW.md](AGENT_REVIEW.md).
 
 ## CLI JSON Output
 

@@ -117,6 +117,17 @@ test("writeReviewBundle generates a PR review artifact pack", () => {
   const manifest = JSON.parse(fs.readFileSync(result.files.manifest, "utf8"));
   assert.equal(result.manifest.schemaVersion, "agentlens.review.v1");
   assert.deepEqual(manifest, result.manifest);
+  assert.equal(typeof manifest.generatedAt, "string");
+  assert.equal(Number.isNaN(Date.parse(manifest.generatedAt)), false);
+  assert.deepEqual(manifest.options, {
+    scan: true,
+    scanFailOnSeverity: "high",
+    sections: "summary,scan,tool-calls,workflow,filters,timeline"
+  });
+  assert.deepEqual(manifest.links, {
+    artifactUrl: "https://example.com/bundle",
+    sarifUrl: "https://example.com/sarif"
+  });
   assert.equal(manifest.status.passed, false);
   assert.equal(manifest.summary.ci.failed, 1);
   assert.equal(manifest.summary.diff.workflow.deltas.tasks, -2);
@@ -184,6 +195,9 @@ test("CLI review can emit JSON manifest", () => {
   assert.equal(result.status, 0, result.stderr);
   const manifest = JSON.parse(result.stdout);
   assert.equal(manifest.schemaVersion, "agentlens.review.v1");
+  assert.equal(Number.isNaN(Date.parse(manifest.generatedAt)), false);
+  assert.equal(manifest.options.scan, true);
+  assert.equal(manifest.links.artifactUrl, null);
   assert.equal(manifest.status.passed, false);
   assert.equal(manifest.summary.diff.workflow.deltas.tasks, -2);
   assert.equal(manifest.summary.diff.workflow.regressions, 2);

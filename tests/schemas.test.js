@@ -12,6 +12,9 @@ test("schema helper exposes trace, eval, and review schemas", () => {
   assert.equal(traceSchema.properties.schemaVersion.const, "agentlens.trace.v1");
   assert.equal(evalSchema.properties.version.const, "agentlens.eval.v1");
   assert.equal(reviewSchema.properties.schemaVersion.const, "agentlens.review.v1");
+  assert.equal(reviewSchema.properties.generatedAt.format, "date-time");
+  assert.ok(reviewSchema.properties.options.properties.sections);
+  assert.ok(reviewSchema.properties.links.properties.artifactUrl);
   assert.ok(reviewSchema.properties.summary.properties.diff.properties.workflow);
   assert.equal(evalSchema.$defs.assertion.properties.type.enum.includes("forbidden-mcp-tool-risks"), true);
   assert.equal(evalSchema.$defs.assertion.properties.type.enum.includes("max-workflow-errors"), true);

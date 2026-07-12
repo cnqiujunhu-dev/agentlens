@@ -37,12 +37,25 @@ function assertString(errors, value, path) {
   if (typeof value !== "string" || value.length === 0) errors.push(`${path} is required`);
 }
 
+function assertDateTime(errors, value, path) {
+  if (typeof value !== "string" || value.length === 0) {
+    errors.push(`${path} is required`);
+  } else if (Number.isNaN(Date.parse(value))) {
+    errors.push(`${path} must be an ISO date-time string`);
+  }
+}
+
 function assertBoolean(errors, value, path) {
   if (typeof value !== "boolean") errors.push(`${path} must be a boolean`);
 }
 
 function assertInteger(errors, value, path) {
   if (!Number.isInteger(value)) errors.push(`${path} must be an integer`);
+}
+
+function assertStringOrNull(errors, value, path) {
+  if (value !== null && typeof value !== "string") errors.push(`${path} must be a string or null`);
+  if (typeof value === "string" && value.length === 0) errors.push(`${path} must be a non-empty string or null`);
 }
 
 function validateAssertion(assertion, index) {
@@ -138,6 +151,27 @@ export function validateReviewManifest(manifest) {
 
   if (!isObject(manifest)) return { valid: false, errors: ["review manifest must be an object"] };
   if (manifest.schemaVersion !== REVIEW_SCHEMA_VERSION) errors.push(`schemaVersion must be ${REVIEW_SCHEMA_VERSION}`);
+
+  if (manifest.generatedAt !== undefined) assertDateTime(errors, manifest.generatedAt, "generatedAt");
+
+  if (manifest.options !== undefined) {
+    if (!isObject(manifest.options)) {
+      errors.push("options must be an object");
+    } else {
+      assertBoolean(errors, manifest.options.scan, "options.scan");
+      assertString(errors, manifest.options.scanFailOnSeverity, "options.scanFailOnSeverity");
+      assertString(errors, manifest.options.sections, "options.sections");
+    }
+  }
+
+  if (manifest.links !== undefined) {
+    if (!isObject(manifest.links)) {
+      errors.push("links must be an object");
+    } else {
+      assertStringOrNull(errors, manifest.links.artifactUrl, "links.artifactUrl");
+      assertStringOrNull(errors, manifest.links.sarifUrl, "links.sarifUrl");
+    }
+  }
 
   if (!isObject(manifest.status)) {
     errors.push("status must be an object");

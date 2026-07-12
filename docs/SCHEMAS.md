@@ -44,6 +44,6 @@ console.log(readSchema("eval"));
 
 ## Notes
 
-The eval schema includes policy assertion names for event requirements, tool and MCP governance, cost and latency budgets, citation checks, and workflow gates such as `min-workflow-tasks`, `min-workflow-chains`, and `max-workflow-errors`. The review schema covers `review.json` status, generated file paths, CI counts, workflow diff deltas, and run bundle links.
+The eval schema includes policy assertion names for event requirements, tool and MCP governance, cost and latency budgets, citation checks, and workflow gates such as `min-workflow-tasks`, `min-workflow-chains`, and `max-workflow-errors`. The review schema covers `review.json` generation time, review options, upload links, status, generated file paths, CI counts, workflow diff deltas, and run bundle links.
 
 The schemas are intended for editor completion, CI integration, and external tooling. AgentLens also uses its own lightweight runtime validation for trace, eval, and review files so the CLI can stay dependency-free and return focused terminal errors.

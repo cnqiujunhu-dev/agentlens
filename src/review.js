@@ -95,6 +95,9 @@ function buildReviewManifest(result) {
   const workflowDeltas = result.diff.deltas.workflow ?? {};
   return {
     schemaVersion: REVIEW_MANIFEST_SCHEMA,
+    generatedAt: result.generatedAt,
+    options: { ...result.options },
+    links: { ...result.links },
     status: { ...result.status },
     inputs: { ...result.inputs },
     files: { ...result.files },
@@ -164,6 +167,7 @@ export function writeReviewBundle({
   });
   const diff = compareTraces(baseline, candidate);
   const bundle = writeRunBundle({ runsDir, outDir: bundleDir, sections });
+  const generatedAt = new Date().toISOString();
   const status = {
     passed: ciReport.failed === 0 && ciReport.total > 0,
     ci: ciReport.failed === 0 && ciReport.total > 0,
@@ -204,6 +208,16 @@ export function writeReviewBundle({
     outDir,
     runsDir,
     reportsDir,
+    generatedAt,
+    options: {
+      scan,
+      scanFailOnSeverity,
+      sections
+    },
+    links: {
+      artifactUrl: artifactUrl ?? null,
+      sarifUrl: sarifUrl ?? null
+    },
     inputs: {
       baselineFile,
       candidateFile,

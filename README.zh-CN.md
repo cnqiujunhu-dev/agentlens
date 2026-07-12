@@ -103,7 +103,7 @@ AgentLens 的差异化是：
 - AutoGen-style 和 CrewAI-style 多 Agent 示例。
 - Deterministic replay，不重新调用模型也能复盘时间线。
 - before/after trace diff 和静态 diff dashboard，包含 workflow delta。
-- `agentlens review`，把 baseline/candidate trace 生成 PR-ready review pack，并输出 workflow diff 摘要和机器可读的 `review.json`。
+- `agentlens review`，把 baseline/candidate trace 生成 PR-ready review pack，并输出 workflow diff 摘要和带 provenance 元数据的机器可读 `review.json`。
 - JSON eval rules，用于 required events、forbidden tools、workflow gate、cost、latency、citation、MCP policy。
 - 本地 security scan，检查 secret-shaped value、prompt injection phrase、高风险工具调用。
 - SARIF 输出，可接入 GitHub code scanning。
@@ -170,7 +170,7 @@ node ./bin/agentlens.js review .agentlens/runs/demo.json .agentlens/runs/failing
 node ./bin/agentlens.js validate review .agentlens/review/review.json
 ```
 
-`agentlens review` 会生成真实 PR 可用的 review pack，包括 `review.json`、CI summary、PR comment、SARIF、diff dashboard 和 run bundle。加 `--json` 可以把同一份 manifest 打印给 bot 或 workflow step。详见 [AGENT_REVIEW.md](docs/AGENT_REVIEW.md)。
+`agentlens review` 会生成真实 PR 可用的 review pack，包括 `review.json`、CI summary、PR comment、SARIF、diff dashboard 和 run bundle。加 `--json` 可以把同一份 manifest 打印给 bot 或 workflow step；manifest 会记录生成时间、review 选项，以及传入的 artifact/SARIF 上传链接。详见 [AGENT_REVIEW.md](docs/AGENT_REVIEW.md)。
 
 输出位置：
 

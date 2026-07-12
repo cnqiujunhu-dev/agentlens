@@ -15,7 +15,7 @@ Generated files:
 - `.agentlens/review/runs/baseline.json`: copied baseline trace.
 - `.agentlens/review/runs/candidate.json`: copied candidate trace.
 - `.agentlens/review/eval.json`: copied eval policy used for the review.
-- `.agentlens/review/review.json`: machine-readable review manifest with status, generated file paths, CI counts, workflow deltas, and bundle links.
+- `.agentlens/review/review.json`: machine-readable review manifest with generation time, run options, upload links, status, generated file paths, CI counts, workflow deltas, and bundle links.
 - `.agentlens/review/reports/ci-summary.md`: GitHub Actions step summary body with trace diff workflow regressions.
 - `.agentlens/review/reports/pr-comment.md`: stable PR comment body with the `agentlens-ci-comment` marker and workflow diff summary.
 - `.agentlens/review/reports/ci-report.txt`: plain text CI report.

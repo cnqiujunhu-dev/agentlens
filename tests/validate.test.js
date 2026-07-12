@@ -105,6 +105,27 @@ test("validateArtifact validates review manifests", () => {
   const valid = validateArtifact("review", review.files.manifest);
   assert.equal(valid.valid, true);
   assert.equal(validateReviewManifest(review.manifest).valid, true);
+  assert.equal(
+    validateReviewManifest({
+      ...review.manifest,
+      generatedAt: 123
+    }).valid,
+    false
+  );
+  assert.equal(
+    validateReviewManifest({
+      ...review.manifest,
+      options: { ...review.manifest.options, scan: "yes" }
+    }).valid,
+    false
+  );
+  assert.equal(
+    validateReviewManifest({
+      ...review.manifest,
+      links: { ...review.manifest.links, artifactUrl: 42 }
+    }).valid,
+    false
+  );
 
   writeJson(badReviewFile, { schemaVersion: "wrong" });
   const invalid = validateArtifact("review", badReviewFile);

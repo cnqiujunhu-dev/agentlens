@@ -106,7 +106,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - Deterministic replay that reconstructs the timeline without calling a model again.
 - Trace diff reports for before/after agent regressions, including workflow deltas.
 - Static diff dashboards for sharing before/after regressions with workflow delta cards.
-- `agentlens review` for turning baseline/candidate traces into a PR-ready review pack with workflow diff summaries and a machine-readable `review.json` manifest.
+- `agentlens review` for turning baseline/candidate traces into a PR-ready review pack with workflow diff summaries and a machine-readable `review.json` manifest carrying provenance metadata.
 - Static run bundles for reviewing a directory of traces as a CI artifact, including workflow counts in the index.
 - Machine-readable `manifest.json` output for run bundle automation, including workflow counts for PR bots.
 - Dashboard review workflow for PR artifacts, compact sections, and filtered view links.
@@ -237,7 +237,7 @@ node ./bin/agentlens.js review .agentlens/runs/demo.json .agentlens/runs/failing
 node ./bin/agentlens.js validate review .agentlens/review/review.json
 ```
 
-`agentlens review` writes a PR-ready artifact pack with copied traces, eval policy, `review.json`, CI summary, PR comment Markdown, SARIF, diff dashboard, and run bundle. Use `--json` to print the same manifest for bots and workflow steps. See [AGENT_REVIEW.md](docs/AGENT_REVIEW.md).
+`agentlens review` writes a PR-ready artifact pack with copied traces, eval policy, `review.json`, CI summary, PR comment Markdown, SARIF, diff dashboard, and run bundle. Use `--json` to print the same manifest for bots and workflow steps; it includes generation time, review options, and uploaded artifact/SARIF links when provided. See [AGENT_REVIEW.md](docs/AGENT_REVIEW.md).
 
 Want to wrap a generic LLM call?
 

@@ -8,6 +8,41 @@
     "schemaVersion": {
       "const": "agentlens.review.v1"
     },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "options": {
+      "type": "object",
+      "required": ["scan", "scanFailOnSeverity", "sections"],
+      "properties": {
+        "scan": {
+          "type": "boolean"
+        },
+        "scanFailOnSeverity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sections": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "links": {
+      "type": "object",
+      "required": ["artifactUrl", "sarifUrl"],
+      "properties": {
+        "artifactUrl": {
+          "type": ["string", "null"]
+        },
+        "sarifUrl": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": true
+    },
     "status": {
       "type": "object",
       "required": ["passed", "ci", "diffRegressions"],
