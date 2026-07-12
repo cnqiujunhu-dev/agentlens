@@ -13,6 +13,10 @@ const requiredFiles = [
   "SUPPORT.md",
   "action.yml",
   ".github/PULL_REQUEST_TEMPLATE.md",
+  ".github/ISSUE_TEMPLATE/config.yml",
+  ".github/ISSUE_TEMPLATE/bug_report.yml",
+  ".github/ISSUE_TEMPLATE/adapter_request.yml",
+  ".github/ISSUE_TEMPLATE/eval_rule_request.yml",
   ".github/workflows/ci.yml",
   ".github/workflows/python-publish.yml",
   "docs/API.md",
@@ -552,6 +556,29 @@ function assertPythonPublishWorkflow() {
   }
 }
 
+function assertGitHubCommunityConfig() {
+  const config = fs.readFileSync(".github/ISSUE_TEMPLATE/config.yml", "utf8");
+  const checklist = fs.readFileSync("docs/RELEASE_CHECKLIST.md", "utf8");
+  const launchPlan = fs.readFileSync("docs/LAUNCH_PLAN.md", "utf8");
+  for (const snippet of [
+    "blank_issues_enabled: false",
+    "https://github.com/cnqiujunhu-dev/agentlens/security/policy",
+    "https://github.com/cnqiujunhu-dev/agentlens/discussions"
+  ]) {
+    if (!config.includes(snippet)) fail(`.github/ISSUE_TEMPLATE/config.yml missing snippet: ${snippet}`);
+  }
+  for (const snippet of [
+    "Local-first PR review and debugging artifacts for AI agents",
+    "ai-agents",
+    "agent-debugging",
+    "github-actions",
+    "GitHub Discussions is enabled"
+  ]) {
+    if (!checklist.includes(snippet)) fail(`docs/RELEASE_CHECKLIST.md missing repo metadata snippet: ${snippet}`);
+    if (!launchPlan.includes(snippet)) fail(`docs/LAUNCH_PLAN.md missing repo metadata snippet: ${snippet}`);
+  }
+}
+
 for (const file of requiredFiles) assertFile(file);
 assertReadme();
 assertChineseReadme();
@@ -565,6 +592,7 @@ assertActionReviewPackSupport();
 assertOtelBatchDocs();
 assertNpmPublishingDocs();
 assertPythonPublishWorkflow();
+assertGitHubCommunityConfig();
 assertPackDryRun();
 
 console.log("AgentLens release audit passed");

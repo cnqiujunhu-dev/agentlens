@@ -1,5 +1,8 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
   - name: Security issue
-    url: https://github.com/
+    url: https://github.com/cnqiujunhu-dev/agentlens/security/policy
     about: Please do not file public issues for sensitive vulnerabilities. See SECURITY.md.
+  - name: Questions and ideas
+    url: https://github.com/cnqiujunhu-dev/agentlens/discussions
+    about: Use Discussions for usage questions, roadmap ideas, and early feedback that is not a reproducible bug.

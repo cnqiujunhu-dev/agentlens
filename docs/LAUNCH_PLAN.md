@@ -83,12 +83,16 @@ Built:
 - Publishable npm package identity as `agentlens-devtools` with `agentlens` CLI command.
 - npm publish dry-run check for package metadata, packed files, and bin-field stability.
 - Post-publish npm registry smoke check for clean-project quickstart verification.
+- GitHub repo description, discovery topics, CI badge, and Discussions feedback channel.
 
 Public launch status:
 
 - Repository is public at `https://github.com/cnqiujunhu-dev/agentlens`.
 - `main` is pushed and configured as the default branch.
 - Latest published tag is `v0.3.0`; `v0.4.0` is the current review-automation release target.
+- Repository description is `Local-first PR review and debugging artifacts for AI agents: trace, replay, eval, scan, dashboard, SARIF, and CI.`
+- Discovery topics include `ai-agents`, `agent-debugging`, `agent-observability`, `ai-observability`, `github-actions`, `rag`, `llmops`, `mcp`, `evals`, `ci`, and `devtools`.
+- GitHub Discussions is enabled for early feedback and roadmap questions.
 - GitHub Actions is expected to pass for both `main` and each release tag.
 
 ## Priority 1: Keep The Project Trustworthy
