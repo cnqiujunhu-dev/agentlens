@@ -47,6 +47,15 @@ node ./bin/agentlens.js ci --runs .agentlens/quickstart/runs --config .agentlens
 
 Quickstart 会把完整 artifact pack 写到 `.agentlens/quickstart/`，你不需要先接入自己的 Agent，就能先评估产品体验。
 
+## 选择你的起步路径
+
+| 目标 | 命令 |
+| --- | --- |
+| 不接入自己的 Agent，先看完整产品体验 | `node ./bin/agentlens.js quickstart --python` |
+| 展示 before/after PR regression artifact pack | `npm run demo:regression-pr` |
+| 给现有仓库加 CI review workflow | `node ./bin/agentlens.js init --review` |
+| 启动 Python Agent 或 RAG 项目 | `node ./bin/agentlens.js init --python` |
+
 ## PR 回归评审
 
 AgentLens 可以把 before/after agent run 变成 PR artifact：CI summary、稳定 PR comment、SARIF scan finding、静态 diff dashboard，以及 reviewer 不需要重新调用模型就能打开的 run bundle。

@@ -18,7 +18,7 @@ The public repo is not launch-ready until all of these are true:
 - The README links to the copyable PR comment example and the current release notes draft.
 - A current demo screenshot or GIF is linked from the README.
 - The GitHub repo has a clear description, topics, license, issues, pull request template, support policy, code of conduct, and security policy.
-- GitHub Discussions is enabled for questions and roadmap feedback; blank issues are disabled so new issues use the bug, adapter request, or eval rule request templates.
+- GitHub Discussions is enabled for questions and roadmap feedback; the issue template config disables blank issues so new issues use the bug, adapter request, or eval rule request templates.
 - Recommended repo description: `Local-first PR review and debugging artifacts for AI agents: trace, replay, eval, scan, dashboard, SARIF, and CI.`
 - Recommended repo topics include `ai-agents`, `agent-debugging`, `agent-observability`, `ai-observability`, `github-actions`, `rag`, `llmops`, `mcp`, `evals`, `ci`, and `devtools`.
 

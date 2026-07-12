@@ -47,6 +47,15 @@ Open `.agentlens/quickstart/reports/dashboard.html` for the trace dashboard, or 
 
 The quickstart writes a complete artifact pack under `.agentlens/quickstart/`, so you can inspect the product without wiring your own agent first.
 
+## Pick Your Starting Path
+
+| Goal | Command |
+| --- | --- |
+| Inspect the product without integrating your agent | `node ./bin/agentlens.js quickstart --python` |
+| Show a before/after PR regression artifact pack | `npm run demo:regression-pr` |
+| Add a CI review workflow to an existing repo | `node ./bin/agentlens.js init --review` |
+| Start a Python agent or RAG project | `node ./bin/agentlens.js init --python` |
+
 ## PR Regression Review
 
 AgentLens can turn recorded before/after agent runs into pull request artifacts: a CI summary, stable PR comment body, SARIF scan findings, a static diff dashboard, and a run bundle reviewers can open without rerunning the model.
