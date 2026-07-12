@@ -21,6 +21,7 @@
 - `agentlens init --review` scaffold for before/after review pack GitHub Actions with manifest checks, artifact upload, and PR comment upsert.
 - Review manifests now include generation time, review options, and artifact/SARIF links for PR bot provenance.
 - Composite GitHub Action provenance inputs and outputs for review manifest status, generation time, and uploaded artifact/SARIF links.
+- Review pack README files now show provenance metadata, uploaded links, and option-preserving re-run commands.
 
 ### Changed
 

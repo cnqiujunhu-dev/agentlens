@@ -13,6 +13,30 @@ function toDisplayPath(filePath, root) {
   return path.relative(root, filePath).replaceAll(path.sep, "/") || ".";
 }
 
+function formatReviewCommand(result, root) {
+  const args = [
+    "agentlens",
+    "review",
+    toDisplayPath(result.inputs.baselineFile, root),
+    toDisplayPath(result.inputs.candidateFile, root),
+    "--config",
+    toDisplayPath(result.inputs.configPath, root),
+    "--out",
+    toDisplayPath(result.outDir, root)
+  ];
+
+  if (result.options.scan) {
+    args.push("--scan-fail-on", result.options.scanFailOnSeverity);
+  } else {
+    args.push("--no-scan");
+  }
+  args.push("--sections", result.options.sections);
+  if (result.links.artifactUrl) args.push("--artifact-url", result.links.artifactUrl);
+  if (result.links.sarifUrl) args.push("--sarif-url", result.links.sarifUrl);
+
+  return args.join(" ");
+}
+
 function formatReviewReadme(result, { root = process.cwd() } = {}) {
   const lines = [
     "# AgentLens Review Pack",
@@ -21,6 +45,13 @@ function formatReviewReadme(result, { root = process.cwd() } = {}) {
     `Baseline: \`${toDisplayPath(result.inputs.baselineFile, root)}\``,
     `Candidate: \`${toDisplayPath(result.inputs.candidateFile, root)}\``,
     `Eval config: \`${toDisplayPath(result.inputs.configPath, root)}\``,
+    "",
+    "## Provenance",
+    "",
+    `- Generated at: ${result.generatedAt}`,
+    `- Scan: ${result.options.scan ? "enabled" : "disabled"}`,
+    `- Scan fail on: ${result.options.scanFailOnSeverity}`,
+    `- Dashboard sections: \`${result.options.sections}\``,
     "",
     "## Files",
     "",
@@ -40,6 +71,12 @@ function formatReviewReadme(result, { root = process.cwd() } = {}) {
     lines.push("- `reports/agentlens-ci.sarif`: SARIF scan results for GitHub code scanning.");
   }
 
+  if (result.links.artifactUrl || result.links.sarifUrl) {
+    lines.push("", "## Uploaded Links", "");
+    if (result.links.artifactUrl) lines.push(`- Artifact URL: ${result.links.artifactUrl}`);
+    if (result.links.sarifUrl) lines.push(`- SARIF URL: ${result.links.sarifUrl}`);
+  }
+
   lines.push("", "## Diff Regressions", "");
   if (result.diff.regressions.length === 0) {
     lines.push("None detected by the trace diff summary.");
@@ -52,7 +89,7 @@ function formatReviewReadme(result, { root = process.cwd() } = {}) {
     "## Re-run",
     "",
     "```bash",
-    `agentlens review ${toDisplayPath(result.inputs.baselineFile, root)} ${toDisplayPath(result.inputs.candidateFile, root)} --config ${toDisplayPath(result.inputs.configPath, root)} --out ${toDisplayPath(result.outDir, root)}`,
+    formatReviewCommand(result, root),
     "```"
   );
 

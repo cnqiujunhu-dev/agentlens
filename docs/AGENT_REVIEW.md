@@ -23,6 +23,7 @@ Generated files:
 - `.agentlens/review/reports/diff.html`: static diff dashboard.
 - `.agentlens/review/reports/agentlens-ci.sarif`: scan findings for GitHub code scanning when scan is enabled.
 - `.agentlens/review/reports/bundle/index.html`: static run bundle for reviewer handoff.
+- `.agentlens/review/README.md`: human-readable artifact index with generation time, review options, upload links, and re-run command.
 
 By default, `agentlens review` generates artifacts and exits successfully even when the candidate fails eval or scan gates. In CI, add `--fail-on-failure`:
 

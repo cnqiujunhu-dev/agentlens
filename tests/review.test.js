@@ -138,6 +138,15 @@ test("writeReviewBundle generates a PR review artifact pack", () => {
   assert.match(fs.readFileSync(result.files.prComment, "utf8"), /Run bundle: https:\/\/example\.com\/bundle/);
   assert.match(fs.readFileSync(result.files.prComment, "utf8"), /### Trace Diff/);
   assert.match(fs.readFileSync(result.files.prComment, "utf8"), /Task events/);
+  const readme = fs.readFileSync(result.files.readme, "utf8");
+  assert.match(readme, /## Provenance/);
+  assert.equal(readme.includes(manifest.generatedAt), true);
+  assert.match(readme, /Scan: enabled/);
+  assert.match(readme, /Scan fail on: high/);
+  assert.match(readme, /Artifact URL: https:\/\/example\.com\/bundle/);
+  assert.match(readme, /SARIF URL: https:\/\/example\.com\/sarif/);
+  assert.match(readme, /--artifact-url https:\/\/example\.com\/bundle/);
+  assert.match(readme, /--sarif-url https:\/\/example\.com\/sarif/);
   assert.match(fs.readFileSync(result.files.ciSummary, "utf8"), /## Trace Diff/);
   assert.match(fs.readFileSync(result.files.ciSummary, "utf8"), /Workflow Signal/);
   assert.match(fs.readFileSync(result.files.diffText, "utf8"), /status changed from passed to failed/);
