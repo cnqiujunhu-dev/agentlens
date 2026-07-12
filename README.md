@@ -3,6 +3,7 @@
 Trace, replay, evaluate, and share AI agent runs before they break in production.
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![CI](https://github.com/cnqiujunhu-dev/agentlens/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/cnqiujunhu-dev/agentlens/actions/workflows/ci.yml?query=branch%3Amain)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-339933.svg)](package.json)
 [![Zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](package.json)
 

@@ -93,6 +93,7 @@ const requiredReadmeSnippets = [
   "ROADMAP.md",
   "Languages:",
   "README.zh-CN.md",
+  "actions/workflows/ci.yml/badge.svg?branch=main",
   "Market Positioning",
   "MARKET_ANALYSIS.md",
   "agentlens quickstart",
@@ -257,6 +258,7 @@ const requiredChineseReadmeSnippets = [
   "agentlens otel-batch",
   "otel:batch",
   "python-publish.yml",
+  "actions/workflows/ci.yml/badge.svg?branch=main",
   "不是另一个 Agent 框架"
 ];
 

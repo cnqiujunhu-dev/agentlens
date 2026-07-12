@@ -3,6 +3,7 @@
 在 AI Agent 上线前，把每一次模型调用、工具调用、检索结果和失败原因都变成可复盘、可评审、可进入 CI 的本地证据。
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![CI](https://github.com/cnqiujunhu-dev/agentlens/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/cnqiujunhu-dev/agentlens/actions/workflows/ci.yml?query=branch%3Amain)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-339933.svg)](package.json)
 [![Zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](package.json)
 
