@@ -59,6 +59,14 @@ function packageVersion() {
   return JSON.parse(fs.readFileSync("package.json", "utf8")).version;
 }
 
+function packageMetadata() {
+  const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
+  return {
+    name: packageJson.name,
+    version: packageJson.version
+  };
+}
+
 function githubRepoFromRemote(remoteUrl) {
   const ssh = remoteUrl.match(/^git@github\.com:([^/]+\/[^.]+)(?:\.git)?$/);
   if (ssh) return ssh[1];
@@ -145,6 +153,37 @@ function checkTag() {
   }
 }
 
+function checkNpmRegistry() {
+  const metadata = packageMetadata();
+  const whoami = runNpm(["whoami"]);
+  if (whoami.status === 0) {
+    pass("npm-auth", `logged in to npm as ${(whoami.stdout ?? "").trim()}`);
+  } else if (localMode) {
+    warn("npm-auth", "npm is not logged in; run: npm login");
+  } else {
+    fail("npm-auth", "npm is not logged in; run: npm login before publishing");
+  }
+
+  const current = runNpm(["view", metadata.name, "version"]);
+  const output = `${current.stdout ?? ""}${current.stderr ?? ""}`.trim();
+  if (current.status === 0 && output) {
+    if (output === metadata.version) {
+      warn("npm-registry", `${metadata.name}@${metadata.version} is already published`);
+    } else {
+      pass("npm-registry", `${metadata.name} latest published version is ${output}`);
+    }
+    return;
+  }
+
+  if (output.includes("E404") || output.includes("Not Found")) {
+    warn("npm-registry", `${metadata.name} is not published yet; first publish still required`);
+  } else if (localMode) {
+    warn("npm-registry", output || `could not inspect npm registry for ${metadata.name}`);
+  } else {
+    fail("npm-registry", output || `could not inspect npm registry for ${metadata.name}`);
+  }
+}
+
 function checkDemoGif() {
   const file = "docs/assets/agentlens-demo.gif";
   if (!fs.existsSync(file)) {
@@ -180,6 +219,7 @@ const origin = remoteUrl();
 checkGitHubAuth();
 checkRemoteBranch(origin);
 checkTag();
+checkNpmRegistry();
 checkDemoGif();
 runReleaseAudit();
 runVerify();

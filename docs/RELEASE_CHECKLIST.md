@@ -11,6 +11,7 @@ The public repo is not launch-ready until all of these are true:
 - `npm pack --dry-run` includes the CLI, source, schemas, docs, README, license, and screenshot assets.
 - `package.json` uses `agentlens-devtools` as the npm package name while exposing the `agentlens` CLI binary.
 - `.github/workflows/ci.yml` passes on GitHub.
+- `npm whoami` reports the account that will publish `agentlens-devtools`; before the first publish, `npm view agentlens-devtools version` should return 404.
 - [NPM_PUBLISHING.md](NPM_PUBLISHING.md) is current before publishing the JavaScript package.
 - [PYTHON_PUBLISHING.md](PYTHON_PUBLISHING.md) is current before publishing `agentlens-trace`.
 - `.github/workflows/python-publish.yml` is current before configuring PyPI or TestPyPI Trusted Publishers.
@@ -65,6 +66,7 @@ Expected result:
 - `agentlens share` writes a redacted share bundle.
 - Release audit prints `AgentLens release audit passed`.
 - Local release preflight warns only for expected unpublished-release gaps when run before pushing or tagging.
+- Local release preflight reports npm auth and registry status before publishing.
 - Dry-run packaging includes `README.md`, `LICENSE`, `bin/agentlens.js`, `src/index.js`, and `docs/assets/dashboard-screenshot.png`.
 
 ## Demo Assets
