@@ -74,6 +74,8 @@ test("initWorkspace can scaffold a review pack GitHub Action", () => {
   assert.match(actionExample, /review: \.agentlens\/reports\/review/);
   assert.match(actionExample, /review-fail-on-failure: true/);
   assert.match(actionExample, /steps\.agentlens\.outputs\.review-manifest/);
+  assert.match(actionExample, /steps\.agentlens\.outputs\.review-status/);
+  assert.match(actionExample, /steps\.agentlens\.outputs\.review-generated-at/);
   assert.match(actionExample, /agentlens\.review\.v1/);
   assert.match(actionExample, /actions\/upload-artifact@v4/);
   assert.match(actionExample, /Upsert AgentLens review PR comment/);

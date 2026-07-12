@@ -22,6 +22,14 @@ inputs:
     description: Optional path to write Markdown suitable for a GitHub PR comment.
     required: false
     default: ""
+  artifact-url:
+    description: Optional uploaded run bundle or review pack URL to include in generated PR comments and review manifests.
+    required: false
+    default: ""
+  sarif-url:
+    description: Optional uploaded SARIF or code scanning URL to include in generated PR comments and review manifests.
+    required: false
+    default: ""
   bundle:
     description: Optional directory to write a static AgentLens run bundle.
     required: false
@@ -97,6 +105,18 @@ outputs:
   review-manifest:
     description: Path to the generated review pack manifest when review inputs are set.
     value: ${{ steps.agentlens.outputs.review-manifest }}
+  review-status:
+    description: PASS when the generated review pack passed eval and scan gates; otherwise FAIL.
+    value: ${{ steps.agentlens.outputs.review-status }}
+  review-generated-at:
+    description: ISO timestamp recorded in the generated review manifest.
+    value: ${{ steps.agentlens.outputs.review-generated-at }}
+  review-artifact-url:
+    description: Artifact URL recorded in the generated review manifest when artifact-url is set.
+    value: ${{ steps.agentlens.outputs.review-artifact-url }}
+  review-sarif-url:
+    description: SARIF URL recorded in the generated review manifest when sarif-url is set.
+    value: ${{ steps.agentlens.outputs.review-sarif-url }}
   review-workflow-chains:
     description: Candidate chain event count from the review diff when review inputs are set.
     value: ${{ steps.agentlens.outputs.review-workflow-chains }}
@@ -144,6 +164,12 @@ runs:
         fi
         if [[ -n "${{ inputs.pr-comment }}" ]]; then
           args+=(--pr-comment-md "${{ inputs.pr-comment }}")
+        fi
+        if [[ -n "${{ inputs.artifact-url }}" ]]; then
+          args+=(--artifact-url "${{ inputs.artifact-url }}")
+        fi
+        if [[ -n "${{ inputs.sarif-url }}" ]]; then
+          args+=(--sarif-url "${{ inputs.sarif-url }}")
         fi
         set +e
         node "$GITHUB_ACTION_PATH/bin/agentlens.js" "${args[@]}" > "$report_json"
@@ -193,6 +219,12 @@ runs:
             if [[ -n "${{ inputs.review-sections }}" ]]; then
               review_args+=(--sections "${{ inputs.review-sections }}")
             fi
+            if [[ -n "${{ inputs.artifact-url }}" ]]; then
+              review_args+=(--artifact-url "${{ inputs.artifact-url }}")
+            fi
+            if [[ -n "${{ inputs.sarif-url }}" ]]; then
+              review_args+=(--sarif-url "${{ inputs.sarif-url }}")
+            fi
             if [[ "${{ inputs.review-fail-on-failure }}" == "true" ]]; then
               review_args+=(--fail-on-failure)
             fi
@@ -210,6 +242,14 @@ runs:
               echo "review-bundle-manifest=$review_dir/reports/bundle/manifest.json"
               echo "review-manifest=$review_dir/review.json"
             } >> "$GITHUB_OUTPUT"
+            node - "$review_dir/review.json" <<'NODE' >> "$GITHUB_OUTPUT"
+        const fs = require("node:fs");
+        const manifest = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
+        console.log(`review-status=${manifest.status?.passed ? "PASS" : "FAIL"}`);
+        console.log(`review-generated-at=${manifest.generatedAt ?? ""}`);
+        console.log(`review-artifact-url=${manifest.links?.artifactUrl ?? ""}`);
+        console.log(`review-sarif-url=${manifest.links?.sarifUrl ?? ""}`);
+        NODE
             review_diff_json="$(mktemp)"
             set +e
             node "$GITHUB_ACTION_PATH/bin/agentlens.js" diff "$review_baseline" "$review_candidate" --json > "$review_diff_json"
@@ -253,6 +293,10 @@ runs:
             echo "review-bundle="
             echo "review-bundle-manifest="
             echo "review-manifest="
+            echo "review-status="
+            echo "review-generated-at="
+            echo "review-artifact-url="
+            echo "review-sarif-url="
             echo "review-workflow-chains="
             echo "review-workflow-tasks="
             echo "review-workflow-errors="

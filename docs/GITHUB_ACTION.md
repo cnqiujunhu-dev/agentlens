@@ -46,6 +46,8 @@ The action fails the job when any trace fails its eval config, any enabled scan 
 | `node-version` | `22` | Node.js version used to run AgentLens. |
 | `summary` | `true` | Write a Markdown report to the GitHub Actions step summary. |
 | `pr-comment` | empty | Optional path to write Markdown suitable for a GitHub PR comment. |
+| `artifact-url` | empty | Optional uploaded run bundle or review pack URL to include in generated PR comments and review manifests. |
+| `sarif-url` | empty | Optional uploaded SARIF or code scanning URL to include in generated PR comments and review manifests. |
 | `bundle` | empty | Optional directory to write a static AgentLens run bundle. |
 | `bundle-sections` | `summary,scan,tool-calls,workflow,filters,timeline` | Dashboard sections used when `bundle` is set. |
 | `review-baseline` | empty | Optional baseline trace file for a before/after review pack. |
@@ -72,6 +74,10 @@ The action fails the job when any trace fails its eval config, any enabled scan 
 | `review-bundle` | Directory containing the generated review run bundle. |
 | `review-bundle-manifest` | Path to the generated review run bundle `manifest.json`. |
 | `review-manifest` | Path to the generated review pack `review.json`. |
+| `review-status` | `PASS` when the generated review pack passed eval and scan gates; otherwise `FAIL`. |
+| `review-generated-at` | ISO timestamp recorded in the generated review manifest. |
+| `review-artifact-url` | Artifact URL recorded in the generated review manifest when `artifact-url` is set. |
+| `review-sarif-url` | SARIF URL recorded in the generated review manifest when `sarif-url` is set. |
 | `review-workflow-chains` | Candidate chain event count from the review diff. |
 | `review-workflow-tasks` | Candidate task event count from the review diff. |
 | `review-workflow-errors` | Candidate workflow error marker count from the review diff. |
@@ -177,6 +183,7 @@ Use `review-baseline`, `review-candidate`, and `review` when a workflow has befo
     review-candidate: .agentlens/candidate/refund.json
     review: .agentlens/reports/review
     review-sections: summary,scan,tool-calls,workflow,timeline
+    artifact-url: https://github.com/acme/app/actions/runs/123/artifacts/456
 
 - name: Upload AgentLens review pack
   if: always()
@@ -186,7 +193,7 @@ Use `review-baseline`, `review-candidate`, and `review` when a workflow has befo
     path: ${{ steps.agentlens.outputs.review }}
 ```
 
-The review pack includes copied traces, `eval.json`, `review.json`, `reports/pr-comment.md`, `reports/diff.html`, `reports/agentlens-ci.sarif`, and `reports/bundle/index.html`. The `review-manifest` output points directly to the machine-readable manifest for later workflow steps, and it can be checked with `agentlens validate review`. The generated PR comment and step summary include a trace diff section with workflow chain, task, and error deltas so reviewers can see workflow regressions before opening the HTML dashboard. Add `review-fail-on-failure: true` when the before/after review should fail the job if the candidate violates eval or scan gates.
+The review pack includes copied traces, `eval.json`, `review.json`, `reports/pr-comment.md`, `reports/diff.html`, `reports/agentlens-ci.sarif`, and `reports/bundle/index.html`. The `review-manifest` output points directly to the machine-readable manifest for later workflow steps, and it can be checked with `agentlens validate review`. The action also exposes `review-status`, `review-generated-at`, `review-artifact-url`, and `review-sarif-url` from the manifest so downstream bots do not need to parse JSON for common routing fields. The generated PR comment and step summary include a trace diff section with workflow chain, task, and error deltas so reviewers can see workflow regressions before opening the HTML dashboard. Add `review-fail-on-failure: true` when the before/after review should fail the job if the candidate violates eval or scan gates.
 
 Workflow outputs are available for downstream automation:
 
@@ -195,6 +202,7 @@ Workflow outputs are available for downstream automation:
   if: steps.agentlens.outputs.review-workflow-regressions != '0'
   run: |
     echo "Manifest: ${{ steps.agentlens.outputs.review-manifest }}"
+    echo "Review status: ${{ steps.agentlens.outputs.review-status }}"
     echo "Task delta: ${{ steps.agentlens.outputs.review-workflow-task-delta }}"
     echo "Workflow errors: ${{ steps.agentlens.outputs.review-workflow-errors }}"
 ```

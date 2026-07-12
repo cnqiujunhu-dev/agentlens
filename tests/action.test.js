@@ -12,6 +12,8 @@ test("composite GitHub Action exposes CI outputs", () => {
   assert.match(action, /failed:/);
   assert.match(action, /summary:/);
   assert.match(action, /pr-comment:/);
+  assert.match(action, /artifact-url:/);
+  assert.match(action, /sarif-url:/);
   assert.match(action, /bundle:/);
   assert.match(action, /bundle-sections:/);
   assert.match(action, /review-baseline:/);
@@ -27,12 +29,18 @@ test("composite GitHub Action exposes CI outputs", () => {
   assert.match(action, /--scan/);
   assert.match(action, /--scan-fail-on/);
   assert.match(action, /--sarif/);
+  assert.match(action, /--artifact-url/);
+  assert.match(action, /--sarif-url/);
   assert.match(action, /--pr-comment-md/);
   assert.match(action, /bundle_args=\(bundle/);
   assert.match(action, /review_args=\(review/);
   assert.match(action, /review-pr-comment/);
   assert.match(action, /review-bundle-manifest/);
   assert.match(action, /review-manifest/);
+  assert.match(action, /review-status/);
+  assert.match(action, /review-generated-at/);
+  assert.match(action, /review-artifact-url/);
+  assert.match(action, /review-sarif-url/);
   assert.match(action, /review-workflow-chains/);
   assert.match(action, /review-workflow-task-delta/);
   assert.match(action, /review-workflow-regressions/);
@@ -58,6 +66,10 @@ test("repository workflow verifies GitHub Action outputs", () => {
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-bundle/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-bundle-manifest/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-manifest/);
+  assert.match(workflow, /steps\.agentlens-action\.outputs\.review-status/);
+  assert.match(workflow, /steps\.agentlens-action\.outputs\.review-generated-at/);
+  assert.match(workflow, /steps\.agentlens-action\.outputs\.review-artifact-url/);
+  assert.match(workflow, /steps\.agentlens-action\.outputs\.review-sarif-url/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-workflow-chains/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-workflow-task-delta/);
   assert.match(workflow, /steps\.agentlens-action\.outputs\.review-workflow-regressions/);
@@ -75,6 +87,8 @@ test("repository workflow verifies GitHub Action outputs", () => {
   assert.match(workflow, /demo:regression-pr/);
   assert.match(workflow, /review-baseline:/);
   assert.match(workflow, /review-candidate:/);
+  assert.match(workflow, /artifact-url: https:\/\/example\.com\/agentlens-review/);
+  assert.match(workflow, /sarif-url: https:\/\/example\.com\/agentlens-sarif/);
   assert.match(workflow, /bundle-sections: summary,scan,tool-calls,workflow,timeline/);
   assert.match(workflow, /review-sections: summary,scan,tool-calls,workflow,timeline/);
   assert.match(workflow, /multi-agent-basic\.json/);

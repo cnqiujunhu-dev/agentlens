@@ -44,7 +44,7 @@ Useful options:
 
 This is the production version of the regression PR demo. The demo still exists for screenshots and launch material, while `agentlens review` is meant for real before/after traces from application tests, eval datasets, or CI jobs.
 
-The composite GitHub Action can generate the same pack with `review-baseline`, `review-candidate`, and `review` inputs. See [GITHUB_ACTION.md](GITHUB_ACTION.md#review-pack-artifact).
+The composite GitHub Action can generate the same pack with `review-baseline`, `review-candidate`, and `review` inputs, then expose manifest fields such as `review-status`, `review-generated-at`, and uploaded artifact links as outputs. See [GITHUB_ACTION.md](GITHUB_ACTION.md#review-pack-artifact).
 
 To scaffold a copyable before/after PR review workflow, run:
 

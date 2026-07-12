@@ -49,6 +49,8 @@ jobs:
           config: evals/default.json
           summary: false
           pr-comment: .agentlens/reports/pr-comment.md
+          artifact-url: https://example.com/agentlens-review
+          sarif-url: https://example.com/agentlens-sarif
           bundle: .agentlens/reports/action-bundle
           bundle-sections: summary,scan,tool-calls,workflow,timeline
           review-baseline: .agentlens/regression-pr/runs/baseline.json
@@ -69,6 +71,10 @@ jobs:
           test "${{ steps.agentlens-action.outputs.review-bundle }}" = ".agentlens/reports/action-review/reports/bundle"
           test "${{ steps.agentlens-action.outputs.review-bundle-manifest }}" = ".agentlens/reports/action-review/reports/bundle/manifest.json"
           test "${{ steps.agentlens-action.outputs.review-manifest }}" = ".agentlens/reports/action-review/review.json"
+          test "${{ steps.agentlens-action.outputs.review-status }}" = "FAIL"
+          test -n "${{ steps.agentlens-action.outputs.review-generated-at }}"
+          test "${{ steps.agentlens-action.outputs.review-artifact-url }}" = "https://example.com/agentlens-review"
+          test "${{ steps.agentlens-action.outputs.review-sarif-url }}" = "https://example.com/agentlens-sarif"
           test "${{ steps.agentlens-action.outputs.review-workflow-chains }}" = "2"
           test "${{ steps.agentlens-action.outputs.review-workflow-tasks }}" = "0"
           test "${{ steps.agentlens-action.outputs.review-workflow-errors }}" = "2"
@@ -86,6 +92,8 @@ jobs:
           test -f .agentlens/reports/action-review/reports/bundle/manifest.json
           test -f .agentlens/reports/action-review/review.json
           grep -q "agentlens.review.v1" .agentlens/reports/action-review/review.json
+          grep -q "https://example.com/agentlens-review" .agentlens/reports/action-review/review.json
+          grep -q "https://example.com/agentlens-sarif" .agentlens/reports/action-review/review.json
           node ./bin/agentlens.js validate review .agentlens/reports/action-review/review.json
 
       - name: MCP adapter demo

@@ -20,6 +20,7 @@
 - `agentlens init` GitHub Action examples now include run bundle uploads and marker-based PR comment upsert steps.
 - `agentlens init --review` scaffold for before/after review pack GitHub Actions with manifest checks, artifact upload, and PR comment upsert.
 - Review manifests now include generation time, review options, and artifact/SARIF links for PR bot provenance.
+- Composite GitHub Action provenance inputs and outputs for review manifest status, generation time, and uploaded artifact/SARIF links.
 
 ### Changed
 

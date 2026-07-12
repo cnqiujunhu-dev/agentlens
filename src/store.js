@@ -133,6 +133,8 @@ jobs:
         run: |
           test -f "\${{ steps.agentlens.outputs.review-manifest }}"
           grep -q '"schemaVersion": "agentlens.review.v1"' "\${{ steps.agentlens.outputs.review-manifest }}"
+          test -n "\${{ steps.agentlens.outputs.review-status }}"
+          test -n "\${{ steps.agentlens.outputs.review-generated-at }}"
 
       - name: Upload AgentLens review pack
         if: always() && steps.agentlens.outputs.review != ''
