@@ -4,8 +4,11 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { initWorkspace, readJson, readTrace } from "../src/store.js";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const binPath = path.resolve(__dirname, "../bin/agentlens.js");
 const latestStableActionRef = "cnqiujunhu-dev/agentlens@v0.3.0";
 
 function findPython() {
@@ -54,6 +57,43 @@ test("initWorkspace scaffolds starter files without overwriting", () => {
 
   assert.equal(second.createdFiles.length, 0);
   assert.deepEqual(readJson(path.join(workspace.evalsDir, "default.json")), { custom: true });
+});
+
+test("initWorkspace can scaffold a review pack GitHub Action", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-review-init-"));
+  const workspace = initWorkspace(dir, { scaffold: true, review: true });
+  const reviewAction = path.join(workspace.examplesDir, "review-github-action.yml");
+
+  assert.equal(fs.existsSync(reviewAction), true);
+  assert.equal(workspace.createdFiles.length, 4);
+
+  const actionExample = fs.readFileSync(reviewAction, "utf8");
+  assert.match(actionExample, /name: agentlens-review/);
+  assert.match(actionExample, /review-baseline: \.agentlens\/baseline\/baseline\.json/);
+  assert.match(actionExample, /review-candidate: \.agentlens\/candidate\/candidate\.json/);
+  assert.match(actionExample, /review: \.agentlens\/reports\/review/);
+  assert.match(actionExample, /review-fail-on-failure: true/);
+  assert.match(actionExample, /steps\.agentlens\.outputs\.review-manifest/);
+  assert.match(actionExample, /agentlens\.review\.v1/);
+  assert.match(actionExample, /actions\/upload-artifact@v4/);
+  assert.match(actionExample, /Upsert AgentLens review PR comment/);
+  assert.match(actionExample, /steps\.agentlens\.outputs\.review-pr-comment/);
+  assert.doesNotMatch(actionExample, /actions\/checkout@v4/);
+
+  const second = initWorkspace(dir, { scaffold: true, review: true });
+  assert.equal(second.createdFiles.length, 0);
+});
+
+test("CLI init --review writes the review workflow template", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agentlens-review-cli-init-"));
+  const result = spawnSync(process.execPath, [binPath, "init", "--review"], {
+    cwd: dir,
+    encoding: "utf8"
+  });
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Review workflow:/);
+  assert.equal(fs.existsSync(path.join(dir, ".agentlens", "examples", "review-github-action.yml")), true);
 });
 
 test("initWorkspace can scaffold a runnable Python starter", () => {

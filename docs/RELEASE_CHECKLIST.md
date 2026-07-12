@@ -154,7 +154,7 @@ Before posting publicly:
 - Confirm all README links work on GitHub.
 - Confirm the screenshot or GIF renders in the README.
 - Confirm the installation and demo commands work from a clean clone.
-- Confirm `agentlens init` creates starter evals and a GitHub Action example.
+- Confirm `agentlens init` creates starter evals and a GitHub Action example, and `agentlens init --review` creates `.agentlens/examples/review-github-action.yml`.
 - Confirm the first issue templates route bugs, adapter requests, and eval rule requests.
 - Confirm the PR template asks for validation and trace safety.
 - Prepare the launch post from [LAUNCH_POST.md](LAUNCH_POST.md).

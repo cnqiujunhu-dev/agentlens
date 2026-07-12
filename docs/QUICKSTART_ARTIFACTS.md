@@ -28,4 +28,6 @@ With `--python`, quickstart also writes the Python starter from `agentlens init 
 - `.agentlens/python/basic_run.py`
 - `.agentlens/examples/python-github-action.yml`: Python trace generation plus the same run bundle upload and PR comment upsert pattern.
 
+For before/after review packs, run `agentlens init --review` to add `.agentlens/examples/review-github-action.yml` with review manifest checks, artifact upload, and PR comment upsert.
+
 The quickstart pack is intentionally separate from `.agentlens/runs`. That makes it safe to run in a repository that already contains passing or failing traces while still demonstrating the same CI, dashboard, bundle, share, scan, and OTLP paths used by real projects.

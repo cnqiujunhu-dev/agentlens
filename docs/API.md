@@ -155,6 +155,7 @@ console.log(review.manifest.summary.diff.workflow.deltas);
 CLI:
 
 ```bash
+agentlens init --review
 agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json --out .agentlens/review
 agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json --out .agentlens/review --json
 agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config evals/default.json --fail-on-failure

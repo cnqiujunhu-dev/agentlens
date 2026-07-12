@@ -94,6 +94,7 @@ AgentLens 的差异化是：
 - `npm run pack:smoke`，在临时干净项目中验证 npm tarball 安装后的 CLI 和 API 可用性。
 - `npm run npm:publish:check`，验证 npm package metadata、打包文件和 publish dry-run 输出。
 - `npm run npm:postpublish:check`，发布后从干净临时项目验证 registry 安装和一条命令 quickstart。
+- `agentlens init --review`，生成 before/after review pack 的 GitHub Action 模板，包含 review manifest 检查、artifact 上传和 PR comment upsert。
 - `agentlens init --python`，为 Python 项目生成 starter trace writer、示例 run，以及带 run bundle 上传和 PR comment upsert 的 GitHub Action 模板。
 - Python framework cookbook，覆盖 `AgentLensLangChainBridge`、`AgentLensLlamaIndexBridge` 和 `AgentLensCrewAIBridge` trace 边界。
 - LangChain-like object payload fixture，用于验证 Python adapter 对真实回调载荷形态的兼容性。
@@ -131,6 +132,7 @@ npx agentlens doctor
 npm install
 node ./bin/agentlens.js quickstart --python
 node ./bin/agentlens.js init --python
+node ./bin/agentlens.js init --review
 npm run demo
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
 node ./bin/agentlens.js replay .agentlens/runs/demo.json
@@ -226,7 +228,7 @@ AgentLens 当前不是：
 
 ```text
 agentlens init
-agentlens init [--python]
+agentlens init [--python] [--review]
 agentlens quickstart [--python]
 agentlens doctor [--json]
 agentlens demo [--out path]

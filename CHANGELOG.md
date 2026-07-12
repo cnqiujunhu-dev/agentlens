@@ -18,6 +18,7 @@
 - Review pack `review.json` manifests, `agentlens review --json`, and a GitHub Action `review-manifest` output for PR automation.
 - Review manifest JSON Schema, `agentlens schema review`, and `agentlens validate review` for downstream PR bot contracts.
 - `agentlens init` GitHub Action examples now include run bundle uploads and marker-based PR comment upsert steps.
+- `agentlens init --review` scaffold for before/after review pack GitHub Actions with manifest checks, artifact upload, and PR comment upsert.
 
 ### Changed
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import process from "node:process";
+import path from "node:path";
 import { createDemoRun } from "../src/demo.js";
 import { formatSummary, summarizeTrace } from "../src/inspect.js";
 import { appendText, initWorkspace, readTrace, writeText, writeTrace } from "../src/store.js";
@@ -13,7 +14,7 @@ function usage() {
     "AgentLens - local-first DevTools for AI agent runs",
     "",
     "Usage:",
-    "  agentlens init [--python]",
+    "  agentlens init [--python] [--review]",
     "  agentlens quickstart [--python]",
     "  agentlens doctor [--json]",
     "  agentlens demo [--out path]",
@@ -75,11 +76,12 @@ async function main() {
   }
 
   if (command === "init") {
-    const workspace = initWorkspace(process.cwd(), { scaffold: true, python: flag("--python") });
+    const workspace = initWorkspace(process.cwd(), { scaffold: true, python: flag("--python"), review: flag("--review") });
     console.log(`Initialized AgentLens workspace at ${workspace.root}`);
     console.log(`Runs: ${workspace.runsDir}`);
     console.log(`Reports: ${workspace.reportsDir}`);
     if (flag("--python")) console.log(`Python starter: ${workspace.pythonDir}`);
+    if (flag("--review")) console.log(`Review workflow: ${path.join(workspace.examplesDir, "review-github-action.yml")}`);
     if (workspace.createdFiles.length > 0) {
       console.log("Starter files:");
       for (const file of workspace.createdFiles) console.log(`  ${file}`);

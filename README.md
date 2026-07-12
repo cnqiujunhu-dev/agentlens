@@ -97,6 +97,7 @@ See [MARKET_ANALYSIS.md](docs/MARKET_ANALYSIS.md) for the detailed comparison an
 - npm publish dry-run check through `npm run npm:publish:check` for package metadata, packed files, and registry publish readiness.
 - Post-publish npm smoke check through `npm run npm:postpublish:check` for registry installs and one-command quickstart confidence.
 - `agentlens init --python` starter scaffold for Python projects.
+- `agentlens init --review` scaffold for before/after PR review pack workflows.
 - Python framework cookbook for `AgentLensLangChainBridge`, `AgentLensLlamaIndexBridge`, and `AgentLensCrewAIBridge` trace boundaries.
 - LangChain-like object payload fixture for Python adapter confidence.
 - OpenTelemetry/OpenInference-style OTLP JSON export for single traces and batch run directories.
@@ -157,6 +158,7 @@ npm install
 node ./bin/agentlens.js quickstart --python
 node ./bin/agentlens.js init
 node ./bin/agentlens.js init --python
+node ./bin/agentlens.js init --review
 node ./bin/agentlens.js doctor
 node ./bin/agentlens.js demo --out .agentlens/runs/demo.json
 node ./bin/agentlens.js inspect .agentlens/runs/demo.json
@@ -187,7 +189,7 @@ npm run demo:regression-pr
 
 `agentlens quickstart` writes an isolated artifact pack under `.agentlens/quickstart/`, including a passing demo trace, eval report, scan report, dashboard, OTLP JSON, PR comment Markdown, run bundle, and redacted share bundle. See [QUICKSTART_ARTIFACTS.md](docs/QUICKSTART_ARTIFACTS.md).
 
-`agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example with run bundle upload and marker-based PR comment upsert. `agentlens init --python` also creates `.agentlens/python/basic_run.py`, `.agentlens/python/agentlens_trace.py`, and `.agentlens/examples/python-github-action.yml`.
+`agentlens init` creates starter files under `.agentlens/`, including an editable eval config and a copyable GitHub Action example with run bundle upload and marker-based PR comment upsert. `agentlens init --review` also writes `.agentlens/examples/review-github-action.yml` for before/after PR review packs. `agentlens init --python` adds `.agentlens/python/basic_run.py`, `.agentlens/python/agentlens_trace.py`, and `.agentlens/examples/python-github-action.yml`.
 
 Python users can start from the `agentlens-trace` package skeleton in `python/agentlens-trace/`, from `examples/python-basic-run.py` and `examples/python-async-run.py`, or run `npm run demo:python` to write AgentLens-compatible sync/async traces, validate them, evaluate them, scan them, and export OTLP JSON. The package exposes `AgentLensRun`, `trace_llm_call`, `trace_async_llm_call`, and framework helpers through `agentlens_trace.adapters`. `npm run python:publish:check` installs the package into a temporary target directory and verifies the installed package entrypoints before a release.
 
@@ -381,7 +383,7 @@ The MVP stores each run as a single JSON file:
 
 ```text
 agentlens init
-agentlens init [--python]
+agentlens init [--python] [--review]
 agentlens quickstart [--python]
 agentlens doctor [--json]
 agentlens demo [--out path]

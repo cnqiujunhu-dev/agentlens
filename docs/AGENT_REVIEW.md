@@ -46,6 +46,14 @@ This is the production version of the regression PR demo. The demo still exists 
 
 The composite GitHub Action can generate the same pack with `review-baseline`, `review-candidate`, and `review` inputs. See [GITHUB_ACTION.md](GITHUB_ACTION.md#review-pack-artifact).
 
+To scaffold a copyable before/after PR review workflow, run:
+
+```bash
+agentlens init --review
+```
+
+This writes `.agentlens/examples/review-github-action.yml` with review pack generation, review manifest checks, artifact upload, and marker-based PR comment upsert.
+
 Validate the machine-readable review contract in CI or local scripts:
 
 ```bash

@@ -25,10 +25,13 @@ Useful commands:
 agentlens demo --out .agentlens/runs/demo.json
 agentlens quickstart --python
 agentlens init --python
+agentlens init --review
 agentlens inspect .agentlens/runs/demo.json
 agentlens replay .agentlens/runs/demo.json
 agentlens eval .agentlens/runs/demo.json --config .agentlens/evals/default.json
 agentlens ci --runs .agentlens/runs --config .agentlens/evals/default.json
+agentlens review .agentlens/runs/baseline.json .agentlens/runs/candidate.json --config .agentlens/evals/default.json --out .agentlens/review
+agentlens validate review .agentlens/review/review.json
 agentlens otel-batch .agentlens/runs --out .agentlens/reports/otel
 agentlens serve .agentlens/runs
 \`\`\`
@@ -80,6 +83,73 @@ jobs:
         run: |
           marker='<!-- agentlens-ci-comment -->'
           body_file='.agentlens/reports/agentlens-pr-comment.md'
+          body="$(cat "$body_file")"
+          comment_id="$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" --jq '.[] | select(.body | contains("<!-- agentlens-ci-comment -->")) | .id' | head -n 1)"
+
+          if [[ -n "$comment_id" ]]; then
+            gh api --method PATCH "repos/$REPO/issues/comments/$comment_id" -f body="$body"
+          else
+            gh api --method POST "repos/$REPO/issues/$PR_NUMBER/comments" -f body="$body"
+          fi
+`;
+
+const REVIEW_GITHUB_ACTION_EXAMPLE = `name: agentlens-review
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  agentlens-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Generate baseline and candidate traces
+        run: |
+          # Replace these commands with your own before/after trace generation.
+          # The files below are examples consumed by review-baseline and review-candidate.
+          npm run test:agent:baseline
+          npm run test:agent:candidate
+
+      - name: Run AgentLens review pack
+        id: agentlens
+        uses: cnqiujunhu-dev/agentlens@v0.3.0
+        with:
+          runs: .agentlens/runs
+          config: .agentlens/evals/default.json
+          review-baseline: .agentlens/baseline/baseline.json
+          review-candidate: .agentlens/candidate/candidate.json
+          review: .agentlens/reports/review
+          review-sections: summary,scan,tool-calls,workflow,filters,timeline
+          review-fail-on-failure: true
+
+      - name: Check review manifest
+        if: always() && steps.agentlens.outputs.review-manifest != ''
+        run: |
+          test -f "\${{ steps.agentlens.outputs.review-manifest }}"
+          grep -q '"schemaVersion": "agentlens.review.v1"' "\${{ steps.agentlens.outputs.review-manifest }}"
+
+      - name: Upload AgentLens review pack
+        if: always() && steps.agentlens.outputs.review != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentlens-review
+          path: \${{ steps.agentlens.outputs.review }}
+
+      - name: Upsert AgentLens review PR comment
+        if: always() && github.event_name == 'pull_request' && steps.agentlens.outputs.review-pr-comment != ''
+        env:
+          GH_TOKEN: \${{ github.token }}
+          REPO: \${{ github.repository }}
+          PR_NUMBER: \${{ github.event.pull_request.number }}
+        run: |
+          marker='<!-- agentlens-ci-comment -->'
+          body_file="\${{ steps.agentlens.outputs.review-pr-comment }}"
           body="$(cat "$body_file")"
           comment_id="$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" --jq '.[] | select(.body | contains("<!-- agentlens-ci-comment -->")) | .id' | head -n 1)"
 
@@ -259,7 +329,7 @@ function readPythonTraceWriterSource() {
   return fs.readFileSync(new URL("../python/agentlens-trace/src/agentlens_trace/__init__.py", import.meta.url), "utf8");
 }
 
-export function initWorkspace(root = process.cwd(), { scaffold = false, python = false } = {}) {
+export function initWorkspace(root = process.cwd(), { scaffold = false, python = false, review = false } = {}) {
   const workspaceRoot = path.join(root, ".agentlens");
   const runsDir = path.join(workspaceRoot, "runs");
   const reportsDir = path.join(workspaceRoot, "reports");
@@ -285,6 +355,7 @@ export function initWorkspace(root = process.cwd(), { scaffold = false, python =
       [path.join(evalsDir, "default.json"), `${JSON.stringify(DEFAULT_INIT_EVAL, null, 2)}\n`],
       [path.join(examplesDir, "github-action.yml"), GITHUB_ACTION_EXAMPLE]
     ];
+    if (review) files.push([path.join(examplesDir, "review-github-action.yml"), REVIEW_GITHUB_ACTION_EXAMPLE]);
     for (const [filePath, content] of files) {
       if (writeIfMissing(filePath, content)) createdFiles.push(filePath);
     }
