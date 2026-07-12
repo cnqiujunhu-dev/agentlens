@@ -22,6 +22,7 @@
 - Review manifests now include generation time, review options, and artifact/SARIF links for PR bot provenance.
 - Composite GitHub Action provenance inputs and outputs for review manifest status, generation time, and uploaded artifact/SARIF links.
 - Review pack README files now show provenance metadata, uploaded links, and option-preserving re-run commands.
+- Copyable PR comment example and v0.4.0 release notes draft for GitHub launch and release workflows.
 
 ### Changed
 

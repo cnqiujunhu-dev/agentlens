@@ -15,6 +15,7 @@ The public repo is not launch-ready until all of these are true:
 - [PYTHON_PUBLISHING.md](PYTHON_PUBLISHING.md) is current before publishing `agentlens-trace`.
 - `.github/workflows/python-publish.yml` is current before configuring PyPI or TestPyPI Trusted Publishers.
 - The README shows the product, the five-minute demo, the GitHub Action, the roadmap, and launch materials.
+- The README links to the copyable PR comment example and the current release notes draft.
 - A current demo screenshot or GIF is linked from the README.
 - The GitHub repo has a clear description, topics, license, issues, pull request template, support policy, code of conduct, and security policy.
 
@@ -104,6 +105,8 @@ Recommended pinned links:
 - README quick demo.
 - Dashboard screenshot or launch GIF.
 - GitHub Action documentation.
+- PR comment example.
+- Current release notes draft.
 - MCP adapter documentation.
 - Launch plan or roadmap.
 
@@ -114,8 +117,8 @@ Only tag after local validation and the GitHub workflow pass:
 ```bash
 gh auth refresh -s workflow
 git push origin main
-git tag v0.3.1
-git push origin v0.3.1
+git tag v0.4.0
+git push origin v0.4.0
 ```
 
 After tagging and configuring `origin`, run the strict gate:
@@ -124,7 +127,7 @@ After tagging and configuring `origin`, run the strict gate:
 npm run release:preflight
 ```
 
-Use the release notes from [LAUNCH_COPY.md](LAUNCH_COPY.md). Keep the wording scoped to the MVP: local-first tracing, replay, evals, dashboards, CI, MCP policy checks, redaction, JSONL traces, and provider-style adapters.
+Use the release notes from [RELEASE_NOTES_V0.4.0.md](RELEASE_NOTES_V0.4.0.md). Keep the wording scoped to the MVP: local-first tracing, replay, evals, dashboards, review packs, CI, MCP policy checks, redaction, JSONL traces, and provider-style adapters.
 
 For JavaScript package publishing, follow [NPM_PUBLISHING.md](NPM_PUBLISHING.md). Publish the npm package as `agentlens-devtools`; keep the CLI binary as `agentlens`. Do not document `npm install agentlens`, because that npm package name is already occupied by an unrelated package.
 
@@ -158,6 +161,8 @@ Before posting publicly:
 - Confirm the first issue templates route bugs, adapter requests, and eval rule requests.
 - Confirm the PR template asks for validation and trace safety.
 - Prepare the launch post from [LAUNCH_POST.md](LAUNCH_POST.md).
+- Confirm [PR_COMMENT_EXAMPLE.md](PR_COMMENT_EXAMPLE.md) still matches the generated PR comment structure.
+- Confirm [RELEASE_NOTES_V0.4.0.md](RELEASE_NOTES_V0.4.0.md) reflects the latest changelog.
 
 ## Current Release Status
 
@@ -166,5 +171,5 @@ As of the latest public release:
 - Public GitHub repository: `https://github.com/cnqiujunhu-dev/agentlens`.
 - Default branch: `main`.
 - Latest published release tag: `v0.3.0`.
-- Current release candidate tag: `v0.3.1`.
+- Current release candidate tag: `v0.4.0`.
 - Strict release preflight should pass before any new release is published.

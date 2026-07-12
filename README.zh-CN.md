@@ -46,6 +46,16 @@ node ./bin/agentlens.js ci --runs .agentlens/quickstart/runs --config .agentlens
 
 Quickstart 会把完整 artifact pack 写到 `.agentlens/quickstart/`，你不需要先接入自己的 Agent，就能先评估产品体验。
 
+## PR 回归评审
+
+AgentLens 可以把 before/after agent run 变成 PR artifact：CI summary、稳定 PR comment、SARIF scan finding、静态 diff dashboard，以及 reviewer 不需要重新调用模型就能打开的 run bundle。
+
+```bash
+npm run demo:regression-pr
+```
+
+可复制的 PR comment 样例见 [PR_COMMENT_EXAMPLE.md](docs/PR_COMMENT_EXAMPLE.md)。
+
 ## 为什么需要 AgentLens
 
 AI Agent 很容易做出演示，但很难稳定上线。一次失败通常会带来这些问题：
@@ -253,9 +263,11 @@ agentlens serve [trace-file|runs-dir] [--host host] [--port port]
 ## 文档
 
 - [API](docs/API.md)
+- [v0.4.0 release notes draft](docs/RELEASE_NOTES_V0.4.0.md)
 - [市场分析](docs/MARKET_ANALYSIS.md)
 - [Quickstart artifacts](docs/QUICKSTART_ARTIFACTS.md)
 - [Agent review packs](docs/AGENT_REVIEW.md)
+- [PR comment example](docs/PR_COMMENT_EXAMPLE.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
 - [Python publishing](docs/PYTHON_PUBLISHING.md)

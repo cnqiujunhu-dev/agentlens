@@ -42,6 +42,7 @@ The current MVP includes:
 - JSON output for automation.
 - Markdown summaries for GitHub Actions.
 - Stable PR comment Markdown and run bundle artifacts.
+- Copyable PR comment example for README and release demos.
 - JSONL streaming traces for long-running agents.
 - Generic LLM wrappers and OpenAI-compatible / Anthropic-compatible adapter helpers.
 - Zero-dependency Python trace writer plus LangChain-style, LlamaIndex-style, and CrewAI-style bridge helpers.
@@ -50,7 +51,7 @@ The current MVP includes:
 
 The design goal is boring interoperability: no hosted account, no required runtime dependency, and no need to rewrite your agent around a new framework. AgentLens should sit beside the code you already have and give you inspectable artifacts when the run succeeds, fails, or regresses.
 
-The public repository has a `v0.3.1` packaging patch candidate after the `v0.3.0` team-workflow release. The next priorities are feedback from people building real tool-using agents, RAG workflows, MCP servers, Python agent projects, or agent CI checks, followed by published package flows and deeper framework adapters.
+The public repository has a `v0.4.0` review-automation release candidate after the `v0.3.1` packaging patch. The next priorities are feedback from people building real tool-using agents, RAG workflows, MCP servers, Python agent projects, or agent CI checks, followed by published package flows and deeper framework adapters.
 
 Repo: <link>
 ```
@@ -63,6 +64,8 @@ Before posting:
 - Confirm the README GIF or screenshot renders on GitHub.
 - Run `npm run verify` and `npm run release:audit`.
 - Link directly to the quick demo section in the README.
+- Link to `docs/PR_COMMENT_EXAMPLE.md` when showing GitHub PR workflow output.
+- Use `docs/RELEASE_NOTES_V0.4.0.md` as the release notes source when cutting the v0.4.0 tag.
 - Invite specific feedback on adapters, eval rules, and MCP policy checks.
 
 ## First Reply Template

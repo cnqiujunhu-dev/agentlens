@@ -28,7 +28,7 @@ Release status:
 - Default branch: `main`.
 - First release: `v0.1.0`.
 - Latest published release: `v0.3.0`.
-- Current release target: `v0.3.1` packaging patch.
+- Current release target: `v0.4.0` review-automation release.
 - GitHub CI is expected to stay green for `main` and release tags.
 
 ## v0.2.0 Integration Release
@@ -101,6 +101,26 @@ Candidates:
 - Collector/protobuf export hardening for teams that already use Langfuse, Phoenix, OpenLIT, or existing APM.
 - Publish the Python trace writer package and harden framework bridge helpers against real LangChain, LlamaIndex, and CrewAI payload shapes.
 - Richer dashboards for MCP exception review history.
+
+## v0.4.0 Review Automation Release
+
+Goal: make AgentLens' GitHub PR review story concrete, machine-readable, and easy to promote.
+
+Shipped for the v0.4.0 release candidate:
+
+- Workflow Review signals in dashboards, eval rules, diff reports, run bundle manifests, PR comments, and review packs.
+- Review pack `review.json` manifests with JSON Schema, CLI validation, runtime validation, status, generated file paths, CI summaries, workflow deltas, bundle links, generation time, review options, and uploaded artifact/SARIF links.
+- Composite GitHub Action outputs for review status, manifest path, provenance links, workflow counts, workflow deltas, and workflow regression count.
+- `agentlens init --review` scaffold for before/after review workflows with manifest checks, artifact upload, and marker-based PR comment upsert.
+- Review pack README provenance metadata and option-preserving re-run commands.
+- Copyable PR comment example and v0.4.0 release notes draft for public launch material.
+
+Next:
+
+- Publish `agentlens-devtools` to npm and smoke test the published registry package.
+- Publish `agentlens-trace` to PyPI after TestPyPI rehearsal.
+- Add more real-world framework fixture coverage for Python bridge helpers.
+- Add richer governance dashboards for MCP exception review history.
 
 ## Good First Issues
 

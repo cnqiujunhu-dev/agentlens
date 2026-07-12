@@ -88,7 +88,7 @@ Public launch status:
 
 - Repository is public at `https://github.com/cnqiujunhu-dev/agentlens`.
 - `main` is pushed and configured as the default branch.
-- Latest published tag is `v0.3.0`; `v0.3.1` is the current packaging patch release target.
+- Latest published tag is `v0.3.0`; `v0.4.0` is the current review-automation release target.
 - GitHub Actions is expected to pass for both `main` and each release tag.
 
 ## Priority 1: Keep The Project Trustworthy
@@ -116,7 +116,7 @@ The GitHub README should do five jobs fast:
 1. Show the pain: AI agents are hard to debug.
 2. Show the payoff: trace, replay, eval, dashboard.
 3. Show a five-minute demo.
-4. Show concrete output.
+4. Show concrete output, especially the copyable PR comment example.
 5. Show a believable roadmap.
 6. Let Chinese-speaking developers switch to the Chinese README immediately.
 
@@ -164,9 +164,10 @@ Avoid hooks that sound like every other agent project:
 
 ## Next Milestone
 
-Target `v0.3.1`:
+Target `v0.4.0`:
 
-- Publishable npm package identity as `agentlens-devtools` with `agentlens` CLI command.
-- npm publish dry-run check for package metadata, packed files, and bin-field stability.
-- Post-publish npm registry smoke check for clean-project quickstart verification.
-- Python Trusted Publishing workflow safety docs and local installed-package checks.
+- Review pack manifests with schema validation, provenance metadata, and PR bot friendly fields.
+- GitHub Action review outputs for status, manifest path, provenance links, workflow counts, deltas, and regressions.
+- `agentlens init --review` scaffold for before/after PR workflows with artifact upload and comment upsert.
+- Copyable PR comment example and v0.4.0 release notes draft for launch material.
+- Keep publishable npm and Python package paths verified before tagging.

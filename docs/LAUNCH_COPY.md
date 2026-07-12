@@ -42,6 +42,7 @@ What ships today:
 - static dashboards with Security Scan, Tool Calls, Workflow Review, filters, and timeline jumps
 - run bundles and before/after review packs for PRs
 - stable PR comment Markdown for GitHub workflows
+- copyable PR comment example for README, launch posts, and release notes
 - generic LLM wrappers plus OpenAI-compatible and Anthropic-compatible adapter helpers
 - LangGraph-style, AutoGen-style, CrewAI-style, MCP-style, and MCP stdio demos
 - zero-dependency Python trace writer and `agentlens_trace.adapters` bridge helpers
@@ -105,6 +106,8 @@ Local-first DevTools for AI agents. Trace, replay, evaluate, scan, redact, and s
 ## GitHub Release Notes
 
 ```text
+Use docs/RELEASE_NOTES_V0.4.0.md for the current review-automation release candidate.
+
 AgentLens v0.3.0 is the team-workflow release after the initial integration release.
 
 Highlights:

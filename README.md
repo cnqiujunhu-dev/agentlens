@@ -54,6 +54,8 @@ AgentLens can turn recorded before/after agent runs into pull request artifacts:
 npm run demo:regression-pr
 ```
 
+See the [copyable PR comment example](docs/PR_COMMENT_EXAMPLE.md) for the Markdown body AgentLens can upsert into a GitHub pull request.
+
 ![AgentLens regression PR diff](docs/assets/regression-pr-diff.png)
 
 ## Why AgentLens
@@ -437,12 +439,14 @@ See [API.md](docs/API.md) for trace, eval, scan, JSONL, and MCP helper examples.
 - [Launch plan](docs/LAUNCH_PLAN.md)
 - [Launch copy](docs/LAUNCH_COPY.md)
 - [Release checklist](docs/RELEASE_CHECKLIST.md)
+- [v0.4.0 release notes draft](docs/RELEASE_NOTES_V0.4.0.md)
 - [Demo recording guide](docs/DEMO_RECORDING.md)
 - [Launch post draft](docs/LAUNCH_POST.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Market analysis](docs/MARKET_ANALYSIS.md)
 - [Quickstart artifacts](docs/QUICKSTART_ARTIFACTS.md)
 - [Agent review packs](docs/AGENT_REVIEW.md)
+- [PR comment example](docs/PR_COMMENT_EXAMPLE.md)
 - [LLM SDK cookbook](docs/LLM_SDK_COOKBOOK.md)
 - [Python trace writer](docs/PYTHON_TRACE_WRITER.md)
 - [Python publishing](docs/PYTHON_PUBLISHING.md)
