@@ -285,7 +285,7 @@ const requiredPackageExports = [
   "./adapters/mcp-stdio"
 ];
 
-const releaseVersion = "0.3.1";
+const releaseVersion = "0.4.0";
 const publicActionVersion = "0.3.0";
 const publicActionRef = `cnqiujunhu-dev/agentlens@v${publicActionVersion}`;
 const placeholderActionRef = "your-org/agentlens@v0";

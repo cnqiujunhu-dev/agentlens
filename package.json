@@ -1,6 +1,6 @@
 {
   "name": "agentlens-devtools",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Local-first DevTools for AI agents: trace, replay, evaluate, and visualize tool-using runs.",
   "type": "module",
   "main": "./src/index.js",

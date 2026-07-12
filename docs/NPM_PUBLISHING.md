@@ -58,7 +58,7 @@ To validate the post-publish script before the package exists on npm, point it a
 ```bash
 mkdir -p .agentlens/npm-pack
 npm pack --pack-destination .agentlens/npm-pack
-npm run npm:postpublish:check -- --package-spec .agentlens/npm-pack/agentlens-devtools-0.3.1.tgz
+npm run npm:postpublish:check -- --package-spec .agentlens/npm-pack/agentlens-devtools-0.4.0.tgz
 ```
 
 ## Publish
@@ -79,13 +79,13 @@ Run the scripted smoke test from the repository root. It creates its own tempora
 ```bash
 npm view agentlens-devtools version
 npm run npm:postpublish:check
-npm run npm:postpublish:check -- --version 0.3.1
+npm run npm:postpublish:check -- --version 0.4.0
 ```
 
 For a manual check from a separate temporary directory:
 
 ```bash
-npm exec --yes --package agentlens-devtools@0.3.1 -- agentlens quickstart --python
+npm exec --yes --package agentlens-devtools@0.4.0 -- agentlens quickstart --python
 node --input-type=module -e "const m = await import('agentlens-devtools'); if (!m.createRun || !m.runQuickstart) throw new Error('missing exports'); console.log('agentlens-devtools ok')"
 ```
 

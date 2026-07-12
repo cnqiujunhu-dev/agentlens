@@ -83,7 +83,7 @@ export class McpStdioClient {
       capabilities: {},
       clientInfo: {
         name: "agentlens",
-        version: "0.3.1"
+        version: "0.4.0"
       },
       ...params
     });

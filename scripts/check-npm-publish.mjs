@@ -15,6 +15,8 @@ const requiredPackageFiles = [
   "docs/API.md",
   "docs/NPM_PUBLISHING.md",
   "docs/MARKET_ANALYSIS.md",
+  "docs/PR_COMMENT_EXAMPLE.md",
+  "docs/RELEASE_NOTES_V0.4.0.md",
   "docs/assets/agentlens-demo.gif",
   "docs/assets/dashboard-screenshot.png",
   "docs/assets/regression-pr-diff.png",

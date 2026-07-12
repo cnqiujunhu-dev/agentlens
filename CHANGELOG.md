@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+No unreleased changes yet.
+
+## 0.4.0
+
 ### Added
 
 - LlamaIndex-like QueryBundle and source node fixture coverage for `agentlens_trace.adapters`.

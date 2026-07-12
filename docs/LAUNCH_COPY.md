@@ -106,28 +106,16 @@ Local-first DevTools for AI agents. Trace, replay, evaluate, scan, redact, and s
 ## GitHub Release Notes
 
 ```text
-Use docs/RELEASE_NOTES_V0.4.0.md for the current review-automation release candidate.
-
-AgentLens v0.3.0 is the team-workflow release after the initial integration release.
+AgentLens v0.4.0 is the review-automation release.
 
 Highlights:
-- Trace AI agent runs as readable local JSON.
-- Wrap generic LLM calls without binding to one SDK.
-- Trace LangGraph-style, AutoGen-style, CrewAI-style, MCP-style, and MCP stdio workflows without adding runtime dependencies.
-- Write Python traces with the zero-dependency `agentlens-trace` package and `agentlens_trace.adapters` bridge helpers.
-- Bootstrap Python projects with `agentlens init --python`.
-- Replay model/tool/retrieval timelines deterministically.
-- Run JSON eval rules and scan gates locally or in CI.
-- Scan traces for leaked secrets, prompt injection phrases, and risky tool calls.
-- Generate static HTML dashboards with Security Scan, Tool Calls, Workflow Review, filters, and timeline jumps.
-- Generate static run bundle artifacts for trace directories.
-- Generate pull request review artifacts with CI summaries, SARIF, diff dashboards, and run bundles.
-- Export single traces or whole run directories as OpenTelemetry/OpenInference-style OTLP JSON.
-- Stream long-running traces as JSONL.
-- Trace MCP-style tool calls and enforce MCP policy rules.
-- Redact secrets before sharing traces publicly.
+- Workflow Review signals in dashboards, eval rules, diff reports, run bundle manifests, PR comments, and review packs.
+- `agentlens review` writes before/after PR review packs with CI summaries, SARIF, diff dashboards, run bundles, README files, and machine-readable review manifests.
+- Review manifests now include JSON Schema validation, provenance metadata, uploaded artifact/SARIF links, and GitHub Action outputs for downstream PR bots.
+- `agentlens init --review` scaffolds a copyable before/after review workflow with artifact upload and marker-based PR comment upsert.
+- Launch material now includes a copyable PR comment example.
 
-This release is designed for early feedback from developers wiring AgentLens into real agent stacks, GitHub CI, Python-heavy agent projects, and existing observability pipelines.
+Use docs/RELEASE_NOTES_V0.4.0.md for the full release notes.
 ```
 
 ## Demo Flow
